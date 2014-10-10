@@ -989,13 +989,9 @@ AUI.add(
 					_onSubmitForm: function(event) {
 						var instance = this;
 
-						event.preventDefault();
-
 						var ddmFormValuesInput = instance.get('ddmFormValuesInput');
 
 						ddmFormValuesInput.set('value', AJSON.stringify(instance.toJSON()));
-
-						submitForm(instance.formNode);
 					},
 
 					_valueDisplayLocale: function() {
