@@ -43,7 +43,6 @@ import com.liferay.portlet.dynamicdatamapping.model.Value;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageType;
-import com.liferay.portlet.dynamicdatamapping.util.test.DDMFormValuesTestUtil;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -290,17 +289,15 @@ public class DDLRecordServiceTest extends BaseDDLServiceTestCase {
 	}
 
 	protected DDMFormValues createDDMFormValues(DDMForm ddmForm) {
-		Set<Locale> availableLocales =
-			DDMFormValuesTestUtil.createAvailableLocales(LocaleUtil.US);
-
-		return DDMFormValuesTestUtil.createDDMFormValues(
-			ddmForm, availableLocales, LocaleUtil.US);
+		return DDLRecordTestUtil.createDDMFormValues(
+			ddmForm, DDLRecordTestUtil.createAvailableLocales(LocaleUtil.US),
+			LocaleUtil.US);
 	}
 
 	protected DDMFormFieldValue createLocalizedTextDDMFormFieldValue(
 		String name, String enValue) {
 
-		return DDMFormValuesTestUtil.createLocalizedTextDDMFormFieldValue(
+		return DDLRecordTestUtil.createLocalizedTextDDMFormFieldValue(
 			name, enValue);
 	}
 
@@ -344,13 +341,13 @@ public class DDLRecordServiceTest extends BaseDDLServiceTestCase {
 	protected DDMFormFieldValue createTextDDMFormFieldValue(
 		String name, Value value) {
 
-		return DDMFormValuesTestUtil.createTextDDMFormFieldValue(name, value);
+		return DDLRecordTestUtil.createTextDDMFormFieldValue(name, value);
 	}
 
 	protected DDMFormFieldValue createUnlocalizedTextDDMFormFieldValue(
 		String name, String value) {
 
-		return DDMFormValuesTestUtil.createUnlocalizedTextDDMFormFieldValue(
+		return DDLRecordTestUtil.createUnlocalizedTextDDMFormFieldValue(
 			name, value);
 	}
 

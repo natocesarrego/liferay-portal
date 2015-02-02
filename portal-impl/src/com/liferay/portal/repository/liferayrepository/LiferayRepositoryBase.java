@@ -38,10 +38,8 @@ import com.liferay.portlet.documentlibrary.service.DLFileVersionService;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFolderService;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
-import com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.util.DDMUtil;
-import com.liferay.portlet.dynamicdatamapping.util.FieldsToDDMFormValuesConverterUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,14 +129,24 @@ public abstract class LiferayRepositoryBase implements CapabilityProvider {
 		}
 	}
 
-	protected HashMap<String, DDMFormValues> getDDMFormValuesMap(
+	protected long getDefaultFileEntryTypeId(
+			ServiceContext serviceContext, long folderId)
+		throws PortalException {
+
+		folderId = dlFolderLocalService.getFolderId(
+			serviceContext.getCompanyId(), folderId);
+
+		return dlFileEntryTypeLocalService.getDefaultFileEntryTypeId(folderId);
+	}
+
+	protected HashMap<String, Fields> getFieldsMap(
 			ServiceContext serviceContext, long fileEntryTypeId)
 		throws PortalException {
 
-		HashMap<String, DDMFormValues> ddmFormValuesMap = new HashMap<>();
+		HashMap<String, Fields> fieldsMap = new HashMap<>();
 
 		if (fileEntryTypeId <= 0) {
-			return ddmFormValuesMap;
+			return fieldsMap;
 		}
 
 		DLFileEntryType fileEntryType =
@@ -149,33 +157,18 @@ public abstract class LiferayRepositoryBase implements CapabilityProvider {
 		for (DDMStructure ddmStructure : ddmStructures) {
 			String namespace = String.valueOf(ddmStructure.getStructureId());
 
-			DDMFormValues ddmFormValues =
-				(DDMFormValues)serviceContext.getAttribute(
-					DDMFormValues.class.getName() +
-						ddmStructure.getStructureId());
+			Fields fields = (Fields)serviceContext.getAttribute(
+				Fields.class.getName() + ddmStructure.getStructureId());
 
-			if (ddmFormValues == null) {
-				Fields fields = DDMUtil.getFields(
+			if (fields == null) {
+				fields = DDMUtil.getFields(
 					ddmStructure.getStructureId(), namespace, serviceContext);
-
-				ddmFormValues = FieldsToDDMFormValuesConverterUtil.convert(
-					ddmStructure, fields);
 			}
 
-			ddmFormValuesMap.put(ddmStructure.getStructureKey(), ddmFormValues);
+			fieldsMap.put(ddmStructure.getStructureKey(), fields);
 		}
 
-		return ddmFormValuesMap;
-	}
-
-	protected long getDefaultFileEntryTypeId(
-			ServiceContext serviceContext, long folderId)
-		throws PortalException {
-
-		folderId = dlFolderLocalService.getFolderId(
-			serviceContext.getCompanyId(), folderId);
-
-		return dlFileEntryTypeLocalService.getDefaultFileEntryTypeId(folderId);
+		return fieldsMap;
 	}
 
 	protected long getGroupId() {

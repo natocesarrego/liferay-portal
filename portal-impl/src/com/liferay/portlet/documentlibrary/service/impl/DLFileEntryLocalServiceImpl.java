@@ -101,6 +101,7 @@ import com.liferay.portlet.documentlibrary.util.DLValidatorUtil;
 import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelModifiedDateComparator;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues;
+import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil;
 import com.liferay.portlet.expando.NoSuchRowException;
 import com.liferay.portlet.expando.NoSuchTableException;
@@ -150,8 +151,8 @@ public class DLFileEntryLocalServiceImpl
 			long userId, long groupId, long repositoryId, long folderId,
 			String sourceFileName, String mimeType, String title,
 			String description, String changeLog, long fileEntryTypeId,
-			Map<String, DDMFormValues> ddmFormValuesMap, File file,
-			InputStream is, long size, ServiceContext serviceContext)
+			Map<String, Fields> fieldsMap, File file, InputStream is, long size,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		if (Validator.isNull(title)) {
@@ -242,7 +243,7 @@ public class DLFileEntryLocalServiceImpl
 		addFileVersion(
 			user, dlFileEntry, serviceContext.getModifiedDate(now), fileName,
 			extension, mimeType, title, description, changeLog,
-			StringPool.BLANK, fileEntryTypeId, ddmFormValuesMap,
+			StringPool.BLANK, fileEntryTypeId, fieldsMap,
 			DLFileEntryConstants.VERSION_DEFAULT, size,
 			WorkflowConstants.STATUS_DRAFT, serviceContext);
 
@@ -628,7 +629,7 @@ public class DLFileEntryLocalServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<>();
+		Map<String, Fields> fieldsMap = new HashMap<>();
 
 		List<DDMStructure> ddmStructures = null;
 
@@ -648,7 +649,7 @@ public class DLFileEntryLocalServiceImpl
 
 		copyFileEntryMetadata(
 			companyId, fileEntryTypeId, fileEntryId, fromFileVersionId,
-			toFileVersionId, serviceContext, ddmFormValuesMap, ddmStructures);
+			toFileVersionId, serviceContext, fieldsMap, ddmStructures);
 	}
 
 	@Override
@@ -1562,7 +1563,7 @@ public class DLFileEntryLocalServiceImpl
 		boolean majorVersion = true;
 		String extraSettings = dlFileVersion.getExtraSettings();
 		long fileEntryTypeId = dlFileVersion.getFileEntryTypeId();
-		Map<String, DDMFormValues> ddmFormValuesMap = null;
+		Map<String, Fields> fieldsMap = null;
 		InputStream is = getFileAsStream(userId, fileEntryId, version);
 		long size = dlFileVersion.getSize();
 
@@ -1571,7 +1572,7 @@ public class DLFileEntryLocalServiceImpl
 		DLFileEntry dlFileEntry = updateFileEntry(
 			userId, fileEntryId, sourceFileName, extension, mimeType, title,
 			description, changeLog, majorVersion, extraSettings,
-			fileEntryTypeId, ddmFormValuesMap, null, is, size, serviceContext);
+			fileEntryTypeId, fieldsMap, null, is, size, serviceContext);
 
 		DLFileVersion newDlFileVersion =
 			dlFileVersionLocalService.getFileVersion(
@@ -1697,8 +1698,8 @@ public class DLFileEntryLocalServiceImpl
 			long userId, long fileEntryId, String sourceFileName,
 			String mimeType, String title, String description, String changeLog,
 			boolean majorVersion, long fileEntryTypeId,
-			Map<String, DDMFormValues> ddmFormValuesMap, File file,
-			InputStream is, long size, ServiceContext serviceContext)
+			Map<String, Fields> fieldsMap, File file, InputStream is, long size,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
@@ -1720,7 +1721,7 @@ public class DLFileEntryLocalServiceImpl
 		return updateFileEntry(
 			userId, fileEntryId, sourceFileName, extension, mimeType, title,
 			description, changeLog, majorVersion, extraSettings,
-			fileEntryTypeId, ddmFormValuesMap, file, is, size, serviceContext);
+			fileEntryTypeId, fieldsMap, file, is, size, serviceContext);
 	}
 
 	@Override
@@ -1978,9 +1979,8 @@ public class DLFileEntryLocalServiceImpl
 			User user, DLFileEntry dlFileEntry, Date modifiedDate,
 			String fileName, String extension, String mimeType, String title,
 			String description, String changeLog, String extraSettings,
-			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
-			String version, long size, int status,
-			ServiceContext serviceContext)
+			long fileEntryTypeId, Map<String, Fields> fieldsMap, String version,
+			long size, int status, ServiceContext serviceContext)
 		throws PortalException {
 
 		long fileVersionId = counterLocalService.increment();
@@ -2021,10 +2021,10 @@ public class DLFileEntryLocalServiceImpl
 
 		dlFileVersionPersistence.update(dlFileVersion);
 
-		if ((fileEntryTypeId > 0) && (ddmFormValuesMap != null)) {
+		if ((fileEntryTypeId > 0) && (fieldsMap != null)) {
 			dlFileEntryMetadataLocalService.updateFileEntryMetadata(
 				fileEntryTypeId, dlFileEntry.getFileEntryId(), fileVersionId,
-				ddmFormValuesMap, serviceContext);
+				fieldsMap, serviceContext);
 		}
 
 		return dlFileVersion;
@@ -2140,8 +2140,7 @@ public class DLFileEntryLocalServiceImpl
 	protected void copyFileEntryMetadata(
 			long companyId, long fileEntryTypeId, long fileEntryId,
 			long fromFileVersionId, long toFileVersionId,
-			ServiceContext serviceContext,
-			Map<String, DDMFormValues> ddmFormValuesMap,
+			ServiceContext serviceContext, Map<String, Fields> fieldsMap,
 			List<DDMStructure> ddmStructures)
 		throws PortalException {
 
@@ -2154,16 +2153,16 @@ public class DLFileEntryLocalServiceImpl
 				continue;
 			}
 
-			DDMFormValues ddmFormValues = StorageEngineUtil.getDDMFormValues(
+			Fields fields = StorageEngineUtil.getFields(
 				dlFileEntryMetadata.getDDMStorageId());
 
-			ddmFormValuesMap.put(ddmStructure.getStructureKey(), ddmFormValues);
+			fieldsMap.put(ddmStructure.getStructureKey(), fields);
 		}
 
-		if (!ddmFormValuesMap.isEmpty()) {
+		if (!fieldsMap.isEmpty()) {
 			dlFileEntryMetadataLocalService.updateFileEntryMetadata(
 				companyId, ddmStructures, fileEntryTypeId, fileEntryId,
-				toFileVersionId, ddmFormValuesMap, serviceContext);
+				toFileVersionId, fieldsMap, serviceContext);
 		}
 	}
 
@@ -2454,8 +2453,8 @@ public class DLFileEntryLocalServiceImpl
 			long userId, long fileEntryId, String sourceFileName,
 			String extension, String mimeType, String title, String description,
 			String changeLog, boolean majorVersion, String extraSettings,
-			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
-			File file, InputStream is, long size, ServiceContext serviceContext)
+			long fileEntryTypeId, Map<String, Fields> fieldsMap, File file,
+			InputStream is, long size, ServiceContext serviceContext)
 		throws PortalException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
@@ -2524,7 +2523,7 @@ public class DLFileEntryLocalServiceImpl
 			updateFileVersion(
 				user, dlFileVersion, sourceFileName, fileName, extension,
 				mimeType, title, description, changeLog, extraSettings,
-				fileEntryTypeId, ddmFormValuesMap, version, size,
+				fileEntryTypeId, fieldsMap, version, size,
 				dlFileVersion.getStatus(), serviceContext.getModifiedDate(now),
 				serviceContext);
 
@@ -2623,8 +2622,8 @@ public class DLFileEntryLocalServiceImpl
 			User user, DLFileVersion dlFileVersion, String sourceFileName,
 			String fileName, String extension, String mimeType, String title,
 			String description, String changeLog, String extraSettings,
-			long fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,
-			String version, long size, int status, Date statusDate,
+			long fileEntryTypeId, Map<String, Fields> fieldsMap, String version,
+			long size, int status, Date statusDate,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -2653,11 +2652,10 @@ public class DLFileEntryLocalServiceImpl
 
 		dlFileVersion = dlFileVersionPersistence.update(dlFileVersion);
 
-		if ((fileEntryTypeId > 0) && (ddmFormValuesMap != null)) {
+		if ((fileEntryTypeId > 0) && (fieldsMap != null)) {
 			dlFileEntryMetadataLocalService.updateFileEntryMetadata(
 				fileEntryTypeId, dlFileVersion.getFileEntryId(),
-				dlFileVersion.getFileVersionId(), ddmFormValuesMap,
-				serviceContext);
+				dlFileVersion.getFileVersionId(), fieldsMap, serviceContext);
 		}
 
 		return dlFileVersion;

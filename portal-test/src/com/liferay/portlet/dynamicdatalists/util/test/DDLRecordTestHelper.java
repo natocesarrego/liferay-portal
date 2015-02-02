@@ -27,9 +27,7 @@ import com.liferay.portlet.dynamicdatalists.service.DDLRecordLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
-import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues;
-import com.liferay.portlet.dynamicdatamapping.util.test.DDMFormValuesTestUtil;
 
 /**
  * @author Marcellus Tavares
@@ -49,20 +47,19 @@ public class DDLRecordTestHelper {
 
 		DDMForm ddmForm = ddmStructure.getDDMForm();
 
-		DDMFormValues ddmFormValues = DDMFormValuesTestUtil.createDDMFormValues(
-			ddmForm,
-			DDMFormValuesTestUtil.createAvailableLocales(LocaleUtil.US),
+		DDMFormValues ddmFormValues = DDLRecordTestUtil.createDDMFormValues(
+			ddmForm, DDLRecordTestUtil.createAvailableLocales(LocaleUtil.US),
 			LocaleUtil.US);
 
 		for (DDMFormField ddmFormField : ddmForm.getDDMFormFields()) {
 			if (ddmFormField.isLocalizable()) {
 				ddmFormValues.addDDMFormFieldValue(
-					createLocalizedTextDDMFormFieldValue(
+					DDLRecordTestUtil.createLocalizedTextDDMFormFieldValue(
 						ddmFormField.getName(), RandomTestUtil.randomString()));
 			}
 			else {
 				ddmFormValues.addDDMFormFieldValue(
-					createUnlocalizedTextDDMFormFieldValue(
+					DDLRecordTestUtil.createUnlocalizedTextDDMFormFieldValue(
 						ddmFormField.getName(), RandomTestUtil.randomString()));
 			}
 		}
@@ -85,20 +82,6 @@ public class DDLRecordTestHelper {
 
 	public DDLRecordSet getRecordSet() {
 		return _recordSet;
-	}
-
-	protected DDMFormFieldValue createLocalizedTextDDMFormFieldValue(
-		String name, String enValue) {
-
-		return DDMFormValuesTestUtil.createLocalizedTextDDMFormFieldValue(
-			name, enValue);
-	}
-
-	protected DDMFormFieldValue createUnlocalizedTextDDMFormFieldValue(
-		String name, String value) {
-
-		return DDMFormValuesTestUtil.createUnlocalizedTextDDMFormFieldValue(
-			name, value);
 	}
 
 	private final Group _group;
