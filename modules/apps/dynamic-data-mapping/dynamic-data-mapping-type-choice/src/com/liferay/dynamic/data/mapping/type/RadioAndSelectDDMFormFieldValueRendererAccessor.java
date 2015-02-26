@@ -20,12 +20,12 @@ import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldValueRenderer
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
 
 /**
- * @author Marcellus Tavares
+ * @author Renato Rego
  */
-public class TextDDMFormFieldValueRendererAccessor
+public class RadioAndSelectDDMFormFieldValueRendererAccessor
 	extends DDMFormFieldValueRendererAccessor<String> {
 
-	public TextDDMFormFieldValueRendererAccessor(
+	public RadioAndSelectDDMFormFieldValueRendererAccessor(
 		DDMFormFieldValueAccessor<String> ddmFormFieldValueAccessor) {
 
 		_ddmFormFieldValueAccessor = ddmFormFieldValueAccessor;

@@ -20,29 +20,29 @@ import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldValueRenderer
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
 
 /**
- * @author Marcellus Tavares
+ * @author Renato Rego
  */
-public class TextDDMFormFieldValueRendererAccessor
-	extends DDMFormFieldValueRendererAccessor<String> {
+public class CheckboxDDMFormFieldValueRendererAccessor
+	extends DDMFormFieldValueRendererAccessor<Boolean> {
 
-	public TextDDMFormFieldValueRendererAccessor(
-		DDMFormFieldValueAccessor<String> ddmFormFieldValueAccessor) {
+	public CheckboxDDMFormFieldValueRendererAccessor(
+		DDMFormFieldValueAccessor<Boolean> ddmFormFieldValueAccessor) {
 
 		_ddmFormFieldValueAccessor = ddmFormFieldValueAccessor;
 	}
 
 	@Override
-	public String get(DDMFormFieldValue ddmFormFieldValue) {
-		String valueString = _ddmFormFieldValueAccessor.get(ddmFormFieldValue);
+	public Boolean get(DDMFormFieldValue ddmFormFieldValue) {
+		Boolean value = _ddmFormFieldValueAccessor.get(ddmFormFieldValue);
 
-		return HtmlUtil.escape(valueString);
+		return value;
 	}
 
 	@Override
-	public Class<String> getAttributeClass() {
-		return String.class;
+	public Class<Boolean> getAttributeClass() {
+		return Boolean.class;
 	}
 
-	private final DDMFormFieldValueAccessor<String> _ddmFormFieldValueAccessor;
+	private final DDMFormFieldValueAccessor<Boolean> _ddmFormFieldValueAccessor;
 
 }

@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
+import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldTypeRegistryUtil;
 
 import java.util.List;
 
@@ -44,6 +45,11 @@ public class DDMFormRendererImpl implements DDMFormRenderer {
 			sb.append(
 				ddmFormFieldRenderer.render(
 					ddmFormField, ddmFormFieldRenderingContext));
+
+			sb.append(
+				DDMFormFieldTypeRegistryUtil.getDDMFormFieldType(
+					"radio-and-select-choice").getDDMFormFieldRenderer().render(
+						ddmFormField, ddmFormFieldRenderingContext));
 		}
 
 		return sb.toString();

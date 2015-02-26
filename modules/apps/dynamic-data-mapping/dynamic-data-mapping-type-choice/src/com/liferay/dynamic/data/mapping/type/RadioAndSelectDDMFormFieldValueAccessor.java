@@ -14,35 +14,32 @@
 
 package com.liferay.dynamic.data.mapping.type;
 
-import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portlet.dynamicdatamapping.model.Value;
 import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldValueAccessor;
-import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldValueRendererAccessor;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
 
+import java.util.Locale;
+
 /**
- * @author Marcellus Tavares
+ * @author Renato Rego
  */
-public class TextDDMFormFieldValueRendererAccessor
-	extends DDMFormFieldValueRendererAccessor<String> {
+public class RadioAndSelectDDMFormFieldValueAccessor
+	extends DDMFormFieldValueAccessor<String> {
 
-	public TextDDMFormFieldValueRendererAccessor(
-		DDMFormFieldValueAccessor<String> ddmFormFieldValueAccessor) {
-
-		_ddmFormFieldValueAccessor = ddmFormFieldValueAccessor;
+	public RadioAndSelectDDMFormFieldValueAccessor(Locale locale) {
+		super(locale);
 	}
 
 	@Override
 	public String get(DDMFormFieldValue ddmFormFieldValue) {
-		String valueString = _ddmFormFieldValueAccessor.get(ddmFormFieldValue);
+		Value value = ddmFormFieldValue.getValue();
 
-		return HtmlUtil.escape(valueString);
+		return value.getString(locale);
 	}
 
 	@Override
 	public Class<String> getAttributeClass() {
 		return String.class;
 	}
-
-	private final DDMFormFieldValueAccessor<String> _ddmFormFieldValueAccessor;
 
 }

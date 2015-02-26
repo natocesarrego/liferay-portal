@@ -14,35 +14,32 @@
 
 package com.liferay.dynamic.data.mapping.type;
 
-import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portlet.dynamicdatamapping.model.Value;
 import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldValueAccessor;
-import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldValueRendererAccessor;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
 
+import java.util.Locale;
+
 /**
- * @author Marcellus Tavares
+ * @author Renato Rego
  */
-public class TextDDMFormFieldValueRendererAccessor
-	extends DDMFormFieldValueRendererAccessor<String> {
+public class CheckboxDDMFormFieldValueAccessor
+	extends DDMFormFieldValueAccessor<Boolean> {
 
-	public TextDDMFormFieldValueRendererAccessor(
-		DDMFormFieldValueAccessor<String> ddmFormFieldValueAccessor) {
-
-		_ddmFormFieldValueAccessor = ddmFormFieldValueAccessor;
+	public CheckboxDDMFormFieldValueAccessor(Locale locale) {
+		super(locale);
 	}
 
 	@Override
-	public String get(DDMFormFieldValue ddmFormFieldValue) {
-		String valueString = _ddmFormFieldValueAccessor.get(ddmFormFieldValue);
+	public Boolean get(DDMFormFieldValue ddmFormFieldValue) {
+		Value value = ddmFormFieldValue.getValue();
 
-		return HtmlUtil.escape(valueString);
+		return Boolean.valueOf(value.getString(locale));
 	}
 
 	@Override
-	public Class<String> getAttributeClass() {
-		return String.class;
+	public Class<Boolean> getAttributeClass() {
+		return Boolean.class;
 	}
-
-	private final DDMFormFieldValueAccessor<String> _ddmFormFieldValueAccessor;
 
 }
