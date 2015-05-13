@@ -93,6 +93,7 @@ boolean showCacheableInput = ParamUtil.getBoolean(request, "showCacheableInput")
 	<aui:input name="saveAndContinue" type="hidden" value="<%= false %>" />
 
 	<liferay-ui:error exception="<%= TemplateNameException.class %>" message="please-enter-a-valid-name" />
+	<liferay-ui:error exception="<%= TemplateRepeatedFieldNameException.class %>" message="field-names-must-be-unique" />
 	<liferay-ui:error exception="<%= TemplateScriptException.class %>" message="please-enter-a-valid-script" />
 
 	<liferay-ui:error exception="<%= TemplateSmallImageNameException.class %>">
