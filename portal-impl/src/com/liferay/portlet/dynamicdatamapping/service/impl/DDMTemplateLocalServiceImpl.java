@@ -200,7 +200,7 @@ public class DDMTemplateLocalServiceImpl
 		}
 
 		validate(
-			groupId, classNameId, templateKey, nameMap, script, smallImage,
+			groupId, classNameId, templateKey, nameMap, type, script, smallImage,
 			smallImageURL, smallImageFile, smallImageBytes);
 
 		long templateId = counterLocalService.increment();
@@ -1260,7 +1260,7 @@ public class DDMTemplateLocalServiceImpl
 		}
 
 		validate(
-			nameMap, script, smallImage, smallImageURL, smallImageFile,
+			nameMap, type, script, smallImage, smallImageURL, smallImageFile,
 			smallImageBytes);
 
 		DDMTemplate template = ddmTemplateLocalService.getDDMTemplate(
@@ -1467,8 +1467,9 @@ public class DDMTemplateLocalServiceImpl
 
 	protected void validate(
 			long groupId, long classNameId, String templateKey,
-			Map<Locale, String> nameMap, String script, boolean smallImage,
-			String smallImageURL, File smallImageFile, byte[] smallImageBytes)
+			Map<Locale, String> nameMap, String type, String script,
+			boolean smallImage, String smallImageURL, File smallImageFile,
+			byte[] smallImageBytes)
 		throws PortalException {
 
 		templateKey = StringUtil.toUpperCase(templateKey.trim());
@@ -1482,11 +1483,12 @@ public class DDMTemplateLocalServiceImpl
 		}
 
 		validate(
-			nameMap, script, smallImage, smallImageURL, smallImageFile,
+			nameMap, type, script, smallImage, smallImageURL, smallImageFile,
 			smallImageBytes);
 	}
 
-	protected void validate(Map<Locale, String> nameMap, String script)
+	protected void validate(Map<Locale, String> nameMap, String type,
+			String script)
 		throws PortalException {
 
 		validateName(nameMap);
@@ -1494,17 +1496,18 @@ public class DDMTemplateLocalServiceImpl
 		if (Validator.isNull(script)) {
 			throw new TemplateScriptException("Script is null");
 		}
-		else {
+		else if (type.equals(DDMTemplateConstants.TEMPLATE_TYPE_FORM)) {
 			validateScriptFieldsNames(script);
 		}
 	}
 
 	protected void validate(
-			Map<Locale, String> nameMap, String script, boolean smallImage,
-			String smallImageURL, File smallImageFile, byte[] smallImageBytes)
+			Map<Locale, String> nameMap, String type, String script,
+			boolean smallImage, String smallImageURL, File smallImageFile,
+			byte[] smallImageBytes)
 		throws PortalException {
 
-		validate(nameMap, script);
+		validate(nameMap, type, script);
 
 		String[] imageExtensions = PrefsPropsUtil.getStringArray(
 			PropsKeys.DYNAMIC_DATA_MAPPING_IMAGE_EXTENSIONS, StringPool.COMMA);
