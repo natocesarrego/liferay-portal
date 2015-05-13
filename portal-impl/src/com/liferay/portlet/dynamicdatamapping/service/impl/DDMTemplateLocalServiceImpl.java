@@ -14,7 +14,19 @@
 
 package com.liferay.portlet.dynamicdatamapping.service.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -38,6 +50,7 @@ import com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException;
 import com.liferay.portlet.dynamicdatamapping.RequiredTemplateException;
 import com.liferay.portlet.dynamicdatamapping.TemplateDuplicateTemplateKeyException;
 import com.liferay.portlet.dynamicdatamapping.TemplateNameException;
+import com.liferay.portlet.dynamicdatamapping.TemplateRepeatedFieldNameException;
 import com.liferay.portlet.dynamicdatamapping.TemplateScriptException;
 import com.liferay.portlet.dynamicdatamapping.TemplateSmallImageNameException;
 import com.liferay.portlet.dynamicdatamapping.TemplateSmallImageSizeException;
@@ -46,15 +59,6 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateVersion;
 import com.liferay.portlet.dynamicdatamapping.service.base.DDMTemplateLocalServiceBaseImpl;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
-
-import java.io.File;
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Provides the local service for accessing, adding, copying, deleting, and
@@ -1490,6 +1494,9 @@ public class DDMTemplateLocalServiceImpl
 		if (Validator.isNull(script)) {
 			throw new TemplateScriptException("Script is null");
 		}
+		else {
+			validateScriptFieldsNames(script);
+		}
 	}
 
 	protected void validate(
@@ -1547,6 +1554,81 @@ public class DDMTemplateLocalServiceImpl
 
 		if (Validator.isNull(name)) {
 			throw new TemplateNameException("Name is null");
+		}
+	}
+
+	protected void validateScriptFieldsNames(String script)
+		throws PortalException {
+
+		try {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(script);
+			JSONArray jsonArray = jsonObject.getJSONArray("fields");
+
+			if (Validator.isNotNull(jsonArray)) {
+				List<String> fieldsNames = new ArrayList<String>();
+				JSONObject currentField;
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					currentField = jsonArray.getJSONObject(i);
+
+					if (Validator.isNull(currentField)) {
+						continue;
+					}
+
+					if (fieldsNames.contains(currentField.getString("name"))) {
+						throw new TemplateRepeatedFieldNameException();
+					}
+					else {
+						fieldsNames.add(currentField.getString("name"));
+					}
+
+					validateScriptNestedFieldsNames(fieldsNames,
+						currentField.getJSONArray("nestedFields"));
+				}
+			}
+		} catch (Exception e) {
+			if (!(e instanceof TemplateRepeatedFieldNameException)) {
+				_log.error(e, e);
+			}
+
+			if (e instanceof JSONException) {
+				throw new TemplateScriptException();
+			}
+			else {
+				throw e;
+			}
+		}
+	}
+	
+	protected void validateScriptNestedFieldsNames(List<String> fieldsNames,
+			JSONArray nestedFields)
+		throws PortalException {
+		
+		if (Validator.isNull(nestedFields)) {
+			return;
+		}
+		else {
+			JSONObject currentNestedField;
+
+			for (int i = 0; i < nestedFields.length(); i++) {
+				currentNestedField = nestedFields.getJSONObject(i);
+
+				if (Validator.isNull(currentNestedField)) {
+					continue;
+				}
+
+				if (fieldsNames.contains(
+					currentNestedField.getString("name"))) {
+
+					throw new TemplateRepeatedFieldNameException();
+				}
+				else {
+					fieldsNames.add(currentNestedField.getString("name"));
+
+					validateScriptNestedFieldsNames(fieldsNames,
+						currentNestedField.getJSONArray("nestedFields"));
+				}
+			}
 		}
 	}
 

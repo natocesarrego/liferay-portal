@@ -38,6 +38,7 @@ import com.liferay.portlet.PortletURLImpl;
 import com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException;
 import com.liferay.portlet.dynamicdatamapping.RequiredTemplateException;
 import com.liferay.portlet.dynamicdatamapping.TemplateNameException;
+import com.liferay.portlet.dynamicdatamapping.TemplateRepeatedFieldNameException;
 import com.liferay.portlet.dynamicdatamapping.TemplateScriptException;
 import com.liferay.portlet.dynamicdatamapping.TemplateSmallImageNameException;
 import com.liferay.portlet.dynamicdatamapping.TemplateSmallImageSizeException;
@@ -46,7 +47,6 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateServiceUtil;
 
 import java.io.File;
-
 import java.util.Locale;
 import java.util.Map;
 
@@ -126,6 +126,7 @@ public class EditTemplateAction extends PortletAction {
 			}
 			else if (e instanceof RequiredTemplateException ||
 					 e instanceof TemplateNameException ||
+					 e instanceof TemplateRepeatedFieldNameException ||
 					 e instanceof TemplateScriptException ||
 					 e instanceof TemplateSmallImageNameException ||
 					 e instanceof TemplateSmallImageSizeException) {
