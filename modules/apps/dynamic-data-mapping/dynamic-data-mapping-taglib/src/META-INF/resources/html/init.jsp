@@ -16,7 +16,7 @@
 @generated
 --%>
 
-<%@ include file="/init.jsp" %>
+<%@ include file="src/META-INF/resources/init.jsp" %>
 
 <%
 boolean checkRequired = GetterUtil.getBoolean(String.valueOf(request.getAttribute("liferay-ddm:html:checkRequired")), true);
@@ -32,4 +32,4 @@ Map<String, Object> dynamicAttributes = (Map<String, Object>)request.getAttribut
 Map<String, Object> scopedAttributes = (Map<String, Object>)request.getAttribute("liferay-ddm:html:scopedAttributes");
 %>
 
-<%@ include file="/html/init-ext.jspf" %>
+<%@ include file="src/META-INF/resources/html/init-ext.jspf" %>

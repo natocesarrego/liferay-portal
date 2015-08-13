@@ -16,7 +16,7 @@
 @generated
 --%>
 
-<%@ include file="/init.jsp" %>
+<%@ include file="src/META-INF/resources/init.jsp" %>
 
 <%
 long classNameId = GetterUtil.getLong(String.valueOf(request.getAttribute("liferay-ddm:html-field:classNameId")));
@@ -31,4 +31,4 @@ Map<String, Object> dynamicAttributes = (Map<String, Object>)request.getAttribut
 Map<String, Object> scopedAttributes = (Map<String, Object>)request.getAttribute("liferay-ddm:html-field:scopedAttributes");
 %>
 
-<%@ include file="/html_field/init-ext.jspf" %>
+<%@ include file="src/META-INF/resources/html_field/init-ext.jspf" %>
