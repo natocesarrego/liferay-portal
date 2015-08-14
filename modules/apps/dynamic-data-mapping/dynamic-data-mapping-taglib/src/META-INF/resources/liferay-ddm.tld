@@ -30,7 +30,7 @@
 			<name>ddmFormValues</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues</type>
+			<type>com.liferay.dynamic.data.mapping.storage.DDMFormValues</type>
 		</attribute>
 		<attribute>
 			<name>fieldsNamespace</name>
