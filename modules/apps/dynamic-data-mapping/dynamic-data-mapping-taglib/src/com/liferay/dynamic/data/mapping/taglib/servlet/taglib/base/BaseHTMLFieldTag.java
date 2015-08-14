@@ -159,10 +159,10 @@ public abstract class BaseHTMLFieldTag extends com.liferay.taglib.util.IncludeTa
 	protected static final String _ATTRIBUTE_NAMESPACE = "liferay-ddm:html-field:";
 
 	private static final String _END_PAGE =
-		"src/META-INF/resources/html_field/end.jsp";
+		"/html_field/end.jsp";
 
 	private static final String _START_PAGE =
-		"src/META-INF/resources/html_field/start.jsp";
+		"/html_field/start.jsp";
 
 	private long _classNameId = 0;
 	private long _classPK = 0;

@@ -123,10 +123,10 @@ public abstract class BaseTemplateRendererTag extends com.liferay.taglib.util.In
 	protected static final String _ATTRIBUTE_NAMESPACE = "liferay-ddm:template-renderer:";
 
 	private static final String _END_PAGE =
-		"src/META-INF/resources/template_renderer/end.jsp";
+		"/template_renderer/end.jsp";
 
 	private static final String _START_PAGE =
-		"src/META-INF/resources/template_renderer/start.jsp";
+		"/template_renderer/start.jsp";
 
 	private java.lang.String _className = null;
 	private java.util.Map<java.lang.String, java.lang.Object> _contextObjects = null;

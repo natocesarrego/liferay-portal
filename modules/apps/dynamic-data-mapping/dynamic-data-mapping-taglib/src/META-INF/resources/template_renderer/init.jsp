@@ -16,7 +16,7 @@
 @generated
 --%>
 
-<%@ include file="src/META-INF/resources/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 java.lang.String className = GetterUtil.getString((java.lang.String)request.getAttribute("liferay-ddm:template-renderer:className"));
@@ -28,4 +28,4 @@ Map<String, Object> dynamicAttributes = (Map<String, Object>)request.getAttribut
 Map<String, Object> scopedAttributes = (Map<String, Object>)request.getAttribute("liferay-ddm:template-renderer:scopedAttributes");
 %>
 
-<%@ include file="src/META-INF/resources/template_renderer/init-ext.jspf" %>
+<%@ include file="/template_renderer/init-ext.jspf" %>
