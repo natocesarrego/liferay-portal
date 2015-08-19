@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.util.impl;
+package com.liferay.dynamic.data.mapping.validator.internal;
 
 import com.liferay.dynamic.data.mapping.exception.StorageException;
 import com.liferay.dynamic.data.mapping.exception.StorageFieldNameException;
