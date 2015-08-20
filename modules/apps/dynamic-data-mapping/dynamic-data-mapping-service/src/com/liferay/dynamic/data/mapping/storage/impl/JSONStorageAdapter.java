@@ -25,7 +25,9 @@ import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.storage.BaseStorageAdapter;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
+import com.liferay.dynamic.data.mapping.validator.DDMFormValuesValidator;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.util.PortalUtil;
 
 import java.util.List;
@@ -121,5 +123,8 @@ public class JSONStorageAdapter extends BaseStorageAdapter {
 
 		return ddmFormValues;
 	}
+
+	@ServiceReference(type = DDMFormValuesValidator.class)
+	protected DDMFormValuesValidator _ddmFormValuesValidator;
 
 }
