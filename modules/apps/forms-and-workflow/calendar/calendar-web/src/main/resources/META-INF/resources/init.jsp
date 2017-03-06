@@ -218,7 +218,7 @@ if (calendarDisplayContext != null) {
 }
 
 for (Calendar groupCalendar : groupCalendars) {
-	if (groupCalendar.isDefaultCalendar() && CalendarPermission.contains(themeDisplay.getPermissionChecker(), groupCalendar, CalendarActionKeys.MANAGE_BOOKINGS)) {
+	if (groupCalendar.isDefaultCalendar() && (CalendarPermission.contains(themeDisplay.getPermissionChecker(), groupCalendar, CalendarActionKeys.MANAGE_BOOKINGS) || CalendarPermission.contains(themeDisplay.getPermissionChecker(), groupCalendar, CalendarActionKeys.VIEW_BOOKING_DETAILS))) {
 		defaultCalendar = groupCalendar;
 	}
 }
