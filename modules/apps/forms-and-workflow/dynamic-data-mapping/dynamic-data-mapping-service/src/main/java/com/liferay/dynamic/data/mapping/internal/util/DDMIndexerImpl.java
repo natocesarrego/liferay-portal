@@ -47,8 +47,6 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 
-import java.math.BigDecimal;
-
 import java.text.Format;
 
 import java.util.ArrayList;
@@ -112,89 +110,66 @@ public class DDMIndexerImpl implements DDMIndexer {
 					List<String> valuesStrings =
 						getValuesStrings(ddmFormFieldValues, locale);
 
-					if (dataType.equals(FieldConstants.BOOLEAN)) {
-						Boolean[] values =
-							valuesStrings.toArray(
-								new Boolean[valuesStrings.size()]);
+					Object[] values = getValuesAsArray(
+						isRepeatable, dataType, valuesStrings);
 
+					if (dataType.equals(FieldConstants.BOOLEAN)) {
 						if (isRepeatable) {
-							document.addKeywordSortable(name, values);
+							document.addKeywordSortable(name, (String[])values);
 						}
 						else {
-							document.addKeywordSortable(name, values[0]);
+							document.addKeywordSortable(
+								name, (String)values[0]);
 						}
 					}
 					else if (dataType.equals(FieldConstants.DATE)) {
-						Date[] values =
-							valuesStrings.toArray(
-								new Date[valuesStrings.size()]);
-
 						if (isRepeatable) {
-							document.addDateSortable(name, values);
+							document.addDateSortable(name, (Date[])values);
 						}
 						else {
-							document.addDateSortable(name, values[0]);
+							document.addDateSortable(name, (Date)values[0]);
 						}
 					}
 					else if (dataType.equals(FieldConstants.DOUBLE)) {
-						Double[] values =
-							valuesStrings.toArray(
-								new Double[valuesStrings.size()]);
-
 						if (isRepeatable) {
-							document.addNumberSortable(name, values);
+							document.addNumberSortable(name, (Double[])values);
 						}
 						else {
-							document.addNumberSortable(name, values[0]);
+							document.addNumberSortable(name, (Double)values[0]);
 						}
 					}
 					else if (dataType.equals(FieldConstants.INTEGER)) {
-						Integer[] values =
-							valuesStrings.toArray(
-								new Integer[valuesStrings.size()]);
-
 						if (isRepeatable) {
-							document.addNumberSortable(name, values);
+							document.addNumberSortable(name, (Integer[])values);
 						}
 						else {
-							document.addNumberSortable(name, values[0]);
+							document.addNumberSortable(
+								name, (Integer)values[0]);
 						}
 					}
 					else if (dataType.equals(FieldConstants.LONG)) {
-						Long[] values =
-							valuesStrings.toArray(
-								new Long[valuesStrings.size()]);
-
 						if (isRepeatable) {
-							document.addNumberSortable(name, values);
+							document.addNumberSortable(name, (Long[])values);
 						}
 						else {
-							document.addNumberSortable(name, values[0]);
+							document.addNumberSortable(name, (Long)values[0]);
 						}
 					}
 					else if (dataType.equals(FieldConstants.FLOAT)) {
-						Float[] values =
-							valuesStrings.toArray(
-								new Float[valuesStrings.size()]);
-
 						if (isRepeatable) {
-							document.addNumberSortable(name, values);
+							document.addNumberSortable(name, (Float[])values);
 						}
 						else {
-							document.addNumberSortable(name, values[0]);
+							document.addNumberSortable(name, (Float)values[0]);
 						}
 					}
 					else if (dataType.equals(FieldConstants.NUMBER) &&
-						isRepeatable) {
+							 isRepeatable) {
 
-						Double[] values =
-							valuesStrings.toArray(
-								new Double[valuesStrings.size()]);
-
-						document.addNumberSortable(name, values);
+						document.addNumberSortable(name, (Double[])values);
 					}
 					else {
-						String valueString = valuesStrings.get(0);
+						String valueString = (String)values[0];
 
 						String type = ddmFormField.getType();
 
@@ -350,12 +325,14 @@ public class DDMIndexerImpl implements DDMIndexer {
 					Boolean value = GetterUtil.getBoolean(valuesStrings.get(0));
 
 					sb.append(value);
+
 					sb.append(StringPool.SPACE);
 				}
 				else if (dataType.equals(FieldConstants.NUMBER)) {
 					Number value = GetterUtil.getNumber(valuesStrings.get(0));
 
 					sb.append(value);
+
 					sb.append(StringPool.SPACE);
 				}
 				else if (dataType.equals(FieldConstants.DATE)) {
@@ -466,6 +443,35 @@ public class DDMIndexerImpl implements DDMIndexer {
 		}
 
 		return ddmFormFieldValuesMap;
+	}
+
+	protected Object[] getValuesAsArray(
+		boolean isRepeatable, String valueType, List<String> valuesStrings) {
+
+		Object[] values;
+
+		if (valueType.equals(FieldConstants.DATE)) {
+			values = valuesStrings.toArray(new Date[valuesStrings.size()]);
+		}
+		else if (valueType.equals(FieldConstants.INTEGER)) {
+			values = valuesStrings.toArray(new Integer[valuesStrings.size()]);
+		}
+		else if (valueType.equals(FieldConstants.LONG)) {
+			values = valuesStrings.toArray(new Long[valuesStrings.size()]);
+		}
+		else if (valueType.equals(FieldConstants.FLOAT)) {
+			values = valuesStrings.toArray(new Float[valuesStrings.size()]);
+		}
+		else if (valueType.equals(FieldConstants.DOUBLE) ||
+				 (valueType.equals(FieldConstants.NUMBER) && isRepeatable)) {
+
+			values = valuesStrings.toArray(new Double[valuesStrings.size()]);
+		}
+		else {
+			values = valuesStrings.toArray(new String[valuesStrings.size()]);
+		}
+
+		return values;
 	}
 
 	protected List<String> getValuesStrings(
