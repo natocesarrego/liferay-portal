@@ -101,20 +101,20 @@ public class DDMIndexerImpl implements DDMIndexer {
 				for (Locale locale : locales) {
 					String dataType = ddmFormField.getDataType();
 
-					boolean isRepeatable = ddmFormField.isRepeatable();
+					boolean repeatable = ddmFormField.isRepeatable();
 
 					String name = encodeName(
 						ddmStructure.getStructureId(), ddmFormField.getName(),
 						locale, indexType);
 
-					List<String> valuesStrings =
-						getValuesStrings(ddmFormFieldValues, locale);
+					List<String> valuesStrings = getValuesStrings(
+						ddmFormFieldValues, locale);
 
 					Object[] values = getValuesAsArray(
-						isRepeatable, dataType, valuesStrings);
+						repeatable, dataType, valuesStrings);
 
 					if (dataType.equals(FieldConstants.BOOLEAN)) {
-						if (isRepeatable) {
+						if (repeatable) {
 							document.addKeywordSortable(name, (String[])values);
 						}
 						else {
@@ -123,7 +123,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 						}
 					}
 					else if (dataType.equals(FieldConstants.DATE)) {
-						if (isRepeatable) {
+						if (repeatable) {
 							document.addDateSortable(name, (Date[])values);
 						}
 						else {
@@ -131,7 +131,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 						}
 					}
 					else if (dataType.equals(FieldConstants.DOUBLE)) {
-						if (isRepeatable) {
+						if (repeatable) {
 							document.addNumberSortable(name, (Double[])values);
 						}
 						else {
@@ -139,7 +139,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 						}
 					}
 					else if (dataType.equals(FieldConstants.INTEGER)) {
-						if (isRepeatable) {
+						if (repeatable) {
 							document.addNumberSortable(name, (Integer[])values);
 						}
 						else {
@@ -148,7 +148,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 						}
 					}
 					else if (dataType.equals(FieldConstants.LONG)) {
-						if (isRepeatable) {
+						if (repeatable) {
 							document.addNumberSortable(name, (Long[])values);
 						}
 						else {
@@ -156,7 +156,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 						}
 					}
 					else if (dataType.equals(FieldConstants.FLOAT)) {
-						if (isRepeatable) {
+						if (repeatable) {
 							document.addNumberSortable(name, (Float[])values);
 						}
 						else {
@@ -164,7 +164,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 						}
 					}
 					else if (dataType.equals(FieldConstants.NUMBER) &&
-							 isRepeatable) {
+							 repeatable) {
 
 						document.addNumberSortable(name, (Double[])values);
 					}
@@ -318,8 +318,8 @@ public class DDMIndexerImpl implements DDMIndexer {
 
 				String dataType = ddmFormField.getDataType();
 
-				List<String> valuesStrings =
-					getValuesStrings(ddmFormFieldValues, locale);
+				List<String> valuesStrings = getValuesStrings(
+					ddmFormFieldValues, locale);
 
 				if (dataType.equals(FieldConstants.BOOLEAN)) {
 					Boolean value = GetterUtil.getBoolean(valuesStrings.get(0));
@@ -336,9 +336,8 @@ public class DDMIndexerImpl implements DDMIndexer {
 					sb.append(StringPool.SPACE);
 				}
 				else if (dataType.equals(FieldConstants.DATE)) {
-					Date[] values =
-						valuesStrings.toArray(
-							new Date[valuesStrings.size()]);
+					Date[] values = valuesStrings.toArray(
+						new Date[valuesStrings.size()]);
 
 					if (ddmFormField.isRepeatable()) {
 						for (Date value : values) {
@@ -446,7 +445,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 	}
 
 	protected Object[] getValuesAsArray(
-		boolean isRepeatable, String valueType, List<String> valuesStrings) {
+		boolean repeatable, String valueType, List<String> valuesStrings) {
 
 		Object[] values;
 
@@ -463,7 +462,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 			values = valuesStrings.toArray(new Float[valuesStrings.size()]);
 		}
 		else if (valueType.equals(FieldConstants.DOUBLE) ||
-				 (valueType.equals(FieldConstants.NUMBER) && isRepeatable)) {
+				 (valueType.equals(FieldConstants.NUMBER) && repeatable)) {
 
 			values = valuesStrings.toArray(new Double[valuesStrings.size()]);
 		}
