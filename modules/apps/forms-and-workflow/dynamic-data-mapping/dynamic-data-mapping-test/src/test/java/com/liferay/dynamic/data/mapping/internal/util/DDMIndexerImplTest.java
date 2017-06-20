@@ -263,15 +263,6 @@ public class DDMIndexerImplTest {
 		return ddmFormValues;
 	}
 
-	protected DDMIndexer createDDMIndexer() {
-		return new DDMIndexerImpl() {
-			{
-				setDDMFormValuesToFieldsConverter(
-					new DDMFormValuesToFieldsConverterImpl());
-			}
-		};
-	}
-
 	protected DDMStructure createDDMStructure(DDMForm ddmForm) {
 		DDMStructure ddmStructure = new DDMStructureImpl();
 
@@ -296,7 +287,7 @@ public class DDMIndexerImplTest {
 	protected final DDMFixture ddmFixture = new DDMFixture();
 	protected final DDMFormJSONSerializer ddmFormJSONSerializer =
 		createDDMFormJSONSerializer();
-	protected final DDMIndexer ddmIndexer = createDDMIndexer();
+	protected final DDMIndexer ddmIndexer = new DDMIndexerImpl();
 	protected final DocumentFixture documentFixture = new DocumentFixture();
 
 	private static Map<String, String> _replaceKeys(
