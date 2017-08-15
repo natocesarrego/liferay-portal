@@ -130,16 +130,13 @@ public class DocumentImpl implements Document {
 			return;
 		}
 
-		if (_dateFormat == null) {
-			_dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-				_INDEX_DATE_FORMAT_PATTERN);
-		}
+		Format dateFormat = getDateFormat();
 
 		String[] datesString = new String[values.length];
 		Long[] datesTime = new Long[values.length];
 
 		for (int i = 0; i < values.length; i++) {
-			datesString[i] = _dateFormat.format(values[i]);
+			datesString[i] = dateFormat.format(values[i]);
 			datesTime[i] = values[i].getTime();
 		}
 
@@ -165,11 +162,13 @@ public class DocumentImpl implements Document {
 			return;
 		}
 
+		Format dateFormat = getDateFormat();
+
 		String[] datesString = new String[values.length];
 		Long[] datesTime = new Long[values.length];
 
 		for (int i = 0; i < values.length; i++) {
-			datesString[i] = _dateFormat.format(values[i]);
+			datesString[i] = dateFormat.format(values[i]);
 			datesTime[i] = values[i].getTime();
 		}
 
@@ -1124,6 +1123,11 @@ public class DocumentImpl implements Document {
 		return field;
 	}
 
+	protected Format getDateFormat() {
+		return FastDateFormatFactoryUtil.getSimpleDateFormat(
+			_INDEX_DATE_FORMAT_PATTERN);
+	}
+
 	protected void setSortableTextFields(Set<String> sortableTextFields) {
 		_sortableTextFields = sortableTextFields;
 	}
@@ -1172,7 +1176,6 @@ public class DocumentImpl implements Document {
 
 	private static final String _UID_PORTLET = "_PORTLET_";
 
-	private static Format _dateFormat;
 	private static final Set<String> _defaultSortableTextFields =
 		SetUtil.fromArray(
 			PropsUtil.getArray(PropsKeys.INDEX_SORTABLE_TEXT_FIELDS));
