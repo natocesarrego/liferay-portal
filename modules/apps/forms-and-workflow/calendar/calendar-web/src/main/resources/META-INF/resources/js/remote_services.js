@@ -360,30 +360,71 @@ AUI.add(
 				_invokeResourceURL: function(params) {
 					var instance = this;
 
-					var url = Liferay.PortletURL.createResourceURL();
-
-					url.setParameters(params.queryParameters);
-					url.setPortletId(instance.ID);
-					url.setResourceId(params.resourceId);
-
 					var payload;
 
-					if (params.payload) {
-						payload = Liferay.Util.ns(instance.get('namespace'), params.payload);
-					}
+					var url = Liferay.PortletURL.createResourceURL();
 
-					A.io.request(
-						url.toString(),
-						{
-							data: payload,
-							dataType: 'JSON',
-							on: {
-								success: function() {
-									params.callback(this.get('responseData'));
+					if (params.queryParameters && params.queryParameters.calendarIds && params.queryParameters.calendarIds.length > 50) {
+						var beginIndex = 0;
+						var endIndex = 50;
+
+						var calendarIds = params.queryParameters.calendarIds.split(',');
+
+						var length = calendarIds.length;
+
+						while (length > 0) {
+							params.queryParameters.calendarIds = calendarIds.slice(beginIndex, endIndex).join(',');
+
+							url.setParameters(params.queryParameters);
+							url.setPortletId(instance.ID);
+							url.setResourceId(params.resourceId);
+
+							if (params.payload) {
+								payload = Liferay.Util.ns(instance.get('namespace'), params.payload);
+							}
+
+							A.io.request(
+								url.toString(),
+								{
+									data: payload,
+									dataType: 'JSON',
+									on: {
+										success: function() {
+											params.callback(this.get('responseData'));
+										}
+									}
+								}
+							);
+
+							beginIndex = endIndex;
+
+							endIndex + 50 < calendarIds.length ? endIndex += 50 : endIndex = calendarIds.length;
+
+							length >= 50 ? length -= 50 : length -= length;
+						}
+					}
+					else {
+						url.setParameters(params.queryParameters);
+						url.setPortletId(instance.ID);
+						url.setResourceId(params.resourceId);
+
+						if (params.payload) {
+							payload = Liferay.Util.ns(instance.get('namespace'), params.payload);
+						}
+
+						A.io.request(
+							url.toString(),
+							{
+								data: payload,
+								dataType: 'JSON',
+								on: {
+									success: function () {
+										params.callback(this.get('responseData'));
+									}
 								}
 							}
-						}
-					);
+						);
+					}
 				},
 
 				_invokeService: function(payload, callback) {
