@@ -398,7 +398,8 @@ public class DDLFormEmailNotificationSender {
 		return LanguageUtil.get(resourceBundle, "someone");
 	}
 
-	protected String getViewFormEntriesURL(DDLRecordSet recordSet)
+	protected String getViewFormEntriesURL(
+			DDLRecordSet recordSet, ThemeDisplay themeDisplay)
 		throws PortalException {
 
 		Map<String, String[]> params = new HashMap<>();
@@ -413,12 +414,13 @@ public class DDLFormEmailNotificationSender {
 			portletNamespace.concat("recordSetId"),
 			new String[] {String.valueOf(recordSet.getRecordSetId())});
 
-		return _portal.getControlPanelFullURL(
-			recordSet.getGroupId(),
-			DDLFormPortletKeys.DYNAMIC_DATA_LISTS_FORM_ADMIN, params);
+		return _portal.getSiteAdminURL(
+			themeDisplay, DDLFormPortletKeys.DYNAMIC_DATA_LISTS_FORM_ADMIN,
+			params);
 	}
 
-	protected String getViewFormURL(DDLRecordSet recordSet, DDLRecord record)
+	protected String getViewFormURL(
+			DDLRecordSet recordSet, DDLRecord record, ThemeDisplay themeDisplay)
 		throws PortalException {
 
 		Map<String, String[]> params = new HashMap<>();
@@ -436,9 +438,9 @@ public class DDLFormEmailNotificationSender {
 			portletNamespace.concat("recordSetId"),
 			new String[] {String.valueOf(recordSet.getRecordSetId())});
 
-		return _portal.getControlPanelFullURL(
-			recordSet.getGroupId(),
-			DDLFormPortletKeys.DYNAMIC_DATA_LISTS_FORM_ADMIN, params);
+		return _portal.getSiteAdminURL(
+			themeDisplay, DDLFormPortletKeys.DYNAMIC_DATA_LISTS_FORM_ADMIN,
+			params);
 	}
 
 	protected void populateParameters(
@@ -448,13 +450,18 @@ public class DDLFormEmailNotificationSender {
 
 		Locale locale = getLocale(recordSet);
 
+		ThemeDisplay themeDisplay = getThemeDisplay(portletRequest);
+
 		template.put("authorName", recordSet.getUserName());
 		template.put("formName", recordSet.getName(locale));
 		template.put("pages", getPages(recordSet, record));
 		template.put("siteName", getSiteName(recordSet.getGroupId(), locale));
 		template.put("userName", getUserName(record, locale));
-		template.put("viewFormEntriesURL", getViewFormEntriesURL(recordSet));
-		template.put("viewFormURL", getViewFormURL(recordSet, record));
+		template.put(
+			"viewFormEntriesURL",
+			getViewFormEntriesURL(recordSet, themeDisplay));
+		template.put(
+			"viewFormURL", getViewFormURL(recordSet, record, themeDisplay));
 	}
 
 	protected String render(Template template) throws TemplateException {
