@@ -15,10 +15,12 @@
 package com.liferay.mobile.device.rules.web.internal.upgrade;
 
 import com.liferay.mobile.device.rules.web.internal.upgrade.v1_0_0.UpgradePortletId;
+import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Mate Thurzo
@@ -58,6 +60,13 @@ public class MDRWebUpgrade implements UpgradeStepRegistrator {
 					"SimpleRuleHandler",
 				"com.liferay.mobile.device.rules.web.internal.rule.group." +
 					"rule.SimpleRuleHandler"));
+	}
+
+	@Reference(
+		target = "(release.bundle.symbolic.name=com.liferay.mobile.device.rules.service)",
+		unbind = "-"
+	)
+	protected void setRelease(Release release) {
 	}
 
 }
