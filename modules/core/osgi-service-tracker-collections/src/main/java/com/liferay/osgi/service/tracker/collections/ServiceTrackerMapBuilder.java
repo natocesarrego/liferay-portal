@@ -48,7 +48,7 @@ public class ServiceTrackerMapBuilder {
 	public interface Mapper<K, SR, NR, R> {
 
 		public <R> Collector<K, SR, NR, R> collect(
-			ServiceTrackerBucketFactory<SR, NR, R> bucketFactory);
+			ServiceTrackerBucketFactory<SR, NR, R> serviceTrackerBucketFactory);
 
 		public Collector<K, SR, NR, List<NR>> collectMultiValue();
 
@@ -70,7 +70,7 @@ public class ServiceTrackerMapBuilder {
 		public Mapper<String, SR, NR, NR> map(String property);
 
 		public <NR> Selector<SR, NR> newSelector(
-			ServiceTrackerCustomizer<SR, NR> customizer);
+			ServiceTrackerCustomizer<SR, NR> serviceTrackerCustomizer);
 
 		public Selector<SR, NR> newSelector(String filter);
 
@@ -114,8 +114,8 @@ public class ServiceTrackerMapBuilder {
 		public ServiceTrackerMap<K, R> build() {
 			ServiceTrackerMap<K, R> serviceTrackerMap =
 				new ServiceTrackerMapImpl<>(
-					_bundleContext, _clazz, _filter, _mapper, _customizer,
-					_bucketFactory, _serviceTrackerMapListener);
+					_bundleContext, _clazz, _filter, _mapper, _serviceTrackerCustomizer,
+					_serviceTrackerBucketFactory, _serviceTrackerMapListener);
 
 			return serviceTrackerMap;
 		}
@@ -125,38 +125,38 @@ public class ServiceTrackerMapBuilder {
 			ServiceTrackerMapListener<K, NR, R> serviceTrackerMapListener) {
 
 			return new CollectorImpl<>(
-				_bundleContext, _clazz, _customizer, _filter, _mapper,
-				_bucketFactory, serviceTrackerMapListener);
+				_bundleContext, _clazz, _serviceTrackerCustomizer, _filter, _mapper,
+				_serviceTrackerBucketFactory, serviceTrackerMapListener);
 		}
 
 		private CollectorImpl(
 			BundleContext bundleContext, Class<SR> clazz,
-			ServiceTrackerCustomizer<SR, NR> customizer, String filter,
+			ServiceTrackerCustomizer<SR, NR> serviceTrackerCustomizer, String filter,
 			ServiceReferenceMapper<K, SR> mapper,
-			ServiceTrackerBucketFactory<SR, NR, R> bucketFactory,
+			ServiceTrackerBucketFactory<SR, NR, R> serviceTrackerBucketFactory,
 			ServiceTrackerMapListener<K, NR, R> serviceTrackerMapListener) {
 
 			_bundleContext = bundleContext;
 			_clazz = clazz;
 
-			if (customizer == null) {
-				_customizer = new DefaultServiceTrackerCustomizer(
+			if (serviceTrackerCustomizer == null) {
+				_serviceTrackerCustomizer = new DefaultServiceTrackerCustomizer(
 					_bundleContext);
 			}
 			else {
-				_customizer = customizer;
+				_serviceTrackerCustomizer = serviceTrackerCustomizer;
 			}
 
 			_filter = filter;
 			_mapper = mapper;
-			_bucketFactory = bucketFactory;
+			_serviceTrackerBucketFactory = serviceTrackerBucketFactory;
 			_serviceTrackerMapListener = serviceTrackerMapListener;
 		}
 
-		private final ServiceTrackerBucketFactory<SR, NR, R> _bucketFactory;
+		private final ServiceTrackerBucketFactory<SR, NR, R> _serviceTrackerBucketFactory;
 		private final BundleContext _bundleContext;
 		private final Class<SR> _clazz;
-		private final ServiceTrackerCustomizer<SR, NR> _customizer;
+		private final ServiceTrackerCustomizer<SR, NR> _serviceTrackerCustomizer;
 		private final String _filter;
 		private final ServiceReferenceMapper<K, SR> _mapper;
 		private final ServiceTrackerMapListener<K, NR, R>
@@ -169,17 +169,17 @@ public class ServiceTrackerMapBuilder {
 
 		@Override
 		public <R> Collector<K, SR, NR, R> collect(
-			ServiceTrackerBucketFactory<SR, NR, R> bucketFactory) {
+			ServiceTrackerBucketFactory<SR, NR, R> serviceTrackerBucketFactory) {
 
 			return new CollectorImpl<>(
-				_bundleContext, _clazz, _customizer, _filter, _mapper,
-				bucketFactory, null);
+				_bundleContext, _clazz, _serviceTrackerCustomizer, _filter, _mapper,
+				serviceTrackerBucketFactory, null);
 		}
 
 		@Override
 		public Collector<K, SR, NR, List<NR>> collectMultiValue() {
 			return new CollectorImpl<>(
-				_bundleContext, _clazz, _customizer, _filter, _mapper,
+				_bundleContext, _clazz, _serviceTrackerCustomizer, _filter, _mapper,
 				new MultiValueServiceTrackerBucketFactory<>(), null);
 		}
 
@@ -188,14 +188,14 @@ public class ServiceTrackerMapBuilder {
 			Comparator<ServiceReference<SR>> comparator) {
 
 			return new CollectorImpl<>(
-				_bundleContext, _clazz, _customizer, _filter, _mapper,
+				_bundleContext, _clazz, _serviceTrackerCustomizer, _filter, _mapper,
 				new MultiValueServiceTrackerBucketFactory<>(comparator), null);
 		}
 
 		@Override
 		public Collector<K, SR, NR, NR> collectSingleValue() {
 			return new CollectorImpl<>(
-				_bundleContext, _clazz, _customizer, _filter, _mapper,
+				_bundleContext, _clazz, _serviceTrackerCustomizer, _filter, _mapper,
 				new SingleValueServiceTrackerBucketFactory<>(), null);
 		}
 
@@ -204,25 +204,25 @@ public class ServiceTrackerMapBuilder {
 			Comparator<ServiceReference<SR>> comparator) {
 
 			return new CollectorImpl<>(
-				_bundleContext, _clazz, _customizer, _filter, _mapper,
+				_bundleContext, _clazz, _serviceTrackerCustomizer, _filter, _mapper,
 				new SingleValueServiceTrackerBucketFactory<>(comparator), null);
 		}
 
 		private MapperImpl(
 			BundleContext bundleContext, Class<SR> clazz,
-			ServiceTrackerCustomizer<SR, NR> customizer,
+			ServiceTrackerCustomizer<SR, NR> serviceTrackerCustomizer,
 			ServiceReferenceMapper<K, SR> mapper, String filter) {
 
 			_bundleContext = bundleContext;
 			_clazz = clazz;
-			_customizer = customizer;
+			_serviceTrackerCustomizer = serviceTrackerCustomizer;
 			_mapper = mapper;
 			_filter = filter;
 		}
 
 		private final BundleContext _bundleContext;
 		private final Class<SR> _clazz;
-		private final ServiceTrackerCustomizer<SR, NR> _customizer;
+		private final ServiceTrackerCustomizer<SR, NR> _serviceTrackerCustomizer;
 		private final String _filter;
 		private final ServiceReferenceMapper<K, SR> _mapper;
 
@@ -235,7 +235,7 @@ public class ServiceTrackerMapBuilder {
 			ServiceReferenceMapper<K, T> mapper) {
 
 			return new MapperImpl<>(
-				_bundleContext, _clazz, _customizer, mapper, null);
+				_bundleContext, _clazz, _serviceTrackerCustomizer, mapper, null);
 		}
 
 		@Override
@@ -247,37 +247,37 @@ public class ServiceTrackerMapBuilder {
 			}
 
 			return new MapperImpl<>(
-				_bundleContext, _clazz, _customizer,
+				_bundleContext, _clazz, _serviceTrackerCustomizer,
 				new PropertyServiceReferenceMapper<>(property), filter);
 		}
 
 		@Override
 		public <NR> Selector<T, NR> newSelector(
-			ServiceTrackerCustomizer<T, NR> customizer) {
+			ServiceTrackerCustomizer<T, NR> serviceTrackerCustomizer) {
 
 			return new SelectorImpl<>(
-				_bundleContext, _clazz, _filter, customizer);
+				_bundleContext, _clazz, _filter, serviceTrackerCustomizer);
 		}
 
 		@Override
 		public Selector<T, NR> newSelector(String filter) {
 			return new SelectorImpl<>(
-				_bundleContext, _clazz, filter, _customizer);
+				_bundleContext, _clazz, filter, _serviceTrackerCustomizer);
 		}
 
 		private SelectorImpl(
 			BundleContext bundleContext, Class<T> clazz, String filter,
-			ServiceTrackerCustomizer<T, NR> customizer) {
+			ServiceTrackerCustomizer<T, NR> serviceTrackerCustomizer) {
 
 			_bundleContext = bundleContext;
 			_clazz = clazz;
 			_filter = filter;
-			_customizer = customizer;
+			_serviceTrackerCustomizer = serviceTrackerCustomizer;
 		}
 
 		private final BundleContext _bundleContext;
 		private final Class<T> _clazz;
-		private final ServiceTrackerCustomizer<T, NR> _customizer;
+		private final ServiceTrackerCustomizer<T, NR> _serviceTrackerCustomizer;
 		private final String _filter;
 
 	}
