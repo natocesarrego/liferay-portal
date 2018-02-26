@@ -19,6 +19,8 @@
 <%
 String mvcPath = ParamUtil.getString(request, "mvcPath", "/view_template.jsp");
 
+String tabs1 = ParamUtil.getString(request, "tabs1", "templates");
+
 long templateId = ParamUtil.getLong(request, "templateId");
 
 long groupId = ParamUtil.getLong(request, "groupId", PortalUtil.getScopeGroupId(request, refererPortletName, true));
@@ -37,7 +39,6 @@ String keywords = ParamUtil.getString(request, "keywords");
 String orderByCol = ParamUtil.getString(request, "orderByCol", "modified-date");
 String orderByType = ParamUtil.getString(request, "orderByType", "asc");
 String searchContainerId = ParamUtil.getString(request, "searchContainerId");
-String tabs1 = ParamUtil.getString(request, "tabs1", "templates");
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
