@@ -41,7 +41,7 @@ public class ReadingTimeUtil {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
 					String.format(
-						"Reading time provider '%s' is not available",
+						"Reading time provider \"%s\" is not available",
 						displayStyle));
 			}
 		}
