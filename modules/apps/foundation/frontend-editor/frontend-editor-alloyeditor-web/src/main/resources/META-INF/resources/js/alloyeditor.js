@@ -99,8 +99,8 @@ AUI.add(
 						var nativeEditor = instance.getNativeEditor();
 
 						nativeEditor.on('error', instance._onError, instance);
-						nativeEditor.on('paste', instance._onPaste, instance);
 						nativeEditor.on('instanceReady', instance._onInstanceReady, instance);
+						nativeEditor.on('paste', instance._onPaste, instance);
 
 						if (instance.get('onBlurMethod')) {
 							nativeEditor.on('blur', instance._onBlur, instance);
