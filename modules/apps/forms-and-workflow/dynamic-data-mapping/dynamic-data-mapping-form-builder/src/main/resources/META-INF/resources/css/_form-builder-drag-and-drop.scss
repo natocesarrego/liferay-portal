@@ -116,6 +116,10 @@ div.sortable-layout-drag-indicator {
 			margin-bottom: 2px;
 		}
 	}
+
+	.form-builder-field label {
+		float: initial;
+	}
 }
 
 .form-builder-field-list .form-builder-field:hover, .form-builder-field-list,
