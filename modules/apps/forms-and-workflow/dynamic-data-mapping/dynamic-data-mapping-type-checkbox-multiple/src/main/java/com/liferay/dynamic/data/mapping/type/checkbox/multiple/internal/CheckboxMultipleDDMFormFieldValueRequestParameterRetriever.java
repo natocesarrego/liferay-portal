@@ -16,6 +16,8 @@ package com.liferay.dynamic.data.mapping.type.checkbox.multiple.internal;
 
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldValueRequestParameterRetriever;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -67,11 +69,18 @@ public class CheckboxMultipleDDMFormFieldValueRequestParameterRetriever
 				defaultDDMFormFieldParameterValue, String[].class);
 		}
 		catch (Exception e) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(e, e);
+			}
+
 			return StringUtil.split(defaultDDMFormFieldParameterValue);
 		}
 	}
 
 	@Reference
 	protected JSONFactory jsonFactory;
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CheckboxMultipleDDMFormFieldValueRequestParameterRetriever.class);
 
 }
