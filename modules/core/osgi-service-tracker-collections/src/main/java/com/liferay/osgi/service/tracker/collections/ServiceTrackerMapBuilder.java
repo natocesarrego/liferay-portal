@@ -67,7 +67,7 @@ public class ServiceTrackerMapBuilder {
 		public <K> Mapper<K, SR, NR, ?> map(
 			ServiceReferenceMapper<K, SR> serviceReferenceMapper);
 
-		public Mapper<String, SR, NR, NR> map(String property);
+		public Mapper<String, SR, NR, NR> map(String propertyKey);
 
 		public <NR> Selector<SR, NR> newSelector(
 			ServiceTrackerCustomizer<SR, NR> serviceTrackerCustomizer);
@@ -239,16 +239,16 @@ public class ServiceTrackerMapBuilder {
 		}
 
 		@Override
-		public Mapper<String, T, NR, NR> map(String property) {
+		public Mapper<String, T, NR, NR> map(String propertyKey) {
 			String filterString = _filterString;
 
 			if (filterString == null) {
-				filterString = "(" + property + "=*)";
+				filterString = "(" + propertyKey + "=*)";
 			}
 
 			return new MapperImpl<>(
 				_bundleContext, _clazz, _serviceTrackerCustomizer,
-				new PropertyServiceReferenceMapper<>(property), filterString);
+				new PropertyServiceReferenceMapper<>(propertyKey), filterString);
 		}
 
 		@Override
