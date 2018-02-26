@@ -125,10 +125,6 @@ public class DDMDisplayContext {
 				for (DDMDisplayTabItem ddmDisplayTabItem :
 						ddmDisplay.getTabItems()) {
 
-					String ddmDisplayTabItemHref = GetterUtil.getString(
-						ddmDisplayTabItem.getURL(
-							liferayPortletRequest, liferayPortletResponse));
-
 					String ddmDisplayTabItemTitle = GetterUtil.getString(
 						ddmDisplayTabItem.getTitle(
 							liferayPortletRequest, liferayPortletResponse));
@@ -138,6 +134,10 @@ public class DDMDisplayContext {
 
 					String defaultDDMDisplayTabItemTitle = GetterUtil.getString(
 						defaultDDMDisplayTabItem.getTitle(
+							liferayPortletRequest, liferayPortletResponse));
+
+					String ddmDisplayTabItemHref = GetterUtil.getString(
+						ddmDisplayTabItem.getURL(
 							liferayPortletRequest, liferayPortletResponse));
 
 					add(
