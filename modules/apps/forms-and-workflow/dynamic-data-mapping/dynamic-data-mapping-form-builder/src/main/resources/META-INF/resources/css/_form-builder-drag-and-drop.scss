@@ -59,6 +59,10 @@
 			width: 78px;
 
 			@include transition(all ease 0.3s);
+
+			button:first-child {
+				margin-right: 5px;
+			}
 		}
 
 		&.hovered-field {
@@ -69,7 +73,7 @@
 				cursor: default;
 			}
 
-			.lfr-ddm-field-actions-container {
+			.form-builder-field:hover .lfr-ddm-field-actions-container {
 				opacity: 1;
 				visibility: visible;
 			}
