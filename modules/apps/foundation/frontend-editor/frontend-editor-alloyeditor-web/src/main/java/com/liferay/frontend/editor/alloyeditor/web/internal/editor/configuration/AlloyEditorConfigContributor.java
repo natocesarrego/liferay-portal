@@ -289,7 +289,6 @@ public class AlloyEditorConfigContributor
 		jsonObject.put(
 			"buttons",
 			toJSONArray("['imageLeft', 'imageCenter', 'imageRight']"));
-
 		jsonObject.put("name", "videoEmbed");
 		jsonObject.put("test", "AlloyEditor.SelectionTest.videoembed");
 
