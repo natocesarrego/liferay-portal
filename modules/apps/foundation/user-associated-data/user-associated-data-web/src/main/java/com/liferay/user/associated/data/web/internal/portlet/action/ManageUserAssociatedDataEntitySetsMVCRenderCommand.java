@@ -59,8 +59,8 @@ public class ManageUserAssociatedDataEntitySetsMVCRenderCommand
 		long selUserId = ParamUtil.getLong(renderRequest, "selUserId");
 
 		if (selUserId > 0) {
-			Map<String, Integer> uadEntitySetCountsMap = new HashMap<>();
-			Map<String, String> uadEntitySetDefaultRegistryKeyMap =
+			Map<String, Integer> uadEntitySetCounts = new HashMap<>();
+			Map<String, String> uadEntitySetDefaultRegistryKeys =
 				new HashMap<>();
 
 			for (String key : _uadRegistry.getUADEntityAggregatorKeySet()) {
@@ -70,22 +70,22 @@ public class ManageUserAssociatedDataEntitySetsMVCRenderCommand
 				Integer uadEntityTypeCount = 0;
 				String uadEntitySetName = uadAggregator.getUADEntitySetName();
 
-				if (uadEntitySetCountsMap.containsKey(uadEntitySetName)) {
-					uadEntityTypeCount = uadEntitySetCountsMap.get(
+				if (uadEntitySetCounts.containsKey(uadEntitySetName)) {
+					uadEntityTypeCount = uadEntitySetCounts.get(
 						uadEntitySetName);
 				}
 				else {
-					uadEntitySetDefaultRegistryKeyMap.put(
+					uadEntitySetDefaultRegistryKeys.put(
 						uadEntitySetName,
 						_getFirstUADRegistryKey(uadEntitySetName));
 				}
 
-				uadEntityTypeCount = uadEntitySetCountsMap.getOrDefault(
+				uadEntityTypeCount = uadEntitySetCounts.getOrDefault(
 					uadAggregator.getUADEntitySetName(), 0);
 
 				uadEntityTypeCount += uadAggregator.count(selUserId);
 
-				uadEntitySetCountsMap.put(
+				uadEntitySetCounts.put(
 					uadAggregator.getUADEntitySetName(), uadEntityTypeCount);
 			}
 
@@ -93,12 +93,12 @@ public class ManageUserAssociatedDataEntitySetsMVCRenderCommand
 				new ArrayList<>();
 
 			for (Map.Entry<String, Integer> entry :
-					uadEntitySetCountsMap.entrySet()) {
+					uadEntitySetCounts.entrySet()) {
 
 				String uadEntitySetName = entry.getKey();
 				Integer count = entry.getValue();
-				String defaultRegistryKey =
-					uadEntitySetDefaultRegistryKeyMap.get(uadEntitySetName);
+				String defaultRegistryKey = uadEntitySetDefaultRegistryKeys.get(
+					uadEntitySetName);
 
 				UADEntitySetComposite uadEntitySetComposite =
 					new UADEntitySetComposite(
