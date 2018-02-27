@@ -26,30 +26,28 @@ import com.liferay.portal.kernel.util.StringBundler;
  */
 public class MDRActionUpgrade extends UpgradeProcess {
 
+	public MDRActionUpgrade(String oldPackageName, String newPackageName) {
+		_oldPackageName = oldPackageName;
+		_newPackageName = newPackageName;
+	}
+
 	@Override
 	public void doUpgrade() throws Exception {
 		_updateMDRAction(
-			LayoutTemplateModificationActionHandler.class.getSimpleName(),
-			LayoutTemplateModificationActionHandler.class.getName());
-		_updateMDRAction(
-			SimpleRedirectActionHandler.class.getSimpleName(),
-			SimpleRedirectActionHandler.class.getName());
-		_updateMDRAction(
-			SiteRedirectActionHandler.class.getSimpleName(),
-			SiteRedirectActionHandler.class.getName());
-		_updateMDRAction(
-			ThemeModificationActionHandler.class.getSimpleName(),
-			ThemeModificationActionHandler.class.getName());
+			LayoutTemplateModificationActionHandler.class.getSimpleName());
+		_updateMDRAction(SimpleRedirectActionHandler.class.getSimpleName());
+		_updateMDRAction(SiteRedirectActionHandler.class.getSimpleName());
+		_updateMDRAction(ThemeModificationActionHandler.class.getSimpleName());
 	}
 
-	private void _updateMDRAction(String oldType, String newType)
-		throws Exception {
-
+	private void _updateMDRAction(String name) throws Exception {
 		runSQL(
 			StringBundler.concat(
-				"update MDRAction set type_ = '", newType, "' where type_ = ",
-				"'com.liferay.portal.mobile.device.rulegroup.action.impl.",
-				oldType, "'"));
+				"update MDRAction set type_ = '", _newPackageName, ".", name,
+				"' where type_ = '", _oldPackageName, ".", name, "'"));
 	}
+
+	private final String _newPackageName;
+	private final String _oldPackageName;
 
 }
