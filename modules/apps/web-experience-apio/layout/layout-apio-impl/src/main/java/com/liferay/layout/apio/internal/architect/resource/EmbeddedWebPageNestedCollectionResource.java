@@ -85,8 +85,6 @@ public class EmbeddedWebPageNestedCollectionResource
 		).addBidirectionalModel(
 			"webSite", "embeddedWebPages", WebSiteIdentifier.class,
 			Layout::getGroupId
-		).addLocalizedString(
-			"breadcrumb", _layoutResourceCollectionUtil::getBreadcrumb
 		).addDate(
 			"dateCreated", Layout::getCreateDate
 		).addDate(
@@ -94,11 +92,11 @@ public class EmbeddedWebPageNestedCollectionResource
 		).addDate(
 			"datePublished", Layout::getLastPublishDate
 		).addLocalizedString(
+			"breadcrumb", _layoutResourceCollectionUtil::getBreadcrumb
+		).addLocalizedString(
 			"description",
 			(layout, language) -> layout.getDescription(
 				language.getPreferredLocale())
-		).addString(
-			"image", _layoutResourceCollectionUtil::getImageURL
 		).addLocalizedString(
 			"keywords",
 			(layout, language) -> layout.getKeywords(
@@ -116,6 +114,8 @@ public class EmbeddedWebPageNestedCollectionResource
 		).addString(
 			"embeddedUrl",
 			layout -> layout.getTypeSettingsProperty("embeddedLayoutURL")
+		).addString(
+			"image", _layoutResourceCollectionUtil::getImageURL
 		).build();
 	}
 
