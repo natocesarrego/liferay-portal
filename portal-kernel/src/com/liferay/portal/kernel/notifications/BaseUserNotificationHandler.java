@@ -143,7 +143,6 @@ public abstract class BaseUserNotificationHandler
 		}
 
 		String link = getLink(userNotificationEvent, serviceContext);
-
 		boolean applicable = isApplicable(
 			userNotificationEvent, serviceContext);
 
