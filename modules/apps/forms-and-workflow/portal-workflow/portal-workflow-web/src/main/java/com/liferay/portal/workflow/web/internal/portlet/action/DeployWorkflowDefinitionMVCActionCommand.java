@@ -89,7 +89,8 @@ public class DeployWorkflowDefinitionMVCActionCommand
 
 		if (!latestWorkflowDefinition.isActive()) {
 			actionRequest.setAttribute(
-				WorkflowWebKeys.WORKFLOW_PUBLISH_DEFINITION_ACTION, true);
+				WorkflowWebKeys.WORKFLOW_PUBLISH_DEFINITION_ACTION,
+				Boolean.TRUE);
 		}
 
 		WorkflowDefinition workflowDefinition =
