@@ -41,12 +41,12 @@ import org.osgi.service.component.annotations.Component;
 public class LayoutResourceCollectionUtil {
 
 	public String getBreadcrumb(Layout layout, Language language) {
-		List<Layout> ancestors = null;
+		List<Layout> ancestorLayouts = null;
 
 		Locale locale = language.getPreferredLocale();
 
 		try {
-			ancestors = layout.getAncestors();
+			ancestorLayouts = layout.getAncestors();
 		}
 		catch (Exception e) {
 			_log.error("Unable to get layout ancestors", e);
@@ -54,7 +54,7 @@ public class LayoutResourceCollectionUtil {
 			return StringPool.BLANK;
 		}
 
-		StringBundler sb = new StringBundler(4 * ancestors.size() + 5);
+		StringBundler sb = new StringBundler(4 * ancestorLayouts.size() + 5);
 
 		if (layout.isPrivateLayout()) {
 			sb.append(LanguageUtil.get(locale, "private-pages"));
@@ -67,10 +67,10 @@ public class LayoutResourceCollectionUtil {
 		sb.append(StringPool.GREATER_THAN);
 		sb.append(StringPool.SPACE);
 
-		Collections.reverse(ancestors);
+		Collections.reverse(ancestorLayouts);
 
-		for (Layout ancestor : ancestors) {
-			sb.append(HtmlUtil.escape(ancestor.getName(locale)));
+		for (Layout ancestorLayout : ancestorLayouts) {
+			sb.append(HtmlUtil.escape(ancestorLayout.getName(locale)));
 			sb.append(StringPool.SPACE);
 			sb.append(StringPool.GREATER_THAN);
 			sb.append(StringPool.SPACE);
