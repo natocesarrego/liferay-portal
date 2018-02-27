@@ -14,6 +14,7 @@
 
 package com.liferay.user.associated.data.web.internal.portlet.action;
 
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItemList;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
@@ -31,6 +32,8 @@ import com.liferay.user.associated.data.entity.UADEntity;
 import com.liferay.user.associated.data.web.internal.constants.UserAssociatedDataWebKeys;
 import com.liferay.user.associated.data.web.internal.display.ManageUserAssociatedDataEntitiesDisplay;
 import com.liferay.user.associated.data.web.internal.registry.UADRegistry;
+
+import java.util.List;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
@@ -87,7 +90,7 @@ public class ManageUserAssociatedDataEntitiesMVCRenderCommand
 				new ManageUserAssociatedDataEntitiesDisplay();
 
 		manageUserAssociatedDataEntitiesDisplay.setNavigationItems(
-			_getNaviagationItemList(
+			_getNaviagationItems(
 				uadEntitySetName, uadRegistryKey, currentURL,
 				liferayPortletResponse));
 
@@ -110,7 +113,7 @@ public class ManageUserAssociatedDataEntitiesMVCRenderCommand
 		return "/manage_user_associated_data_entities.jsp";
 	}
 
-	private NavigationItemList _getNaviagationItemList(
+	private List<NavigationItem> _getNaviagationItems(
 			String uadEntitySetName, String uadRegistryKey,
 			PortletURL currentURL,
 			LiferayPortletResponse liferayPortletResponse)
