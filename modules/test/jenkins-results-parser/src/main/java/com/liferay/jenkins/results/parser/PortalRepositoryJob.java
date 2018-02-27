@@ -102,7 +102,7 @@ public abstract class PortalRepositoryJob extends RepositoryJob {
 		}
 		catch (IOException ioe) {
 			throw new RuntimeException(
-				"Invalid git working directory " + workingDirectoryPath, ioe);
+				"Invalid Git working directory " + workingDirectoryPath, ioe);
 		}
 	}
 
