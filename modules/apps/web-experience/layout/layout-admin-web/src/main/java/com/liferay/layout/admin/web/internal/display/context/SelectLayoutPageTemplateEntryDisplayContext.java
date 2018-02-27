@@ -104,7 +104,6 @@ public class SelectLayoutPageTemplateEntryDisplayContext {
 	public List<NavigationItem> getNavigationItems() throws PortalException {
 		return new NavigationItemList() {
 			{
-
 				String basicPagesURL =
 					_layoutsAdminDisplayContext.
 						getSelectLayoutPageTemplateEntryURL(

@@ -79,10 +79,6 @@ public class CopyLayoutMVCActionCommand extends BaseMVCActionCommand {
 		boolean privateLayout = ParamUtil.getBoolean(
 			actionRequest, "privateLayout");
 		long layoutId = ParamUtil.getLong(uploadPortletRequest, "layoutId");
-
-		long liveGroupId = ParamUtil.getLong(actionRequest, "liveGroupId");
-		long stagingGroupId = ParamUtil.getLong(
-			actionRequest, "stagingGroupId");
 		String name = ParamUtil.getString(actionRequest, "name");
 
 		Map<Locale, String> nameMap = new HashMap<>();
@@ -126,6 +122,10 @@ public class CopyLayoutMVCActionCommand extends BaseMVCActionCommand {
 				actionRequest, layout, copyLayout);
 
 			SitesUtil.copyLookAndFeel(layout, copyLayout);
+
+			long liveGroupId = ParamUtil.getLong(actionRequest, "liveGroupId");
+			long stagingGroupId = ParamUtil.getLong(
+				actionRequest, "stagingGroupId");
 
 			_actionUtil.updateLookAndFeel(
 				actionRequest, themeDisplay.getCompanyId(), liveGroupId,
