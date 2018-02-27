@@ -79,12 +79,12 @@ public class WebSiteCollectionResource
 		).identifier(
 			Group::getGroupId
 		).addLocalizedString(
-			"name",
-			(group, language) -> group.getName(language.getPreferredLocale())
-		).addLocalizedString(
 			"description",
 			(group, language) -> group.getDescription(
 				language.getPreferredLocale())
+		).addLocalizedString(
+			"name",
+			(group, language) -> group.getName(language.getPreferredLocale())
 		).build();
 	}
 
