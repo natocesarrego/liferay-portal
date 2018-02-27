@@ -93,7 +93,7 @@ public class WebSiteCollectionResource
 			return _groupLocalService.getGroup(groupId);
 		}
 		catch (NoSuchGroupException nsge) {
-			throw new NotFoundException("Unable to get Group " + groupId, nsge);
+			throw new NotFoundException("Unable to get group " + groupId, nsge);
 		}
 		catch (PortalException pe) {
 			throw new ServerErrorException(500, pe);
@@ -106,11 +106,10 @@ public class WebSiteCollectionResource
 		List<Group> groups = _groupLocalService.getGroups(
 			company.getCompanyId(), 0, true, pagination.getStartPosition(),
 			pagination.getEndPosition());
-
-		int groupsCount = _groupLocalService.getGroupsCount(
+		int count = _groupLocalService.getGroupsCount(
 			company.getCompanyId(), 0, true);
 
-		return new PageItems<>(groups, groupsCount);
+		return new PageItems<>(groups, count);
 	}
 
 	@Reference
