@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.site.apio.identifier;
+package com.liferay.layout.apio.architect.identifier;
 
 import com.liferay.apio.architect.identifier.Identifier;
 
 /**
  * @author Pavel Savinov
  */
-public interface WebSiteId extends Identifier<Long> {
+public interface EmbeddedWebPageId extends Identifier<Long> {
 }
