@@ -131,9 +131,8 @@ public class ManageUserAssociatedDataEntitySetsMVCRenderCommand
 
 		if (_log.isWarnEnabled()) {
 			_log.warn(
-				StringBundler.concat(
-					"No UADEntityAggregator found for entity set name \"",
-					uadEntitySetName, "\"."));
+				"Unable to find UADEntityAggregator for entity set " +
+					uadEntitySetName);
 		}
 
 		return null;
