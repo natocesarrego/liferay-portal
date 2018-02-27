@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.site.apio.architect.identifier.WebSiteId;
+import com.liferay.site.apio.architect.identifier.WebSiteIdentifier;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true)
 public class WebSiteCollectionResource
-	implements CollectionResource<Group, Long, WebSiteId> {
+	implements CollectionResource<Group, Long, WebSiteIdentifier> {
 
 	@Override
 	public CollectionRoutes<Group> collectionRoutes(

@@ -20,7 +20,7 @@ import com.liferay.apio.architect.representor.Representor;
 import com.liferay.apio.architect.resource.NestedCollectionResource;
 import com.liferay.apio.architect.routes.ItemRoutes;
 import com.liferay.apio.architect.routes.NestedCollectionRoutes;
-import com.liferay.layout.apio.architect.identifier.EmbeddedWebPageId;
+import com.liferay.layout.apio.architect.identifier.EmbeddedWebPageIdentifier;
 import com.liferay.layout.apio.internal.util.LayoutResourceCollectionUtil;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -30,7 +30,7 @@ import com.liferay.portal.kernel.security.auth.AuthException;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutService;
-import com.liferay.site.apio.architect.identifier.WebSiteId;
+import com.liferay.site.apio.architect.identifier.WebSiteIdentifier;
 
 import java.util.List;
 
@@ -45,9 +45,9 @@ import org.osgi.service.component.annotations.Reference;
  * @author Pavel Savinov
  */
 @Component(immediate = true)
-public class EmbeddedWebPageCollectionResource
+public class EmbeddedWebPageNestedCollectionResource
 	implements NestedCollectionResource
-		<Layout, Long, EmbeddedWebPageId, Long, WebSiteId> {
+		<Layout, Long, EmbeddedWebPageIdentifier, Long, WebSiteIdentifier> {
 
 	@Override
 	public NestedCollectionRoutes<Layout, Long> collectionRoutes(
@@ -83,7 +83,8 @@ public class EmbeddedWebPageCollectionResource
 		).identifier(
 			Layout::getPlid
 		).addBidirectionalModel(
-			"webSite", "embeddedWebPages", WebSiteId.class, Layout::getGroupId
+			"webSite", "embeddedWebPages", WebSiteIdentifier.class,
+			Layout::getGroupId
 		).addLocalizedString(
 			"breadcrumb", _layoutResourceCollectionUtil::getBreadcrumb
 		).addDate(
