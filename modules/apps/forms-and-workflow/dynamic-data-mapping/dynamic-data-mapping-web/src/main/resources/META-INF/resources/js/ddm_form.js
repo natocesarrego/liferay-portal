@@ -712,11 +712,13 @@ AUI.add(
 
 							var value;
 
-							if (Lang.isString(localizationMap)) {
-								value = localizationMap;
+							if (instance.get('localizable')) {
+								if (!A.Object.isEmpty(localizationMap)) {
+									value = localizationMap[instance.get('displayLocale')];
+								}
 							}
-							else if (!A.Object.isEmpty(localizationMap)) {
-								value = localizationMap[instance.get('displayLocale')];
+							else {
+								value = instance.getValue();
 							}
 
 							if (Lang.isUndefined(value)) {
@@ -870,14 +872,12 @@ AUI.add(
 
 						var locales = [defaultLocale].concat(availableLocales);
 
-						if (localizable) {
-							if (locales.indexOf(event.prevVal) > -1) {
-								instance.updateLocalizationMap(event.prevVal);
-							}
+						if (locales.indexOf(event.prevVal) > -1) {
+							instance.updateLocalizationMap(event.prevVal);
+						}
 
-							if (locales.indexOf(event.newVal) > -1) {
-								instance.addLocaleToLocalizationMap(event.newVal);
-							}
+						if (locales.indexOf(event.newVal) > -1) {
+							instance.addLocaleToLocalizationMap(event.newVal);
 						}
 
 						instance.set('displayLocale', event.newVal);
@@ -1520,11 +1520,13 @@ AUI.add(
 
 							var layoutValue = instance.getParsedValue(instance.getValue());
 
+							var retVal = null;
+
 							if (layoutValue.layoutId) {
-								return layoutValue;
+								retVal = layoutValue;
 							}
 
-							return null;
+							return retVal;
 						}
 					},
 
@@ -3373,8 +3375,7 @@ AUI.add(
 
 							new A.DD.Drag(
 								A.mix(dragOptions, instance.get('dd'))
-							)
-							.plug(A.Plugin.DDProxy, proxyOptions);
+							).plug(A.Plugin.DDProxy, proxyOptions);
 						}
 					}
 				}
