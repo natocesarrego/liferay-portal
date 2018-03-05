@@ -258,14 +258,14 @@ if (hints != null) {
 					var checkbox = $('#<portlet:namespace /><%= formName + fieldParam %>');
 
 					checkbox.one(
-						'click',
+						'click mouseover',
 						function() {
 							Liferay.component('<portlet:namespace /><%= fieldParam %>DatePicker');
 						}
 					);
 
 					checkbox.on(
-						'click',
+						'click mouseover',
 						function(event) {
 							var checked = checkbox.prop('checked');
 
