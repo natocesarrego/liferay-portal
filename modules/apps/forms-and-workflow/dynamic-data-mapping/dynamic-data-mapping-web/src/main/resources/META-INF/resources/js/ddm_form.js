@@ -392,19 +392,19 @@ AUI.add(
 								localizationMap[locale] = predefinedValue;
 							}
 							else {
-								var name = instance.get('name');
+								var translationManager = instance.get('translationManager');
 
-								var field = instance.getFieldByNameInFieldDefinition(name);
+								var defaultLocale;
 
-								if (field && field.type) {
-									var type = field.type;
+								if (translationManager) {
+									defaultLocale = translationManager.get('defaultLocale');
+								}
 
-									if (type === 'radio' || type === 'select') {
-										localizationMap[locale] = instance.getValue();
-									}
-									else {
-										localizationMap[locale] = '';
-									}
+								if (defaultLocale && localizationMap[defaultLocale]) {
+									localizationMap[locale] = localizationMap[defaultLocale];
+								}
+								else {
+									localizationMap[locale] = '';
 								}
 							}
 						}
