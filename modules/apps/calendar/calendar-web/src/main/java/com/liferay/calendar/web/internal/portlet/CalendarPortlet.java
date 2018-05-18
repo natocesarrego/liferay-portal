@@ -1481,13 +1481,23 @@ public class CalendarPortlet extends MVCPortlet {
 				user.getUserId());
 		}
 
+		PortletPreferences portletPreferences =
+		resourceRequest.getPreferences();
+		
+		boolean showUserEvents = GetterUtil.getBoolean(
+			portletPreferences.getValue("showUserEvents", null), true);
+
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
 		for (Calendar calendar : calendarsSet) {
-			JSONObject jsonObject = CalendarUtil.toCalendarJSONObject(
-				themeDisplay, calendar);
+			CalendarResource calendarResource = calendar.getCalendarResource();
 
-			jsonArray.put(jsonObject);
+			if (showUserEvents || !calendarResource.isUser()){
+				JSONObject jsonObject = CalendarUtil.toCalendarJSONObject(
+					themeDisplay, calendar);
+
+				jsonArray.put(jsonObject);
+			}
 		}
 
 		writeJSON(resourceRequest, resourceResponse, jsonArray);
