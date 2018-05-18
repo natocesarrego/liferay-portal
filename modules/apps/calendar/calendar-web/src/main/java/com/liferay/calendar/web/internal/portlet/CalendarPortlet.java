@@ -1483,7 +1483,7 @@ public class CalendarPortlet extends MVCPortlet {
 
 		PortletPreferences portletPreferences =
 		resourceRequest.getPreferences();
-		
+
 		boolean showUserEvents = GetterUtil.getBoolean(
 			portletPreferences.getValue("showUserEvents", null), true);
 
@@ -1492,7 +1492,7 @@ public class CalendarPortlet extends MVCPortlet {
 		for (Calendar calendar : calendarsSet) {
 			CalendarResource calendarResource = calendar.getCalendarResource();
 
-			if (showUserEvents || !calendarResource.isUser()){
+			if (showUserEvents || !calendarResource.isUser()) {
 				JSONObject jsonObject = CalendarUtil.toCalendarJSONObject(
 					themeDisplay, calendar);
 
