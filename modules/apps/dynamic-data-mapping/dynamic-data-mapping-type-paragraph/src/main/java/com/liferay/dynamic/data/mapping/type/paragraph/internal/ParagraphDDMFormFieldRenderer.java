@@ -64,22 +64,6 @@ public class ParagraphDDMFormFieldRenderer extends BaseDDMFormFieldRenderer {
 		_templateResource = null;
 	}
 
-	@Override
-	protected void populateOptionalContext(
-		Template template, DDMFormField ddmFormField,
-		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
-
-		Map<String, Object> parameters =
-			paragraphDDMFormFieldTemplateContextContributor.getParameters(
-				ddmFormField, ddmFormFieldRenderingContext);
-
-		template.putAll(parameters);
-	}
-
-	@Reference
-	protected ParagraphDDMFormFieldTemplateContextContributor
-		paragraphDDMFormFieldTemplateContextContributor;
-
 	private TemplateResource _templateResource;
 
 }
