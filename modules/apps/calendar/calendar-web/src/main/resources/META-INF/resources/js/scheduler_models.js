@@ -218,6 +218,23 @@ AUI.add(
 						return instance.get('parentCalendarBookingId') === instance.get('calendarBookingId');
 					},
 
+					intersects: function(evt) {
+						var instance = this;
+						var endDate = instance.get('endDate');
+						var laterEndDate = DateMath.add(DateMath.clone(endDate), DateMath.MINUTES, 30);
+						var startDate = instance.get('startDate');
+						var evtStartDate = evt.get('startDate');
+
+						if (instance.sameStartDate(evt) ||
+							DateMath.between(evtStartDate, startDate, endDate)) {
+
+							return true;
+						}
+						else {
+							return DateMath.between(evtStartDate, startDate, laterEndDate);
+						}
+					},
+
 					isRecurring: function() {
 						var instance = this;
 
