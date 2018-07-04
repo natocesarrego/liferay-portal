@@ -45,11 +45,14 @@ public class DDMFormValuesMergerImpl implements DDMFormValuesMerger {
 		return existingDDMFormValues;
 	}
 
-	protected DDMFormFieldValue getDDMFormFieldValueByName(
-		List<DDMFormFieldValue> ddmFormFieldValues, String name) {
+	protected DDMFormFieldValue getDDMFormFieldValueByNameAndInstanceId(
+		List<DDMFormFieldValue> ddmFormFieldValues, String name,
+		String instanceId) {
 
 		for (DDMFormFieldValue ddmFormFieldValue : ddmFormFieldValues) {
-			if (name.equals(ddmFormFieldValue.getName())) {
+			if (name.equals(ddmFormFieldValue.getName()) &&
+				instanceId.equals(ddmFormFieldValue.getInstanceId())) {
+
 				return ddmFormFieldValue;
 			}
 		}
@@ -66,8 +69,9 @@ public class DDMFormValuesMergerImpl implements DDMFormValuesMerger {
 
 		for (DDMFormFieldValue newDDMFormFieldValue : newDDMFormFieldValues) {
 			DDMFormFieldValue actualDDMFormFieldValue =
-				getDDMFormFieldValueByName(
-					existingDDMFormFieldValues, newDDMFormFieldValue.getName());
+				getDDMFormFieldValueByNameAndInstanceId(
+					existingDDMFormFieldValues, newDDMFormFieldValue.getName(),
+					newDDMFormFieldValue.getInstanceId());
 
 			if (actualDDMFormFieldValue != null) {
 				mergeValue(
