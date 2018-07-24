@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.permission.RolePermissionUtil;
+import com.liferay.roles.admin.web.internal.util.RolesWorkflowUtil;
 
 import javax.portlet.PortletResponse;
 
@@ -42,7 +43,8 @@ public class RoleChecker extends EmptyOnClickRowChecker {
 			PermissionThreadLocal.getPermissionChecker();
 
 		try {
-			if (role.isSystem() ||
+			if (RolesWorkflowUtil.hasWorkflow(role.getRoleId()) ||
+				role.isSystem() ||
 				!RolePermissionUtil.contains(
 					permissionChecker, role.getRoleId(), ActionKeys.DELETE)) {
 

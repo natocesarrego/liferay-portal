@@ -121,6 +121,7 @@ page import="com.liferay.roles.admin.web.internal.display.context.RoleDisplayCon
 page import="com.liferay.roles.admin.web.internal.display.context.SelectRoleManagementToolbarDisplayContext" %><%@
 page import="com.liferay.roles.admin.web.internal.display.context.ViewRolesManagementToolbarDisplayContext" %><%@
 page import="com.liferay.roles.admin.web.internal.util.PortletDisplayTemplateUtil" %><%@
+page import="com.liferay.roles.admin.web.internal.util.RolesWorkflowUtil" %><%@
 page import="com.liferay.taglib.search.ResultRow" %><%@
 page import="com.liferay.users.admin.kernel.util.UsersAdmin" %><%@
 page import="com.liferay.users.admin.kernel.util.UsersAdminUtil" %>
