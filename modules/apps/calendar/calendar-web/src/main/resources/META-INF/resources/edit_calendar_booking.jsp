@@ -934,13 +934,44 @@ while (manageableCalendarsIterator.hasNext()) {
 			var endDateContainer = A.one('#<portlet:namespace />endDateContainer');
 			var startDateContainer = A.one('#<portlet:namespace />startDateContainer');
 
+			var endDatePicker = intervalSelector.get('endDatePicker');
+			var startDatePicker = intervalSelector.get('startDatePicker');
+
+			var endDate = endDatePicker.getDate();
+			var startDate = startDatePicker.getDate();
+
+			var endTimePicker = intervalSelector.get('endTimePicker');
+			var startTimePicker = intervalSelector.get('startTimePicker');
+
 			var checked = allDayCheckbox.get('checked');
 
 			if (checked) {
 				placeholderSchedulerEvent.set('allDay', true);
+
+				startDate.setHours(0);
+				startDate.setMinutes(0);
+
+				endDate.setHours(23);
+				endDate.setMinutes(59);
+
+				intervalSelector.setDuration(endDate.valueOf() - startDate.valueOf());
+
+				startTimePicker.selectDates([startDate]);
+				endTimePicker.selectDates([endDate]);
 			}
 			else {
 				placeholderSchedulerEvent.set('allDay', false);
+
+				startDate.setHours(10);
+				startDate.setMinutes(0);
+
+				endDate.setHours(10);
+				endDate.setMinutes(30);
+
+				intervalSelector.setDuration(endDate.valueOf() - startDate.valueOf());
+
+				startTimePicker.selectDates([startDate]);
+				endTimePicker.selectDates([endDate]);
 
 				endDateContainer.show();
 			}
