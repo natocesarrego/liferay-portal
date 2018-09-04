@@ -266,7 +266,6 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			optionalControl.toggle(!paragraph);
 			paragraphDiv.toggle(paragraph);
 
-			optionalControl.all('input[type="checkbox"]').attr('checked', paragraph);
 			optionalControl.all('input[type="hidden"]').attr('value', paragraph);
 		};
 
