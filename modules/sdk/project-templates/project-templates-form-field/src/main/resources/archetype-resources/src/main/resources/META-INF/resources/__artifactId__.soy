@@ -1,3 +1,4 @@
+#parse ("definitions.vm")
 #if (${liferayVersion.startsWith("7.0")})
 {namespace ddm}
 
@@ -32,7 +33,6 @@
 	</div>
 {/template}
 #elseif (${liferayVersion.startsWith("7.1")})
-#parse ("definitions.vm")
 {namespace DDM${className}}
 
 /**
