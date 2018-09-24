@@ -263,7 +263,6 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			}
 
 			labelName.toggle(!paragraph);
-			optionalControl.toggle(!paragraph);
 			paragraphDiv.toggle(paragraph);
 		};
 
