@@ -1,7 +1,12 @@
 apply plugin: "com.liferay.alloy.taglib"
 apply plugin: "com.liferay.lang.merger"
 
+configurations {
+	alloyTaglib
+}
+
 buildTaglibs {
+	classpath = configurations.alloyTaglib
 	componentsXmlFiles "liferay-ddm.xml"
 	javaPackage = "com.liferay.dynamic.data.mapping.taglib.servlet"
 }
@@ -18,4 +23,6 @@ dependencies {
 	compileOnly project(":apps:portlet-display-template:portlet-display-template-api")
 	compileOnly project(":core:petra:petra-lang")
 	compileOnly project(":core:petra:petra-string")
+
+	alloyTaglib project(":apps:dynamic-data-mapping:dynamic-data-mapping-api")
 }
