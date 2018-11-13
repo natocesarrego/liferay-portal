@@ -22,7 +22,7 @@ import javax.portlet.Portlet;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author arthurchan35
+ * @author Arthur Chan
  */
 @Component(
 	immediate = true,
