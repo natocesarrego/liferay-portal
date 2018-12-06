@@ -249,7 +249,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 
 			var labelName = formRow.one('.label-name');
 			var optionalCheckbox = formRow.one('.optional-control');
-			var optionalControl = formRow.one('.optional-control').ancestor();
+			var optionalControl = optionalCheckbox.ancestor();
 			var paragraphDiv = formRow.one('.paragraph');
 
 			var paragraph = value === 'paragraph';
