@@ -459,6 +459,7 @@ public class DDMFormDisplayContext {
 			new DDMFormRenderingContext();
 
 		ddmFormRenderingContext.setContainerId(_containerId);
+		ddmFormRenderingContext.setFormInstanceId(getFormInstanceId());
 		ddmFormRenderingContext.setDDMFormValues(
 			_ddmFormValuesFactory.create(_renderRequest, ddmForm));
 

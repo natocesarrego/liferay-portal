@@ -45,6 +45,10 @@ public class DDMFormRenderingContext {
 		return _ddmFormValues;
 	}
 
+	public long getFormInstanceId() {
+		return _formInstanceId;
+	}
+
 	public long getGroupId() {
 		return _groupId;
 	}
@@ -105,6 +109,10 @@ public class DDMFormRenderingContext {
 		_ddmFormValues = ddmFormValues;
 	}
 
+	public void setFormInstanceId(long formInstanceId) {
+		_formInstanceId = formInstanceId;
+	}
+
 	public void setGroupId(long groupId) {
 		_groupId = groupId;
 	}
@@ -159,6 +167,7 @@ public class DDMFormRenderingContext {
 
 	private String _containerId;
 	private DDMFormValues _ddmFormValues;
+	private long _formInstanceId;
 	private long _groupId;
 	private HttpServletRequest _httpServletRequest;
 	private HttpServletResponse _httpServletResponse;

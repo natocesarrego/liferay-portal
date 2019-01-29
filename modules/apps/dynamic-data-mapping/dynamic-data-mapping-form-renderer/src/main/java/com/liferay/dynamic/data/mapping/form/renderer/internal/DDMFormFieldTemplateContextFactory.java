@@ -103,6 +103,8 @@ public class DDMFormFieldTemplateContextFactory {
 		ddmFormFieldRenderingContext.setProperty(
 			"changedProperties", changedProperties);
 		ddmFormFieldRenderingContext.setProperty(
+			"formInstanceId", _ddmFormRenderingContext.getFormInstanceId());
+		ddmFormFieldRenderingContext.setProperty(
 			"groupId", _ddmFormRenderingContext.getGroupId());
 		ddmFormFieldRenderingContext.setReturnFullContext(
 			_ddmFormRenderingContext.isReturnFullContext());
