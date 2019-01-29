@@ -133,6 +133,24 @@
 					},
 					root: MODULE_PATH + '/fieldset/'
 				},
+				'field-file-upload': {
+					base: MODULE_PATH + '/file-upload/',
+					combine: Liferay.AUI.getCombine(),
+					filter: Liferay.AUI.getFilterConfig(),
+					modules: {
+						'liferay-ddm-form-field-file-upload': {
+							condition: {
+								trigger: 'liferay-ddm-form-renderer'
+							},
+							path: 'file_upload_field.js',
+							requires: [
+								'liferay-ddm-form-renderer-field',
+								'liferay-upload'
+							]
+						}
+					},
+					root: MODULE_PATH + '/file-upload/'
+				},
 				'field-grid': {
 					base: MODULE_PATH + '/grid/',
 					combine: Liferay.AUI.getCombine(),

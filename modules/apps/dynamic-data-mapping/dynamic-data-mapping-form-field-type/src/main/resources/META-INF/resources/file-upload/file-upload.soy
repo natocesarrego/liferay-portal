@@ -1,0 +1,102 @@
+{namespace DDMFileUpload}
+
+/**
+* Defines the delegated template for the file upload field.
+*/
+{deltemplate ddm.field variant="'file_upload'"}
+	{call .render data="all" /}
+{/deltemplate}
+
+/**
+* Prints the upload field.
+*/
+{template .render}
+	{@param name: string}
+	{@param pathThemeImages: string}
+	{@param showLabel: bool}
+	{@param visible: bool}
+	{@param? dir: string}
+	{@param? label: string}
+	{@param? fileEntryTitle: string}
+	{@param? fileEntryURL: string}
+	{@param? lexiconIconsPath: string}
+	{@param? portletNamespace: string}
+	{@param? required: bool}
+	{@param? tip: string}
+	{@param? value: ?}
+
+	<div class="form-group{$visible ? '' : ' hide'}" data-fieldname="{$name}">
+		{if $showLabel or $required}
+			<label>
+				{if $showLabel}
+					{$label}{sp}
+				{/if}
+
+				{if $required}
+					<svg aria-hidden="true"
+						 class="lexicon-icon lexicon-icon-asterisk reference-mark">
+						<use xlink:href="{$pathThemeImages}/lexicon/icons.svg#asterisk"/>
+					</svg>
+				{/if}
+			</label>
+		{/if}
+
+		<div class="liferay-ddm-form-field-file-upload">
+			{if $fileEntryURL}
+				{call .card_item}
+					{param fileEntryTitle: $fileEntryTitle /}
+					{param fileEntryURL: $fileEntryURL /}
+					{param lexiconIconsPath: $lexiconIconsPath /}
+				{/call}
+			{else}
+				<div class="input-group">
+					<div class="input-group-item input-group-prepend">
+						<div class="lfr-dynamic-uploader">
+							<div class="lfr-upload-container" id="{$portletNamespace}fileUpload"></div>
+						</div>
+
+						<input class="field form-control"
+							   {if $dir}dir="{$dir}"{/if}
+								disabled
+							   id="inputFile"
+							   type="text"
+							   value="{$fileEntryTitle ? $fileEntryTitle : ''}"
+						>
+					</div>
+				</div>
+			{/if}
+			<input class="field form-control" name="{$name}" type="hidden" value="{$value ? $value : ''}">
+		</div>
+
+		{if $showLabel}
+			{if $tip}
+				<span class="form-text">{$tip}</span>
+			{/if}
+		{/if}
+	</div>
+{/template}
+
+/**
+ * Prints the card to allow file to be downloaded.
+ */
+{template .card_item}
+	{@param? fileEntryTitle: string}
+	{@param? fileEntryURL: string}
+	{@param? lexiconIconsPath: string}
+
+	<div class="card card-horizontal">
+		<div class="card-row card-row-padded">
+			<div class="card-col-content card-col-gutters">
+				<h4 class="truncate-text" title="{$fileEntryTitle}">{$fileEntryTitle}</h4>
+			</div>
+
+			<div class="card-col-field">
+				<a href="{$fileEntryURL}" download="{$fileEntryTitle}">
+					<svg class="lexicon-icon">
+						<use xlink:href="{$lexiconIconsPath}download" />
+					</svg>
+				</a>
+			</div>
+		</div>
+	</div>
+{/template}
