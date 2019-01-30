@@ -14,6 +14,8 @@
 
 package com.liferay.dynamic.data.mapping.service.impl;
 
+import com.liferay.document.library.kernel.exception.NoSuchFolderException;
+import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.dynamic.data.mapping.exception.FormInstanceNameException;
 import com.liferay.dynamic.data.mapping.exception.FormInstanceStructureIdException;
 import com.liferay.dynamic.data.mapping.io.DDMFormValuesDeserializer;
@@ -40,9 +42,12 @@ import com.liferay.dynamic.data.mapping.util.DDMFormInstanceFactory;
 import com.liferay.dynamic.data.mapping.validator.DDMFormValuesValidator;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Repository;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -207,6 +212,8 @@ public class DDMFormInstanceLocalServiceImpl
 		throws PortalException {
 
 		deleteDDMFormInstance(ddmFormInstance);
+
+		deleteDDMFormInstanceFolder(ddmFormInstance);
 
 		resourceLocalService.deleteResource(
 			ddmFormInstance.getCompanyId(), DDMFormInstance.class.getName(),
@@ -425,6 +432,35 @@ public class DDMFormInstanceLocalServiceImpl
 		ddmFormInstanceVersionPersistence.update(ddmFormInstanceVersion);
 
 		return ddmFormInstanceVersion;
+	}
+
+	protected void deleteDDMFormInstanceFolder(DDMFormInstance ddmFormInstance)
+		throws PortalException {
+
+		Repository portletRepository =
+			PortletFileRepositoryUtil.fetchPortletRepository(
+				ddmFormInstance.getGroupId(),
+				"com.liferay.dynamic.data.mapping.form.web");
+
+		if (portletRepository == null) {
+			return;
+		}
+
+		try {
+			Folder folder = PortletFileRepositoryUtil.getPortletFolder(
+				portletRepository.getRepositoryId(),
+				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+				String.valueOf(ddmFormInstance.getFormInstanceId()));
+
+			PortletFileRepositoryUtil.deletePortletFolder(folder.getFolderId());
+		}
+		catch (PortalException pe) {
+			if (pe instanceof NoSuchFolderException) {
+				return;
+			}
+
+			throw pe;
+		}
 	}
 
 	protected DDMFormInstance doUpdateFormInstance(
