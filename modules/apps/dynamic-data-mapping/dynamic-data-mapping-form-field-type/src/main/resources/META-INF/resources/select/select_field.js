@@ -1,6 +1,14 @@
 AUI.add(
 	'liferay-ddm-form-field-select',
 	function(A) {
+		var ARROW_UP_CODE_STRING = 'ArrowUp';
+
+		var ARROW_UP_CODE_INTEGER = 38;
+
+		var ARROW_DOWN_CODE_STRING = 'ArrowDown';
+
+		var ARROW_DOWN_CODE_INTEGER = 40;
+
 		var CSS_ACTIVE = A.getClassName('active');
 
 		var CSS_DROP_CHOSEN = A.getClassName('drop', 'chosen');
@@ -33,6 +41,13 @@ AUI.add(
 		);
 
 		var CSS_SELECT_DROPDOWN_ITEM = A.getClassName('dropdown', 'item');
+
+		var CSS_SELECT_FIELD = A.getClassName(
+			'form',
+			'builder',
+			'select',
+			'field'
+		);
 
 		var CSS_SELECT_LABEL_ITEM_CLOSE = A.getClassName(
 			'trigger',
@@ -143,6 +158,16 @@ AUI.add(
 							'click',
 							instance._handleContainerClick,
 							'.' + CSS_FORM_FIELD_CONTAINER
+						),
+						instance.bindContainerEvent(
+							'blur',
+							instance._handleSelectFieldBlur,
+							'.' + CSS_SELECT_FIELD
+						),
+						instance.bindContainerEvent(
+							'focus',
+							instance._handleSelectFieldFocus,
+							'.' + CSS_SELECT_FIELD
 						)
 					);
 				},
@@ -152,6 +177,10 @@ AUI.add(
 
 					if (instance._tooltip) {
 						instance._tooltip.destroy();
+					}
+
+					if (instance._selectFieldKeydownHandler) {
+						instance._selectFieldKeydownHandler.detach();
 					}
 				},
 
@@ -447,6 +476,24 @@ AUI.add(
 					});
 				},
 
+				_focusOptionByIndex: function() {
+					var instance = this;
+
+					var focusedOption = false;
+
+					var optionNodesList = A.all('.' + CSS_SELECT_OPTION_ITEM);
+
+					optionNodesList.some(function(optionNode) {
+						if (optionNode.attr('data-option-index') === instance._focusedOptionIndex.toString()) {
+							optionNode.focus();
+
+							focusedOption = true;
+						}
+
+						return focusedOption;
+					});
+				},
+
 				_getFixedOptions: function(fixedOptions) {
 					return fixedOptions || [];
 				},
@@ -573,6 +620,53 @@ AUI.add(
 					instance.setValue(values);
 				},
 
+				_handleSelectFieldBlur: function() {
+					var instance = this;
+
+					instance._selectFieldKeydownHandler.detach();
+				},
+
+				_handleSelectFieldFocus: function() {
+					var instance = this;
+
+					instance._selectFieldKeydownHandler = instance.bindContainerEvent(
+						'keyup',
+						instance._handleSelectFieldKeydown,
+						'.' + CSS_SELECT_FIELD
+					);
+
+					instance._focusedOptionIndex = -1;
+				},
+
+				_handleSelectFieldKeydown: function(event) {
+					var instance = this;
+
+					var keyCode;
+					var arrowUpCode;
+					var arrowDownCode;
+
+					if (event.code) {
+						keyCode = event.code;
+						arrowUpCode = ARROW_UP_CODE_STRING;
+						arrowDownCode = ARROW_DOWN_CODE_STRING;
+					} else if (event.keyCode) {
+						keyCode = event.keyCode;
+						arrowUpCode = ARROW_UP_CODE_INTEGER;
+						arrowDownCode = ARROW_DOWN_CODE_INTEGER;
+					}
+
+					if (keyCode) {
+						if (keyCode === arrowUpCode || keyCode === arrowDownCode) {
+							if (!instance._isListOpen()) {
+								instance.openList();
+							}
+							else {
+								instance._moveToOption(keyCode);
+							}
+						}
+					}
+				},
+
 				_handleSelectTriggerClick: function(event) {
 					var instance = this;
 
@@ -651,6 +745,36 @@ AUI.add(
 					}
 
 					return openList;
+				},
+
+				_moveToOption: function(keyCode) {
+					var instance = this;
+
+					var lastFocusedOptionIndex = instance._focusedOptionIndex.valueOf();
+
+					var options = instance.get('options');
+
+					var OPTIONS_LENGTH = options.length;
+
+					if (keyCode === ARROW_UP_CODE_STRING || keyCode === ARROW_UP_CODE_INTEGER) {
+						if (instance._focusedOptionIndex > 0) {
+							instance._focusedOptionIndex--;
+						}
+					}
+					else if (keyCode === ARROW_DOWN_CODE_STRING || keyCode === ARROW_DOWN_CODE_INTEGER) {
+						if (instance._focusedOptionIndex < OPTIONS_LENGTH) {
+							instance._focusedOptionIndex++;
+						}
+					}
+
+					if (instance._focusedOptionIndex >= 0 && instance._focusedOptionIndex !== lastFocusedOptionIndex) {
+						console.log('focus option');
+
+						instance._focusOptionByIndex();
+					}
+
+					console.log('lastFocusedOptionIndex = ' + lastFocusedOptionIndex);
+					console.log('instance._focusedOptionIndex = ' + instance._focusedOptionIndex);
 				},
 
 				_removeValue: function(value) {

@@ -38,7 +38,7 @@
 		<div class="input-select-wrapper">
 			{call .select_label data="all" /}
 
-			<div class="form-builder-select-field input-group-container">
+			<div class="form-builder-select-field input-group-container" tabindex="0">
 				{if not $readOnly and $displayValues}
 					{call .hidden_select}
 						{param dir: $dir /}
@@ -425,7 +425,7 @@
 
 		data-option-value="{$option.value}"
 	{/let}
-	<li {$attributesNormalSelection}>
+	<li {$attributesNormalSelection} tabindex="0">
 		{let $itemAttributes kind="attributes"}
 			class="
 				dropdown-item
