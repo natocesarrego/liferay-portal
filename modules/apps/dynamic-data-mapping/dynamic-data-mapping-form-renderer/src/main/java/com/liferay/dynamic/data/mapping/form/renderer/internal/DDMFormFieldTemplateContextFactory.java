@@ -561,6 +561,15 @@ public class DDMFormFieldTemplateContextFactory {
 			return;
 		}
 
+		LocalizedValue errorMessage = ddmFormFieldValidation.getErrorMessage();
+
+		String errorMessageValue = StringPool.BLANK;
+
+		if (errorMessage != null) {
+			errorMessageValue = GetterUtil.getString(
+				errorMessage.getString(_locale));
+		}
+
 		Map<String, String> validation = new HashMap<>();
 
 		validation.put(
@@ -568,9 +577,7 @@ public class DDMFormFieldTemplateContextFactory {
 			GetterUtil.getString(
 				changedProperties.get("validationDataType"),
 				MapUtil.getString(changedProperties, "dataType")));
-		validation.put(
-			"errorMessage",
-			GetterUtil.getString(ddmFormFieldValidation.getErrorMessage()));
+		validation.put("errorMessage", errorMessageValue);
 		validation.put(
 			"expression",
 			GetterUtil.getString(ddmFormFieldValidation.getExpression()));
