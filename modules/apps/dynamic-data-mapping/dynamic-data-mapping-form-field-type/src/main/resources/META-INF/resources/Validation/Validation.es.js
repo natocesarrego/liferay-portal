@@ -83,6 +83,7 @@ class Validation extends Component {
 	}
 
 	_getStateFromValue(value) {
+		const {editingLanguageId} = this;
 		const {errorMessage, expression} = value;
 		let parameterMessage = '';
 		let selectedValidation;
@@ -106,9 +107,11 @@ class Validation extends Component {
 			}
 		}
 
+		let errorMessageValue = errorMessage[editingLanguageId];
+
 		return {
 			enableValidation,
-			errorMessage,
+			errorMessageValue,
 			expression,
 			parameterMessage,
 			selectedValidation
@@ -220,6 +223,24 @@ Validation.STATE = {
 	dataType: Config.string().valueFn('_dataTypeValueFn'),
 
 	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof Options
+	 * @type {?string}
+	 */
+
+	defaultLanguageId: Config.string(),
+
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof Options
+	 * @type {?string}
+	 */
+
+	editingLanguageId: Config.string(),
+
+	/**
 	 * @default false
 	 * @instance
 	 * @memberof Validation
@@ -237,9 +258,16 @@ Validation.STATE = {
 	 * @type {String}
 	 */
 
-	errorMessage: Config.string()
-		.internal()
-		.value(''),
+	errorMessage: Config.arrayOf(
+		Config.shapeOf({
+			name: Config.string(),
+			value: Config.string()
+		})
+	).internal()
+	.value({
+		label: '',
+		value: ''
+	}),
 
 	/**
 	 * @default ''
