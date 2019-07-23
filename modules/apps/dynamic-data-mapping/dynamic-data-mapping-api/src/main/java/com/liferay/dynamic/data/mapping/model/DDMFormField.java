@@ -137,7 +137,27 @@ public class DDMFormField implements Serializable {
 	}
 
 	public DDMFormFieldOptions getDDMFormFieldOptions() {
-		return (DDMFormFieldOptions)_properties.get("options");
+		DDMFormFieldOptions options = (DDMFormFieldOptions)_properties.get(
+			"options");
+
+		String dataSourceType = (String)_properties.get("dataSourceType");
+
+		if (Validator.isNotNull(dataSourceType) &&
+			!dataSourceType.equals("manual")) {
+
+			DDMFormFieldOptions ddmFormFieldOptions = null;
+
+			if (options != null) {
+				ddmFormFieldOptions = new DDMFormFieldOptions();
+
+				ddmFormFieldOptions.setDefaultLocale(
+					options.getDefaultLocale());
+			}
+
+			return ddmFormFieldOptions;
+		}
+
+		return options;
 	}
 
 	/**
