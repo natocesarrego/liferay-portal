@@ -95,4 +95,41 @@
 		</div>
 	</div>
 {/template}
+#elseif (${liferayVersion.startsWith("7.2")})
+{namespace ${className}}
+
+{template .render}
+	{@param name: string}
+	{@param label: string}
+	{@param showLabel: bool}
+	{@param value: ?}
+
+	{call FieldBase.render}
+		{param contentRenderer kind="html"}
+			{call .content}
+				{param name: $name /}
+				{param value: $value /}
+			{/call}
+		{/param}
+		{param name: $name /}
+		{param label: $label /}
+		{param showLabel: $showLabel /}
+	{/call}
+{/template}
+
+{template .content}
+	{@param name: string}
+	{@param value: ?}
+	{let $attributes kind="attributes"}
+		class="ddm-field-${artifactId} form-control"
+
+		name="{$name}"
+
+		{if $value}
+			value="{$value}"
+		{/if}
+	{/let}
+
+	<input {$attributes}>
+{/template}
 #end
