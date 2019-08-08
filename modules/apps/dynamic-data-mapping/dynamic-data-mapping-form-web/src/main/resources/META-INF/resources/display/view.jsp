@@ -86,7 +86,7 @@ long formInstanceId = ddmFormDisplayContext.getFormInstanceId();
 				%>
 
 				<div class="portlet-forms">
-					<aui:form action="<%= addFormInstanceRecordActionURL %>" data-DDMFormInstanceId="<%= formInstanceId %>" method="post" name="fm">
+					<aui:form action="<%= addFormInstanceRecordActionURL %>" data-DDMFormInstanceId="<%= formInstanceId %>" data-senna-off="true" method="post" name="fm">
 
 						<%
 						String redirectURL = ddmFormDisplayContext.getRedirectURL();
