@@ -82,6 +82,7 @@ import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletProvider;
@@ -214,7 +215,7 @@ public class DDMFormAdminDisplayContext {
 			return availableLocales;
 		}
 
-		return new Locale[] {getSiteDefaultLocale()};
+		return new Locale[] {getDefaultLocale()};
 	}
 
 	public String getClearResultsURL() throws PortletException {
@@ -418,7 +419,7 @@ public class DDMFormAdminDisplayContext {
 			return defaultLanguageId;
 		}
 
-		return LocaleUtil.toLanguageId(getSiteDefaultLocale());
+		return LocaleUtil.toLanguageId(getDefaultLocale());
 	}
 
 	public String getDisplayStyle() {
@@ -1110,6 +1111,18 @@ public class DDMFormAdminDisplayContext {
 			DDMFormWebKeys.DYNAMIC_DATA_MAPPING_FORM_INSTANCE_RECORD);
 	}
 
+	protected Locale getDefaultLocale() {
+		ThemeDisplay themeDisplay = formAdminRequestHelper.getThemeDisplay();
+
+		User user = themeDisplay.getUser();
+
+		return Optional.ofNullable(
+			user.getLocale()
+		).orElse(
+			themeDisplay.getSiteDefaultLocale()
+		);
+	}
+
 	protected String getDisplayStyle(
 		PortletRequest portletRequest,
 		DDMFormWebConfiguration formWebConfiguration, String[] displayViews) {
@@ -1303,12 +1316,6 @@ public class DDMFormAdminDisplayContext {
 				add(getOrderByDropdownItem("name"));
 			}
 		};
-	}
-
-	protected Locale getSiteDefaultLocale() {
-		ThemeDisplay themeDisplay = formAdminRequestHelper.getThemeDisplay();
-
-		return themeDisplay.getSiteDefaultLocale();
 	}
 
 	protected boolean hasResults() {
