@@ -62,6 +62,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -101,10 +102,14 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 			boolean showEmptyFieldLabel =
 				ddmFormFieldRenderingContext.isShowEmptyFieldLabel();
 
+			Locale locale = ddmFormFieldRenderingContext.getLocale();
+
+			locale = getDefaultLocale(locale, ddmFormField);
+
 			return getFieldHTML(
 				httpServletRequest, httpServletResponse, ddmFormField, fields,
 				null, portletNamespace, namespace, mode, readOnly,
-				showEmptyFieldLabel, ddmFormFieldRenderingContext.getLocale());
+				showEmptyFieldLabel, locale);
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -231,6 +236,29 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 		return sb.toString();
 	}
 
+	protected Locale getDefaultLocale(
+		Locale locale, DDMFormField ddmFormField) {
+
+		DDMForm ddmForm = ddmFormField.getDDMForm();
+
+		Set<Locale> availableLocales = ddmForm.getAvailableLocales();
+
+		if (!availableLocales.contains(locale)) {
+			if (availableLocales.size() == 1) {
+				Iterator iter = availableLocales.iterator();
+
+				locale = (Locale)iter.next();
+
+				ddmForm.setDefaultLocale(locale);
+			}
+			else {
+				locale = ddmForm.getDefaultLocale();
+			}
+		}
+
+		return locale;
+	}
+
 	protected Map<String, Object> getFieldContext(
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse, String portletNamespace,
@@ -248,19 +276,9 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 			return fieldContext;
 		}
 
-		DDMForm ddmForm = ddmFormField.getDDMForm();
-
-		Set<Locale> availableLocales = ddmForm.getAvailableLocales();
-
-		Locale structureLocale = locale;
-
-		if (!availableLocales.contains(locale)) {
-			structureLocale = ddmForm.getDefaultLocale();
-		}
-
 		fieldContext = new HashMap<>();
 
-		addLayoutProperties(ddmFormField, fieldContext, structureLocale);
+		addLayoutProperties(ddmFormField, fieldContext, locale);
 
 		addStructureProperties(ddmFormField, fieldContext);
 
