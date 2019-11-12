@@ -200,13 +200,16 @@
 				{foreach $field in $column.fields}
 					{let $fieldType: $field.type /}
 
+					{let $fieldRef: $editable ? 'pageRendererFieldRef' + $rowIndex + $columnIndex + $pageIndex
+						: $field.type + $field.fieldName + $field.name + $field.label + $rowIndex + $columnIndex + $pageIndex /}
+
 					{delcall PageRenderer.RegisterFieldType variant="$fieldType" data="$field" allowemptydefault="true"}
 						{param events: [
 						'fieldBlurred': $_handleFieldBlurred,
 						'fieldEdited': $_handleFieldEdited,
 						'fieldFocused': $_handleFieldFocused
 						] /}
-						{param ref: 'pageRendererFieldRef' + $rowIndex + $columnIndex + $pageIndex /}
+						{param ref: $fieldRef /}
 						{param spritemap: $spritemap /}
 					{/delcall}
 				{/foreach}
