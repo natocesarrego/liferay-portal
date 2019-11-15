@@ -4117,12 +4117,19 @@ AUI.add(
 						if (type === 'ddm-text-html') {
 							var editor = fieldInstance.getEditor();
 
+							var usingCKEditor =
+								CKEDITOR &&
+								CKEDITOR.instances &&
+								CKEDITOR.instances[
+									fieldInstance.getInputName() + 'Editor'
+								];
+
 							var usingAlloyEditor =
 								editor.getNativeEditor()._editor &&
 								editor.getNativeEditor()._editor.window.$
 									.AlloyEditor;
 
-							if (!usingAlloyEditor) {
+							if (usingCKEditor && !usingAlloyEditor) {
 								instance.recreateEditor(editor);
 							}
 						}
