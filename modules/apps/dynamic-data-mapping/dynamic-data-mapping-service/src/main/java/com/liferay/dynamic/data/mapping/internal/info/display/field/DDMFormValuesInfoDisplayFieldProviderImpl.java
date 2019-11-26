@@ -195,7 +195,11 @@ public class DDMFormValuesInfoDisplayFieldProviderImpl<T extends GroupedModel>
 
 		Value value = ddmFormFieldValue.getValue();
 
-		String valueString = value.getString(locale);
+		String valueString = StringPool.BLANK;
+
+		if (value != null) {
+			valueString = value.getString(locale);
+		}
 
 		if (Objects.equals(ddmFormFieldValue.getType(), "ddm-date")) {
 			try {
