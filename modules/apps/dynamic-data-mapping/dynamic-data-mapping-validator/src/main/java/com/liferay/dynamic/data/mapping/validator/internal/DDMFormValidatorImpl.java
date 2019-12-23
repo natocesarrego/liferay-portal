@@ -169,10 +169,10 @@ public class DDMFormValidatorImpl implements DDMFormValidator {
 
 			return;
 		}
-		
+
 		String dataSourceType = GetterUtil.getString(
-				ddmFormField.getDataSourceType(), "manual");
-		
+			ddmFormField.getDataSourceType(), "manual");
+
 		if (!Objects.equals(dataSourceType, "manual")) {
 			return;
 		}

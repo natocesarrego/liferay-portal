@@ -132,6 +132,29 @@ public class DDMFormField implements Serializable {
 		return false;
 	}
 
+	public String getDataSourceType() {
+		Object dataSourceType = _properties.get("dataSourceType");
+
+		if (dataSourceType instanceof JSONArray) {
+			JSONArray jsonArray = (JSONArray)dataSourceType;
+
+			return jsonArray.getString(0);
+		}
+		else if (dataSourceType instanceof String) {
+			try {
+				JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
+					(String)dataSourceType);
+
+				return jsonArray.getString(0);
+			}
+			catch (Exception e) {
+				return (String)dataSourceType;
+			}
+		}
+
+		return StringPool.BLANK;
+	}
+
 	public String getDataType() {
 		return MapUtil.getString(_properties, "dataType");
 	}
@@ -379,29 +402,6 @@ public class DDMFormField implements Serializable {
 
 	public void setVisibilityExpression(String visibilityExpression) {
 		_properties.put("visibilityExpression", visibilityExpression);
-	}
-
-	public String getDataSourceType() {
-		Object dataSourceType = _properties.get("dataSourceType");
-
-		if (dataSourceType instanceof JSONArray) {
-			JSONArray jsonArray = (JSONArray)dataSourceType;
-
-			return jsonArray.getString(0);
-		}
-		else if (dataSourceType instanceof String) {
-			try {
-				JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
-					(String)dataSourceType);
-
-				return jsonArray.getString(0);
-			}
-			catch (Exception e) {
-				return (String)dataSourceType;
-			}
-		}
-
-		return StringPool.BLANK;
 	}
 
 	private DDMForm _ddmForm;
