@@ -381,7 +381,7 @@ public class DDMFormField implements Serializable {
 		_properties.put("visibilityExpression", visibilityExpression);
 	}
 
-	protected String getDataSourceType() {
+	public String getDataSourceType() {
 		Object dataSourceType = _properties.get("dataSourceType");
 
 		if (dataSourceType instanceof JSONArray) {
