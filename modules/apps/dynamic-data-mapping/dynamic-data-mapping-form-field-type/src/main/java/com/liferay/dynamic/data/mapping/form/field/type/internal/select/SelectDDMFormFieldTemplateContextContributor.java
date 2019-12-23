@@ -65,7 +65,7 @@ public class SelectDDMFormFieldTemplateContextContributor
 		Map<String, Object> parameters = HashMapBuilder.<String, Object>put(
 			"dataSourceType",
 			GetterUtil.getString(
-				ddmFormField.getProperty("dataSourceType"), "manual")
+				ddmFormField.getDataSourceType(), "manual")
 		).put(
 			"multiple", getMultiple(ddmFormField, ddmFormFieldRenderingContext)
 		).build();

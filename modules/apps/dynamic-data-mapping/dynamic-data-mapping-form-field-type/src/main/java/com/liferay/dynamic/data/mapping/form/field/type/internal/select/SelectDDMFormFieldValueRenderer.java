@@ -91,7 +91,7 @@ public class SelectDDMFormFieldValueRenderer
 
 	protected boolean isManualDataSourceType(DDMFormField ddmFormField) {
 		String dataSourceType = GetterUtil.getString(
-			ddmFormField.getProperty("dataSourceType"), "manual");
+			ddmFormField.getDataSourceType(), "manual");
 
 		if (Objects.equals(dataSourceType, "manual")) {
 			return true;

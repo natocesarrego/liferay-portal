@@ -83,7 +83,7 @@ public class RadioDDMFormFieldTemplateContextContributor
 		DDMFormFieldOptions ddmFormFieldOptions = new DDMFormFieldOptions();
 
 		String dataSourceType = GetterUtil.getString(
-			ddmFormField.getProperty("dataSourceType"), "manual");
+			ddmFormField.getDataSourceType(), "manual");
 
 		if (Objects.equals(dataSourceType, "manual")) {
 			List<Map<String, String>> keyValuePairs =
