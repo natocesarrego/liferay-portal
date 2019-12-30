@@ -200,6 +200,41 @@ public class DDMFormValidatorImpl implements DDMFormValidator {
 		}
 	}
 
+	protected void validateDDMFormFieldOptionsGrid(
+			DDMFormField ddmFormField, Set<Locale> ddmFormAvailableLocales,
+			Locale ddmFormDefaultLocale)
+		throws DDMFormValidationException {
+
+		String fieldType = ddmFormField.getType();
+
+		if (!fieldType.equals(DDMFormFieldType.GRID)) {
+			return;
+		}
+
+		DDMFormFieldOptions ddmFormFieldOptionsRows =
+			(DDMFormFieldOptions)ddmFormField.getProperty("rows");
+
+		Set<String> optionsValuesRows = Collections.emptySet();
+
+		if (ddmFormFieldOptionsRows != null) {
+			optionsValuesRows = ddmFormFieldOptionsRows.getOptionsValues();
+		}
+
+		DDMFormFieldOptions ddmFormFieldOptionsColumns =
+			(DDMFormFieldOptions)ddmFormField.getProperty("columns");
+
+		Set<String> optionsValuesColumns = Collections.emptySet();
+
+		if (ddmFormFieldOptionsColumns != null) {
+			optionsValuesColumns =
+				ddmFormFieldOptionsColumns.getOptionsValues();
+		}
+
+		if (optionsValuesRows.isEmpty() || optionsValuesColumns.isEmpty()) {
+			throw new MustSetOptionsForField(ddmFormField.getName());
+		}
+	}
+
 	protected void validateDDMFormFieldPropertyValue(
 			String fieldName, String propertyName, LocalizedValue propertyValue,
 			Set<Locale> ddmFormAvailableLocales, Locale ddmFormDefaultLocale)
@@ -231,6 +266,9 @@ public class DDMFormValidatorImpl implements DDMFormValidator {
 			validateDDMFormFieldIndexType(ddmFormField);
 
 			validateDDMFormFieldOptions(
+				ddmFormField, ddmFormAvailableLocales, ddmFormDefaultLocale);
+
+			validateDDMFormFieldOptionsGrid(
 				ddmFormField, ddmFormAvailableLocales, ddmFormDefaultLocale);
 
 			validateOptionalDDMFormFieldLocalizedProperty(
