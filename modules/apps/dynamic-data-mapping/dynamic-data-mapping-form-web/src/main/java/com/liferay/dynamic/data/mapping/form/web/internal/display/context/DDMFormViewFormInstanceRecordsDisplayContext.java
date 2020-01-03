@@ -605,7 +605,7 @@ public class DDMFormViewFormInstanceRecordsDisplayContext {
 			Collectors.toList()
 		);
 
-		List<String> renderedFormFieldLabels = ListUtil.toList(
+		return ListUtil.toList(
 			convertedFormFieldValues,
 			new Function<String, String>() {
 
@@ -622,8 +622,6 @@ public class DDMFormViewFormInstanceRecordsDisplayContext {
 				}
 
 			});
-
-		return renderedFormFieldLabels;
 	}
 
 	private static final int _MAX_COLUMNS = 5;
