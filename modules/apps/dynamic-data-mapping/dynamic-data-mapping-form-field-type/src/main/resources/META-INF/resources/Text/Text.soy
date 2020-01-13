@@ -20,6 +20,7 @@
 	{@param? label: string}
 	{@param? options: list<?>}
 	{@param? placeholder: string}
+	{@param? placeholderStyle: bool}
 	{@param? predefinedValue: string}
 	{@param? readOnly: bool}
 	{@param? repeatable: bool}
@@ -50,6 +51,7 @@
 				{param name: $name /}
 				{param options: $options/}
 				{param placeholder: $placeholder /}
+				{param placeholderStyle: $placeholderStyle /}
 				{param predefinedValue: $predefinedValue /}
 				{param readOnly: $readOnly /}
 				{param value: isNonnull($_value) ? $_value : $value /}
@@ -88,6 +90,7 @@
 	{@param? id: string}
 	{@param? options: list<?>}
 	{@param? placeholder: string}
+	{@param? placeholderStyle: bool}
 	{@param? predefinedValue: string}
 	{@param? readOnly: bool}
 	{@param? value: string}
@@ -112,6 +115,8 @@
 		{if $placeholder}
 			placeholder="{$placeholder}"
 		{/if}
+
+		placeholderStyle="{$placeholderStyle}"
 
 		type="text"
 

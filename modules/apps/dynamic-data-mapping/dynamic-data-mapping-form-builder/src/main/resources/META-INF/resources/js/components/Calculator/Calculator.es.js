@@ -93,12 +93,31 @@ class Calculator extends Component {
 	}
 
 	prepareStateForRender(state) {
-		const {expression} = state;
+		let {expression} = state;
+		let placeholder = Liferay.Language.get(
+			'the-expression-will-be-displayed-here'
+		);
+		let placeholderStyle = false;
+
+		if (
+			typeof Liferay !== 'undefined' &&
+			typeof Liferay.Browser !== 'undefined'
+		) {
+			if (Liferay.Browser.isIe()) {
+				if (!expression) {
+					expression = placeholder;
+					placeholderStyle = true;
+				}
+				placeholder = '';
+			}
+		}
 
 		return {
 			...state,
 			...this.getStateBasedOnExpression(expression),
-			expression: expression.replace(/[[\]]/g, '')
+			expression: expression.replace(/[[\]]/g, ''),
+			placeholder,
+			placeholderStyle
 		};
 	}
 
