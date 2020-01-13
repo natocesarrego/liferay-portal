@@ -140,6 +140,10 @@
 				padding: 10px;
 			}
 
+			textarea[placeholderStyle] {
+				color: #a7a9bc;
+			}
+
 			textarea[readOnly] {
 				cursor: not-allowed;
 			}
@@ -180,6 +184,7 @@
 				display: flex;
 				margin: 0 auto;
 				padding: 0;
+				width: 210px;
 
 				& ul {
 					list-style-type: none;
