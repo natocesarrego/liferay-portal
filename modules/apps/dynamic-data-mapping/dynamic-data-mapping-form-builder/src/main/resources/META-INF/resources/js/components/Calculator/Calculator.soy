@@ -12,7 +12,9 @@
 	{@param? disableFunctions: bool}
 	{@param? disableNumbers: bool}
 	{@param? disableOperators: bool}
+	{@param? placeholderStyle: bool}
 	{@param? expression: string}
+	{@param? placeholderText: string}
 	{@param? repeatableFields: list<?>}
 	{@param? showOnlyRepeatableFields: bool}
 
@@ -97,17 +99,18 @@
 
 				<div class="calculate-container-fields col-md-9">
 					<div class="form-group">
-						{delcall PageRenderer.RegisterFieldType variant="'text'"}
-							{param name: 'calculator-expression' /}
-							{param readOnly: true /}
-							{param displayStyle: 'multiline' /}
-							{param placeholder kind="text"}
-								{msg desc=""}the-expression-will-be-displayed-here{/msg}
-							{/param}
-							{param showLabel: false /}
-							{param spritemap: $spritemap /}
-							{param value: $expression /}
-						{/delcall}
+						{let $textareaAttributes kind="attributes"}
+							class="ddm-field-text form-control"
+
+							disabled="disabled"
+
+							name="calculator-expression"
+
+							placeholderStyle="{$placeholderStyle}"
+
+							placeholder="{$placeholderText}"
+						{/let}
+						<textarea {$textareaAttributes}>{$expression}</textarea>
 					</div>
 				</div>
 			</div>
