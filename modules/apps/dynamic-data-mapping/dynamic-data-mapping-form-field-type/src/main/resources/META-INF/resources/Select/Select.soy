@@ -121,7 +121,9 @@
 											{param events: [
 												'close': $_handleLabelClosed
 											]/}
-											{param label: $option.label /}
+											{param label kind="html"}
+												<pre>{$option.label}</pre>
+											{/param}
 											{param spritemap: $spritemap /}
 										{/call}
 									</li>
