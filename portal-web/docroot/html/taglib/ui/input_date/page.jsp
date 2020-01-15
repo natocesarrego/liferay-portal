@@ -84,7 +84,7 @@ String placeholderValue = StringUtil.replace(simpleDateFormatPattern, dateAbbrev
 
 boolean nullDate = false;
 
-if (nullable && !required && (dayValue == 0) && (monthValue == -1) && (yearValue == 0)) {
+if (nullable && (dayValue == 0) && (monthValue == -1) && (yearValue == 0)) {
 	nullDate = true;
 }
 
