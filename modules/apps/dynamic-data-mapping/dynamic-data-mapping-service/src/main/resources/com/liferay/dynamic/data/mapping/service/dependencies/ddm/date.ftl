@@ -45,21 +45,11 @@
 		year = fieldValue.get(YEAR)
 	/>
 <#else>
-	<#if required>
-		<#assign
-			calendar = calendarFactory.getCalendar(timeZone)
-
-			day = calendar.get(DATE)
-			month = calendar.get(MONTH)
-			year = calendar.get(YEAR)
-		/>
-	<#else>
-		<#assign
-			day = 0
-			month = -1
-			year = 0
-		/>
-	</#if>
+	<#assign
+		day = 0
+		month = -1
+		year = 0
+	/>
 </#if>
 
 <#assign
