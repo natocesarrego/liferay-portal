@@ -268,7 +268,7 @@ public class ConfigurationModelToDDMFormConverter {
 			return DDMFormFieldType.SELECT;
 		}
 
-		return DDMFormFieldType.TEXT;
+		return DDMFormFieldType.LOCALIZABLE_TEXT;
 	}
 
 	protected void setDDMFormFieldDataType(
