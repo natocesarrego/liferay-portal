@@ -550,3 +550,14 @@ div.ddm-tooltip-container {
 		margin-left: 108px;
 	}
 }
+
+.liferay-ddm-form-field-localizable-text {
+	.custom-dropdown-menu {
+		max-width: 340px !important;
+		width: 100% !important;
+	}
+
+	.custom-dropdown-item-row {
+		display: flex;
+	}
+}
