@@ -14,19 +14,6 @@
 
 package com.liferay.dynamic.data.mapping.form.field.type.internal.localizable.text;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Matchers;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import com.liferay.dynamic.data.mapping.form.field.type.BaseDDMFormFieldTypeSettingsTestCase;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
@@ -37,6 +24,21 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.mockito.Matchers;
+
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Gabriel Ibson
@@ -81,7 +83,6 @@ public class LocalizableTextDDMFormFieldTypeSettingsTest
 		Assert.assertNotNull(tooltipDDMFormField);
 		Assert.assertEquals(
 			"FALSE", tooltipDDMFormField.getVisibilityExpression());
-
 	}
 
 	@Override

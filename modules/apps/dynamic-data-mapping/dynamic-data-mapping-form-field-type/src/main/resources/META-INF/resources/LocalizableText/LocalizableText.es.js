@@ -64,7 +64,8 @@ class LocalizableText extends Component {
 		if (value && typeof value === 'string') {
 			try {
 				return JSON.parse(value);
-			} catch (e) {
+			}
+			catch (e) {
 				console.warn('Unable to parse JSON', value);
 			}
 		}
