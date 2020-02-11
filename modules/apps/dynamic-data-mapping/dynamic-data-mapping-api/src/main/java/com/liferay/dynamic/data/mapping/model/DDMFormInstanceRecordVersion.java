@@ -76,4 +76,7 @@ public interface DDMFormInstanceRecordVersion
 	public DDMFormInstanceRecord getFormInstanceRecord()
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	public String getStorageType()
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 }
