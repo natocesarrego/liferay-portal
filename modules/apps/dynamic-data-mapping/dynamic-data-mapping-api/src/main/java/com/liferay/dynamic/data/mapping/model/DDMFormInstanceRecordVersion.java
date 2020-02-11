@@ -70,6 +70,9 @@ public interface DDMFormInstanceRecordVersion
 			getDDMFormValues()
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	public String getStorageType()
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 	public DDMFormInstance getFormInstance()
 		throws com.liferay.portal.kernel.exception.PortalException;
 

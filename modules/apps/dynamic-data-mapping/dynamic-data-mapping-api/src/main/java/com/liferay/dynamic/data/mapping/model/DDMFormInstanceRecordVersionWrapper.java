@@ -347,6 +347,13 @@ public class DDMFormInstanceRecordVersionWrapper
 		return model.getStorageId();
 	}
 
+	@Override
+	public String getStorageType()
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return model.getStorageType();
+	}
+
 	/**
 	 * Returns the user ID of this ddm form instance record version.
 	 *
