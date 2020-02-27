@@ -497,6 +497,7 @@ public class DDMDataProviderDisplayContext {
 		ddmFormRenderingContext.setPortletNamespace(
 			_renderResponse.getNamespace());
 		ddmFormRenderingContext.setShowRequiredFieldsWarning(false);
+		ddmFormRenderingContext.setShowSubmitButton(false);
 
 		return ddmFormRenderingContext;
 	}
