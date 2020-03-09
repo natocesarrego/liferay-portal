@@ -191,6 +191,18 @@ renderResponse.setTitle(headerTitle);
 										label="view[action]"
 									/>
 
+									<%
+									PortletURL editURL = assetRenderer.getURLEdit(liferayPortletRequest, liferayPortletResponse);
+									%>
+
+									<c:if test="<%= Validator.isNotNull(editURL) %>">
+										<liferay-frontend:management-bar-button
+											href="<%= assetRenderer.getURLEdit(liferayPortletRequest, liferayPortletResponse).toString() %>"
+											icon="pencil"
+											label="edit"
+										/>
+									</c:if>
+
 									<c:if test="<%= workflowTaskDisplayContext.hasViewDiffsPortletURL(workflowTask) %>">
 										<liferay-ui:icon
 											icon="paste"
