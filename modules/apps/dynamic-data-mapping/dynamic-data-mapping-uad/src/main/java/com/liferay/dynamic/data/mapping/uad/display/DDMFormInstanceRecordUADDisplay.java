@@ -89,9 +89,6 @@ public class DDMFormInstanceRecordUADDisplay
 				String.valueOf(ddmFormInstanceRecord.getFormInstanceId())
 			}
 		).put(
-			portletNamespace.concat("readOnly"),
-			new String[] {Boolean.FALSE.toString()}
-		).put(
 			portletNamespace.concat("redirect"),
 			new String[] {_portal.getCurrentURL(httpServletRequest)}
 		).put(
