@@ -16,7 +16,7 @@ package com.liferay.dynamic.data.mapping.form.web.internal.portlet.action;
 
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
-import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordLocalService;
+import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordService;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -52,13 +52,11 @@ public class EditFormInstanceRecordMVCActionCommand
 		long ddmFormInstanceRecordId = ParamUtil.getLong(
 			actionRequest, "formInstanceRecordId");
 
-		_ddmFormInstanceRecordLocalService.updateFormInstanceRecord(
-			userId, ddmFormInstanceRecordId, false, ddmFormValues,
-			serviceContext);
+		_ddmFormInstanceRecordService.updateFormInstanceRecord(
+			ddmFormInstanceRecordId, false, ddmFormValues, serviceContext);
 	}
 
 	@Reference
-	private DDMFormInstanceRecordLocalService
-		_ddmFormInstanceRecordLocalService;
+	private DDMFormInstanceRecordService _ddmFormInstanceRecordService;
 
 }
