@@ -90,7 +90,6 @@ public class DDMUADHelper {
 
 			return documentBuilder.parse(
 				new InputSource(new StringReader(xml)));
-
 		}
 		catch (IOException | ParserConfigurationException | SAXException
 					exception) {
