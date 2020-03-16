@@ -974,6 +974,12 @@ public class DDMFormAdminDisplayContext {
 			ddmForm, ddmFormLayout, ddmFormRenderingContext);
 	}
 
+	public void setHttpServletResponse(
+		HttpServletResponse httpServletResponse) {
+
+		_httpServletResponse = httpServletResponse;
+	}
+
 	protected DDMFormRenderingContext createDDMFormRenderingContext(
 		RenderRequest renderRequest, RenderResponse renderResponse) {
 
@@ -986,7 +992,7 @@ public class DDMFormAdminDisplayContext {
 		ddmFormRenderingContext.setHttpServletRequest(
 			_portal.getHttpServletRequest(renderRequest));
 		ddmFormRenderingContext.setHttpServletResponse(
-			_portal.getHttpServletResponse(renderResponse));
+			_getHttpServletResponse());
 		ddmFormRenderingContext.setContainerId("settingsDDMForm");
 		ddmFormRenderingContext.setLocale(themeDisplay.getLocale());
 		ddmFormRenderingContext.setPortletNamespace(
@@ -1379,6 +1385,14 @@ public class DDMFormAdminDisplayContext {
 			languageId, HtmlUtil.escape(jsonObject.getString(languageId)));
 	}
 
+	private HttpServletResponse _getHttpServletResponse() {
+		if (_httpServletResponse == null) {
+			return _portal.getHttpServletResponse(renderResponse);
+		}
+
+		return _httpServletResponse;
+	}
+
 	private void _populateDDMDataProviderNavigationItem(
 		NavigationItem navigationItem) {
 
@@ -1444,6 +1458,7 @@ public class DDMFormAdminDisplayContext {
 	private String _displayStyle;
 	private final FormInstancePermissionCheckerHelper
 		_formInstancePermissionCheckerHelper;
+	private HttpServletResponse _httpServletResponse;
 	private final NPMResolver _npmResolver;
 	private final Portal _portal;
 
