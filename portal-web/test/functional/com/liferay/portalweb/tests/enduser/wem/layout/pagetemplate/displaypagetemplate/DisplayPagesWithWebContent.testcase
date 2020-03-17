@@ -739,7 +739,7 @@ definition {
 	@priority = "5"
 	test ViewDisplayPageViaAssetPublisher {
 
-		// Ignore test until POSHI-48 is resolved
+		// Ignore test until LRQA-56638 is resolved
 
 		property portal.acceptance = "true";
 
