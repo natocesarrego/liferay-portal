@@ -12,7 +12,7 @@
  * details.
  */
 
-import RuleList from '../../../src/main/resources/META-INF/resources/js/components/RuleList/RuleList.es';
+import RuleList from '../../../../src/main/resources/META-INF/resources/js/components/RuleList/RuleList.es';
 
 let component;
 
@@ -67,8 +67,46 @@ const configDefault = {
 					],
 					operator: 'equals-to',
 				},
+				{
+					operands: [
+						{
+							type: 'field',
+							value: 'text1',
+						},
+						{
+							type: 'field',
+							value: 'text2',
+						},
+					],
+					operator: 'equals-to',
+				},
 			],
 			['logical-operator']: 'OR',
+		},
+		{
+			actions: [
+				{
+					action: 'show',
+					label: 'label text 1',
+					target: 'text1',
+				},
+			],
+			conditions: [
+				{
+					operands: [
+						{
+							type: 'field',
+							value: 'text1',
+						},
+						{
+							type: 'field',
+							value: 'text2',
+						},
+					],
+					operator: 'not-equals-to',
+				},
+			],
+			['logical-operator']: 'AND',
 		},
 	],
 	spritemap,
@@ -108,6 +146,12 @@ describe('RuleList', () => {
 					'there-are-no-rules-yet-click-on-plus-icon-below-to-add-the-first',
 			},
 		});
+
+		expect(component).toMatchSnapshot();
+	});
+
+	it('shows rule list', () => {
+		component = new RuleList(configDefault);
 
 		expect(component).toMatchSnapshot();
 	});
