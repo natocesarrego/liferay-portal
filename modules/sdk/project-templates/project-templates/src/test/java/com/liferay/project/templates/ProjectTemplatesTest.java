@@ -55,7 +55,6 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -711,7 +710,6 @@ public class ProjectTemplatesTest implements BaseProjectTemplatesTestCase {
 		_buildProjects(gradleProjectDir, mavenProjectDir);
 	}
 
-	@Ignore
 	@Test
 	public void testBuildTemplateFormField71() throws Exception {
 		File gradleProjectDir = _buildTemplateWithGradle(
@@ -778,7 +776,6 @@ public class ProjectTemplatesTest implements BaseProjectTemplatesTestCase {
 		_buildProjects(gradleProjectDir, mavenProjectDir);
 	}
 
-	@Ignore
 	@Test
 	public void testBuildTemplateFormField71WithHyphen() throws Exception {
 		File gradleProjectDir = _buildTemplateWithGradle(
@@ -839,6 +836,91 @@ public class ProjectTemplatesTest implements BaseProjectTemplatesTestCase {
 			temporaryFolder, "form-field", "foo-bar", "com.test", mavenExecutor,
 			"-DclassName=FooBar", "-Dpackage=foo.bar",
 			"-DliferayVersion=7.1.3");
+
+		testContains(
+			mavenProjectDir, "bnd.bnd", "-contract: JavaPortlet,JavaServlet");
+
+		_buildProjects(gradleProjectDir, mavenProjectDir);
+	}
+
+	@Test
+	public void testBuildTemplateFormField72() throws Exception {
+		File gradleProjectDir = _buildTemplateWithGradle(
+			"form-field", "foobar", "--liferay-version", "7.2.0");
+
+		testContains(
+			gradleProjectDir, "bnd.bnd", "Bundle-Name: foobar",
+			"Web-ContextPath: /dynamic-data-foobar-form-field");
+		testContains(
+			gradleProjectDir, "build.gradle",
+			"apply plugin: \"com.liferay.plugin\"",
+			DEPENDENCY_PORTAL_KERNEL + ", version: \"4.4.0");
+		testContains(
+			gradleProjectDir,
+			"src/main/java/foobar/form/field/FoobarDDMFormFieldType.java",
+			"ddm.form.field.type.description=foobar-description",
+			"ddm.form.field.type.label=foobar-label",
+			"ddm.form.field.type.name=foobar",
+			"public class FoobarDDMFormFieldType extends BaseDDMFormFieldType",
+			"return \"foobar\";");
+		testContains(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/foobar.soy",
+			"{namespace Foobar}", "ddm-field-foobar", "form-control foobar");
+		testContains(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/foobar.es.js",
+			"import './foobarRegister.soy.js';", "* Foobar Component",
+			"import templates from './foobar.soy.js';",
+			"class Foobar extends Component", "Soy.register(Foobar,",
+			"Foobar.STATE", "export default Foobar;");
+
+		File mavenProjectDir = buildTemplateWithMaven(
+			temporaryFolder, "form-field", "foobar", "com.test", mavenExecutor,
+			"-DclassName=Foobar", "-Dpackage=foobar", "-DliferayVersion=7.2.0");
+
+		testContains(
+			mavenProjectDir, "bnd.bnd", "-contract: JavaPortlet,JavaServlet");
+
+		_buildProjects(gradleProjectDir, mavenProjectDir);
+	}
+
+	@Test
+	public void testBuildTemplateFormField72WithHyphen() throws Exception {
+		File gradleProjectDir = _buildTemplateWithGradle(
+			"form-field", "foo-bar", "--liferay-version", "7.2.0");
+
+		testContains(
+			gradleProjectDir, "bnd.bnd", "Bundle-Name: foo-bar",
+			"Web-ContextPath: /dynamic-data-foo-bar-form-field");
+		testContains(
+			gradleProjectDir, "build.gradle",
+			"apply plugin: \"com.liferay.plugin\"",
+			DEPENDENCY_PORTAL_KERNEL + ", version: \"4.4.0");
+		testContains(
+			gradleProjectDir,
+			"src/main/java/foo/bar/form/field/FooBarDDMFormFieldType.java",
+			"ddm.form.field.type.description=foo-bar-description",
+			"ddm.form.field.type.label=foo-bar-label",
+			"ddm.form.field.type.name=fooBar",
+			"public class FooBarDDMFormFieldType extends BaseDDMFormFieldType",
+			"return \"fooBar\";");
+		testContains(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/foo-bar.soy",
+			"{namespace FooBar}", "ddm-field-foo-bar", "form-control foo-bar");
+		testContains(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/foo-bar.es.js",
+			"import './foo-barRegister.soy.js';", "* FooBar Component",
+			"import templates from './foo-bar.soy.js';",
+			"class FooBar extends Component", "Soy.register(FooBar,",
+			"FooBar.STATE", "export default FooBar;");
+
+		File mavenProjectDir = buildTemplateWithMaven(
+			temporaryFolder, "form-field", "foo-bar", "com.test", mavenExecutor,
+			"-DclassName=FooBar", "-Dpackage=foo-bar",
+			"-DliferayVersion=7.2.0");
 
 		testContains(
 			mavenProjectDir, "bnd.bnd", "-contract: JavaPortlet,JavaServlet");
