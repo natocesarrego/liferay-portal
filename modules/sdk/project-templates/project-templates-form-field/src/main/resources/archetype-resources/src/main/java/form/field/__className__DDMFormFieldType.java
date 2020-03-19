@@ -23,6 +23,7 @@ import org.osgi.service.component.annotations.Reference;
 #elseif (${liferayVersion.startsWith("7.1")} || ${liferayVersion.startsWith("7.2")})
 		"ddm.form.field.type.description=${artifactId}-description",
 		"ddm.form.field.type.display.order:Integer=10",
+		"ddm.form.field.type.group=customized",
 #end
 		"ddm.form.field.type.icon=text",
 #if (${liferayVersion.startsWith("7.0")} || ${liferayVersion.startsWith("7.1")})
@@ -40,7 +41,7 @@ public class ${className}DDMFormFieldType extends BaseDDMFormFieldType {
 	@Override
 	public String getModuleName() {
 		return _npmResolver.resolveModuleName(
-			"dynamic-data-mapping-form-field-type-slider/Slider/Slider.es");
+			"dynamic-data-${artifactId}-form-field/${artifactId}.es");
 	}
 #end
 

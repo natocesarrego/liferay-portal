@@ -46,25 +46,50 @@ public class FormFieldProjectTemplateCustomizer
 
 		String liferayVersion = projectTemplatesArgs.getLiferayVersion();
 
-		if (!liferayVersion.startsWith("7.1")) {
-			Path destinationDirPath = destinationDir.toPath();
+		Path destinationDirPath = destinationDir.toPath();
 
-			String name = projectTemplatesArgs.getName();
+		String name = projectTemplatesArgs.getName();
 
-			Path projectDirPath = destinationDirPath.resolve(name);
+		Path projectDirPath = destinationDirPath.resolve(name);
 
-			List<String> fileNames = new ArrayList<>();
+		List<String> fileNames = new ArrayList<>();
 
+		if (liferayVersion.startsWith("7.0")) {
 			fileNames.add(".babelrc");
 			fileNames.add(".npmbundlerrc");
 			fileNames.add("package.json");
 			fileNames.add(
 				"src/main/resources/META-INF/resources/" + name + ".es.js");
+		}
 
-			for (String fileName : fileNames) {
-				ProjectTemplateCustomizer.deleteFileInPath(
-					fileName, projectDirPath);
+		if (liferayVersion.startsWith("7.2")) {
+			fileNames.add("src/main/resources/META-INF/resources/config.js");
+			fileNames.add(
+				"src/main/resources/META-INF/resources/" + name + "_field.js");
+
+			String[] folders = name.split("-");
+
+			String directory = (folders.length > 0) ? "" : name;
+
+			for (String folder : folders) {
+				directory += folder + "/";
 			}
+
+			String className = projectTemplatesArgs.getClassName();
+
+			fileNames.add(
+				"src/main/java/" + directory + "form/field/" + className +
+					"DDMFormFieldRenderer.java");
+		}
+		else {
+			fileNames.add(
+				"src/main/resources/META-INF/resources/" + name +
+					"Register.js");
+		}
+
+		for (String fileName : fileNames) {
+			ProjectTemplateCustomizer.deleteFileInPath(
+				fileName, projectDirPath);
 		}
 	}
 

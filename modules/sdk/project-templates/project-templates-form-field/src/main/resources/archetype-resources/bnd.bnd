@@ -1,7 +1,9 @@
 Bundle-Name: ${artifactId}
 Bundle-SymbolicName: ${package}
 Bundle-Version: ${version}
+#if (!${liferayVersion.startsWith("7.2")})
 Liferay-JS-Config: /META-INF/resources/config.js
+#end
 #if (${liferayVersion.startsWith("7.2")})
 Provide-Capability:\
 	soy;\

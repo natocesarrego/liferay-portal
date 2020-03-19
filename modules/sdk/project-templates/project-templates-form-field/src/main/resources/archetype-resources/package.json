@@ -17,7 +17,7 @@
 		"@babel/plugin-proposal-object-rest-spread": "^7.5.5",
 		"@babel/preset-env": "^7.4.2",
 		"babel-loader": "8.0.6",
-		"liferay-npm-bundler": "2.13.0",
+		"liferay-npm-bundler": "2.16.1",
 		"liferay-npm-bundler-preset-liferay-dev": "^2.0.0",
 		"metal-tools-soy": "4.3.2"
 #else
