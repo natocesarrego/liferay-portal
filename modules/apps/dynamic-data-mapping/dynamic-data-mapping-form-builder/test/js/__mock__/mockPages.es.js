@@ -14,6 +14,11 @@
 
 export default [
 	{
+		description: 'Page Description',
+		localizedDescription: {},
+		localizedTitle: {
+			en_US: 'Localized Title',
+		},
 		rows: [
 			{
 				columns: [
