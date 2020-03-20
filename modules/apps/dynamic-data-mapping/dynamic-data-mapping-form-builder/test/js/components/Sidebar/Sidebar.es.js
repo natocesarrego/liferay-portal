@@ -99,7 +99,7 @@ describe('Sidebar', () => {
 		jest.clearAllTimers();
 	});
 
-	it('renders a Sidebar open', () => {
+	it('renders a Sidebar opened', () => {
 		component = new Sidebar({
 			fieldTypes: mockFieldTypes,
 			spritemap: 'icons.svg',
@@ -145,11 +145,13 @@ describe('Sidebar', () => {
 			'#ddm-field-types-basic-header'
 		);
 		expect(basicTab).toEqual(expect.anything());
+		expect(basicTab.classList.value).toEqual('collapse-icon panel-header panel-header-link');
 
 		const customizedTab = document.querySelector(
 			'#ddm-field-types-customized-header'
 		);
 		expect(customizedTab).toEqual(expect.anything());
+		expect(customizedTab.classList.value).toEqual('collapse-icon panel-header panel-header-link');
 	});
 
 	it('closes the sidebar when the mouse down event is not on it', () => {
