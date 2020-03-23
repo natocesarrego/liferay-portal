@@ -19,7 +19,8 @@ package com.liferay.dynamic.data.mapping.uad.constants;
  */
 public class DDMFormInstanceUADConstants {
 
-	public static final String DEFAULT_DATE_FORMAT = "MMM dd yyyy 'at' HH:mm";
+	public static final String DEFAULT_DDM_FORM_INSTANCE_DATE_FORMAT =
+		"MMM dd yyyy 'at' HH:mm";
 
 	public static final long DEFAULT_DDM_FORM_INSTANCE_PARENT_ID = 0;
 

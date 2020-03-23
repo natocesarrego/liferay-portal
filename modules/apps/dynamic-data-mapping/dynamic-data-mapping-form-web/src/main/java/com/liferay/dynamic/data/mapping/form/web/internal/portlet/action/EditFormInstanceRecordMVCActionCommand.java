@@ -15,18 +15,9 @@
 package com.liferay.dynamic.data.mapping.form.web.internal.portlet.action;
 
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
-import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
-import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordLocalService;
-import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.util.ParamUtil;
-
-import javax.portlet.ActionRequest;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Marcos Martins
@@ -41,24 +32,4 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class EditFormInstanceRecordMVCActionCommand
 	extends AddFormInstanceRecordMVCActionCommand {
-
-	@Override
-	protected void saveFormInstanceRecord(
-			ActionRequest actionRequest, DDMFormInstance ddmFormInstance,
-			DDMFormValues ddmFormValues, long groupId,
-			ServiceContext serviceContext, long userId)
-		throws PortalException {
-
-		long ddmFormInstanceRecordId = ParamUtil.getLong(
-			actionRequest, "formInstanceRecordId");
-
-		_ddmFormInstanceRecordLocalService.updateFormInstanceRecord(
-			userId, ddmFormInstanceRecordId, false, ddmFormValues,
-			serviceContext);
-	}
-
-	@Reference
-	private DDMFormInstanceRecordLocalService
-		_ddmFormInstanceRecordLocalService;
-
 }

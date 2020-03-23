@@ -67,7 +67,8 @@ public class DDMUADHelper {
 				"createDate",
 				Time.getSimpleDate(
 					createdDate,
-					DDMFormInstanceUADConstants.DEFAULT_DATE_FORMAT));
+					DDMFormInstanceUADConstants.
+						DEFAULT_DDM_FORM_INSTANCE_DATE_FORMAT));
 		}
 	}
 
