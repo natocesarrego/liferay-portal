@@ -103,13 +103,13 @@ FragmentManagementToolbarDisplayContext fragmentManagementToolbarDisplayContext 
 </aui:form>
 
 <liferay-frontend:component
-	componentId="<%= FragmentWebKeys.FRAGMENT_ENTRY_DROPDOWN_DEFAULT_EVENT_HANDLER %>"
-	module="js/FragmentEntryDropdownDefaultEventHandler.es"
+	componentId="<%= FragmentWebKeys.FRAGMENT_COMPOSITION_DROPDOWN_DEFAULT_EVENT_HANDLER %>"
+	module="js/FragmentCompositionDropdownDefaultEventHandler.es"
 />
 
 <liferay-frontend:component
-	componentId="<%= FragmentWebKeys.FRAGMENT_COMPOSITION_DROPDOWN_DEFAULT_EVENT_HANDLER %>"
-	module="js/FragmentCompositionDropdownDefaultEventHandler.es"
+	componentId="<%= FragmentWebKeys.FRAGMENT_ENTRY_DROPDOWN_DEFAULT_EVENT_HANDLER %>"
+	module="js/FragmentEntryDropdownDefaultEventHandler.es"
 />
 
 <liferay-frontend:component

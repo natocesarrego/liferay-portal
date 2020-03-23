@@ -1148,6 +1148,24 @@ public class JenkinsResultsParserUtil {
 	}
 
 	public static List<File> getIncludedFiles(
+		File basedir, String[] excludes, String[] includes) {
+
+		if (includes == null) {
+			return new ArrayList<>();
+		}
+
+		List<PathMatcher> excludePathMatchers = null;
+
+		if ((excludes != null) && (excludes.length > 0)) {
+			excludePathMatchers = toPathMatchers(null, excludes);
+		}
+
+		return getIncludedFiles(
+			excludePathMatchers, toPathMatchers(null, includes),
+			findFiles(basedir, ".*"));
+	}
+
+	public static List<File> getIncludedFiles(
 		List<PathMatcher> excludesPathMatchers,
 		List<PathMatcher> includesPathMatchers, List<File> files) {
 
