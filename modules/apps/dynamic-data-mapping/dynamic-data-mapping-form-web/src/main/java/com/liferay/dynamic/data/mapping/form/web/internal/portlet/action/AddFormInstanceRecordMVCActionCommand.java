@@ -166,22 +166,31 @@ public class AddFormInstanceRecordMVCActionCommand
 			ServiceContext serviceContext, long userId)
 		throws PortalException {
 
-		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
-			_ddmFormInstanceRecordVersionLocalService.
-				fetchLatestFormInstanceRecordVersion(
-					userId, ddmFormInstance.getFormInstanceId(),
-					ddmFormInstance.getVersion(),
-					WorkflowConstants.STATUS_DRAFT);
+		if (this instanceof EditFormInstanceRecordMVCActionCommand) {
+			long ddmFormInstanceRecordId = ParamUtil.getLong(
+				actionRequest, "formInstanceRecordId");
 
-		if (ddmFormInstanceRecordVersion == null) {
-			_ddmFormInstanceRecordService.addFormInstanceRecord(
-				groupId, ddmFormInstance.getFormInstanceId(), ddmFormValues,
-				serviceContext);
+			_updateDDMFormInstanceRecord(
+				ddmFormInstanceRecordId, ddmFormValues, serviceContext);
 		}
 		else {
-			_ddmFormInstanceRecordService.updateFormInstanceRecord(
-				ddmFormInstanceRecordVersion.getFormInstanceRecordId(), false,
-				ddmFormValues, serviceContext);
+			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
+				_ddmFormInstanceRecordVersionLocalService.
+					fetchLatestFormInstanceRecordVersion(
+						userId, ddmFormInstance.getFormInstanceId(),
+						ddmFormInstance.getVersion(),
+						WorkflowConstants.STATUS_DRAFT);
+
+			if (ddmFormInstanceRecordVersion == null) {
+				_ddmFormInstanceRecordService.addFormInstanceRecord(
+					groupId, ddmFormInstance.getFormInstanceId(), ddmFormValues,
+					serviceContext);
+			}
+			else {
+				_updateDDMFormInstanceRecord(
+					ddmFormInstanceRecordVersion.getFormInstanceRecordId(),
+					ddmFormValues, serviceContext);
+			}
 		}
 	}
 
@@ -239,6 +248,15 @@ public class AddFormInstanceRecordMVCActionCommand
 		if (formInstanceSettings.requireCaptcha()) {
 			CaptchaUtil.check(actionRequest);
 		}
+	}
+
+	private void _updateDDMFormInstanceRecord(
+			long ddmFormInstanceRecordId, DDMFormValues ddmFormValues,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		_ddmFormInstanceRecordService.updateFormInstanceRecord(
+			ddmFormInstanceRecordId, false, ddmFormValues, serviceContext);
 	}
 
 	private AddFormInstanceRecordMVCCommandHelper
