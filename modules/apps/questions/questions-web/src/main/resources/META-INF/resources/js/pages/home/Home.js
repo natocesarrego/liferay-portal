@@ -14,9 +14,9 @@
 
 import ClayCard from '@clayui/card';
 import React, {useContext, useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
 
 import {AppContext} from '../../AppContext.es';
+import Link from '../../components/Link.es';
 import {getSections} from '../../utils/client.es';
 import lang from '../../utils/lang.es';
 
@@ -47,7 +47,7 @@ export default () => {
 							key={section.id}
 						>
 							<Link
-								className="d-block h-100 questions-card text-decoration-none text-secondary"
+								className="questions-card text-decoration-none text-secondary"
 								to={`/questions/${section.title}`}
 							>
 								<ClayCard>
