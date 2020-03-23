@@ -542,45 +542,6 @@ describe('LayoutProvider', () => {
 			});
 		});
 
-		xdescribe('fieldChangesCanceled', () => {
-			it('listens the fieldChangesCanceled event and change the state of the focusedField and pages for the data wich was received', () => {
-				component = new Parent({
-					initialPages: pages,
-				});
-
-				const {child, provider} = component.refs;
-				const mockedData = {
-					fieldName: 'original',
-					name: 'text1',
-					settingsContext: {
-						pages: [],
-					},
-					type: 'text',
-				};
-
-				provider.setState({
-					focusedField: {
-						fieldName: 'changed',
-						icon: 'text',
-						name: 'text1',
-						originalContext: mockedData,
-						settingsContext: {
-							pages: [],
-						},
-					},
-				});
-
-				child.emit('fieldChangesCanceled');
-
-				jest.runAllTimers();
-
-				expect(provider.state.focusedField.fieldName).toEqual(
-					'original'
-				);
-				expect(provider.state.pages).toMatchSnapshot();
-			});
-		});
-
 		describe('focusedFieldUpdated', () => {
 			it('listens the focusedFieldUpdated event and change the state of the focusedField and pages for the data wich was received', () => {
 				component = new Parent();
