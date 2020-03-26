@@ -759,7 +759,7 @@ public class DDMFormAdminDisplayContext {
 	public String getPublishedFormURL(DDMFormInstance formInstance)
 		throws PortalException {
 
-		if (formInstance == null) {
+		if (!isFormPublished(formInstance)) {
 			return StringPool.BLANK;
 		}
 
