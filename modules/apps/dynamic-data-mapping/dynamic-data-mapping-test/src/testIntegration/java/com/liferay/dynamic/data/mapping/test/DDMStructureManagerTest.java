@@ -24,6 +24,7 @@ import com.liferay.dynamic.data.mapping.kernel.DDMStructureManager;
 import com.liferay.dynamic.data.mapping.kernel.LocalizedValue;
 import com.liferay.dynamic.data.mapping.kernel.StorageEngineManager;
 import com.liferay.dynamic.data.mapping.kernel.Value;
+import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.model.Group;
@@ -317,11 +318,16 @@ public class DDMStructureManagerTest {
 			LocaleUtil.US, "Test Structure Description"
 		).build();
 
-		return _ddmStructureManager.addStructure(
+		DDMStructure ddmStructure = _ddmStructureManager.addStructure(
 			TestPropsValues.getUserId(), _group.getGroupId(), null,
 			_classNameId, StringUtil.randomString(), nameMap, descriptionMap,
 			createDDMForm(), StorageEngineManager.STORAGE_TYPE_DEFAULT,
 			DDMStructureManager.STRUCTURE_TYPE_DEFAULT, _serviceContext);
+
+		_ddmStructure = DDMStructureLocalServiceUtil.getStructure(
+			ddmStructure.getStructureId());
+
+		return ddmStructure;
 	}
 
 	protected void assertEquals(
@@ -387,6 +393,9 @@ public class DDMStructureManagerTest {
 
 	@Inject
 	private static Portal _portal;
+
+	@DeleteAfterTestRun
+	private com.liferay.dynamic.data.mapping.model.DDMStructure _ddmStructure;
 
 	@DeleteAfterTestRun
 	private Group _group;
