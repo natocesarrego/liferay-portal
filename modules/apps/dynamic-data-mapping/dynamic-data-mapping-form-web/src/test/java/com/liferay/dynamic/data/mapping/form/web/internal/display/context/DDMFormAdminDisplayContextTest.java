@@ -35,6 +35,7 @@ import com.liferay.dynamic.data.mapping.service.DDMStructureService;
 import com.liferay.dynamic.data.mapping.util.DDMFormValuesMerger;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.language.Language;
@@ -127,6 +128,40 @@ public class DDMFormAdminDisplayContextTest extends PowerMockito {
 		String formURL = _ddmFormAdminDisplayContext.getFormURL();
 
 		Assert.assertEquals(getSharedFormURL(), formURL);
+	}
+
+	@Test
+	public void testGetPublishedURLForRestrictedFormInstance()
+		throws Exception {
+
+		DDMFormInstance ddmFormInstance = mockDDMFormInstance(
+			_SHARED_FORM_INSTANCE_ID, false);
+
+		String publishedFormURL =
+			_ddmFormAdminDisplayContext.getPublishedFormURL(ddmFormInstance);
+
+		Assert.assertEquals(StringPool.BLANK, publishedFormURL);
+	}
+
+	@Test
+	public void testGetPublishedURLForSharedFormInstance() throws Exception {
+		DDMFormInstance ddmFormInstance = mockDDMFormInstance(
+			_SHARED_FORM_INSTANCE_ID, false);
+
+		DDMFormInstanceSettings ddmFormInstanceSettings =
+			ddmFormInstance.getSettingsModel();
+
+		when(
+			ddmFormInstanceSettings.published()
+		).thenReturn(
+			true
+		);
+
+		String publishedFormURL =
+			_ddmFormAdminDisplayContext.getPublishedFormURL(ddmFormInstance);
+
+		Assert.assertEquals(
+			getSharedFormURL() + _SHARED_FORM_INSTANCE_ID, publishedFormURL);
 	}
 
 	@Test
