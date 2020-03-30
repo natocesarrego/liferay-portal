@@ -39,28 +39,37 @@ public class DDMFormEvaluatorRuleHelper {
 			ddmFormEvaluatorExpressionObserver;
 	}
 
-	public void checkFieldAffectedByAction(DDMFormRule ddmFormRule) {
+	public void checkFieldAffectedByAction(
+		DDMFormRule ddmFormRule, List<String> actionsAlreadyEvaluated) {
+
 		Collection<DDMFormField> fieldNameSet = _ddmFormFieldsMap.values();
 
 		Stream<DDMFormField> stream = fieldNameSet.stream();
 
-		stream.forEach(field -> checkFieldAffectedByAction(ddmFormRule, field));
+		stream.forEach(
+			field -> checkFieldAffectedByAction(
+				ddmFormRule, field, actionsAlreadyEvaluated));
 	}
 
 	protected void checkFieldAffectedByAction(
-		DDMFormRule ddmFormRule, DDMFormField ddmFormField) {
+		DDMFormRule ddmFormRule, DDMFormField ddmFormField,
+		List<String> actionsAlreadyEvaluated) {
 
-		checkFieldAffectedBySetReadOnlyAction(ddmFormRule, ddmFormField);
-		checkFieldAffectedBySetRequiredAction(ddmFormRule, ddmFormField);
-		checkFieldAffectedBySetVisibleAction(ddmFormRule, ddmFormField);
+		checkFieldAffectedBySetReadOnlyAction(
+			ddmFormRule, ddmFormField, actionsAlreadyEvaluated);
+		checkFieldAffectedBySetRequiredAction(
+			ddmFormRule, ddmFormField, actionsAlreadyEvaluated);
+		checkFieldAffectedBySetVisibleAction(
+			ddmFormRule, ddmFormField, actionsAlreadyEvaluated);
 	}
 
 	protected void checkFieldAffectedBySetReadOnlyAction(
-		DDMFormRule ddmFormRule, DDMFormField ddmFormField) {
+		DDMFormRule ddmFormRule, DDMFormField ddmFormField,
+		List<String> actionsAlreadyEvaluated) {
 
 		if (containsAction(
 				ddmFormRule, "setEnabled", ddmFormField.getName(),
-				!ddmFormField.isReadOnly())) {
+				!ddmFormField.isReadOnly(), actionsAlreadyEvaluated)) {
 
 			UpdateFieldPropertyRequest.Builder builder =
 				UpdateFieldPropertyRequest.Builder.newBuilder(
@@ -73,11 +82,12 @@ public class DDMFormEvaluatorRuleHelper {
 	}
 
 	protected void checkFieldAffectedBySetRequiredAction(
-		DDMFormRule ddmFormRule, DDMFormField ddmFormField) {
+		DDMFormRule ddmFormRule, DDMFormField ddmFormField,
+		List<String> actionsAlreadyEvaluated) {
 
 		if (containsAction(
 				ddmFormRule, "setRequired", ddmFormField.getName(),
-				ddmFormField.isRequired())) {
+				ddmFormField.isRequired(), actionsAlreadyEvaluated)) {
 
 			UpdateFieldPropertyRequest.Builder builder =
 				UpdateFieldPropertyRequest.Builder.newBuilder(
@@ -90,10 +100,12 @@ public class DDMFormEvaluatorRuleHelper {
 	}
 
 	protected void checkFieldAffectedBySetVisibleAction(
-		DDMFormRule ddmFormRule, DDMFormField ddmFormField) {
+		DDMFormRule ddmFormRule, DDMFormField ddmFormField,
+		List<String> actionsAlreadyEvaluated) {
 
 		if (containsAction(
-				ddmFormRule, "setVisible", ddmFormField.getName(), true)) {
+				ddmFormRule, "setVisible", ddmFormField.getName(), true,
+				actionsAlreadyEvaluated)) {
 
 			UpdateFieldPropertyRequest.Builder builder =
 				UpdateFieldPropertyRequest.Builder.newBuilder(
@@ -106,7 +118,7 @@ public class DDMFormEvaluatorRuleHelper {
 
 	protected boolean containsAction(
 		DDMFormRule ddmFormRule, String functionName, String ddmFormFieldName,
-		boolean defaultValue) {
+		boolean defaultValue, List<String> actionsAlreadyEvaluated) {
 
 		String setBooleanPropertyAction = String.format(
 			"%s('%s', %s)", functionName, ddmFormFieldName, defaultValue);
@@ -115,8 +127,20 @@ public class DDMFormEvaluatorRuleHelper {
 
 		Stream<String> stream = actions.stream();
 
-		return stream.anyMatch(
-			action -> Objects.equals(setBooleanPropertyAction, action));
+		Stream<String> actionsAlreadyEvaluatedStream =
+			actionsAlreadyEvaluated.stream();
+
+		boolean alreadyEvaluated = actionsAlreadyEvaluatedStream.anyMatch(
+			action -> action.contains(setBooleanPropertyAction));
+
+		if (stream.anyMatch(
+				action -> Objects.equals(setBooleanPropertyAction, action)) &&
+			!alreadyEvaluated) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private final DDMFormEvaluatorExpressionObserver
