@@ -182,6 +182,7 @@ definition {
 			takeScreenshot();
 		}
 		else {
+			Pause(locator1 = "1000");
 			Type(
 				key_fieldName = "${fieldName}",
 				locator1 = "FormFields#TEXT_FIELD",
@@ -190,6 +191,7 @@ definition {
 	}
 
 	macro editTextAlt {
+		Pause(locator1 = "1000");
 		Type(
 			key_fieldName = "${fieldName}",
 			locator1 = "FormFields#TEXT_FIELD_ALT",
@@ -197,6 +199,7 @@ definition {
 	}
 
 	macro editTextFieldWithEnterKey {
+		Pause(locator1 = "1000");
 		KeyPress(
 			key_fieldName = "${fieldName}",
 			locator1 = "FormFields#TEXT_FIELD",
@@ -204,6 +207,7 @@ definition {
 	}
 
 	macro editTextMultiline {
+		Pause(locator1 = "1000");
 		Type(
 			key_fieldName = "${fieldName}",
 			locator1 = "FormFields#TEXT_MULTILINE_FIELD",
@@ -211,6 +215,7 @@ definition {
 	}
 
 	macro editTextWithBackspace {
+		Pause(locator1 = "1000");
 		var key_fieldName = "${fieldName}";
 
 		DoubleClick(locator1 = "FormFields#TEXT_FIELD");
@@ -221,6 +226,7 @@ definition {
 	}
 
 	macro editTextWithDataProvider {
+		Pause(locator1 = "1000");
 		Type.sendKeys(
 			key_fieldName = "${fieldName}",
 			locator1 = "FormFields#TEXT_FIELD",
@@ -228,6 +234,7 @@ definition {
 	}
 
 	macro editValidation {
+		Pause(locator1 = "1000");
 		Click(locator1 = "FormFields#VALIDATION_ARGUMENT");
 
 		AssertClick(
@@ -255,9 +262,13 @@ definition {
 	}
 
 	macro enableSwitcher {
+		Pause(locator1 = "3000");
+
 		Click(
 			key_fieldName = "${fieldName}",
 			locator1 = "FormFields#SWITCHER");
+
+		Pause(locator1 = "3000");
 
 		//FormFields.viewSwitcherChecked(fieldName = "${fieldName}");
 
