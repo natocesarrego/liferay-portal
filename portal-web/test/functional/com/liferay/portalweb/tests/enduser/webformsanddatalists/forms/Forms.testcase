@@ -3105,8 +3105,6 @@ definition {
 
 		FormPortlet.submit();
 
-		Pause(locator1 = "5000");
-
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -3249,8 +3247,6 @@ definition {
 
 		FormPortlet.submit();
 
-		Pause(locator1 = "5000");
-
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -3387,8 +3383,6 @@ definition {
 
 		FormPortlet.submit();
 
-		Pause(locator1 = "5000");
-
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -3505,8 +3499,6 @@ definition {
 
 		FormPortlet.submit();
 
-		Pause(locator1 = "5000");
-
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -3586,8 +3578,6 @@ definition {
 			fieldValue = "Text Field Value");
 
 		FormPortlet.submit();
-
-		Pause(locator1 = "5000");
 
 		Navigator.openURL();
 
@@ -3672,8 +3662,6 @@ definition {
 			radioOption = "Option 1");
 
 		FormPortlet.submit();
-
-		Pause(locator1 = "5000");
 
 		Navigator.openURL();
 
@@ -3831,8 +3819,6 @@ definition {
 
 		FormPortlet.submit();
 
-		Pause(locator1 = "5000");
-
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -3981,8 +3967,6 @@ definition {
 
 		FormPortlet.submit();
 
-		Pause(locator1 = "5000");
-
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -4057,8 +4041,6 @@ definition {
 			fieldValue = "01/01/2016");
 
 		FormPortlet.submit();
-
-		Pause(locator1 = "5000");
 
 		Navigator.openURL();
 
