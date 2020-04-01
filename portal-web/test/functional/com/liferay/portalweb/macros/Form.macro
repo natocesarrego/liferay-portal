@@ -461,7 +461,6 @@ definition {
 			value1 = "Submit");
 
 		Alert.viewSuccessMessage();
-
 	}
 
 	macro switchPaginationMode {
