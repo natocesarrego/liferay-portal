@@ -262,13 +262,13 @@ definition {
 	}
 
 	macro enableSwitcher {
-		Pause(locator1 = "3000");
+		Pause(locator1 = "2000");
 
 		Click(
 			key_fieldName = "${fieldName}",
 			locator1 = "FormFields#SWITCHER");
 
-		Pause(locator1 = "3000");
+		Pause(locator1 = "2000");
 
 		//FormFields.viewSwitcherChecked(fieldName = "${fieldName}");
 
