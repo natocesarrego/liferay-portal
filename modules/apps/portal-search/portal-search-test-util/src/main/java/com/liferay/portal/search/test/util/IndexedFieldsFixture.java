@@ -96,10 +96,13 @@ public class IndexedFieldsFixture {
 		}
 	}
 
-	public void populatePriority(String priority, Map<String, String> map) {
+	public void populatePriority(
+		String priority, Map<String, String> map,
+		boolean sourceFilteringEnabled) {
+
 		map.put(Field.PRIORITY, priority);
 
-		if (_isSearchEngineSolr()) {
+		if (sourceFilteringEnabled || _isSearchEngineSolr()) {
 			map.put(Field.PRIORITY.concat("_sortable"), priority);
 		}
 	}
