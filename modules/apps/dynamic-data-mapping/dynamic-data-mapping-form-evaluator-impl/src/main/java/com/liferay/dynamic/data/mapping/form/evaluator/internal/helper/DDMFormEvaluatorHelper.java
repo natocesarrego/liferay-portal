@@ -52,7 +52,6 @@ import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -120,13 +119,10 @@ public class DDMFormEvaluatorHelper {
 
 		Stream<DDMFormRule> stream = ddmFormRules.stream();
 
-		List<String> actionsAlreadyEvaluated = new ArrayList<>();
-
 		stream.filter(
 			DDMFormRule::isEnabled
 		).forEach(
-			ddmFormRule -> evaluateDDMFormRule(
-				ddmFormRule, actionsAlreadyEvaluated)
+			this::evaluateDDMFormRule
 		);
 
 		verifyFieldsMarkedAsRequired();
@@ -185,9 +181,7 @@ public class DDMFormEvaluatorHelper {
 			portletResourceBundle, portalResourceBundle);
 	}
 
-	protected void evaluateDDMFormRule(
-		DDMFormRule ddmFormRule, List<String> actionsAlreadyEvaluated) {
-
+	protected void evaluateDDMFormRule(DDMFormRule ddmFormRule) {
 		if (evaluateDDMFormRuleCondition(ddmFormRule.getCondition())) {
 			List<String> actions = ddmFormRule.getActions();
 
@@ -196,11 +190,11 @@ public class DDMFormEvaluatorHelper {
 			evaluateDDMFormRuleAction(
 				stream.collect(Collectors.joining(" AND ")));
 
-			actionsAlreadyEvaluated.add(actions.toString());
+			_actionsAlreadyEvaluated = actions;
 		}
 		else {
 			_ddmFormRuleHelper.checkFieldAffectedByAction(
-				ddmFormRule, actionsAlreadyEvaluated);
+				ddmFormRule, _actionsAlreadyEvaluated);
 		}
 	}
 
@@ -692,6 +686,7 @@ public class DDMFormEvaluatorHelper {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMFormEvaluatorHelper.class);
 
+	private List<String> _actionsAlreadyEvaluated;
 	private final DDMExpressionFactory _ddmExpressionFactory;
 	private final DDMForm _ddmForm;
 	private final DDMFormEvaluatorEvaluateRequest
