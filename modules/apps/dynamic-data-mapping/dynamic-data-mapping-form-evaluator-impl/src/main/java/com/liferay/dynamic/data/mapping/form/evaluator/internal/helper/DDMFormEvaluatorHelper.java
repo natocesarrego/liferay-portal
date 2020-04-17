@@ -190,12 +190,12 @@ public class DDMFormEvaluatorHelper {
 			evaluateDDMFormRuleAction(
 				stream.collect(Collectors.joining(" AND ")));
 
-			_actionsAlreadyEvaluated = actions;
+			_evaluatedActions = actions;
 		}
 		else {
 			DDMFormRule ddmFormRuleClone = ddmFormRule;
 
-			if (_actionsAlreadyEvaluated != null) {
+			if (_evaluatedActions != null) {
 				List<String> ddmFormRuleActions = ddmFormRule.getActions();
 
 				Stream<String> ddmFormRuleActionsStream =
@@ -203,7 +203,7 @@ public class DDMFormEvaluatorHelper {
 
 				Stream<String> ddmFormRuleActionsFilteredStream =
 					ddmFormRuleActionsStream.filter(
-						action -> !_actionsAlreadyEvaluated.contains(action));
+						action -> !_evaluatedActions.contains(action));
 
 				List<String> ddmFormRuleActionsFiltered =
 					ddmFormRuleActionsFilteredStream.collect(
@@ -705,7 +705,6 @@ public class DDMFormEvaluatorHelper {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMFormEvaluatorHelper.class);
 
-	private List<String> _actionsAlreadyEvaluated;
 	private final DDMExpressionFactory _ddmExpressionFactory;
 	private final DDMForm _ddmForm;
 	private final DDMFormEvaluatorEvaluateRequest
@@ -718,6 +717,7 @@ public class DDMFormEvaluatorHelper {
 	private final DDMFormFieldTypeServicesTracker
 		_ddmFormFieldTypeServicesTracker;
 	private final DDMFormEvaluatorRuleHelper _ddmFormRuleHelper;
+	private List<String> _evaluatedActions;
 	private final Map<Integer, Integer> _pageFlow = new HashMap<>();
 	private ResourceBundle _resourceBundle;
 
