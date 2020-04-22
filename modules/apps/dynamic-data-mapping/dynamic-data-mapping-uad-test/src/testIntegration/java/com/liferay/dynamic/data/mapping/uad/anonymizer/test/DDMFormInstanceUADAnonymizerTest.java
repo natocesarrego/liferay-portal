@@ -16,7 +16,7 @@ package com.liferay.dynamic.data.mapping.uad.anonymizer.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
-import com.liferay.dynamic.data.mapping.service.DDMFormInstanceLocalService;
+import com.liferay.dynamic.data.mapping.service.DDMFormInstanceLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.uad.util.DDMFormInstanceUADTestUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
@@ -63,8 +63,7 @@ public class DDMFormInstanceUADAnonymizerTest
 			long userId, boolean deleteAfterTestRun)
 		throws Exception {
 
-		return DDMFormInstanceUADTestUtil.addDDMFormInstance(
-			_ddmFormInstanceLocalService, _group, userId);
+		return DDMFormInstanceUADTestUtil.addDDMFormInstance(_group, userId);
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class DDMFormInstanceUADAnonymizerTest
 		throws Exception {
 
 		DDMFormInstance ddmFormInstance =
-			_ddmFormInstanceLocalService.getDDMFormInstance(baseModelPK);
+			DDMFormInstanceLocalServiceUtil.getDDMFormInstance(baseModelPK);
 
 		String userName = ddmFormInstance.getUserName();
 
@@ -93,7 +92,7 @@ public class DDMFormInstanceUADAnonymizerTest
 	@Override
 	protected boolean isBaseModelDeleted(long baseModelPK) {
 		DDMFormInstance ddmFormInstance =
-			_ddmFormInstanceLocalService.fetchDDMFormInstance(baseModelPK);
+			DDMFormInstanceLocalServiceUtil.fetchDDMFormInstance(baseModelPK);
 
 		if (ddmFormInstance == null) {
 			return true;
@@ -101,9 +100,6 @@ public class DDMFormInstanceUADAnonymizerTest
 
 		return false;
 	}
-
-	@Inject
-	private DDMFormInstanceLocalService _ddmFormInstanceLocalService;
 
 	@DeleteAfterTestRun
 	private Group _group;

@@ -16,7 +16,7 @@ package com.liferay.dynamic.data.mapping.uad.anonymizer.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord;
-import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordLocalService;
+import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.uad.util.DDMFormInstanceRecordUADTestUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
@@ -58,8 +58,7 @@ public class DDMFormInstanceRecordUADAnonymizerTest
 		DDMFormInstanceRecord ddmFormInstanceRecord =
 			DDMFormInstanceRecordUADTestUtil.
 				addDDMFormInstanceRecordWithStatusByUserId(
-					_ddmFormInstanceRecordLocalService, _group, statusByUserId,
-					userId);
+					_group, statusByUserId, userId);
 
 		_ddmFormInstanceRecords.add(ddmFormInstanceRecord);
 
@@ -86,7 +85,7 @@ public class DDMFormInstanceRecordUADAnonymizerTest
 
 		DDMFormInstanceRecord ddmFormInstanceRecord =
 			DDMFormInstanceRecordUADTestUtil.addDDMFormInstanceRecord(
-				_ddmFormInstanceRecordLocalService, _group, userId);
+				_group, userId);
 
 		if (deleteAfterTestRun) {
 			_ddmFormInstanceRecords.add(ddmFormInstanceRecord);
@@ -105,7 +104,7 @@ public class DDMFormInstanceRecordUADAnonymizerTest
 		throws Exception {
 
 		DDMFormInstanceRecord ddmFormInstanceRecord =
-			_ddmFormInstanceRecordLocalService.getDDMFormInstanceRecord(
+			DDMFormInstanceRecordLocalServiceUtil.getDDMFormInstanceRecord(
 				baseModelPK);
 
 		String userName = ddmFormInstanceRecord.getUserName();
@@ -122,7 +121,7 @@ public class DDMFormInstanceRecordUADAnonymizerTest
 	@Override
 	protected boolean isBaseModelDeleted(long baseModelPK) {
 		DDMFormInstanceRecord ddmFormInstanceRecord =
-			_ddmFormInstanceRecordLocalService.fetchDDMFormInstanceRecord(
+			DDMFormInstanceRecordLocalServiceUtil.fetchDDMFormInstanceRecord(
 				baseModelPK);
 
 		if (ddmFormInstanceRecord == null) {
@@ -131,10 +130,6 @@ public class DDMFormInstanceRecordUADAnonymizerTest
 
 		return false;
 	}
-
-	@Inject
-	private DDMFormInstanceRecordLocalService
-		_ddmFormInstanceRecordLocalService;
 
 	@DeleteAfterTestRun
 	private final List<DDMFormInstanceRecord> _ddmFormInstanceRecords =
