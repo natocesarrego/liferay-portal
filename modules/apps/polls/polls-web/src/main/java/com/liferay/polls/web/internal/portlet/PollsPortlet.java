@@ -15,13 +15,13 @@
 package com.liferay.polls.web.internal.portlet;
 
 import com.liferay.polls.constants.PollsPortletKeys;
+import com.liferay.polls.constants.PollsWebKeys;
 import com.liferay.polls.service.PollsQuestionLocalService;
 import com.liferay.polls.web.internal.portlet.display.context.PollsDisplayContext;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -101,7 +101,7 @@ public class PollsPortlet extends MVCPortlet {
 		throws PortalException {
 
 		renderRequest.setAttribute(
-			WebKeys.PORTLET_DISPLAY_CONTEXT,
+			PollsWebKeys.POLLS_PORTLET_DISPLAY_CONTEXT,
 			new PollsDisplayContext(
 				renderRequest, renderResponse, _pollsQuestionLocalService));
 	}
