@@ -19,6 +19,9 @@ package com.liferay.polls.constants;
  */
 public class PollsWebKeys {
 
+	public static final String POLLS_PORTLET_DISPLAY_CONTEXT =
+		"POLLS_PORTLET_DISPLAY_CONTEXT";
+
 	public static final String POLLS_QUESTION = "POLLS_QUESTION";
 
 }

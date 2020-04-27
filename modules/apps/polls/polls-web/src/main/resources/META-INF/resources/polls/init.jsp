@@ -20,5 +20,5 @@
 page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %>
 
 <%
-PollsDisplayContext pollsDisplayContext = new PollsDisplayContext(renderRequest, renderResponse);
+PollsDisplayContext pollsDisplayContext = (PollsDisplayContext)request.getAttribute(PollsWebKeys.POLLS_PORTLET_DISPLAY_CONTEXT);
 %>
