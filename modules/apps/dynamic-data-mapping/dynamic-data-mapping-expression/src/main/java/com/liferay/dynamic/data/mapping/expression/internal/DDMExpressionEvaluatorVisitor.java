@@ -203,8 +203,8 @@ public class DDMExpressionEvaluatorVisitor
 				_ddmExpressionFieldAccessor);
 		}
 
-		Optional<Method> methodOptional = _getExpressionFunctionApplyMethod(
-			ddmExpressionFunction);
+		Optional<Method> methodOptional =
+			_getOptionalExpressionFunctionApplyMethod(ddmExpressionFunction);
 
 		if (!methodOptional.isPresent()) {
 			return null;
@@ -548,7 +548,21 @@ public class DDMExpressionEvaluatorVisitor
 		return (T)parseTree.accept(this);
 	}
 
-	private Optional<Method> _getExpressionFunctionApplyMethod(
+	private Method[] _getHierarchicalMethods(Class<?> clazz) {
+		Set<Method> methods = new HashSet<>();
+
+		if (clazz.getSuperclass() != null) {
+			Collections.addAll(
+				methods, _getHierarchicalMethods(clazz.getSuperclass()));
+		}
+
+		Collections.addAll(methods, clazz.getDeclaredMethods());
+		Collections.addAll(methods, clazz.getMethods());
+
+		return methods.toArray(new Method[0]);
+	}
+
+	private Optional<Method> _getOptionalExpressionFunctionApplyMethod(
 		DDMExpressionFunction ddmExpressionFunction) {
 
 		List<Method> methods = Stream.of(
@@ -573,20 +587,6 @@ public class DDMExpressionEvaluatorVisitor
 		}
 
 		return Optional.ofNullable(method);
-	}
-
-	private Method[] _getHierarchicalMethods(Class<?> clazz) {
-		Set<Method> methods = new HashSet<>();
-
-		if (clazz.getSuperclass() != null) {
-			Collections.addAll(
-				methods, _getHierarchicalMethods(clazz.getSuperclass()));
-		}
-
-		Collections.addAll(methods, clazz.getDeclaredMethods());
-		Collections.addAll(methods, clazz.getMethods());
-
-		return methods.toArray(new Method[0]);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
