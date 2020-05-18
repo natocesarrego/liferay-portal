@@ -295,7 +295,10 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 			"3.3.0", "3.4.0",
 			new UpgradeCTModel("DDMStructureLink", "DDMTemplateLink"));
 
-		registry.register("3.4.0", "3.5.0", new UpgradeDDMFormInstanceReport());
+		registry.register(
+			"3.4.0", "3.5.0", new UpgradeDDMFormInstanceReport(),
+			new com.liferay.dynamic.data.mapping.internal.upgrade.v3_5_0.
+				UpgradeDDMDataProviderInstance());
 	}
 
 	@Activate

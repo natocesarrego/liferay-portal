@@ -39,7 +39,8 @@ public class DDMDataProviderInstanceTable {
 		{"name", Types.VARCHAR},
 		{"description", Types.CLOB},
 		{"definition", Types.CLOB},
-		{"type_", Types.VARCHAR}
+		{"type_", Types.VARCHAR},
+		{"lastPublishDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
@@ -69,8 +70,10 @@ TABLE_COLUMNS_MAP.put("definition", Types.CLOB);
 
 TABLE_COLUMNS_MAP.put("type_", Types.VARCHAR);
 
+TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
+
 }
-	public static final String TABLE_SQL_CREATE = "create table DDMDataProviderInstance (uuid_ VARCHAR(75) null,dataProviderInstanceId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name STRING null,description TEXT null,definition TEXT null,type_ VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table DDMDataProviderInstance (uuid_ VARCHAR(75) null,dataProviderInstanceId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name STRING null,description TEXT null,definition TEXT null,type_ VARCHAR(75) null,lastPublishDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table DDMDataProviderInstance";
 
