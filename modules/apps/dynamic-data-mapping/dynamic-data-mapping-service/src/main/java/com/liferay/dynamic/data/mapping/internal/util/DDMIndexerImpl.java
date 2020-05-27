@@ -324,62 +324,75 @@ public class DDMIndexerImpl implements DDMIndexer {
 		return sb.toString();
 	}
 
+	@Override
+	public String getValueFieldName(String indexType, Locale locale) {
+		String valueFieldName = DDMIndexer.DDM_VALUE_FIELD_NAME_PREFIX;
+
+		if (indexType != null) {
+			valueFieldName =
+				valueFieldName.concat(
+					StringUtil.upperCaseFirstLetter(indexType));
+		}
+
+		if (locale != null) {
+			valueFieldName =
+				StringBundler.concat(
+					valueFieldName, StringPool.UNDERLINE,
+					LocaleUtil.toLanguageId(locale));
+		}
+
+		return valueFieldName;
+	}
+
 	protected Document createDocument(
 			String indexType, String type, Serializable value, Locale locale)
 		throws JSONException {
 
 		Document document = new DocumentImpl();
 
-		String name =
-			DDMIndexer.DDM_VALUE_FIELD_NAME_PREFIX +
-				StringUtil.upperCaseFirstLetter(indexType);
-
-		if (locale != null) {
-			name =
-				name + StringPool.UNDERLINE + LocaleUtil.toLanguageId(locale);
-		}
+		String valueFieldName = getValueFieldName(indexType, locale);
 
 		if (value instanceof BigDecimal) {
-			document.addNumberSortable(name, (BigDecimal)value);
+			document.addNumberSortable(valueFieldName, (BigDecimal)value);
 		}
 		else if (value instanceof BigDecimal[]) {
-			document.addNumberSortable(name, (BigDecimal[])value);
+			document.addNumberSortable(valueFieldName, (BigDecimal[])value);
 		}
 		else if (value instanceof Boolean) {
-			document.addKeywordSortable(name, (Boolean)value);
+			document.addKeywordSortable(valueFieldName, (Boolean)value);
 		}
 		else if (value instanceof Boolean[]) {
-			document.addKeywordSortable(name, (Boolean[])value);
+			document.addKeywordSortable(valueFieldName, (Boolean[])value);
 		}
 		else if (value instanceof Date) {
-			document.addDateSortable(name, (Date)value);
+			document.addDateSortable(valueFieldName, (Date)value);
 		}
 		else if (value instanceof Date[]) {
-			document.addDateSortable(name, (Date[])value);
+			document.addDateSortable(valueFieldName, (Date[])value);
 		}
 		else if (value instanceof Double) {
-			document.addNumberSortable(name, (Double)value);
+			document.addNumberSortable(valueFieldName, (Double)value);
 		}
 		else if (value instanceof Double[]) {
-			document.addNumberSortable(name, (Double[])value);
+			document.addNumberSortable(valueFieldName, (Double[])value);
 		}
 		else if (value instanceof Integer) {
-			document.addNumberSortable(name, (Integer)value);
+			document.addNumberSortable(valueFieldName, (Integer)value);
 		}
 		else if (value instanceof Integer[]) {
-			document.addNumberSortable(name, (Integer[])value);
+			document.addNumberSortable(valueFieldName, (Integer[])value);
 		}
 		else if (value instanceof Long) {
-			document.addNumberSortable(name, (Long)value);
+			document.addNumberSortable(valueFieldName, (Long)value);
 		}
 		else if (value instanceof Long[]) {
-			document.addNumberSortable(name, (Long[])value);
+			document.addNumberSortable(valueFieldName, (Long[])value);
 		}
 		else if (value instanceof Float) {
-			document.addNumberSortable(name, (Float)value);
+			document.addNumberSortable(valueFieldName, (Float)value);
 		}
 		else if (value instanceof Float[]) {
-			document.addNumberSortable(name, (Float[])value);
+			document.addNumberSortable(valueFieldName, (Float[])value);
 		}
 		else if (value instanceof Number[]) {
 			Number[] numbers = (Number[])value;
@@ -390,16 +403,16 @@ public class DDMIndexerImpl implements DDMIndexer {
 				doubles[i] = numbers[i].doubleValue();
 			}
 
-			document.addNumberSortable(name, doubles);
+			document.addNumberSortable(valueFieldName, doubles);
 		}
 		else if (value instanceof Object[]) {
 			String[] valuesString = ArrayUtil.toStringArray((Object[])value);
 
 			if (indexType.equals("keyword")) {
-				document.addKeywordSortable(name, valuesString);
+				document.addKeywordSortable(valueFieldName, valuesString);
 			}
 			else {
-				document.addTextSortable(name, valuesString);
+				document.addTextSortable(valueFieldName, valuesString);
 			}
 		}
 		else {
@@ -413,7 +426,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 				double longitude = jsonObject.getDouble("longitude", 0);
 
 				document.addGeoLocation(
-					name.concat("_geolocation"), latitude, longitude);
+					valueFieldName.concat("_geolocation"), latitude, longitude);
 			}
 			else if (type.equals(DDMImpl.TYPE_SELECT)) {
 				JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
@@ -421,7 +434,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 
 				String[] stringArray = ArrayUtil.toStringArray(jsonArray);
 
-				document.addKeywordSortable(name, stringArray);
+				document.addKeywordSortable(valueFieldName, stringArray);
 			}
 			else {
 				if (type.equals(DDMImpl.TYPE_DDM_TEXT_HTML)) {
@@ -429,10 +442,10 @@ public class DDMIndexerImpl implements DDMIndexer {
 				}
 
 				if (indexType.equals("keyword")) {
-					document.addKeywordSortable(name, valueString);
+					document.addKeywordSortable(valueFieldName, valueString);
 				}
 				else {
-					document.addTextSortable(name, valueString);
+					document.addTextSortable(valueFieldName, valueString);
 				}
 			}
 		}
