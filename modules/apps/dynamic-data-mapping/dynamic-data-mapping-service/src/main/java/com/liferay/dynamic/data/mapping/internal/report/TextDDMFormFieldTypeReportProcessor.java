@@ -59,11 +59,11 @@ public class TextDDMFormFieldTypeReportProcessor
 			long formInstanceRecordId, String formInstanceReportEvent)
 		throws Exception {
 
-		DDMFormInstanceRecord formInstanceRecord =
-			ddmFormInstanceRecordLocalService.getFormInstanceRecord(
-				formInstanceRecordId);
+		int totalEntries = fieldJSONObject.getInt("totalEntries");
 
 		JSONArray valuesJSONArray = JSONFactoryUtil.createJSONArray();
+
+		boolean nullFieldValue = Validator.isNull(_getValue(ddmFormFieldValue));
 
 		if (formInstanceReportEvent.equals(
 				DDMFormInstanceReportConstants.EVENT_ADD_RECORD_VERSION)) {
@@ -77,6 +77,10 @@ public class TextDDMFormFieldTypeReportProcessor
 
 			JSONArray jsonArray = fieldJSONObject.getJSONArray("values");
 
+			if (nullFieldValue) {
+				return fieldJSONObject;
+			}
+
 			if (jsonArray != null) {
 				Iterator<JSONObject> iterator = jsonArray.iterator();
 
@@ -86,6 +90,8 @@ public class TextDDMFormFieldTypeReportProcessor
 					valuesJSONArray.put(jsonObject);
 				}
 			}
+
+			totalEntries++;
 		}
 		else if (formInstanceReportEvent.equals(
 					DDMFormInstanceReportConstants.
@@ -144,14 +150,15 @@ public class TextDDMFormFieldTypeReportProcessor
 						}
 					}
 				}
+			);
+
+			if (!nullFieldValue) {
+				totalEntries--;
 			}
 		}
 
 		fieldJSONObject.put(
-			"totalEntries",
-			ddmFormInstanceRecordLocalService.getFormInstanceRecordsCount(
-				formInstanceRecord.getFormInstanceId(),
-				WorkflowConstants.STATUS_APPROVED)
+			"totalEntries", totalEntries
 		).put(
 			"values", valuesJSONArray
 		);
