@@ -43,7 +43,6 @@ import handleFieldSetAdded from './handlers/fieldSetAddedHandler.es';
 import handleFocusedFieldEvaluationEnded from './handlers/focusedFieldEvaluationEndedHandler.es';
 import handleLanguageIdDeleted from './handlers/languageIdDeletedHandler.es';
 import handleSectionAdded from './handlers/sectionAddedHandler.es';
-import {shouldAutoGenerateName} from './util/defaults.es';
 import {generateFieldName} from './util/fields.es';
 
 /**
@@ -661,10 +660,6 @@ class LayoutProvider extends Component {
 		});
 	}
 
-	_shouldAutoGenerateNameValueFn() {
-		return shouldAutoGenerateName;
-	}
-
 	_successPageSettingsValueFn() {
 		const {editingLanguageId, initialSuccessPageSettings} = this.props;
 
@@ -779,6 +774,15 @@ LayoutProvider.PROPS = {
 	fieldSets: Config.array().value([]),
 
 	/**
+	 * @default false
+	 * @instance
+	 * @memberof LayoutProvider
+	 * @type {?bool}
+	 */
+
+	generateFieldNameUsingFieldLabel: Config.bool().value(false),
+
+	/**
 	 * @default undefined
 	 * @instance
 	 * @memberof LayoutProvider
@@ -818,17 +822,6 @@ LayoutProvider.PROPS = {
 	 */
 
 	rules: Config.arrayOf(ruleStructure),
-
-	/**
-	 * @default _shouldAutoGenerateNameValueFn
-	 * @instance
-	 * @memberof LayoutProvider
-	 * @type {?function}
-	 */
-
-	shouldAutoGenerateName: Config.func().valueFn(
-		'_shouldAutoGenerateNameValueFn'
-	),
 
 	/**
 	 * @default undefined

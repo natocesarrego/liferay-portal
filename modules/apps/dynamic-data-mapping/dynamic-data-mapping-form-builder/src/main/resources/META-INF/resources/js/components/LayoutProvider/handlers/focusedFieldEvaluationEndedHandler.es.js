@@ -35,17 +35,10 @@ const handleFocusedFieldEvaluationEnded = (
 	};
 
 	visitor.mapFields(({fieldName, value}) => {
-		state = handleFieldEdited(
-			{
-				...props,
-				shouldAutoGenerateName: () => false,
-			},
-			state,
-			{
-				propertyName: fieldName,
-				propertyValue: value,
-			}
-		);
+		state = handleFieldEdited(props, state, {
+			propertyName: fieldName,
+			propertyValue: value,
+		});
 	});
 
 	return state;
