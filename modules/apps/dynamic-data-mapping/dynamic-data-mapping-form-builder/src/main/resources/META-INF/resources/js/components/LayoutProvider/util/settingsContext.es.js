@@ -17,6 +17,7 @@ import {
 	normalizeFieldName,
 } from 'dynamic-data-mapping-form-renderer';
 
+import {getDefaultFieldName} from '../../../util/fieldSupport.es';
 import {updateFieldValidationProperty} from './fields.es';
 
 export const getSettingsContextProperty = (settingsContext, propertyName) => {
@@ -68,7 +69,7 @@ export const updateFieldName = (
 	focusedField,
 	value
 ) => {
-	const {fieldName, label} = focusedField;
+	const {fieldName, instanceId, type} = focusedField;
 	const normalizedFieldName = normalizeFieldName(value);
 
 	let newFieldName;
@@ -77,7 +78,10 @@ export const updateFieldName = (
 		newFieldName = fieldNameGenerator(value, fieldName);
 	}
 	else {
-		newFieldName = fieldNameGenerator(label, fieldName);
+		newFieldName = fieldNameGenerator(
+			getDefaultFieldName(type, instanceId),
+			fieldName
+		);
 	}
 
 	if (newFieldName) {

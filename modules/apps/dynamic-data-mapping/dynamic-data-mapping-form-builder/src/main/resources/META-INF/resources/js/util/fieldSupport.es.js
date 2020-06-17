@@ -33,6 +33,8 @@ export const createField = (props, event) => {
 		useFieldName = '',
 	} = event;
 
+	const instanceId = generateInstanceId(8);
+
 	let newFieldName = useFieldName;
 
 	if (!useFieldName) {
@@ -47,7 +49,9 @@ export const createField = (props, event) => {
 			});
 		}
 		else {
-			newFieldName = fieldNameGenerator(fieldType.label);
+			newFieldName = fieldNameGenerator(
+				getDefaultFieldName(fieldType.name, instanceId)
+			);
 		}
 	}
 
@@ -76,7 +80,7 @@ export const createField = (props, event) => {
 			editingLanguageId
 		),
 		fieldName,
-		instanceId: generateInstanceId(8),
+		instanceId,
 		name,
 		settingsContext,
 		spritemap,
@@ -99,6 +103,26 @@ export const generateInstanceId = (length) => {
 	}
 
 	return text;
+};
+
+export const getDefaultFieldName = (type, instanceId) => {
+	let defaultFieldName = 'Field';
+
+	if (type && type.length > 1) {
+		const typeLowercase = type.toLowerCase();
+
+		defaultFieldName =
+			typeLowercase.charAt(0).toUpperCase() + typeLowercase.slice(1);
+	}
+
+	if (instanceId) {
+		defaultFieldName = defaultFieldName + instanceId;
+	}
+	else {
+		defaultFieldName = defaultFieldName + generateInstanceId(8);
+	}
+
+	return defaultFieldName;
 };
 
 export const getField = (pages, fieldName) => {
