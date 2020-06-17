@@ -14,6 +14,7 @@
 
 import {
 	PagesVisitor,
+	generateInstanceId,
 	normalizeFieldName,
 } from 'dynamic-data-mapping-form-renderer';
 import {findFieldByFieldName} from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormSupport.es';
@@ -24,7 +25,6 @@ export const generateFieldName = (
 	currentName = null,
 	blacklist = []
 ) => {
-	let counter = 0;
 	let fieldName = normalizeFieldName(desiredName);
 
 	let existingField = findFieldByFieldName(pages, fieldName);
@@ -33,13 +33,9 @@ export const generateFieldName = (
 		(existingField && existingField.fieldName !== currentName) ||
 		blacklist.includes(fieldName)
 	) {
-		if (counter > 0) {
-			fieldName = normalizeFieldName(desiredName) + counter;
-		}
+		fieldName = normalizeFieldName(replaceFieldNameInstanceId(desiredName));
 
 		existingField = findFieldByFieldName(pages, fieldName);
-
-		counter++;
 	}
 
 	return normalizeFieldName(fieldName);
@@ -83,6 +79,22 @@ export const getFieldLocalizedValue = (pages, fieldName, locale) => {
 	);
 
 	return fieldLocalizedValue[locale];
+};
+
+const replaceFieldNameInstanceId = (fieldName) => {
+	const instanceIdLength = 8;
+	const currentInstanceIdIndex = fieldName.length - instanceIdLength;
+
+	if (currentInstanceIdIndex >= 0) {
+		const currentInstanceId = fieldName.slice(currentInstanceIdIndex);
+
+		return fieldName.replace(
+			currentInstanceId,
+			generateInstanceId(instanceIdLength)
+		);
+	}
+
+	return fieldName;
 };
 
 export const updateFieldValidationProperty = (
