@@ -49,9 +49,7 @@ export const createField = (props, event) => {
 			});
 		}
 		else {
-			newFieldName = fieldNameGenerator(
-				getDefaultFieldName(fieldType.name, instanceId)
-			);
+			newFieldName = fieldNameGenerator(getDefaultFieldName(instanceId));
 		}
 	}
 
@@ -105,15 +103,8 @@ export const generateInstanceId = (length) => {
 	return text;
 };
 
-export const getDefaultFieldName = (type, instanceId) => {
+export const getDefaultFieldName = (instanceId) => {
 	let defaultFieldName = 'Field';
-
-	if (type && type.length > 1) {
-		const typeLowercase = type.toLowerCase();
-
-		defaultFieldName =
-			typeLowercase.charAt(0).toUpperCase() + typeLowercase.slice(1);
-	}
 
 	if (instanceId) {
 		defaultFieldName = defaultFieldName + instanceId;

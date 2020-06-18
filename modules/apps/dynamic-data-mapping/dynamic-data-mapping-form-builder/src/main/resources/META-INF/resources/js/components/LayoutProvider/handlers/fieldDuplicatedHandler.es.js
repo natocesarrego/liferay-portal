@@ -31,7 +31,7 @@ export const createDuplicatedField = (originalField, props, blacklist = []) => {
 	const {editingLanguageId, fieldNameGenerator} = props;
 	const instanceId = generateInstanceId(8);
 	const newFieldName = fieldNameGenerator(
-		getDefaultFieldName(originalField.type, instanceId),
+		getDefaultFieldName(instanceId),
 		null,
 		blacklist
 	);

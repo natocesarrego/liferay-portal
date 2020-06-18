@@ -69,7 +69,7 @@ export const updateFieldName = (
 	focusedField,
 	value
 ) => {
-	const {fieldName, instanceId, type} = focusedField;
+	const {fieldName, instanceId} = focusedField;
 	const normalizedFieldName = normalizeFieldName(value);
 
 	let newFieldName;
@@ -79,7 +79,7 @@ export const updateFieldName = (
 	}
 	else {
 		newFieldName = fieldNameGenerator(
-			getDefaultFieldName(type, instanceId),
+			getDefaultFieldName(instanceId),
 			fieldName
 		);
 	}
