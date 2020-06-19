@@ -49,6 +49,8 @@ definition {
 			Click(locator1 = "FormPortlet#PORTLET_CONTENT");
 		}
 		else {
+			WaitForElementPresent(locator1 = "Form#PUBLISH_URL_FORM_PAGE");
+
 			Click(locator1 = "Form#PUBLISH_URL_FORM_PAGE");
 
 			Click(locator1 = "Form#PUBLISH_URL_FORM_PAGE");
