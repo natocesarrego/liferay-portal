@@ -3344,6 +3344,8 @@ definition {
 			navTab = "Documents and Media",
 			uploadFileName = "Document_1.jpg");
 
+		Pause(locator1 = "5000");
+
 		FormPortlet.submitSuccessfully();
 
 		Navigator.openURL();
