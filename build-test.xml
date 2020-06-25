@@ -8028,6 +8028,10 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		<priority value="DEBUG" />
 	</category>
 
+	<category name="com.liferay.dynamic.data.mapping.form.evaluator.internal.helper.DDMFormEvaluatorHelper">
+		<priority value="DEBUG" />
+	</category>
+
 	<category name="com.liferay.portal.dao.orm.hibernate.VerifySessionFactoryWrapper">
 		<priority value="INFO" />
 	</category>
