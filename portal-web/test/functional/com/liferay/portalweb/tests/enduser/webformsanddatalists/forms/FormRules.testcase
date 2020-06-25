@@ -621,7 +621,7 @@ definition {
 	@priority = "5"
 	test EditRule {
 		property test.name.skip.portal.instance = "FormRules#EditRule";
-		property portal.acceptance = "true";
+		property portal.acceptance = "natocesarrego";
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
