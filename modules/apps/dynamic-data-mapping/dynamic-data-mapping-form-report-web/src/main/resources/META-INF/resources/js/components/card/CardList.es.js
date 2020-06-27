@@ -16,19 +16,20 @@ import React from 'react';
 
 import toDataArray, {sumTotalEntries, toArray} from '../../utils/data.es';
 import fieldTypes from '../../utils/fieldTypes.es';
-import BarChart from '../chart/bar/BarChart.es';
+import MultiBarChart from '../chart/bar/MultiBarChart.es';
+import SimpleBarChart from '../chart/bar/SimpleBarChart.es';
 import PieChart from '../chart/pie/PieChart.es';
 import EmptyState from '../empty-state/EmptyState.es';
 import List from '../list/List.es';
 import Card from './Card.es';
 
-const chartFactory = (field, values, totalEntries) => {
+const chartFactory = (field, values, totalEntries, structure) => {
 	const {options, type} = field;
 
 	switch (type) {
 		case 'checkbox_multiple':
 			return (
-				<BarChart
+				<SimpleBarChart
 					data={toDataArray(options, values)}
 					totalEntries={totalEntries}
 				/>
@@ -48,6 +49,18 @@ const chartFactory = (field, values, totalEntries) => {
 				return '';
 			}
 		}
+
+		case 'grid': {
+			return (
+				<MultiBarChart
+					data={values}
+					field={field}
+					structure={structure}
+					totalEntries={totalEntries}
+				/>
+			);
+		}
+
 		case 'radio':
 		case 'select':
 			return (
@@ -85,15 +98,17 @@ export default ({data, fields}) => {
 	const cards = fields.map((field, index) => {
 		const {
 			values = {},
+			structure = {},
 			summary = {},
 			totalEntries = sumTotalEntries(values),
 		} = data[field.name] || {};
+
 		field = {
 			...field,
 			...fieldTypes[field.type],
 		};
 
-		const chart = chartFactory(field, values, totalEntries);
+		const chart = chartFactory(field, values, totalEntries, structure);
 
 		if (chart === null) {
 			return null;
