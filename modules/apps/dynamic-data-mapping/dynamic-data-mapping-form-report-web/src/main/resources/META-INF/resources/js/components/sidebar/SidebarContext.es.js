@@ -14,6 +14,8 @@
 
 import React, {createContext, useState} from 'react';
 
+import useEventListener from './../../hooks/useEventListener.es';
+
 const SidebarContext = createContext({});
 
 const SidebarContextProvider = ({
@@ -27,10 +29,24 @@ const SidebarContextProvider = ({
 		totalEntries: 0,
 	});
 
-	const toggleSidebar = (field, totalEntries) => {
+	useEventListener(window, 'click', (event) => {
+		const target = event.srcElement;
+
+		if (
+			!target.closest('#sidebar-reports') &&
+			!target.closest('#see-more')
+		) {
+			setSidebarState(() => ({
+				isOpen: false,
+			}));
+		}
+	});
+
+	const toggleSidebar = (field, summary, totalEntries) => {
 		setSidebarState(() => ({
 			field,
 			isOpen: field !== null,
+			summary,
 			totalEntries,
 		}));
 	};
