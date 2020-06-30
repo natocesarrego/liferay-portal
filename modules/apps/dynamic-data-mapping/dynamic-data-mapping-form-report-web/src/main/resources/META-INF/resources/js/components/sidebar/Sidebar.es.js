@@ -26,6 +26,7 @@ export default () => {
 		field,
 		formReportRecordsFieldValuesURL,
 		isOpen,
+		language,
 		portletNamespace,
 		toggleSidebar,
 		totalEntries,
@@ -102,7 +103,7 @@ export default () => {
 							</div>
 						)}
 
-						<List data={data}></List>
+						<List data={data} language={language}></List>
 					</div>
 				</div>
 			</div>

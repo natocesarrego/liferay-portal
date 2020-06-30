@@ -22,7 +22,7 @@ import EmptyState from '../empty-state/EmptyState.es';
 import List from '../list/List.es';
 import Card from './Card.es';
 
-const chartFactory = (field, values, totalEntries) => {
+const chartFactory = (field, language, values, totalEntries) => {
 	const {options, type} = field;
 
 	switch (type) {
@@ -58,7 +58,22 @@ const chartFactory = (field, values, totalEntries) => {
 				/>
 			);
 
-		case 'date':
+		case 'date': {
+			if (Array.isArray(values)) {
+				return (
+					<List
+						data={toArray(values)}
+						field={field}
+						language={language}
+						totalEntries={totalEntries}
+					/>
+				);
+			}
+			else {
+				return '';
+			}
+		}
+
 		case 'text': {
 			if (Array.isArray(values)) {
 				return (
@@ -79,8 +94,10 @@ const chartFactory = (field, values, totalEntries) => {
 	}
 };
 
-export default ({data, fields}) => {
+export default ({data, fields, locale}) => {
 	let hasCards = false;
+
+	const {language} = locale;
 
 	const cards = fields.map((field, index) => {
 		const {
@@ -93,7 +110,7 @@ export default ({data, fields}) => {
 			...fieldTypes[field.type],
 		};
 
-		const chart = chartFactory(field, values, totalEntries);
+		const chart = chartFactory(field, language, values, totalEntries);
 
 		if (chart === null) {
 			return null;
