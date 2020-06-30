@@ -13,6 +13,7 @@
  */
 
 import ClayButton from '@clayui/button';
+import moment from 'moment';
 import React, {useContext} from 'react';
 
 import Color from '../color/Color.es';
