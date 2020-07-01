@@ -28,7 +28,6 @@ export default () => {
 		field,
 		formReportRecordsFieldValuesURL,
 		isOpen,
-		language,
 		portletNamespace,
 		summary = {},
 		toggleSidebar,
