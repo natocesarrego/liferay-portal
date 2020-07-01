@@ -12,21 +12,4 @@
  * details.
  */
 
-import React from 'react';
-import {Text} from 'recharts';
-
-import ellipsize from '../../../utils/ellipsize.es';
-
-export default ({payload, x, y}) => (
-		<Text
-			textAnchor="middle"
-			verticalAnchor="start"
-			width={180}
-			x={x}
-			y={y}
-		>
-			{payload.value.length > 34
-				? ellipsize(payload.value, 34)
-				: payload.value}
-		</Text>
-	);
+export default (value, lenght) => value.substring(0, lenght) +'...';
