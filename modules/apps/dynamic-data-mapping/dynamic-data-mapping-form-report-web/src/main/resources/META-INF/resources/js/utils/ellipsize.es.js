@@ -12,4 +12,4 @@
  * details.
  */
 
-export default (value, lenght) => value.substring(0, lenght) +'...';
+export default (value, lenght) => value.substring(0, lenght) + '...';
