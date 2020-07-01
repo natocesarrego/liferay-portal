@@ -18,29 +18,33 @@ import React, {useContext} from 'react';
 
 import {SidebarContext} from '../sidebar/SidebarContext.es';
 
-export default ({data, field, language, totalEntries}) => {
+export default ({data, field, totalEntries, type}) => {
 	const {toggleSidebar} = useContext(SidebarContext);
+
+	const formatDate = (field) => {
+		moment.locale(themeDisplay.getLanguageId().split('_', 1)[0]);
+		const m = moment(field);
+		field = m.format('L');
+
+		return field;
+	};
 
 	return (
 		<div className="field-list">
 			<ul className="entries-list">
 				{Array.isArray(data) &&
-					data.map((field, index) => {
-						if (language) {
-							moment.locale(language);
-							const m = moment(new Date(field));
-							field = m.format('L');
-						}
-
-						return <li key={index}>{field}</li>;
-					})}
+					data.map((field, index) => (
+						<li key={index}>
+							{type == 'date' ? formatDate(field) : field}
+						</li>
+					))}
 
 				{data.length == 5 && totalEntries > 5 ? (
 					<li key={'see-more'}>
 						<ClayButton
 							displayType="link"
 							onClick={() =>
-								toggleSidebar(field, language, totalEntries)
+								toggleSidebar(field, totalEntries, type)
 							}
 						>
 							{Liferay.Language.get('see-all-entries')}
