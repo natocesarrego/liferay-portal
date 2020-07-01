@@ -27,12 +27,12 @@ const SidebarContextProvider = ({
 		totalEntries: 0,
 	});
 
-	const toggleSidebar = (field, language = {}, totalEntries) => {
+	const toggleSidebar = (field, totalEntries, type) => {
 		setSidebarState(() => ({
 			field,
 			isOpen: field !== null,
-			language,
 			totalEntries,
+			type,
 		}));
 	};
 

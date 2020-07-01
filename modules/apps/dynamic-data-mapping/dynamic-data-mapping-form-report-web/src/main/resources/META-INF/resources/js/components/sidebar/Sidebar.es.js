@@ -26,10 +26,10 @@ export default () => {
 		field,
 		formReportRecordsFieldValuesURL,
 		isOpen,
-		language,
 		portletNamespace,
 		toggleSidebar,
 		totalEntries,
+		type,
 	} = useContext(SidebarContext);
 
 	let endpoint = null;
@@ -103,7 +103,7 @@ export default () => {
 							</div>
 						)}
 
-						<List data={data} language={language}></List>
+						<List data={data} type={type}></List>
 					</div>
 				</div>
 			</div>
