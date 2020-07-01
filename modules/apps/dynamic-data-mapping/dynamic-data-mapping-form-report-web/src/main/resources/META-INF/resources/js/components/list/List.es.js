@@ -22,6 +22,14 @@ import {SidebarContext} from '../sidebar/SidebarContext.es';
 export default ({data, field, totalEntries, type}) => {
 	const {toggleSidebar} = useContext(SidebarContext);
 
+	const formatDate = (field) => {
+		moment.locale(themeDisplay.getLanguageId().split('_', 1)[0]);
+		const m = moment(field);
+		field = m.format('L');
+
+		return field;
+	};
+
 	return (
 		<div className="field-list">
 			<ul className="entries-list">
@@ -30,7 +38,7 @@ export default ({data, field, totalEntries, type}) => {
 						<li key={index}>
 							{type == 'color' ? (
 								<Color hexColor={field} />
-							) : (
+							) : type == 'date' ? formatDate(field) : (
 								field
 							)}
 						</li>
