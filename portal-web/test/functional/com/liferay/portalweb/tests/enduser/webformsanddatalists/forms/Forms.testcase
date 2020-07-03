@@ -99,6 +99,7 @@ definition {
 		Form.save();
 	}
 
+	@ignore = "true"
 	@priority = "5"
 	test AddElementSetsWithTranslation {
 		property test.name.skip.portal.instance = "Forms#AddElementSetsWithTranslation";
@@ -1083,6 +1084,7 @@ definition {
 			rowEntry = "Created Form Name");
 	}
 
+	@ignore = "true"
 	@description = "This is a use case for LPS-98073."
 	@priority = "5"
 	test CreateReadUpdateDeleteImageField {
@@ -1491,6 +1493,7 @@ definition {
 			rowNumber = "3");
 	}
 
+	@ignore = "true"
 	@priority = "4"
 	test EditAllFormFieldNames {
 		property test.name.skip.portal.instance = "Forms#EditAllFormFieldNames";
@@ -4503,6 +4506,7 @@ definition {
 			rowEntry = "Untitled Form");
 	}
 
+	@ignore = "true"
 	@description = "This is a use case for LPS-64305."
 	@priority = "4"
 	test ViewDefaultFieldNamesWithPunctuationCharacters {
