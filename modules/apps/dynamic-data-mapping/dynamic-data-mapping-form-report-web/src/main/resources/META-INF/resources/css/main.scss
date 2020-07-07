@@ -11,44 +11,6 @@ body,
 	width: 100%;
 }
 
-.recharts-legend-wrapper {
-	align-items: center;
-	display: flex;
-	justify-content: center;
-
-	.bar-legend {
-		display: flex;
-		font-size: 14px;
-		line-height: 150%;
-		list-style-type: none;
-
-		svg {
-			margin-right: 8px;
-			min-width: 12px;
-		}
-
-		rect {
-			width: 12px;
-		}
-
-		span {
-			display: -webkit-box;
-			width: 89%;
-			-webkit-line-clamp: 2;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-		}
-
-		li {
-			align-items: center;
-			display: flex;
-			margin: 0;
-			max-width: 204px;
-			padding: 0 16px 0 0;
-		}
-	}
-}
-
 .card {
 	box-shadow: none;
 	margin-bottom: 0;
@@ -397,6 +359,44 @@ body,
 
 .recharts-cartesian-axis-ticks {
 	font-size: 14px;
+}
+
+.recharts-legend-wrapper {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+
+	.bar-legend {
+		display: flex;
+		font-size: 14px;
+		line-height: 150%;
+		list-style-type: none;
+
+		svg {
+			margin-right: 8px;
+			min-width: 12px;
+		}
+
+		rect {
+			width: 12px;
+		}
+
+		span {
+			display: -webkit-box;
+			width: 89%;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+
+		li {
+			align-items: center;
+			display: flex;
+			margin: 0;
+			max-width: 204px;
+			padding: 0 16px 0 0;
+		}
+	}
 }
 
 .recharts-responsive-container {
