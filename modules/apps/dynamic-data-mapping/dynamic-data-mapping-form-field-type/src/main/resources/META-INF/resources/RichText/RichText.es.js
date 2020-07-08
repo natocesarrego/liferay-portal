@@ -73,6 +73,7 @@ const RichText = ({
 	onChange,
 	predefinedValue,
 	readOnly,
+	required,
 	value,
 	...otherProps
 }) => {
@@ -100,7 +101,8 @@ const RichText = ({
 	}
 
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly}>
+		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
+			<fieldset aria-label="rich text" aria-required={required}>
 			<Editor {...editorProps} />
 
 			<input
@@ -109,6 +111,7 @@ const RichText = ({
 				name={name}
 				type="hidden"
 			/>
+			</fieldset>
 		</FieldBase>
 	);
 };

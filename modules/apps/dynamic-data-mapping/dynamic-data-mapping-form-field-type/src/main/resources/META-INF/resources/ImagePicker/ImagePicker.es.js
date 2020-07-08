@@ -33,6 +33,7 @@ const ImagePicker = ({
 	onFieldChanged,
 	portletNamespace,
 	readOnly,
+	required
 }) => {
 	const [imageValues, setImageValues] = useSyncValue(inputValue);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -113,6 +114,8 @@ const ImagePicker = ({
 				<ClayInput.Group>
 					<ClayInput.GroupItem className="d-none d-sm-block" prepend>
 						<ClayInput
+							aria-label="image upload"
+							aria-required={required}
 							className="bg-light"
 							disabled={readOnly}
 							onClick={handleItemSelectorTriggerClick}
@@ -231,6 +234,7 @@ const Main = ({
 	onChange,
 	portletNamespace,
 	readOnly,
+	required,
 	value,
 	...otherProps
 }) => {
@@ -248,7 +252,7 @@ const Main = ({
 	};
 
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly}>
+		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
 			<ImagePicker
 				id={id}
 				inputValue={
@@ -265,6 +269,7 @@ const Main = ({
 				onFieldChanged={({event, ...data}) => onChange(event, data)}
 				portletNamespace={portletNamespace}
 				readOnly={readOnly}
+				required={required}
 			/>
 		</FieldBase>
 	);

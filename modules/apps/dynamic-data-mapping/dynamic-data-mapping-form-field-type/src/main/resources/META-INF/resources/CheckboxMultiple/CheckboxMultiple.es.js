@@ -65,6 +65,7 @@ const CheckboxMultiple = ({
 	onFocus,
 	options,
 	predefinedValue,
+	required,
 	value: initialValue,
 }) => {
 	const [value, setValue] = useState(initialValue);
@@ -88,6 +89,7 @@ const CheckboxMultiple = ({
 
 	return (
 		<div className="lfr-ddm-checkbox-multiple">
+			<fieldset aria-label="checkbox" aria-required={required}>
 			{options.map((option) => (
 				<Toggle
 					checked={displayValues.includes(option.value)}
@@ -102,6 +104,7 @@ const CheckboxMultiple = ({
 					value={option.value}
 				/>
 			))}
+			</fieldset>
 		</div>
 	);
 };
@@ -124,11 +127,12 @@ const Main = ({
 	onFocus,
 	predefinedValue,
 	readOnly,
+	required,
 	showAsSwitcher = true,
 	value,
 	...otherProps
 }) => (
-	<FieldBase name={name} readOnly={readOnly} {...otherProps}>
+	<FieldBase name={name} readOnly={readOnly} required={required} {...otherProps}>
 		<CheckboxMultiple
 			disabled={readOnly}
 			inline={inline}
@@ -139,6 +143,7 @@ const Main = ({
 			onFocus={onFocus}
 			options={options}
 			predefinedValue={setJSONArrayValue(predefinedValue)}
+			required={required}
 			value={setJSONArrayValue(value)}
 		/>
 	</FieldBase>
