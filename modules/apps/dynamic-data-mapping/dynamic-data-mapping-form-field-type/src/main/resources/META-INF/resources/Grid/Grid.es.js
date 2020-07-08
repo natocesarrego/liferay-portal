@@ -75,11 +75,13 @@ const Grid = ({
 	onBlur,
 	onChange,
 	onFocus,
+	required,
 	rows = [{label: 'row', value: 'jehf'}],
 	value,
 	...otherProps
 }) => (
 	<div className="table-responsive" {...otherProps}>
+		<fieldset aria-label="grid" aria-required={required}>
 		{!disabled &&
 			rows.map((row, rowIndex) => {
 				const inputValue = value[row.value]
@@ -128,6 +130,7 @@ const Grid = ({
 				})}
 			</ClayTable.Body>
 		</ClayTable>
+		</fieldset>
 	</div>
 );
 
@@ -139,13 +142,14 @@ const Main = ({
 	onChange,
 	onFocus,
 	onBlur,
+	required,
 	value = {},
 	...otherProps
 }) => {
 	const [state, setState] = useState(value);
 
 	return (
-		<FieldBase name={name} readOnly={readOnly} {...otherProps}>
+		<FieldBase name={name} readOnly={readOnly} required={required} {...otherProps}>
 			<Grid
 				columns={columns}
 				disabled={readOnly}
@@ -164,6 +168,7 @@ const Main = ({
 					onChange(event, newState);
 				}}
 				onFocus={onFocus}
+				required={required}
 				rows={rows}
 				value={state}
 			/>

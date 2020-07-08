@@ -37,6 +37,7 @@ const Radio = ({
 	onFocus,
 	predefinedValue,
 	readOnly: disabled,
+	required,
 	value: initialValue,
 	...otherProps
 }) => {
@@ -52,7 +53,8 @@ const Radio = ({
 	);
 
 	return (
-		<FieldBase {...otherProps} name={name} readOnly={disabled}>
+		<FieldBase {...otherProps} name={name} readOnly={disabled} required={required}>
+			<fieldset aria-label="single selection" aria-required={required}>
 			<div className="ddm-radio" onBlur={onBlur} onFocus={onFocus}>
 				{options.map((option) => (
 					<ClayRadio
@@ -71,6 +73,7 @@ const Radio = ({
 					/>
 				))}
 			</div>
+			</fieldset>
 		</FieldBase>
 	);
 };

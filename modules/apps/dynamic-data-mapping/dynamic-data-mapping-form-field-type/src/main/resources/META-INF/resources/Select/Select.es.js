@@ -225,6 +225,7 @@ const Trigger = forwardRef(
 			onTriggerClicked,
 			onTriggerKeyDown,
 			readOnly,
+			required,
 			value,
 			...otherProps
 		},
@@ -240,6 +241,7 @@ const Trigger = forwardRef(
 					onCloseButtonClicked={onCloseButtonClicked}
 					onKeyDown={onTriggerKeyDown}
 					readOnly={readOnly}
+					required={required}
 					ref={ref}
 					value={value}
 					{...otherProps}
@@ -257,6 +259,7 @@ const Select = ({
 	options,
 	predefinedValue,
 	readOnly,
+	required,
 	value,
 	...otherProps
 }) => {
@@ -318,6 +321,7 @@ const Select = ({
 
 	return (
 		<>
+			<fieldset aria-label="select field" aria-required={required}>
 			<Trigger
 				multiple={multiple}
 				onCloseButtonClicked={({event, value}) => {
@@ -419,6 +423,7 @@ const Select = ({
 					))}
 				</ClayDropDown.ItemList>
 			</ClayDropDown.Menu>
+			</fieldset>
 		</>
 	);
 };
@@ -435,6 +440,7 @@ const Main = ({
 	options = [],
 	predefinedValue = [],
 	readOnly = false,
+	required,
 	value = [],
 	...otherProps
 }) => {
@@ -469,6 +475,7 @@ const Main = ({
 			localizedValue={localizedValue}
 			name={name}
 			readOnly={readOnly}
+			required={required}
 			{...otherProps}
 		>
 			<Select
@@ -491,6 +498,7 @@ const Main = ({
 				options={normalizedOptions}
 				predefinedValue={predefinedValueArray}
 				readOnly={readOnly}
+				required={required}
 				value={value}
 				{...otherProps}
 			/>

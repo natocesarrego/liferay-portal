@@ -118,6 +118,7 @@ const DatePicker = ({
 	disabled,
 	name,
 	onChange,
+	required,
 	spritemap,
 	value: initialValue,
 }) => {
@@ -174,6 +175,8 @@ const DatePicker = ({
 				value={getValueForHidden(value)}
 			/>
 			<ClayDatePicker
+				aria-label="date"
+				aria-required={required}
 				dateFormat={dateMask}
 				disabled={disabled}
 				expanded={expanded}
@@ -219,6 +222,7 @@ const Main = ({
 	placeholder,
 	predefinedValue,
 	readOnly,
+	required,
 	spritemap,
 	value,
 	...otherProps
@@ -227,6 +231,7 @@ const Main = ({
 		{...otherProps}
 		name={name}
 		readOnly={readOnly}
+		required={required}
 		spritemap={spritemap}
 	>
 		<DatePicker
@@ -234,6 +239,7 @@ const Main = ({
 			name={name}
 			onChange={(value) => onChange({}, value)}
 			placeholder={placeholder}
+			required={required}
 			spritemap={spritemap}
 			value={value ? value : predefinedValue}
 		/>

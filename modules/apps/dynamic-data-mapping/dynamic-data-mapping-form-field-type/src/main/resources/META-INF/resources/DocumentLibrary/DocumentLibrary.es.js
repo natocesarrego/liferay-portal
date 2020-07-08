@@ -129,6 +129,7 @@ const DocumentLibrary = ({
 	onSelectButtonClicked,
 	placeholder,
 	readOnly,
+	required,
 	value,
 }) => {
 	const [transformedFileEntryTitle, transformedFileEntryURL] = useMemo(
@@ -152,7 +153,8 @@ const DocumentLibrary = ({
 				<ClayInput.Group>
 					<ClayInput.GroupItem prepend>
 						<ClayInput
-							aria-label={Liferay.Language.get('file')}
+							aria-label="upload"
+							aria-required={required}
 							className="field"
 							disabled
 							id={`${name}inputFile`}
@@ -209,6 +211,7 @@ const Main = ({
 	onFocus,
 	placeholder,
 	readOnly,
+	required,
 	value = '{}',
 	...otherProps
 }) => {
@@ -257,7 +260,7 @@ const Main = ({
 	};
 
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly}>
+		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
 			<DocumentLibrary
 				fileEntryTitle={fileEntryTitle}
 				fileEntryURL={fileEntryURL}
@@ -276,6 +279,7 @@ const Main = ({
 				}
 				placeholder={placeholder}
 				readOnly={readOnly}
+				required={required}
 				value={currentValue || ''}
 			/>
 		</FieldBase>

@@ -43,6 +43,7 @@ const Numeric = ({
 	dataType = 'integer',
 	disabled,
 	onChange,
+	required,
 	symbols = {
 		decimalSymbol: '.',
 		thousandsSeparator: ',',
@@ -90,6 +91,7 @@ const Numeric = ({
 		<ClayInput
 			{...otherProps}
 			aria-label="numeric"
+			aria-required={required}
 			disabled={disabled}
 			onChange={(event) => {
 				const {value: newValue} = event.target;
@@ -121,11 +123,12 @@ const Main = ({
 	placeholder,
 	predefinedValue = '',
 	readOnly,
+	required,
 	symbols,
 	value,
 	...otherProps
 }) => (
-	<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly}>
+	<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
 		<Numeric
 			dataType={dataType}
 			disabled={readOnly}
@@ -135,6 +138,7 @@ const Main = ({
 			onChange={onChange}
 			onFocus={onFocus}
 			placeholder={placeholder}
+			required={required}
 			symbols={symbols}
 			value={value ? value : predefinedValue}
 		/>
