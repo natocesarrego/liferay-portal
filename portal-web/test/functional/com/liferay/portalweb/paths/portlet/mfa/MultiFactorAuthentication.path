@@ -52,11 +52,6 @@
 </tr>
 <!--EMAIL_OTP_VERIFY-->
 <tr>
-	<td>EMAIL_OTP_ATTEMPTS_FAILED</td>
-	<td>//div[contains(@class,'alert alert-danger')]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>EMAIL_OTP_VERIFY_INFO_MESSAGE</td>
 	<td>//div[@class='portlet-msg-info']</td>
 	<td></td>
@@ -73,7 +68,7 @@
 </tr>
 <tr>
 	<td>EMAIL_OTP_VERIFY_FIELD</td>
-	<td>//div[label[contains(.,'Please enter the one-time password from the email')]]/input</td>
+	<td>//div[label[contains(.,'Enter the one-time password from the email')]]/input</td>
 	<td></td>
 </tr>
 <tr>

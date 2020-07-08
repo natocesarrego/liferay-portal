@@ -14,19 +14,29 @@
 
 package com.liferay.account.admin.web.internal.display;
 
+import com.liferay.account.configuration.AccountEntryEmailDomainsConfiguration;
 import com.liferay.account.constants.AccountConstants;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountEntryOrganizationRel;
 import com.liferay.account.model.AccountEntryOrganizationRelModel;
+import com.liferay.account.model.AccountEntryUserRel;
 import com.liferay.account.service.AccountEntryLocalServiceUtil;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalServiceUtil;
+import com.liferay.account.service.AccountEntryUserRelLocalServiceUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.webserver.WebServerServletTokenUtil;
@@ -35,6 +45,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,6 +114,10 @@ public class AccountEntryDisplay {
 		return _parentAccountEntryName;
 	}
 
+	public Optional<User> getPersonAccountEntryUserOptional() {
+		return _personAccountEntryUserOptional;
+	}
+
 	public String getStatusLabel() {
 		return _statusLabel;
 	}
@@ -123,6 +138,29 @@ public class AccountEntryDisplay {
 		return _active;
 	}
 
+	public boolean isEmailDomainValidationEnabled(ThemeDisplay themeDisplay) {
+		try {
+			AccountEntryEmailDomainsConfiguration
+				accountEntryEmailDomainsConfiguration =
+					ConfigurationProviderUtil.getCompanyConfiguration(
+						AccountEntryEmailDomainsConfiguration.class,
+						themeDisplay.getCompanyId());
+
+			if (accountEntryEmailDomainsConfiguration.
+					enableEmailDomainValidation()) {
+
+				return true;
+			}
+		}
+		catch (ConfigurationException configurationException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(configurationException, configurationException);
+			}
+		}
+
+		return false;
+	}
+
 	private AccountEntryDisplay() {
 		_accountEntryId = 0;
 		_active = true;
@@ -132,6 +170,7 @@ public class AccountEntryDisplay {
 		_name = StringPool.BLANK;
 		_organizationNames = StringPool.BLANK;
 		_parentAccountEntryName = StringPool.BLANK;
+		_personAccountEntryUserOptional = Optional.empty();
 		_statusLabel = StringPool.BLANK;
 		_statusLabelStyle = StringPool.BLANK;
 		_taxIdNumber = StringPool.BLANK;
@@ -147,10 +186,30 @@ public class AccountEntryDisplay {
 		_name = accountEntry.getName();
 		_organizationNames = _getOrganizationNames(accountEntry);
 		_parentAccountEntryName = _getParentAccountEntryName(accountEntry);
+		_personAccountEntryUserOptional = _getPersonAccountEntryUserOptional(
+			accountEntry);
 		_statusLabel = _getStatusLabel(accountEntry);
 		_statusLabelStyle = _getStatusLabelStyle(accountEntry);
 		_taxIdNumber = accountEntry.getTaxIdNumber();
 		_type = accountEntry.getType();
+	}
+
+	private List<User> _getAccountEntryUsers(AccountEntry accountEntry) {
+		return Stream.of(
+			AccountEntryUserRelLocalServiceUtil.
+				getAccountEntryUserRelsByAccountEntryId(
+					accountEntry.getAccountEntryId())
+		).flatMap(
+			List::stream
+		).map(
+			AccountEntryUserRel::getAccountUserId
+		).map(
+			UserLocalServiceUtil::fetchUser
+		).filter(
+			Objects::nonNull
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private List<String> _getDomains(AccountEntry accountEntry) {
@@ -216,6 +275,25 @@ public class AccountEntryDisplay {
 		return StringPool.BLANK;
 	}
 
+	private Optional<User> _getPersonAccountEntryUserOptional(
+		AccountEntry accountEntry) {
+
+		if (!Objects.equals(
+				AccountConstants.ACCOUNT_ENTRY_TYPE_PERSONAL,
+				accountEntry.getType())) {
+
+			return Optional.empty();
+		}
+
+		List<User> users = _getAccountEntryUsers(accountEntry);
+
+		if (ListUtil.isNotEmpty(users)) {
+			return Optional.of(users.get(0));
+		}
+
+		return Optional.empty();
+	}
+
 	private String _getStatusLabel(AccountEntry accountEntry) {
 		int status = accountEntry.getStatus();
 
@@ -259,6 +337,9 @@ public class AccountEntryDisplay {
 
 	private static final int _ORGANIZATION_NAMES_LIMIT = 5;
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		AccountEntryDisplay.class);
+
 	private final long _accountEntryId;
 	private final boolean _active;
 	private final String _description;
@@ -267,6 +348,7 @@ public class AccountEntryDisplay {
 	private final String _name;
 	private final String _organizationNames;
 	private final String _parentAccountEntryName;
+	private final Optional<User> _personAccountEntryUserOptional;
 	private final String _statusLabel;
 	private final String _statusLabelStyle;
 	private final String _taxIdNumber;

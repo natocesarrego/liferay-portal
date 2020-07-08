@@ -65,6 +65,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>DETAILS_CATEGORY_SELECT</td>
+	<td>//label[contains(.,'Categorization')]//following-sibling::div//button[contains(.,'Select')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>DETAILS_TAG_FIELD</td>
 	<td>//input[contains(@class,'form-control-inset')]</td>
 	<td></td>
@@ -295,6 +300,11 @@
 <tr>
 	<td>CATEGORIZATION_LABEL</td>
 	<td>//div/label[@class='control-label' and contains(.,'Categorization')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>VOCABULARY_LABEL</td>
+	<td>//div/label[contains(.,'${key_vocabularyName}')]</td>
 	<td></td>
 </tr>
 <tr>

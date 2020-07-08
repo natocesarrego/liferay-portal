@@ -182,10 +182,6 @@ definition {
 			collectionName = "Collection Name",
 			fragmentName = "Text Fragment Example");
 
-		Click.clickNoMouseOver(
-			key_elementType = "Fragment",
-			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
-
 		task ("Assert placeholder is exist") {
 			AssertVisible(locator1 = "FragmentEditor#FRAGMENTS_EDITOR_FLOATING_CONFIGURATION_PANEL");
 		}
@@ -273,7 +269,6 @@ definition {
 			AssertVisible(
 				key_content = "Updated fragment text",
 				key_fragmentClass = "configuration",
-				key_position = "1",
 				locator1 = "Fragment#FRAGMENT");
 		}
 	}
@@ -325,14 +320,13 @@ definition {
 			AssertVisible(
 				key_content = "WC WebContent Content 2",
 				key_fragmentClass = "configuration",
-				key_position = "1",
 				locator1 = "Fragment#FRAGMENT");
 		}
 	}
 
-	@description = "This is a test for LPS-96685. User can restore and change fragment configuration value."
+	@description = "This is a test for LPS-96685. User can change fragment configuration value."
 	@priority = "5"
-	test RestoreAndChangeConfigurationFragmentToContentPage {
+	test ChangeConfigurationFragmentToContentPage {
 		property portal.acceptance = "true";
 
 		task ("Add a section fragment to the fragment collection via JSON") {
@@ -362,12 +356,6 @@ definition {
 
 		task ("Assert dark text is visible") {
 			AssertElementPresent(locator1 = "//div[contains(@class,'fragment-configuration')]/div[contains(@class,'dark')]");
-		}
-
-		PageEditorConfiguration.restoreConfigValues(fragmentName = "Text Fragment Example");
-
-		task ("Assert default value is displayed") {
-			AssertElementPresent(locator1 = "//div[contains(@class,'fragment-configuration')]/div[contains(@class,'light')]");
 		}
 	}
 

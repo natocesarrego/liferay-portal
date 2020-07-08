@@ -21,7 +21,6 @@ import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -30,23 +29,18 @@ import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.translation.exception.XLIFFFileException;
-import com.liferay.translation.exporter.TranslationInfoItemFieldValuesExporter;
+import com.liferay.translation.importer.TranslationInfoItemFieldValuesImporter;
 import com.liferay.translation.info.item.updater.InfoItemFieldValuesUpdater;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowStateException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,11 +67,7 @@ public class ImportTranslationMVCActionCommand extends BaseMVCActionCommand {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		long articleResourcePrimKey = ParamUtil.getLong(
-			actionRequest, "articleResourcePrimKey");
-		long groupId = ParamUtil.getLong(actionRequest, "groupId");
-		String articleId = ParamUtil.getString(actionRequest, "articleId");
-		double version = ParamUtil.getDouble(actionRequest, "version");
+		JournalArticle article = ActionUtil.getArticle(actionRequest);
 
 		try {
 			UploadPortletRequest uploadPortletRequest =
@@ -91,26 +81,25 @@ public class ImportTranslationMVCActionCommand extends BaseMVCActionCommand {
 					"file")) {
 
 				InfoItemFieldValues infoItemFieldValues =
-					_translationInfoItemFieldValuesExporter.importXLIFF(
-						themeDisplay.getScopeGroupId(),
-						new InfoItemClassPKReference(
-							JournalArticle.class.getName(),
-							articleResourcePrimKey),
-						inputStream);
+					_translationInfoItemFieldValuesImporter.
+						importInfoItemFieldValues(
+							themeDisplay.getScopeGroupId(),
+							new InfoItemClassPKReference(
+								JournalArticle.class.getName(),
+								article.getResourcePrimKey()),
+							inputStream);
 
 				_journalArticleInfoItemFieldValuesUpdater.
-					updateFromInfoItemFieldValues(
-						_journalArticleService.getArticle(
-							groupId, articleId, version),
-						infoItemFieldValues);
+					updateFromInfoItemFieldValues(article, infoItemFieldValues);
 			}
 		}
 		catch (Exception exception) {
 			SessionErrors.add(actionRequest, exception.getClass(), exception);
 
-			_sendRedirect(
-				actionRequest, actionResponse, articleResourcePrimKey, groupId,
-				articleId, version);
+			actionResponse.setRenderParameter(
+				"mvcPath", "/import_translation.jsp");
+
+			hideDefaultSuccessMessage(actionRequest);
 		}
 	}
 
@@ -151,30 +140,6 @@ public class ImportTranslationMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
-	private void _sendRedirect(
-			ActionRequest actionRequest, ActionResponse actionResponse,
-			long articleResourcePrimKey, long groupId, String articleId,
-			double version)
-		throws IOException, WindowStateException {
-
-		PortletURL portletURL = PortletURLFactoryUtil.create(
-			actionRequest, JournalPortletKeys.JOURNAL,
-			PortletRequest.RENDER_PHASE);
-
-		portletURL.setParameter("mvcPath", "/import_translation.jsp");
-		portletURL.setParameter(
-			"redirect", ParamUtil.getString(actionRequest, "redirect"));
-		portletURL.setParameter(
-			"articleResourcePrimKey", String.valueOf(articleResourcePrimKey));
-		portletURL.setParameter("groupId", String.valueOf(groupId));
-		portletURL.setParameter("articleId", articleId);
-		portletURL.setParameter("version", String.valueOf(version));
-
-		portletURL.setWindowState(actionRequest.getWindowState());
-
-		sendRedirect(actionRequest, actionResponse, portletURL.toString());
-	}
-
 	@Reference(
 		target = "(model.class.name=com.liferay.journal.model.JournalArticle)"
 	)
@@ -188,7 +153,7 @@ public class ImportTranslationMVCActionCommand extends BaseMVCActionCommand {
 	private Portal _portal;
 
 	@Reference
-	private TranslationInfoItemFieldValuesExporter
-		_translationInfoItemFieldValuesExporter;
+	private TranslationInfoItemFieldValuesImporter
+		_translationInfoItemFieldValuesImporter;
 
 }

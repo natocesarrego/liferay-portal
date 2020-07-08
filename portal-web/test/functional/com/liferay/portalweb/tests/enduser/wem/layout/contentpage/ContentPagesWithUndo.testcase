@@ -52,7 +52,7 @@ definition {
 			key_text = "undo",
 			locator1 = "Icon#ANY_ENABLED");
 
-		PageEditor.gotoConfiguration(fragmentName = "Heading");
+		PageEditor.gotoStyle(fragmentName = "Heading");
 
 		PageEditor.configureFragment(textAlign = "Center");
 
@@ -78,7 +78,7 @@ definition {
 			collectionName = "Basic Components",
 			fragmentName = "Button");
 
-		PageEditor.gotoConfiguration(fragmentName = "Button");
+		PageEditor.gotoStyle(fragmentName = "Button");
 
 		PageEditor.configureFragment(alignment = "Center");
 
@@ -159,7 +159,7 @@ definition {
 			id = "element-text",
 			text = "New editable fragment text");
 
-		PageEditor.gotoConfiguration(fragmentName = "Heading");
+		PageEditor.gotoStyle(fragmentName = "Heading");
 
 		PageEditor.configureFragment(alignment = "Center");
 
@@ -396,13 +396,11 @@ definition {
 			collectionName = "Basic Components",
 			fragmentName = "Tabs");
 
-		PageEditor.gotoConfiguration(fragmentName = "Tabs");
+		PageEditor.clickConfigurableField(fragmentName = "Tabs");
 
 		PageEditor.configureFragment(numberOfTabs = "2");
 
-		Click.clickNoMouseOver(
-			key_elementType = "Fragment",
-			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+		Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 
 		AssertVisible(
 			key_navItem = "Tab 2",
@@ -498,7 +496,6 @@ definition {
 		AssertVisible(
 			key_content = "WC WebContent Title",
 			key_fragmentClass = "content",
-			key_position = "1",
 			locator1 = "Fragment#FRAGMENT");
 	}
 
@@ -514,13 +511,11 @@ definition {
 			fragmentName = "Tabs");
 
 		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19") {
-			PageEditor.gotoConfiguration(fragmentName = "Tabs");
+			PageEditor.clickConfigurableField(fragmentName = "Tabs");
 
 			PageEditor.configureFragment(numberOfTabs = "${i}");
 
-			Click.clickNoMouseOver(
-				key_elementType = "Fragment",
-				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+			Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 		}
 
 		PageEditor.removeFragment(fragmentName = "Tabs");
@@ -530,13 +525,11 @@ definition {
 			fragmentName = "Tabs");
 
 		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18") {
-			PageEditor.gotoConfiguration(fragmentName = "Tabs");
+			PageEditor.clickConfigurableField(fragmentName = "Tabs");
 
 			PageEditor.configureFragment(numberOfTabs = "${i}");
 
-			Click.clickNoMouseOver(
-				key_elementType = "Fragment",
-				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+			Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 		}
 
 		PageEditor.removeFragment(fragmentName = "Tabs");
@@ -546,13 +539,11 @@ definition {
 			fragmentName = "Tabs");
 
 		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18") {
-			PageEditor.gotoConfiguration(fragmentName = "Tabs");
+			PageEditor.clickConfigurableField(fragmentName = "Tabs");
 
 			PageEditor.configureFragment(numberOfTabs = "${i}");
 
-			Click.clickNoMouseOver(
-				key_elementType = "Fragment",
-				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+			Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 		}
 
 		PageEditor.removeFragment(fragmentName = "Tabs");
@@ -562,13 +553,11 @@ definition {
 			fragmentName = "Tabs");
 
 		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18") {
-			PageEditor.gotoConfiguration(fragmentName = "Tabs");
+			PageEditor.clickConfigurableField(fragmentName = "Tabs");
 
 			PageEditor.configureFragment(numberOfTabs = "${i}");
 
-			Click.clickNoMouseOver(
-				key_elementType = "Fragment",
-				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+			Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 		}
 
 		PageEditor.removeFragment(fragmentName = "Tabs");
@@ -578,13 +567,11 @@ definition {
 			fragmentName = "Tabs");
 
 		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19") {
-			PageEditor.gotoConfiguration(fragmentName = "Tabs");
+			PageEditor.clickConfigurableField(fragmentName = "Tabs");
 
 			PageEditor.configureFragment(numberOfTabs = "${i}");
 
-			Click.clickNoMouseOver(
-				key_elementType = "Fragment",
-				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+			Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 		}
 
 		var count = "0";
@@ -631,9 +618,7 @@ definition {
 			columnCount = "1",
 			position = "1");
 
-		Click.clickNoMouseOver(
-			key_elementType = "Row",
-			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+		Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 
 		PageEditor.editLayoutRow(columnCount = "2");
 
@@ -682,7 +667,7 @@ definition {
 			collectionName = "Basic Components",
 			fragmentName = "Button");
 
-		PageEditor.gotoConfiguration(fragmentName = "Button");
+		PageEditor.gotoStyle(fragmentName = "Button");
 
 		PageEditor.configureFragment(alignment = "Center");
 

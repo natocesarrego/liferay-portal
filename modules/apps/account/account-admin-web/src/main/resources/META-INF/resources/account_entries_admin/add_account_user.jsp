@@ -43,11 +43,11 @@ renderResponse.setTitle(LanguageUtil.format(request, "add-new-user-to-x", accoun
 	action="<%= addAccountUsersURL %>"
 >
 	<liferay-frontend:edit-form-body>
-		<portlet:renderURL var="redirect">
+		<portlet:renderURL var="defaultRedirect">
 			<portlet:param name="mvcPath" value="/account_users_admin/edit_account_user.jsp" />
 		</portlet:renderURL>
 
-		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+		<aui:input name="redirect" type="hidden" value='<%= ParamUtil.getString(request, "redirect", defaultRedirect) %>' />
 		<aui:input name="accountEntryId" type="hidden" value="<%= String.valueOf(accountEntryDisplay.getAccountEntryId()) %>" />
 
 		<h2 class="sheet-title">
@@ -125,7 +125,7 @@ renderResponse.setTitle(LanguageUtil.format(request, "add-new-user-to-x", accoun
 	</liferay-frontend:edit-form-footer>
 </liferay-frontend:edit-form>
 
-<c:if test="<%= !Objects.equals(accountEntryDisplay.getType(), AccountConstants.ACCOUNT_ENTRY_TYPE_PERSONAL) %>">
+<c:if test="<%= accountEntryDisplay.isEmailDomainValidationEnabled(themeDisplay) && !Objects.equals(accountEntryDisplay.getType(), AccountConstants.ACCOUNT_ENTRY_TYPE_PERSONAL) %>">
 
 	<%
 	PortletURL viewValidDomainsURL = renderResponse.createRenderURL();
