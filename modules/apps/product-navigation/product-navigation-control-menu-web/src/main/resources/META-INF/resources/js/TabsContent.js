@@ -15,7 +15,13 @@
 import classNames from 'classnames';
 import {fetch, objectToFormData} from 'frontend-js-web';
 import PropTypes from 'prop-types';
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 
 import {AddPanelContext, normalizeContent} from './AddPanel';
 import Collapse from './Collapse';
@@ -29,9 +35,7 @@ const INITIAL_EXPANDED_ITEM_COLLECTIONS = 3;
 const EMPTY_COLLECTIONS = {collections: []};
 
 const TabsContent = ({tab, tabIndex}) => {
-	const {displayGrid, getContentsURL, namespace} = useContext(
-		AddPanelContext
-	);
+	const {getContentsURL, namespace} = useContext(AddPanelContext);
 
 	const [filteredContent, setFilteredContent] = useState(tab);
 	const [totalItems, setTotalItems] = useState(0);
@@ -47,6 +51,19 @@ const TabsContent = ({tab, tabIndex}) => {
 		searchValue,
 	]);
 
+	const collectionFilter = useCallback((collection) => {
+		return collection.collections.reduce((acc, item) => {
+			return item.collections?.length > 0
+				? acc.concat(item.children, collectionFilter(item))
+				: acc.concat(item.children);
+		}, []);
+	}, []);
+
+	const itemFilter = useCallback(
+		(item) => item.label.toLowerCase().indexOf(searchValueLowerCase) !== -1,
+		[searchValueLowerCase]
+	);
+
 	const filteredWidgets = useMemo(
 		() =>
 			searchValueLowerCase
@@ -54,24 +71,31 @@ const TabsContent = ({tab, tabIndex}) => {
 						{
 							...tab,
 							collections: tab.collections
-								.map((collection) => ({
-									...collection,
-									children: collection.children.filter(
-										(item) =>
-											item.label
-												.toLowerCase()
-												.indexOf(
-													searchValueLowerCase
-												) !== -1
-									),
-								}))
+								.map((collection) => {
+									let filteredChildren = collection.children;
+
+									if (collection.collections) {
+										filteredChildren = filteredChildren.concat(
+											collection.collections
+												.map(collectionFilter)
+												.flat()
+										);
+									}
+
+									return {
+										...collection,
+										children: filteredChildren.filter(
+											itemFilter
+										),
+									};
+								})
 								.filter(
 									(collection) => collection.children.length
 								),
 						},
 				  ]
 				: tab,
-		[searchValueLowerCase, tab]
+		[collectionFilter, itemFilter, searchValueLowerCase, tab]
 	);
 
 	useEffect(() => {
@@ -138,28 +162,64 @@ const TabsContent = ({tab, tabIndex}) => {
 				/>
 			) : (
 				<ul className="list-unstyled">
-					{collections.map((collection, index) => (
-						<Collapse
-							key={collection.collectionId}
-							label={collection.label}
-							open={index < INITIAL_EXPANDED_ITEM_COLLECTIONS}
-						>
-							<ul
-								className={classNames('list-unstyled', {
-									grid: isContentTab && displayGrid,
-								})}
-							>
-								{collection.children.map((item) => (
-									<TabItem item={item} key={item.itemId} />
-								))}
-							</ul>
-						</Collapse>
-					))}
+					<Collections
+						collections={collections}
+						isContentTab={isContentTab}
+						open
+					/>
 				</ul>
 			)}
 		</>
 	);
 };
+
+const Collections = ({
+	collections,
+	indentation = false,
+	isContentTab,
+	open,
+}) => {
+	const {displayGrid} = useContext(AddPanelContext);
+
+	return collections.map((collection, index) => (
+		<Collapse
+			indentation
+			key={collection.collectionId}
+			label={collection.label}
+			open={open && index < INITIAL_EXPANDED_ITEM_COLLECTIONS}
+		>
+			{collection.collections && (
+				<Collections
+					collections={collection.collections}
+					indentation={indentation}
+				/>
+			)}
+
+			<ul
+				className={classNames('list-unstyled', {
+					grid: isContentTab && displayGrid,
+				})}
+			>
+				{collection.children.map((item) => (
+					<React.Fragment key={item.itemId}>
+						<TabItem item={item} />
+						{item.portletItems?.length && (
+							<TabPortletItem items={item.portletItems} />
+						)}
+					</React.Fragment>
+				))}
+			</ul>
+		</Collapse>
+	));
+};
+
+const TabPortletItem = ({items}) => (
+	<ul className="list-unstyled">
+		{items.map((item) => (
+			<TabItem item={item} key={item.data.portletItemId} />
+		))}
+	</ul>
+);
 
 TabsContent.propTypes = {
 	tab: PropTypes.shape({

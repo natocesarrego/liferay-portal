@@ -68,7 +68,7 @@
 </tr>
 <tr>
 	<td>EMAIL_OTP_VERIFY_FIELD</td>
-	<td>//div[label[contains(.,'Please enter the one-time password from the email')]]/input</td>
+	<td>//div[label[contains(.,'Enter the one-time password from the email')]]/input</td>
 	<td></td>
 </tr>
 <tr>

@@ -330,7 +330,7 @@ definition {
 			fieldName = "url",
 			fieldValue = "${videoLink}");
 
-		Click(locator1 = "//input[@type='text' and contains(@id,'width')]");
+		Click(locator1 = "PageEditor#MANAGEMENT_BAR");
 
 		PageEditor.waitForAutoSave();
 	}
@@ -836,7 +836,7 @@ definition {
 			locator1 = "Fragment#EDITABLE_HTML_FRAGMENT_FIELD",
 			value1 = "${content}");
 
-		Click.pauseClickAt(locator1 = "Button#SAVE");
+		Click.pauseClickAt(locator1 = "//button[normalize-space(text())='Save']");
 
 		PageEditor.waitForAutoSave();
 	}
@@ -1171,10 +1171,6 @@ definition {
 				key_rowPosition = "${rowPosition}",
 				locator1 = "Fragment#CONTENT_FRAGMENT_BODY");
 		}
-
-		Click.clickNoMouseOver(
-			key_elementType = "Fragment",
-			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
 	}
 
 	macro gotoDuplicate {
@@ -1237,10 +1233,6 @@ definition {
 
 	macro gotoSelectPanel {
 		PageEditor.clickConfigurableField(fragmentName = "${fragmentName}");
-
-		Click(
-			key_elementType = "Fragment",
-			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
 
 		Click(locator1 = "PageEditor#FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON");
 

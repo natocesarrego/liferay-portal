@@ -122,7 +122,7 @@ definition {
 		PageEditor.gotoContentConfiguration(
 			colPosition = "1",
 			entryContent = "Report",
-			fragmentName = "Content Flagss",
+			fragmentName = "Content Flags",
 			rowPosition = "1");
 
 		AssertTextEquals(
@@ -170,7 +170,7 @@ definition {
 			collectionName = "Basic Components",
 			fragmentName = "Video");
 
-		PageEditor.gotoStyle(fragmentName = "Video");
+		PageEditor.gotoConfiguration(fragmentName = "Video");
 
 		PageEditor.addVideoFragmentURL(videoLink = "https://www.youtube.com/watch?v=2EPZxIC5ogU");
 

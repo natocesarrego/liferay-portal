@@ -47,16 +47,33 @@ const SearchResultsPanel = ({alertTitle, filteredTabs}) => {
 						[]
 					)
 					.map((item) => (
-						<TabItem item={item} key={item.itemId} />
+						<React.Fragment key={item.itemId}>
+							<TabItem item={item} />
+							{item.portletItems?.length && (
+								<TabPortletItem items={item.portletItems} />
+							)}
+						</React.Fragment>
 					))}
 			</ul>
 		) : (
-			<ClayAlert displayType="info" title={Liferay.Language.get('info')}>
+			<ClayAlert
+				displayType="info"
+				key={index}
+				title={Liferay.Language.get('info')}
+			>
 				{alertTitle}
 			</ClayAlert>
 		)
 	);
 };
+
+const TabPortletItem = ({items}) => (
+	<ul className="list-unstyled">
+		{items.map((item) => (
+			<TabItem item={item} key={item.data.portletItemId} />
+		))}
+	</ul>
+);
 
 SearchResultsPanel.proptypes = {
 	alertTitle: PropTypes.string.isRequired,

@@ -77,11 +77,9 @@ const AddPanel = ({
 	const tabs = useMemo(
 		() => [
 			{
-				collections: widgets.map((collection) => ({
-					children: collection.portlets.map(normalizeWidget),
-					collectionId: collection.path,
-					label: collection.title,
-				})),
+				collections: widgets.map((collection) =>
+					normalizeCollections(collection)
+				),
 				id: 'widgets',
 				label: Liferay.Language.get('widgets'),
 			},
@@ -130,18 +128,63 @@ const AddPanel = ({
 	);
 };
 
-export const updateUsedWidget = ({item, used = true, widgets}) => {
-	return widgets.map((collection) => {
+const updateUsedPortlet = ({item, portlet, used}) => {
+	if (portlet.portletId === item.itemId && !portlet.instanceable) {
+		portlet.used = used;
+
+		if (portlet.portletItems?.length) {
+			portlet.portletItems.map((portletItem) => {
+				portletItem.used = used;
+			});
+		}
+	}
+};
+
+const updateUsedCategoryPortlet = ({category, item, used}) => {
+	if (category.portlets?.length) {
+		category.portlets.map((portlet) => {
+			updateUsedPortlet({item, portlet, used});
+		});
+	}
+
+	return category.categories?.length
+		? {
+				...category,
+				categories: category.categories.map((category) =>
+					updateUsedCategoryPortlet({category, item, used})
+				),
+		  }
+		: category;
+};
+
+export const updateUsedWidget = ({item, used = true, widgets}) =>
+	widgets.map((collection) => {
+		updateUsedCategoryPortlet({category: collection, item, used});
+
 		return {
 			...collection,
 			portlets: collection.portlets.map((portlet) => {
-				return portlet.portletId === item.itemId &&
-					!portlet.instanceable
-					? {...portlet, used}
-					: portlet;
+				updateUsedPortlet({item, portlet, used});
+
+				return {...portlet};
 			}),
 		};
 	});
+
+const normalizeCollections = (collection) => {
+	const normalizedElement = {
+		children: collection.portlets.map(normalizeWidget),
+		collectionId: collection.path,
+		label: collection.title,
+	};
+
+	if (collection.categories?.length) {
+		normalizedElement.collections = collection.categories.map(
+			normalizeCollections
+		);
+	}
+
+	return normalizedElement;
 };
 
 const normalizeWidget = (widget) => {
@@ -149,12 +192,16 @@ const normalizeWidget = (widget) => {
 		data: {
 			instanceable: widget.instanceable,
 			portletId: widget.portletId,
+			portletItemId: widget.portletItemId || null,
 			used: widget.used,
 		},
 		disabled: !widget.instanceable && widget.used,
 		icon: widget.instanceable ? 'cards2' : 'square-hole',
 		itemId: widget.portletId,
 		label: widget.title,
+		portletItems: widget.portletItems?.length
+			? widget.portletItems.map(normalizeWidget)
+			: null,
 		type: LAYOUT_DATA_ITEM_TYPES.widget,
 	};
 };
@@ -169,6 +216,7 @@ export const normalizeContent = (content) => {
 			instanceable: content.instanceable,
 			portletId: content.portletId,
 		},
+		disabled: !content.draggable,
 		icon: content.icon,
 		itemId: `${content.portletId}_${content.classPK}`,
 		label: content.title,
