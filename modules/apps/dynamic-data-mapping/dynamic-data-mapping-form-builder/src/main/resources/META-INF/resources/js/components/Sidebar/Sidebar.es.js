@@ -177,7 +177,9 @@ class Sidebar extends Component {
 					defaultLanguageId,
 					editingLanguageId,
 					keywordReadOnly:
-						field.fieldName == 'options'
+						field.fieldName == 'columns' ||
+						field.fieldName == 'options' ||
+						field.fieldName == 'rows'
 							? readOnlyFieldName
 							: false,
 					readOnly:
