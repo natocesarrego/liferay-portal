@@ -41,9 +41,13 @@ $c: '.ddm-field-options';
 				background: transparent;
 				border: none;
 				color: #6b6c7e;
-				cursor: default;
+				cursor: auto;
 				display: inline-block;
 				outline: none;
+
+				&.disabled {
+					cursor: not-allowed;
+				}
 			}
 
 			label,
