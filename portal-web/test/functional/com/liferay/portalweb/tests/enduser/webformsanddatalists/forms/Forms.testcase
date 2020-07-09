@@ -1084,8 +1084,8 @@ definition {
 			rowEntry = "Created Form Name");
 	}
 
-	@ignore = "true"
 	@description = "This is a use case for LPS-98073."
+	@ignore = "true"
 	@priority = "5"
 	test CreateReadUpdateDeleteImageField {
 		property test.name.skip.portal.instance = "Forms#SubmitFormWithRequiredImageField";
@@ -4506,8 +4506,8 @@ definition {
 			rowEntry = "Untitled Form");
 	}
 
-	@ignore = "true"
 	@description = "This is a use case for LPS-64305."
+	@ignore = "true"
 	@priority = "4"
 	test ViewDefaultFieldNamesWithPunctuationCharacters {
 		property test.name.skip.portal.instance = "Forms#ViewDefaultFieldNamesWithPunctuationCharacters";
