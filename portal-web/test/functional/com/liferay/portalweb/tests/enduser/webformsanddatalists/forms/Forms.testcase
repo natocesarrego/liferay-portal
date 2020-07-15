@@ -431,6 +431,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Label",
+			fieldLabelRequired = "Label Required",
 			fieldName = "Label");
 	}
 
@@ -742,6 +743,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -756,6 +758,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -783,6 +786,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -803,6 +807,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -817,6 +822,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -844,6 +850,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -864,6 +871,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -878,6 +886,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewRadioValue(
@@ -890,6 +899,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -929,6 +939,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "TestingTitle");
 
 		FormFields.viewFieldHelpText(
@@ -1018,6 +1029,7 @@ definition {
 
 		FormsAdmin.viewSelectEntry(
 			fieldLabel = "Testing Title",
+			fieldLabelRequired = "Testing Title Required",
 			fieldName = "${fieldSelectFromField}",
 			selectOption = "Select 2");
 
@@ -1759,6 +1771,7 @@ definition {
 		FormFields.viewTextField(
 			fieldHelpText = "Configure how long a lock is held before releasing due to suspected deadlock.",
 			fieldLabel = "Lock Timeout Milliseconds",
+			fieldLabelRequired = "Lock Timeout Milliseconds Required",
 			fieldName = "ds.lock.timeout.milliseconds");
 
 		Refresh();
@@ -3390,6 +3403,7 @@ definition {
 
 		FormsAdmin.viewMultilineTextEntry(
 			fieldLabel = "MultilineText",
+			fieldLabelRequired = "MultilineText Required",
 			fieldName = "${fieldMultilineTextField}",
 			fieldValue = "Multiline Text");
 
@@ -3400,6 +3414,7 @@ definition {
 
 		FormsAdmin.viewRadioEntry(
 			fieldLabel = "Radio",
+			fieldLabelRequired = "Radio Required",
 			fieldName = "${fieldSingleSelectionField}",
 			fieldValue = "Option 1");
 
@@ -3770,6 +3785,7 @@ definition {
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Checkbox Field",
+			fieldLabelRequired = "Checkbox Field Required",
 			fieldName = "${fieldMultipleSelectionField}");
 
 		FormFields.viewRequiredAsterisk();
@@ -3943,6 +3959,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Text Field",
+			fieldLabelRequired = "Text Field Required",
 			fieldName = "TextField");
 
 		FormFields.viewRequiredAsterisk();
@@ -4034,6 +4051,7 @@ definition {
 
 		FormFields.viewRadioLabel(
 			fieldLabel = "Radio Field",
+			fieldLabelRequired = "Radio Field Required",
 			fieldName = "${fieldSingleSelectionField}");
 
 		FormFields.viewRequiredAsterisk();
@@ -4196,6 +4214,7 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Text Field",
+			fieldLabelRequired = "Text Field Required",
 			fieldName = "${fieldTextField}");
 
 		FormFields.viewRequiredAsterisk();
@@ -4437,6 +4456,7 @@ definition {
 
 		FormFields.viewDateField(
 			fieldLabel = "Date Field",
+			fieldLabelRequired = "Date Field Required",
 			fieldName = "${fieldDateField}");
 
 		FormFields.viewRequiredAsterisk();
@@ -4475,6 +4495,7 @@ definition {
 
 		FormsAdmin.viewDateEntry(
 			fieldLabel = "Date Field",
+			fieldLabelRequired = "Date Field Required",
 			fieldName = "${fieldDateField}",
 			fieldValue = "01/01/2016");
 	}
