@@ -24,6 +24,8 @@ import {useSyncValue} from '../hooks/useSyncValue.es';
 const defaultValue = {description: '', title: '', url: ''};
 
 const ImagePicker = ({
+	displayErrors,
+	errorMessage,
 	id,
 	inputValue,
 	itemSelectorURL,
@@ -33,10 +35,14 @@ const ImagePicker = ({
 	onFieldChanged,
 	portletNamespace,
 	readOnly,
-	required
+	required,
+	valid,
 }) => {
 	const [imageValues, setImageValues] = useSyncValue(inputValue);
 	const [modalVisible, setModalVisible] = useState(false);
+
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
 
 	const {observer, onClose} = useModal({
 		onClose: () => setModalVisible(false),
@@ -114,6 +120,8 @@ const ImagePicker = ({
 				<ClayInput.Group>
 					<ClayInput.GroupItem className="d-none d-sm-block" prepend>
 						<ClayInput
+							aria-describedby={describedBy}
+							aria-invalid={invalid}
 							aria-label="image upload"
 							aria-required={required}
 							className="bg-light"
@@ -227,6 +235,8 @@ const ImagePicker = ({
 };
 
 const Main = ({
+	displayErrors,
+	errorMessage,
 	id,
 	inputValue,
 	itemSelectorURL,
@@ -236,6 +246,7 @@ const Main = ({
 	readOnly,
 	required,
 	value,
+	valid,
 	...otherProps
 }) => {
 	const transformValue = (sourceValue) => {
@@ -252,8 +263,10 @@ const Main = ({
 	};
 
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
+		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
 			<ImagePicker
+				displayErrors={displayErrors}
+				errorMessage={errorMessage}
 				id={id}
 				inputValue={
 					transformValue(inputValue) ??
@@ -270,6 +283,7 @@ const Main = ({
 				portletNamespace={portletNamespace}
 				readOnly={readOnly}
 				required={required}
+				valid={valid}
 			/>
 		</FieldBase>
 	);

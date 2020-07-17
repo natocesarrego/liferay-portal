@@ -116,10 +116,13 @@ const getValueForHidden = (value) => {
 
 const DatePicker = ({
 	disabled,
+	displayErrors,
+	errorMessage,
 	name,
 	onChange,
 	required,
 	spritemap,
+	valid,
 	value: initialValue,
 }) => {
 	const inputRef = useRef(null);
@@ -166,6 +169,9 @@ const DatePicker = ({
 		});
 	};
 
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+
 	return (
 		<>
 			<input
@@ -175,6 +181,8 @@ const DatePicker = ({
 				value={getValueForHidden(value)}
 			/>
 			<ClayDatePicker
+				aria-describedby={describedBy}
+				aria-invalid={invalid}
 				aria-label="date"
 				aria-required={required}
 				dateFormat={dateMask}
@@ -217,6 +225,8 @@ const DatePicker = ({
 };
 
 const Main = ({
+	displayErrors,
+	errorMessage,
 	name,
 	onChange,
 	placeholder,
@@ -224,23 +234,30 @@ const Main = ({
 	readOnly,
 	required,
 	spritemap,
+	valid,
 	value,
 	...otherProps
 }) => (
 	<FieldBase
 		{...otherProps}
+		displayErrors={displayErrors}
+		errorMessage={errorMessage}
 		name={name}
 		readOnly={readOnly}
 		required={required}
 		spritemap={spritemap}
+		valid={valid}
 	>
 		<DatePicker
 			disabled={readOnly}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
 			name={name}
 			onChange={(value) => onChange({}, value)}
 			placeholder={placeholder}
 			required={required}
 			spritemap={spritemap}
+			valid={valid}
 			value={value ? value : predefinedValue}
 		/>
 	</FieldBase>

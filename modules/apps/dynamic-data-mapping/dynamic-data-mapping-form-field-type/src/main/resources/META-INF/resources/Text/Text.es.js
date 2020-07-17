@@ -25,7 +25,9 @@ import {useSyncValue} from '../hooks/useSyncValue.es';
 const Text = ({
 	defaultLanguageId,
 	disabled,
+	displayErrors,
 	editingLanguageId,
+	errorMessage,
 	fieldName,
 	id,
 	localizable,
@@ -37,6 +39,7 @@ const Text = ({
 	placeholder,
 	required,
 	syncDelay,
+	valid,
 	value: initialValue,
 }) => {
 	const [value, setValue] = useSyncValue(initialValue, syncDelay);
@@ -58,9 +61,13 @@ const Text = ({
 		prevEditingLanguageId,
 		setValue,
 	]);
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
 
 	return (
 		<ClayInput
+			aria-describedby={describedBy}
+			aria-invalid={invalid}
 			aria-label="text"
 			aria-required={required}
 			className="ddm-field-text"
@@ -262,8 +269,10 @@ const Main = ({
 	autocomplete,
 	autocompleteEnabled,
 	defaultLanguageId,
+	displayErrors,
 	displayStyle = 'singleline',
 	editingLanguageId,
+	errorMessage,
 	fieldName,
 	id,
 	localizable,
@@ -278,6 +287,7 @@ const Main = ({
 	readOnly,
 	required,
 	syncDelay = true,
+	valid,
 	value,
 	...otherProps
 }) => {
@@ -294,10 +304,12 @@ const Main = ({
 		];
 
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
+		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
 			<Component
 				defaultLanguageId={defaultLanguageId}
+				displayErrors={displayErrors}
 				disabled={readOnly}
+				errorMessage={errorMessage}
 				editingLanguageId={editingLanguageId}
 				fieldName={fieldName}
 				id={id}
@@ -311,6 +323,7 @@ const Main = ({
 				placeholder={placeholder}
 				required={required}
 				syncDelay={syncDelay}
+				valid={valid}
 				value={value ? value : predefinedValue}
 			/>
 		</FieldBase>

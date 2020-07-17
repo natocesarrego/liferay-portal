@@ -57,6 +57,8 @@ const Switcher = ({
 
 const CheckboxMultiple = ({
 	disabled,
+	displayErrors,
+	errorMessage,
 	inline,
 	isSwitcher,
 	name,
@@ -66,12 +68,16 @@ const CheckboxMultiple = ({
 	options,
 	predefinedValue,
 	required,
+	valid,
 	value: initialValue,
 }) => {
 	const [value, setValue] = useState(initialValue);
 
 	const displayValues = value && value.length > 0 ? value : predefinedValue;
 	const Toggle = isSwitcher ? Switcher : ClayCheckbox;
+
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
 
 	const handleChange = (event) => {
 		const {target} = event;
@@ -89,7 +95,7 @@ const CheckboxMultiple = ({
 
 	return (
 		<div className="lfr-ddm-checkbox-multiple">
-			<fieldset aria-label="checkbox" aria-required={required}>
+			<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="checkbox" aria-required={required}>
 			{options.map((option) => (
 				<Toggle
 					checked={displayValues.includes(option.value)}
@@ -110,6 +116,8 @@ const CheckboxMultiple = ({
 };
 
 const Main = ({
+	displayErrors,
+	errorMessage,
 	inline,
 	name,
 	options = [
@@ -129,11 +137,14 @@ const Main = ({
 	readOnly,
 	required,
 	showAsSwitcher = true,
+	valid,
 	value,
 	...otherProps
 }) => (
-	<FieldBase name={name} readOnly={readOnly} required={required} {...otherProps}>
+	<FieldBase displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={readOnly} required={required} valid={valid} {...otherProps}>
 		<CheckboxMultiple
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
 			disabled={readOnly}
 			inline={inline}
 			isSwitcher={showAsSwitcher}
@@ -144,6 +155,7 @@ const Main = ({
 			options={options}
 			predefinedValue={setJSONArrayValue(predefinedValue)}
 			required={required}
+			valid={valid}
 			value={setJSONArrayValue(value)}
 		/>
 	</FieldBase>

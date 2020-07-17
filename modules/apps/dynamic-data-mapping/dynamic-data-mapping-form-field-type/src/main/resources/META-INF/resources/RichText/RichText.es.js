@@ -68,12 +68,15 @@ const CKEDITOR_CONFIG = {
 };
 
 const RichText = ({
+	displayErrors,
+	errorMessage,
 	id,
 	name,
 	onChange,
 	predefinedValue,
 	readOnly,
 	required,
+	valid,
 	value,
 	...otherProps
 }) => {
@@ -100,9 +103,12 @@ const RichText = ({
 		};
 	}
 
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
-			<fieldset aria-label="rich text" aria-required={required}>
+		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
+			<fieldset  aria-describedby={describedBy} aria-invalid={invalid} aria-label="rich text" aria-required={required}>
 			<Editor {...editorProps} />
 
 			<input
