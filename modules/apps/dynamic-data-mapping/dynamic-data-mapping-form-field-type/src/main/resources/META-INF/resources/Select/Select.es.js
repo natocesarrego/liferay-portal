@@ -252,6 +252,8 @@ const Trigger = forwardRef(
 );
 
 const Select = ({
+	displayErrors,
+	errorMessage,
 	multiple,
 	onCloseButtonClicked,
 	onDropdownItemClicked,
@@ -260,6 +262,7 @@ const Select = ({
 	predefinedValue,
 	readOnly,
 	required,
+	valid,
 	value,
 	...otherProps
 }) => {
@@ -319,9 +322,12 @@ const Select = ({
 		}
 	};
 
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+
 	return (
 		<>
-			<fieldset aria-label="select field" aria-required={required}>
+			<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="select field" aria-required={required}>
 			<Trigger
 				multiple={multiple}
 				onCloseButtonClicked={({event, value}) => {
@@ -429,6 +435,8 @@ const Select = ({
 };
 
 const Main = ({
+	displayErrors,
+	errorMessage,
 	fixedOptions = [],
 	label,
 	localizedValue = {},
@@ -441,6 +449,7 @@ const Main = ({
 	predefinedValue = [],
 	readOnly = false,
 	required,
+	valid,
 	value = [],
 	...otherProps
 }) => {
@@ -471,14 +480,19 @@ const Main = ({
 
 	return (
 		<FieldBase
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
 			label={label}
 			localizedValue={localizedValue}
 			name={name}
 			readOnly={readOnly}
 			required={required}
+			valid={valid}
 			{...otherProps}
 		>
 			<Select
+				displayErrors={displayErrors}
+				errorMessage={errorMessage}
 				multiple={multiple}
 				name={name}
 				onCloseButtonClicked={({event, value}) =>
@@ -499,6 +513,7 @@ const Main = ({
 				predefinedValue={predefinedValueArray}
 				readOnly={readOnly}
 				required={required}
+				valid={valid}
 				value={value}
 				{...otherProps}
 			/>

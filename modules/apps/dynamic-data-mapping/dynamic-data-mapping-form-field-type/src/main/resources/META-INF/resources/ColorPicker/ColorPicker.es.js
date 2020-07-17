@@ -33,6 +33,8 @@ const DEFAULT_COLORS = [
 ];
 
 const ClayColorPickerWithState = ({
+	displayErrors,
+	errorMessage,
 	inputValue,
 	name,
 	onBlur,
@@ -41,8 +43,12 @@ const ClayColorPickerWithState = ({
 	readOnly,
 	required,
 	spritemap,
+	valid,
 }) => {
 	const [customColors, setCustoms] = useState(DEFAULT_COLORS);
+
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
 
 	const [color, setColor] = useState(
 		inputValue ? inputValue : customColors[0]
@@ -56,6 +62,8 @@ const ClayColorPickerWithState = ({
 
 	return (
 		<ClayColorPicker
+			aria-describedby={describedBy}
+			aria-invalid={invalid}
 			aria-label="color"
 			aria-required={required}
 			colors={customColors}
@@ -78,6 +86,8 @@ const ClayColorPickerWithState = ({
 };
 
 const ColorPicker = ({
+	displayErrors,
+	errorMessage,
 	name,
 	onBlur,
 	onChange,
@@ -86,17 +96,23 @@ const ColorPicker = ({
 	readOnly,
 	required,
 	spritemap,
+	valid,
 	value,
 	...otherProps
 }) => (
 	<FieldBase
+		displayErrors={displayErrors}
+		errorMessage={errorMessage}
 		name={name}
 		readOnly={readOnly}
 		required={required}
 		spritemap={spritemap}
+		valid={valid}
 		{...otherProps}
 	>
 		<ClayColorPickerWithState
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
 			inputValue={value ? value : predefinedValue}
 			name={name}
 			onBlur={onBlur}
@@ -105,6 +121,7 @@ const ColorPicker = ({
 			readOnly={readOnly}
 			required={required}
 			spritemap={spritemap}
+			valid={valid}
 		/>
 	</FieldBase>
 );

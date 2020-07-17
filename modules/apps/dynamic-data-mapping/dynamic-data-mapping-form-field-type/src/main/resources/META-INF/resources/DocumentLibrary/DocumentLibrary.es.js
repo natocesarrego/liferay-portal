@@ -121,6 +121,8 @@ function transformFileEntryProperties({fileEntryTitle, fileEntryURL, value}) {
 }
 
 const DocumentLibrary = ({
+	displayErrors,
+	errorMessage,
 	fileEntryTitle = '',
 	fileEntryURL = '',
 	id,
@@ -130,6 +132,7 @@ const DocumentLibrary = ({
 	placeholder,
 	readOnly,
 	required,
+	valid,
 	value,
 }) => {
 	const [transformedFileEntryTitle, transformedFileEntryURL] = useMemo(
@@ -142,6 +145,9 @@ const DocumentLibrary = ({
 		[fileEntryTitle, fileEntryURL, value]
 	);
 
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+
 	return (
 		<div className="liferay-ddm-form-field-document-library">
 			{transformedFileEntryURL && readOnly ? (
@@ -153,6 +159,8 @@ const DocumentLibrary = ({
 				<ClayInput.Group>
 					<ClayInput.GroupItem prepend>
 						<ClayInput
+							aria-describedby={describedBy}
+							aria-invalid={invalid}
 							aria-label="upload"
 							aria-required={required}
 							className="field"
@@ -200,6 +208,8 @@ const DocumentLibrary = ({
 };
 
 const Main = ({
+	displayErrors,
+	errorMessage,
 	fileEntryTitle,
 	fileEntryURL,
 	groupId,
@@ -212,6 +222,7 @@ const Main = ({
 	placeholder,
 	readOnly,
 	required,
+	valid,
 	value = '{}',
 	...otherProps
 }) => {
@@ -260,8 +271,10 @@ const Main = ({
 	};
 
 	return (
-		<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
+		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
 			<DocumentLibrary
+				displayErrors={displayErrors}
+				errorMessage={errorMessage}
 				fileEntryTitle={fileEntryTitle}
 				fileEntryURL={fileEntryURL}
 				id={id}
@@ -280,6 +293,7 @@ const Main = ({
 				placeholder={placeholder}
 				readOnly={readOnly}
 				required={required}
+				valid={valid}
 				value={currentValue || ''}
 			/>
 		</FieldBase>

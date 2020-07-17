@@ -30,6 +30,8 @@ const Radio = ({
 			value: 'option2',
 		},
 	],
+	displayErrors,
+	errorMessage,
 	inline,
 	name,
 	onBlur,
@@ -38,6 +40,7 @@ const Radio = ({
 	predefinedValue,
 	readOnly: disabled,
 	required,
+	valid,
 	value: initialValue,
 	...otherProps
 }) => {
@@ -52,9 +55,12 @@ const Radio = ({
 		initialValue ? initialValue : predefinedValueMemo
 	);
 
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+
 	return (
-		<FieldBase {...otherProps} name={name} readOnly={disabled} required={required}>
-			<fieldset aria-label="single selection" aria-required={required}>
+		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={disabled} required={required} valid={valid}>
+			<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="single selection" aria-required={required}>
 			<div className="ddm-radio" onBlur={onBlur} onFocus={onFocus}>
 				{options.map((option) => (
 					<ClayRadio

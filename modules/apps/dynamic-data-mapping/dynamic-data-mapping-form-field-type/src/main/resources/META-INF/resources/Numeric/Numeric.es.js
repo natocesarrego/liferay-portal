@@ -42,17 +42,23 @@ const getMaskConfig = (dataType, symbols) => {
 const Numeric = ({
 	dataType = 'integer',
 	disabled,
+	displayErrors,
+	errorMessage,
 	onChange,
 	required,
 	symbols = {
 		decimalSymbol: '.',
 		thousandsSeparator: ',',
 	},
+	valid,
 	value: initialValue,
 	...otherProps
 }) => {
 	const [value, setValue] = useSyncValue(initialValue);
 	const inputRef = useRef(null);
+
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
 
 	useEffect(() => {
 		let maskInstance = null;
@@ -90,6 +96,8 @@ const Numeric = ({
 	return (
 		<ClayInput
 			{...otherProps}
+			aria-describedby={describedBy}
+			aria-invalid={invalid}
 			aria-label="numeric"
 			aria-required={required}
 			disabled={disabled}
@@ -115,6 +123,8 @@ const Numeric = ({
 
 const Main = ({
 	dataType,
+	displayErrors,
+	errorMessage,
 	id,
 	name,
 	onBlur,
@@ -125,13 +135,16 @@ const Main = ({
 	readOnly,
 	required,
 	symbols,
+	valid,
 	value,
 	...otherProps
 }) => (
-	<FieldBase {...otherProps} id={id} name={name} readOnly={readOnly} required={required}>
+	<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
 		<Numeric
 			dataType={dataType}
 			disabled={readOnly}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
 			id={id}
 			name={name}
 			onBlur={onBlur}
@@ -140,6 +153,7 @@ const Main = ({
 			placeholder={placeholder}
 			required={required}
 			symbols={symbols}
+			valid={valid}
 			value={value ? value : predefinedValue}
 		/>
 	</FieldBase>

@@ -71,17 +71,24 @@ const TableBodyColumns = ({
 const Grid = ({
 	columns = [{label: 'col1', value: 'fieldId'}],
 	disabled,
+	displayErrors,
+	errorMessage,
 	name,
 	onBlur,
 	onChange,
 	onFocus,
 	required,
 	rows = [{label: 'row', value: 'jehf'}],
+	valid,
 	value,
 	...otherProps
-}) => (
+}) => {
+	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
+	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+
+return (
 	<div className="table-responsive" {...otherProps}>
-		<fieldset aria-label="grid" aria-required={required}>
+		<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="grid" aria-required={required}>
 		{!disabled &&
 			rows.map((row, rowIndex) => {
 				const inputValue = value[row.value]
@@ -132,10 +139,13 @@ const Grid = ({
 		</ClayTable>
 		</fieldset>
 	</div>
-);
+	);
+}
 
 const Main = ({
 	columns,
+	displayErrors,
+	errorMessage,
 	name,
 	readOnly,
 	rows,
@@ -143,16 +153,19 @@ const Main = ({
 	onFocus,
 	onBlur,
 	required,
+	valid,
 	value = {},
 	...otherProps
 }) => {
 	const [state, setState] = useState(value);
 
 	return (
-		<FieldBase name={name} readOnly={readOnly} required={required} {...otherProps}>
+		<FieldBase displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={readOnly} required={required} valid={valid} {...otherProps}>
 			<Grid
 				columns={columns}
 				disabled={readOnly}
+				displayErrors={displayErrors}
+				errorMessage={errorMessage}
 				name={name}
 				onBlur={onBlur}
 				onChange={(event) => {
@@ -170,6 +183,7 @@ const Main = ({
 				onFocus={onFocus}
 				required={required}
 				rows={rows}
+				valid={valid}
 				value={state}
 			/>
 		</FieldBase>

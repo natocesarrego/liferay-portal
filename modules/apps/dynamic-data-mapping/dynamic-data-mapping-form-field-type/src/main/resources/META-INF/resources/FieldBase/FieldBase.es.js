@@ -61,6 +61,8 @@ FieldBase.STATE = {
 	 * @type {?(string|undefined)}
 	 */
 
+	errorMessage: Config.string(),
+
 	id: Config.string(),
 
 	/**
@@ -126,6 +128,8 @@ FieldBase.STATE = {
 	 */
 
 	tooltip: Config.string(),
+
+	valid: Config.bool(),
 };
 
 const composed = compose(
