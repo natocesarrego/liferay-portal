@@ -25,6 +25,13 @@ export default ({fields}) => {
 			setItemSelected(window.location.hash.match(/.*(\d+)$/)[1]);
 		}
 	}
+	else if (document.getElementById(window.location.hash.split('#')[1])) {
+		const element = document.getElementById(
+			window.location.hash.split('#')[1]
+		);
+		element.scrollIntoView();
+	}
+
 	const shortcuts = fields.map((field, index) => (
 		<li key={`item-${index}`} onClick={() => setItemSelected(index)}>
 			<a
