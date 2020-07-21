@@ -20,6 +20,11 @@ export default ({fields}) => {
 	const [itemSelected, setItemSelected] = useState(null);
 	const {portletNamespace} = useContext(SidebarContext);
 
+	if (itemSelected == null) {
+		if (window.location.hash) {
+			setItemSelected(window.location.hash.match(/.*(\d+)$/)[1]);
+		}
+	}
 	const shortcuts = fields.map((field, index) => (
 		<li key={`item-${index}`} onClick={() => setItemSelected(index)}>
 			<a
