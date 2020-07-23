@@ -7,6 +7,7 @@ exports[`Field Numeric has a helptext 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -29,6 +30,7 @@ exports[`Field Numeric has a key 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -51,6 +53,7 @@ exports[`Field Numeric has a label 1`] = `
       label
     </p>
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -68,6 +71,7 @@ exports[`Field Numeric has a placeholder 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -86,6 +90,7 @@ exports[`Field Numeric has a value 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -103,6 +108,7 @@ exports[`Field Numeric has an id 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       id="ID"
@@ -121,6 +127,7 @@ exports[`Field Numeric is not readOnly 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -138,7 +145,9 @@ exports[`Field Numeric is not required 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
+      aria-required="false"
       class="form-control"
       name="numericField"
       type="text"
@@ -160,6 +169,7 @@ exports[`Field Numeric renders Label if showLabel is true 1`] = `
       Numeric Field
     </p>
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
@@ -177,6 +187,7 @@ exports[`Field Numeric renders the default markup 1`] = `
     data-field-name="numericField"
   >
     <input
+      aria-invalid="false"
       aria-label="numeric"
       class="form-control"
       name="numericField"
