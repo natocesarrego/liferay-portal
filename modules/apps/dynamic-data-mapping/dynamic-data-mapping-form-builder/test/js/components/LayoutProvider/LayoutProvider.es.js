@@ -508,11 +508,15 @@ describe('LayoutProvider', () => {
 				).toEqual(fieldNameCreated);
 			});
 		});
+
 		describe('fieldDuplicated', () => {
 			it('listens the duplicate field event and add this field in the pages', () => {
 				component = new Parent();
 
 				const {child, provider} = component.refs;
+
+				const initalFieldsNumber = provider.state.pages[0].rows.length;
+
 				const mockEvent = {
 					activePage: 0,
 					fieldName: 'radio',
@@ -526,53 +530,13 @@ describe('LayoutProvider', () => {
 
 				jest.runAllTimers();
 
-				const visitor = new PagesVisitor(provider.state.pages);
+				expect(provider.state.pages[0].rows.length).toBe(
+					initalFieldsNumber + 1
+				);
 
 				expect(
-					visitor.mapFields(
-						(
-							field,
-							fieldIndex,
-							columnIndex,
-							rowIndex,
-							pageIndex
-						) => {
-							const {pages} = field.settingsContext;
-
-							if (pages.length) {
-								pages[0].rows[0].columns[0].fields[1].value =
-									'Liferay';
-
-								const validation =
-									pages[0].rows[0].columns[0].fields[4]
-										.validation;
-
-								if (validation && validation.fieldName) {
-
-									// Overrides the fieldName because it is generated when a field is duplicated,
-									// toMatchSnapshot has problems with deep arrays so we override it here to
-									// avoid this.
-
-									validation.fieldName = 'Any<String>';
-								}
-							}
-
-							return {
-								...field,
-								fieldName: `name${fieldIndex}${columnIndex}${rowIndex}${pageIndex}`,
-
-								// Overrides the instanceId because it is generated when a field is duplicated,
-								// toMatchSnapshot has problems with deep arrays so we override it here to
-								// avoid this.
-
-								instanceId: 'Any<String>',
-								name: `name${fieldIndex}${columnIndex}${rowIndex}${pageIndex}`,
-							};
-						}
-					)
-				).toMatchSnapshot();
-
-				unmockLiferayLanguage();
+					provider.state.pages[0].rows[1].columns[0].fields[0].label
+				).toBe('copy-of-x');
 			});
 		});
 
