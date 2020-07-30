@@ -148,6 +148,7 @@ exports[`Field Text is readOnly 1`] = `
       aria-label="text"
       class="form-control ddm-field-text"
       disabled=""
+      id="textField"
       name="textField"
       type="text"
       value=""
