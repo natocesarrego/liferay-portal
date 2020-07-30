@@ -76,8 +76,13 @@ const CheckboxMultiple = ({
 	const displayValues = value && value.length > 0 ? value : predefinedValue;
 	const Toggle = isSwitcher ? Switcher : ClayCheckbox;
 
-	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
-	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+	let invalid = 'false';
+	let describedBy = null;
+
+	if (displayErrors && errorMessage && !valid) {
+   	 	invalid = 'true';
+    	describedBy = 'errorMessage';
+	}
 
 	const handleChange = (event) => {
 		const {target} = event;

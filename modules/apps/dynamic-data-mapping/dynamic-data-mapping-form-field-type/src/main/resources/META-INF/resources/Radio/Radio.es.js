@@ -55,8 +55,13 @@ const Radio = ({
 		initialValue ? initialValue : predefinedValueMemo
 	);
 
-	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
-	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+	let invalid = 'false';
+	let describedBy = null;
+
+	if (displayErrors && errorMessage && !valid) {
+   	 	invalid = 'true';
+    	describedBy = 'errorMessage';
+	}
 
 	return (
 		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={disabled} required={required} valid={valid}>

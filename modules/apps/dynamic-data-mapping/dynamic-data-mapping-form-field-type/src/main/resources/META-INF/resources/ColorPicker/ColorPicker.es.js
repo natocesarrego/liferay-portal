@@ -47,8 +47,13 @@ const ClayColorPickerWithState = ({
 }) => {
 	const [customColors, setCustoms] = useState(DEFAULT_COLORS);
 
-	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
-	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+	let invalid = 'false';
+	let describedBy = null;
+
+	if (displayErrors && errorMessage && !valid) {
+   	 	invalid = 'true';
+    	describedBy = 'errorMessage';
+	}
 
 	const [color, setColor] = useState(
 		inputValue ? inputValue : customColors[0]

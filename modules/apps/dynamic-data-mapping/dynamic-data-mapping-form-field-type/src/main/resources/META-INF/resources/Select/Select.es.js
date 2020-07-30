@@ -399,8 +399,13 @@ const Select = ({
 		}
 	};
 
-	const invalid = (displayErrors && errorMessage && !valid ) ? 'true' : 'false';
-	const describedBy = (displayErrors && errorMessage && !valid ) ? 'errorMessage' : null;
+	let invalid = 'false';
+	let describedBy = null;
+
+	if (displayErrors && errorMessage && !valid) {
+   	 	invalid = 'true';
+    	describedBy = 'errorMessage';
+	}
 
 	return (
 		<>
