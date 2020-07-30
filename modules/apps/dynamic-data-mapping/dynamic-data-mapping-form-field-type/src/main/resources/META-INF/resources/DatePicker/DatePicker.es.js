@@ -118,6 +118,7 @@ const DatePicker = ({
 	disabled,
 	displayErrors,
 	errorMessage,
+	label,
 	name,
 	onChange,
 	required,
@@ -173,8 +174,8 @@ const DatePicker = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	return (
@@ -188,7 +189,7 @@ const DatePicker = ({
 			<ClayDatePicker
 				aria-describedby={describedBy}
 				aria-invalid={invalid}
-				aria-label="date"
+				aria-label={label}
 				aria-required={required}
 				dateFormat={dateMask}
 				disabled={disabled}
@@ -232,6 +233,7 @@ const DatePicker = ({
 const Main = ({
 	displayErrors,
 	errorMessage,
+	label,
 	name,
 	onChange,
 	placeholder,
@@ -247,6 +249,7 @@ const Main = ({
 		{...otherProps}
 		displayErrors={displayErrors}
 		errorMessage={errorMessage}
+		label={label}
 		name={name}
 		readOnly={readOnly}
 		required={required}
@@ -257,6 +260,7 @@ const Main = ({
 			disabled={readOnly}
 			displayErrors={displayErrors}
 			errorMessage={errorMessage}
+			label={label}
 			name={name}
 			onChange={(value) => onChange({}, value)}
 			placeholder={placeholder}

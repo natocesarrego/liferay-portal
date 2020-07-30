@@ -29,6 +29,7 @@ const ImagePicker = ({
 	id,
 	inputValue,
 	itemSelectorURL,
+	label,
 	name,
 	onClearClick,
 	onDescriptionChange,
@@ -45,8 +46,8 @@ const ImagePicker = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	const {observer, onClose} = useModal({
@@ -127,7 +128,7 @@ const ImagePicker = ({
 						<ClayInput
 							aria-describedby={describedBy}
 							aria-invalid={invalid}
-							aria-label="image upload"
+							aria-label={label}
 							aria-required={required}
 							className="bg-light"
 							disabled={readOnly}
@@ -245,13 +246,14 @@ const Main = ({
 	id,
 	inputValue,
 	itemSelectorURL,
+	label,
 	name,
 	onChange,
 	portletNamespace,
 	readOnly,
 	required,
-	value,
 	valid,
+	value,
 	...otherProps
 }) => {
 	const transformValue = (sourceValue) => {
@@ -268,7 +270,17 @@ const Main = ({
 	};
 
 	return (
-		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
+		<FieldBase
+			{...otherProps}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
+			id={id}
+			label={label}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			valid={valid}
+		>
 			<ImagePicker
 				displayErrors={displayErrors}
 				errorMessage={errorMessage}
@@ -279,6 +291,7 @@ const Main = ({
 					defaultValue
 				}
 				itemSelectorURL={itemSelectorURL}
+				label={label}
 				name={name}
 				onClearClick={({event, ...data}) => onChange(event, data)}
 				onDescriptionChange={({event, ...data}) =>

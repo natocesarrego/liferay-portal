@@ -73,6 +73,7 @@ const Grid = ({
 	disabled,
 	displayErrors,
 	errorMessage,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -87,70 +88,78 @@ const Grid = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
-return (
-	<div className="table-responsive" {...otherProps}>
-		<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="grid" aria-required={required}>
-		{!disabled &&
-			rows.map((row, rowIndex) => {
-				const inputValue = value[row.value]
-					? `${row.value};${value[row.value]}`
-					: '';
+	return (
+		<div className="table-responsive" {...otherProps}>
+			<fieldset
+				aria-describedby={describedBy}
+				aria-invalid={invalid}
+				aria-label={label}
+				aria-required={required}
+			>
+				{!disabled &&
+					rows.map((row, rowIndex) => {
+						const inputValue = value[row.value]
+							? `${row.value};${value[row.value]}`
+							: '';
 
-				return (
-					<ClayInput
-						aria-label="grid_hidden"
-						key={`row-${row.value}-${rowIndex}`}
-						name={name}
-						type="hidden"
-						value={inputValue}
-					/>
-				);
-			})}
-
-		<ClayTable striped>
-			<TableHead columns={columns} />
-
-			<ClayTable.Body>
-				{rows.map((row, rowIndex) => {
-					if (row.value) {
 						return (
-							<ClayTable.Row
+							<ClayInput
+								aria-label="grid_hidden"
 								key={`row-${row.value}-${rowIndex}`}
-								name={row.value}
-							>
-								<ClayTable.Cell>{row.label}</ClayTable.Cell>
-
-								<TableBodyColumns
-									columns={columns}
-									disabled={disabled}
-									onBlur={onBlur}
-									onChange={onChange}
-									onFocus={onFocus}
-									row={row}
-									rowIndex={rowIndex}
-									value={value}
-								/>
-							</ClayTable.Row>
+								name={name}
+								type="hidden"
+								value={inputValue}
+							/>
 						);
-					}
+					})}
 
-					return null;
-				})}
-			</ClayTable.Body>
-		</ClayTable>
-		</fieldset>
-	</div>
+				<ClayTable striped>
+					<TableHead columns={columns} />
+
+					<ClayTable.Body>
+						{rows.map((row, rowIndex) => {
+							if (row.value) {
+								return (
+									<ClayTable.Row
+										key={`row-${row.value}-${rowIndex}`}
+										name={row.value}
+									>
+										<ClayTable.Cell>
+											{row.label}
+										</ClayTable.Cell>
+
+										<TableBodyColumns
+											columns={columns}
+											disabled={disabled}
+											onBlur={onBlur}
+											onChange={onChange}
+											onFocus={onFocus}
+											row={row}
+											rowIndex={rowIndex}
+											value={value}
+										/>
+									</ClayTable.Row>
+								);
+							}
+
+							return null;
+						})}
+					</ClayTable.Body>
+				</ClayTable>
+			</fieldset>
+		</div>
 	);
-}
+};
 
 const Main = ({
 	columns,
 	displayErrors,
 	errorMessage,
+	label,
 	name,
 	readOnly,
 	rows,
@@ -165,12 +174,22 @@ const Main = ({
 	const [state, setState] = useState(value);
 
 	return (
-		<FieldBase displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={readOnly} required={required} valid={valid} {...otherProps}>
+		<FieldBase
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
+			label={label}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			valid={valid}
+			{...otherProps}
+		>
 			<Grid
 				columns={columns}
 				disabled={readOnly}
 				displayErrors={displayErrors}
 				errorMessage={errorMessage}
+				label={label}
 				name={name}
 				onBlur={onBlur}
 				onChange={(event) => {

@@ -61,6 +61,7 @@ const CheckboxMultiple = ({
 	errorMessage,
 	inline,
 	isSwitcher,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -80,8 +81,8 @@ const CheckboxMultiple = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	const handleChange = (event) => {
@@ -100,21 +101,26 @@ const CheckboxMultiple = ({
 
 	return (
 		<div className="lfr-ddm-checkbox-multiple">
-			<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="checkbox" aria-required={required}>
-			{options.map((option) => (
-				<Toggle
-					checked={displayValues.includes(option.value)}
-					disabled={disabled}
-					inline={inline}
-					key={option.value}
-					label={option.label}
-					name={name}
-					onBlur={onBlur}
-					onChange={handleChange}
-					onFocus={onFocus}
-					value={option.value}
-				/>
-			))}
+			<fieldset
+				aria-describedby={describedBy}
+				aria-invalid={invalid}
+				aria-label={label}
+				aria-required={required}
+			>
+				{options.map((option) => (
+					<Toggle
+						checked={displayValues.includes(option.value)}
+						disabled={disabled}
+						inline={inline}
+						key={option.value}
+						label={option.label}
+						name={name}
+						onBlur={onBlur}
+						onChange={handleChange}
+						onFocus={onFocus}
+						value={option.value}
+					/>
+				))}
 			</fieldset>
 		</div>
 	);
@@ -124,6 +130,7 @@ const Main = ({
 	displayErrors,
 	errorMessage,
 	inline,
+	label,
 	name,
 	options = [
 		{
@@ -146,13 +153,23 @@ const Main = ({
 	value,
 	...otherProps
 }) => (
-	<FieldBase displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={readOnly} required={required} valid={valid} {...otherProps}>
+	<FieldBase
+		displayErrors={displayErrors}
+		errorMessage={errorMessage}
+		label={label}
+		name={name}
+		readOnly={readOnly}
+		required={required}
+		valid={valid}
+		{...otherProps}
+	>
 		<CheckboxMultiple
+			disabled={readOnly}
 			displayErrors={displayErrors}
 			errorMessage={errorMessage}
-			disabled={readOnly}
 			inline={inline}
 			isSwitcher={showAsSwitcher}
+			label={label}
 			name={name}
 			onBlur={onBlur}
 			onChange={onChange}

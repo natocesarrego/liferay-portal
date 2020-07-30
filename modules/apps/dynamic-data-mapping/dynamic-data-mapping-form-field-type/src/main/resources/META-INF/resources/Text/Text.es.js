@@ -30,6 +30,7 @@ const Text = ({
 	errorMessage,
 	fieldName,
 	id,
+	label,
 	localizable,
 	localizedValue,
 	name,
@@ -66,15 +67,15 @@ const Text = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	return (
 		<ClayInput
 			aria-describedby={describedBy}
 			aria-invalid={invalid}
-			aria-label="text"
+			aria-label={label}
 			aria-required={required}
 			className="ddm-field-text"
 			disabled={disabled}
@@ -281,6 +282,7 @@ const Main = ({
 	errorMessage,
 	fieldName,
 	id,
+	label,
 	localizable,
 	localizedValue,
 	name,
@@ -310,15 +312,26 @@ const Main = ({
 		];
 
 	return (
-		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
+		<FieldBase
+			{...otherProps}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
+			id={id}
+			label={label}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			valid={valid}
+		>
 			<Component
 				defaultLanguageId={defaultLanguageId}
-				displayErrors={displayErrors}
 				disabled={readOnly}
-				errorMessage={errorMessage}
+				displayErrors={displayErrors}
 				editingLanguageId={editingLanguageId}
+				errorMessage={errorMessage}
 				fieldName={fieldName}
 				id={id}
+				label={label}
 				localizable={localizable}
 				localizedValue={localizedValue}
 				name={name}

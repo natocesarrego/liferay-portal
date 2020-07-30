@@ -126,6 +126,7 @@ const DocumentLibrary = ({
 	fileEntryTitle = '',
 	fileEntryURL = '',
 	id,
+	label,
 	name,
 	onClearButtonClicked,
 	onSelectButtonClicked,
@@ -149,8 +150,8 @@ const DocumentLibrary = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	return (
@@ -166,7 +167,7 @@ const DocumentLibrary = ({
 						<ClayInput
 							aria-describedby={describedBy}
 							aria-invalid={invalid}
-							aria-label="upload"
+							aria-label={label}
 							aria-required={required}
 							className="field"
 							disabled
@@ -220,6 +221,7 @@ const Main = ({
 	groupId,
 	id,
 	itemSelectorAuthToken,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -276,13 +278,24 @@ const Main = ({
 	};
 
 	return (
-		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
+		<FieldBase
+			{...otherProps}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
+			id={id}
+			label={label}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			valid={valid}
+		>
 			<DocumentLibrary
 				displayErrors={displayErrors}
 				errorMessage={errorMessage}
 				fileEntryTitle={fileEntryTitle}
 				fileEntryURL={fileEntryURL}
 				id={id}
+				label={label}
 				name={name}
 				onClearButtonClicked={(event) => {
 					setCurrentValue(null);

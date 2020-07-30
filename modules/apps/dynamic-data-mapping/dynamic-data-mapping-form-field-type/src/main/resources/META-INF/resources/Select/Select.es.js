@@ -318,8 +318,8 @@ const Trigger = forwardRef(
 					onCloseButtonClicked={onCloseButtonClicked}
 					onKeyDown={onTriggerKeyDown}
 					readOnly={readOnly}
-					required={required}
 					ref={ref}
+					required={required}
 					value={value}
 					{...otherProps}
 				/>
@@ -331,6 +331,7 @@ const Trigger = forwardRef(
 const Select = ({
 	displayErrors,
 	errorMessage,
+	label,
 	multiple,
 	onCloseButtonClicked,
 	onDropdownItemClicked,
@@ -403,117 +404,123 @@ const Select = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	return (
 		<>
-			<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="select field" aria-required={required}>
-			<Trigger
-				multiple={multiple}
-				onCloseButtonClicked={({event, value}) => {
-					const newValue = removeValue({
-						value: currentValue,
-						valueToBeRemoved: value,
-					});
+			<fieldset
+				aria-describedby={describedBy}
+				aria-invalid={invalid}
+				aria-label={label}
+				aria-required={required}
+			>
+				<Trigger
+					multiple={multiple}
+					onCloseButtonClicked={({event, value}) => {
+						const newValue = removeValue({
+							value: currentValue,
+							valueToBeRemoved: value,
+						});
 
-					setCurrentValue(newValue);
+						setCurrentValue(newValue);
 
-					onCloseButtonClicked({event, value: newValue});
-				}}
-				onTriggerClicked={(event) => {
-					if (readOnly) {
-						return;
-					}
-
-					setExpand(!expand);
-					onExpand({event, expand: !expand});
-
-					if (expand) {
-						triggerElementRef.current.firstChild.focus();
-					}
-				}}
-				onTriggerKeyDown={(event) => {
-					if (
-						(event.keyCode === KEYCODES.TAB ||
-							event.keyCode === KEYCODES.ARROW_DOWN) &&
-						!event.shiftKey &&
-						expand
-					) {
-						event.preventDefault();
-						event.stopPropagation();
-
-						const firstElement = menuElementRef.current.querySelector(
-							'button'
-						);
-
-						firstElement.focus();
-					}
-
-					if (
-						event.keyCode === KEYCODES.ENTER ||
-						(event.keyCode === KEYCODES.SPACE && !event.shiftKey)
-					) {
-						event.preventDefault();
-						event.stopPropagation();
+						onCloseButtonClicked({event, value: newValue});
+					}}
+					onTriggerClicked={(event) => {
+						if (readOnly) {
+							return;
+						}
 
 						setExpand(!expand);
-
 						onExpand({event, expand: !expand});
 
 						if (expand) {
 							triggerElementRef.current.firstChild.focus();
 						}
-					}
-				}}
-				options={options}
-				predefinedValue={predefinedValue}
-				readOnly={readOnly}
-				ref={triggerElementRef}
-				value={currentValue}
-				{...otherProps}
-			/>
-			<ClayDropDown.Menu
-				active={expand}
-				alignElementRef={triggerElementRef}
-				className="ddm-btn-full ddm-select-dropdown"
-				onKeyDown={(event) => {
-					switch (event.keyCode) {
-						case KEYCODES.ARROW_DOWN:
-							handleFocus(event, false);
-							break;
-						case KEYCODES.ARROW_UP:
-							handleFocus(event, true);
-							break;
-						case KEYCODES.TAB:
-							handleFocus(event, event.shiftKey);
-							break;
-						default:
-							break;
-					}
-				}}
-				onSetActive={setExpand}
-				ref={menuElementRef}
-			>
-				{options.length > MAX_ITEMS ? (
-					<DropdownListWithSearch
-						currentValue={currentValue}
-						expand={expand}
-						handleSelect={handleSelect}
-						multiple={multiple}
-						options={options}
-					/>
-				) : (
-					<DropdownList
-						currentValue={currentValue}
-						expand={expand}
-						handleSelect={handleSelect}
-						multiple={multiple}
-						options={options}
-					/>
-				)}
-			</ClayDropDown.Menu>
+					}}
+					onTriggerKeyDown={(event) => {
+						if (
+							(event.keyCode === KEYCODES.TAB ||
+								event.keyCode === KEYCODES.ARROW_DOWN) &&
+							!event.shiftKey &&
+							expand
+						) {
+							event.preventDefault();
+							event.stopPropagation();
+
+							const firstElement = menuElementRef.current.querySelector(
+								'button'
+							);
+
+							firstElement.focus();
+						}
+
+						if (
+							event.keyCode === KEYCODES.ENTER ||
+							(event.keyCode === KEYCODES.SPACE &&
+								!event.shiftKey)
+						) {
+							event.preventDefault();
+							event.stopPropagation();
+
+							setExpand(!expand);
+
+							onExpand({event, expand: !expand});
+
+							if (expand) {
+								triggerElementRef.current.firstChild.focus();
+							}
+						}
+					}}
+					options={options}
+					predefinedValue={predefinedValue}
+					readOnly={readOnly}
+					ref={triggerElementRef}
+					value={currentValue}
+					{...otherProps}
+				/>
+				<ClayDropDown.Menu
+					active={expand}
+					alignElementRef={triggerElementRef}
+					className="ddm-btn-full ddm-select-dropdown"
+					onKeyDown={(event) => {
+						switch (event.keyCode) {
+							case KEYCODES.ARROW_DOWN:
+								handleFocus(event, false);
+								break;
+							case KEYCODES.ARROW_UP:
+								handleFocus(event, true);
+								break;
+							case KEYCODES.TAB:
+								handleFocus(event, event.shiftKey);
+								break;
+							default:
+								break;
+						}
+					}}
+					onSetActive={setExpand}
+					ref={menuElementRef}
+				>
+					{options.length > MAX_ITEMS ? (
+						<DropdownListWithSearch
+							currentValue={currentValue}
+							expand={expand}
+							handleSelect={handleSelect}
+							multiple={multiple}
+							options={options}
+						/>
+					) : (
+						<DropdownList
+							currentValue={currentValue}
+							expand={expand}
+							handleSelect={handleSelect}
+							multiple={multiple}
+							options={options}
+						/>
+					)}
+				</ClayDropDown.Menu>
 			</fieldset>
 		</>
 	);
@@ -578,6 +585,7 @@ const Main = ({
 			<Select
 				displayErrors={displayErrors}
 				errorMessage={errorMessage}
+				label={label}
 				multiple={multiple}
 				name={name}
 				onCloseButtonClicked={({event, value}) =>

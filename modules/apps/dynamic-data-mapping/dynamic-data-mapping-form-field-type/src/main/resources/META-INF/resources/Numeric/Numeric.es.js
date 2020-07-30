@@ -44,6 +44,7 @@ const Numeric = ({
 	disabled,
 	displayErrors,
 	errorMessage,
+	label,
 	onChange,
 	required,
 	symbols = {
@@ -61,8 +62,8 @@ const Numeric = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	useEffect(() => {
@@ -103,7 +104,7 @@ const Numeric = ({
 			{...otherProps}
 			aria-describedby={describedBy}
 			aria-invalid={invalid}
-			aria-label="numeric"
+			aria-label={label}
 			aria-required={required}
 			disabled={disabled}
 			onChange={(event) => {
@@ -131,6 +132,7 @@ const Main = ({
 	displayErrors,
 	errorMessage,
 	id,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -144,13 +146,24 @@ const Main = ({
 	value,
 	...otherProps
 }) => (
-	<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
+	<FieldBase
+		{...otherProps}
+		displayErrors={displayErrors}
+		errorMessage={errorMessage}
+		id={id}
+		label={label}
+		name={name}
+		readOnly={readOnly}
+		required={required}
+		valid={valid}
+	>
 		<Numeric
 			dataType={dataType}
 			disabled={readOnly}
 			displayErrors={displayErrors}
 			errorMessage={errorMessage}
 			id={id}
+			label={label}
 			name={name}
 			onBlur={onBlur}
 			onChange={onChange}

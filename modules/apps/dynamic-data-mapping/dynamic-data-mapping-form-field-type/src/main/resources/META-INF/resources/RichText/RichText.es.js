@@ -71,6 +71,7 @@ const RichText = ({
 	displayErrors,
 	errorMessage,
 	id,
+	label,
 	name,
 	onChange,
 	predefinedValue,
@@ -107,21 +108,36 @@ const RichText = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	return (
-		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} id={id} name={name} readOnly={readOnly} required={required} valid={valid}>
-			<fieldset  aria-describedby={describedBy} aria-invalid={invalid} aria-label="rich text" aria-required={required}>
-			<Editor {...editorProps} />
+		<FieldBase
+			{...otherProps}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
+			id={id}
+			label={label}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			valid={valid}
+		>
+			<fieldset
+				aria-describedby={describedBy}
+				aria-invalid={invalid}
+				aria-label={label}
+				aria-required={required}
+			>
+				<Editor {...editorProps} />
 
-			<input
-				defaultValue={currentValue}
-				id={id || name}
-				name={name}
-				type="hidden"
-			/>
+				<input
+					defaultValue={currentValue}
+					id={id || name}
+					name={name}
+					type="hidden"
+				/>
 			</fieldset>
 		</FieldBase>
 	);

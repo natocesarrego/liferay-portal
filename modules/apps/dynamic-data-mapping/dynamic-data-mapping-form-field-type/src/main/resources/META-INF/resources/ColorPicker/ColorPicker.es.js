@@ -36,6 +36,7 @@ const ClayColorPickerWithState = ({
 	displayErrors,
 	errorMessage,
 	inputValue,
+	label,
 	name,
 	onBlur,
 	onFocus,
@@ -51,8 +52,8 @@ const ClayColorPickerWithState = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	const [color, setColor] = useState(
@@ -69,7 +70,7 @@ const ClayColorPickerWithState = ({
 		<ClayColorPicker
 			aria-describedby={describedBy}
 			aria-invalid={invalid}
-			aria-label="color"
+			aria-label={label}
 			aria-required={required}
 			colors={customColors}
 			disabled={readOnly}
@@ -93,6 +94,7 @@ const ClayColorPickerWithState = ({
 const ColorPicker = ({
 	displayErrors,
 	errorMessage,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -108,6 +110,7 @@ const ColorPicker = ({
 	<FieldBase
 		displayErrors={displayErrors}
 		errorMessage={errorMessage}
+		label={label}
 		name={name}
 		readOnly={readOnly}
 		required={required}
@@ -119,6 +122,7 @@ const ColorPicker = ({
 			displayErrors={displayErrors}
 			errorMessage={errorMessage}
 			inputValue={value ? value : predefinedValue}
+			label={label}
 			name={name}
 			onBlur={onBlur}
 			onFocus={onFocus}

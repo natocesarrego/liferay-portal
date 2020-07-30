@@ -33,6 +33,7 @@ const Radio = ({
 	displayErrors,
 	errorMessage,
 	inline,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -59,31 +60,45 @@ const Radio = ({
 	let describedBy = null;
 
 	if (displayErrors && errorMessage && !valid) {
-   	 	invalid = 'true';
-    	describedBy = 'errorMessage';
+		invalid = 'true';
+		describedBy = 'errorMessage';
 	}
 
 	return (
-		<FieldBase {...otherProps} displayErrors={displayErrors} errorMessage={errorMessage} name={name} readOnly={disabled} required={required} valid={valid}>
-			<fieldset aria-describedby={describedBy} aria-invalid={invalid} aria-label="single selection" aria-required={required}>
-			<div className="ddm-radio" onBlur={onBlur} onFocus={onFocus}>
-				{options.map((option) => (
-					<ClayRadio
-						checked={currentValue === option.value}
-						disabled={disabled}
-						inline={inline}
-						key={option.value}
-						label={option.label}
-						name={name}
-						onChange={(event) => {
-							setCurrentValue(option.value);
+		<FieldBase
+			{...otherProps}
+			displayErrors={displayErrors}
+			errorMessage={errorMessage}
+			label={label}
+			name={name}
+			readOnly={disabled}
+			required={required}
+			valid={valid}
+		>
+			<fieldset
+				aria-describedby={describedBy}
+				aria-invalid={invalid}
+				aria-label={label}
+				aria-required={required}
+			>
+				<div className="ddm-radio" onBlur={onBlur} onFocus={onFocus}>
+					{options.map((option) => (
+						<ClayRadio
+							checked={currentValue === option.value}
+							disabled={disabled}
+							inline={inline}
+							key={option.value}
+							label={option.label}
+							name={name}
+							onChange={(event) => {
+								setCurrentValue(option.value);
 
-							onChange(event);
-						}}
-						value={option.value}
-					/>
-				))}
-			</div>
+								onChange(event);
+							}}
+							value={option.value}
+						/>
+					))}
+				</div>
 			</fieldset>
 		</FieldBase>
 	);
