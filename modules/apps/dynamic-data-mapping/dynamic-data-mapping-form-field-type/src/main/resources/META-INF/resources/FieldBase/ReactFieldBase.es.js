@@ -174,7 +174,11 @@ function FieldBase({
 				{displayErrors && errorMessage && !valid && (
 					<span className="form-feedback-group">
 						<div className="form-feedback-item">
-							<div aria-label={label} aria-live="polite" aria-relevant="additions removals">
+							<div
+								aria-label={label}
+								aria-live="polite"
+								aria-relevant="additions text"
+							>
 								{errorMessage}
 							</div>
 						</div>
