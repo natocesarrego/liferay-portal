@@ -6,54 +6,58 @@ exports[`Field Radio has a helptext 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
     <span
       class="form-text"
     >
@@ -74,54 +78,59 @@ exports[`Field Radio has a label 1`] = `
     >
       label
     </p>
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
+      aria-label="label"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -132,54 +141,58 @@ exports[`Field Radio has a placeholder 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -190,54 +203,58 @@ exports[`Field Radio has a value 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -248,54 +265,58 @@ exports[`Field Radio has an id 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -306,56 +327,60 @@ exports[`Field Radio is not editable 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            disabled=""
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              disabled=""
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            disabled=""
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              disabled=""
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -366,54 +391,59 @@ exports[`Field Radio is not required 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
+      aria-required="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -429,54 +459,59 @@ exports[`Field Radio renders Label if showLabel is true 1`] = `
     >
       text
     </p>
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
+      aria-label="text"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option1"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option1"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 1
+              <span
+                class="custom-control-label-text"
+              >
+                Option 1
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="option2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="option2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              Option 2
+              <span
+                class="custom-control-label-text"
+              >
+                Option 2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;
@@ -487,9 +522,13 @@ exports[`Field Radio renders no options when options is empty 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
-    />
+    <fieldset
+      aria-invalid="false"
+    >
+      <div
+        class="ddm-radio"
+      />
+    </fieldset>
   </div>
 </div>
 `;
@@ -500,54 +539,58 @@ exports[`Field Radio renders options 1`] = `
     class="form-group hide"
     data-field-name="radioField"
   >
-    <div
-      class="ddm-radio"
+    <fieldset
+      aria-invalid="false"
     >
       <div
-        class="custom-control custom-radio"
+        class="ddm-radio"
       >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="item"
-          />
-          <span
-            class="custom-control-label"
-          >
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="item"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              label
+              <span
+                class="custom-control-label-text"
+              >
+                label
+              </span>
             </span>
-          </span>
-        </label>
-      </div>
-      <div
-        class="custom-control custom-radio"
-      >
-        <label>
-          <input
-            class="custom-control-input"
-            name="radioField"
-            role="radio"
-            type="radio"
-            value="item2"
-          />
-          <span
-            class="custom-control-label"
-          >
+          </label>
+        </div>
+        <div
+          class="custom-control custom-radio"
+        >
+          <label>
+            <input
+              class="custom-control-input"
+              name="radioField"
+              role="radio"
+              type="radio"
+              value="item2"
+            />
             <span
-              class="custom-control-label-text"
+              class="custom-control-label"
             >
-              label2
+              <span
+                class="custom-control-label-text"
+              >
+                label2
+              </span>
             </span>
-          </span>
-        </label>
+          </label>
+        </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;

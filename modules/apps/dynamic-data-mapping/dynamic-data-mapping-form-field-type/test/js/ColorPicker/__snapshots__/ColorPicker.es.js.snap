@@ -38,6 +38,7 @@ exports[`Field Color Picker renders field disabled 1`] = `
           class="input-group-item input-group-append"
         >
           <input
+            aria-invalid="false"
             aria-label="Color selection is 000000"
             class="form-control input-group-inset input-group-inset-before"
             disabled=""
@@ -93,6 +94,7 @@ exports[`Field Color Picker renders field with helptext 1`] = `
           class="input-group-item input-group-append"
         >
           <input
+            aria-invalid="false"
             aria-label="Color selection is 000000"
             class="form-control input-group-inset input-group-inset-before"
             type="text"
@@ -157,6 +159,7 @@ exports[`Field Color Picker renders field with label 1`] = `
           class="input-group-item input-group-append"
         >
           <input
+            aria-invalid="false"
             aria-label="Color selection is 000000"
             class="form-control input-group-inset input-group-inset-before"
             type="text"

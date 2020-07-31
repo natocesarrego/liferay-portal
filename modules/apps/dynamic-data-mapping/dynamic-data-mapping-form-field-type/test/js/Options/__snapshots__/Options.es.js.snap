@@ -40,7 +40,7 @@ exports[`Options shows the options 1`] = `
               data-field-name="keyValueLabeloption0"
             >
               <input
-                aria-label="text"
+                aria-invalid="false"
                 class="form-control ddm-field-text"
                 name="keyValueLabeloption0"
                 placeholder="enter-an-option"
@@ -111,7 +111,7 @@ exports[`Options shows the options 1`] = `
               data-field-name="keyValueLabeloption1"
             >
               <input
-                aria-label="text"
+                aria-invalid="false"
                 class="form-control ddm-field-text"
                 name="keyValueLabeloption1"
                 placeholder="enter-an-option"
@@ -182,7 +182,7 @@ exports[`Options shows the options 1`] = `
               data-field-name="keyValueLabeloption2"
             >
               <input
-                aria-label="text"
+                aria-invalid="false"
                 class="form-control ddm-field-text"
                 name="keyValueLabeloption2"
                 placeholder="enter-an-option"
