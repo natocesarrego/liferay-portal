@@ -37,6 +37,10 @@
 			font-size: 32px;
 			font-weight: 300;
 			padding: $baseline * 5 0 0 0;
+
+			p {
+				font-weight: 600;
+			}
 		}
 	}
 
@@ -62,6 +66,10 @@
 		resize: none;
 		width: 90%;
 		word-break: normal;
+	}
+
+	.form-builder-page-header-title {
+		font-weight: 600;
 	}
 
 	.form-builder-page-header-description.form-control,
