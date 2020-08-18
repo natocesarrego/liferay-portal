@@ -1127,6 +1127,6 @@ You can use isShowAddButton(Group scopeGroup) method instead of this method
 
 #### Why was this change made?
 
-These methods were removed as part of the solution for this https://issues.liferay.com/browse/LPS-103549
+This method was removed as part of a clean up refactor. See more in https://issues.liferay.com/browse/LPS-103549
 
 ---------------------------------------
