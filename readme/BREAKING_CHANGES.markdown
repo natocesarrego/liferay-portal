@@ -851,27 +851,27 @@ have a common solution for both Alloy Editor and CKEditor.
 
 The following methods were removed:
 
-    `findByClassNameId (with the parameter long classNameId)`
+    findByClassNameId (with the parameter long classNameId)
 
-    `findByClassNameId (with the parameters long classNameId, int start and int end)`
+    findByClassNameId (with the parameters long classNameId, int start and int end)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId (with the parameters long classNameId, int start, int end and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end, com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator and boolean useFinderCache)`
+    findByClassNameId (with the parameters long classNameId, int start, int end, com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator and boolean useFinderCache)
 
-    `findByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `fetchByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)`
+    fetchByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `findByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `fetchByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)`
+    fetchByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `findByClassNameId_PrevAndNext (with the parameters long structureLinkId, long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId_PrevAndNext (with the parameters long structureLinkId, long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `removeByClassNameId (with the parameter long classNameId)`
+    removeByClassNameId (with the parameter long classNameId)
 
-    `countByClassNameId (with the parameter long classNameId)`
+    countByClassNameId (with the parameter long classNameId)
 
 ### Who is affected
 
@@ -895,27 +895,27 @@ These methods were removed as part of the solution for this https://issues.lifer
 
 The following methods were removed:
 
-    `findByClassNameId (with the parameter long classNameId)`
+    findByClassNameId (with the parameter long classNameId)
             
-    `findByClassNameId (with the parameters long classNameId, int start and int end)`
+    findByClassNameId (with the parameters long classNameId, int start and int end)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end and OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId (with the parameters long classNameId, int start, int end and OrderByComparator<DDMStructureLink> orderByComparator)
 
-    `findByClassNameId(with the parameters long classNameId, int start, int end, OrderByComparator<DDMStructureLink> orderByComparator and  boolean useFinderCache)`
+    findByClassNameId(with the parameters long classNameId, int start, int end, OrderByComparator<DDMStructureLink> orderByComparator and  boolean useFinderCache)
 
-    `findByClassNameId_First (with the parameters  long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId_First (with the parameters  long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)
         
-    `fetchByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)` 
+    fetchByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)
             
-    `findByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)
             
-    `fetchByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)`
+    fetchByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)
             
-    `findByClassNameId_PrevAndNext (with the parameters long structureLinkId, long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)`
+    findByClassNameId_PrevAndNext (with the parameters long structureLinkId, long classNameId and OrderByComparator<DDMStructureLink> orderByComparator)
             
-    `removeByClassNameId (with the parameter long classNameId)`
+    removeByClassNameId (with the parameter long classNameId)
 
-    `countByClassNameId (with the parameter long classNameId)`
+    countByClassNameId (with the parameter long classNameId)
 
 ### Who is affected
 
@@ -939,27 +939,27 @@ These methods were removed as part of the solution for this https://issues.lifer
 
 The following methods were removed:
 
-    `findByClassNameId (with the parameter long classNameId)`
+    findByClassNameId (with the parameter long classNameId)
 
-    `findByClassNameId (with the parameters long classNameId, int start and int end)`
+    findByClassNameId (with the parameters long classNameId, int start and int end)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end and  com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId (with the parameters long classNameId, int start, int end and  com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end, com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator and boolean useFinderCache)`
+    findByClassNameId (with the parameters long classNameId, int start, int end, com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator and boolean useFinderCache)
 
-    `findByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)
 
-    `fetchByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)`
+    fetchByClassNameId_First (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)
 
-    `findByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)
 
-    `fetchByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)`
+    fetchByClassNameId_Last (with the parameters long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure> orderByComparator)
 
-    `findByClassNameId_PrevAndNext (with the parameters long structureId, long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure>               orderByComparator)`
+    findByClassNameId_PrevAndNext (with the parameters long structureId, long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMStructure>               orderByComparator)
 
-    `removeByClassNameId (with the parameter long classNameId)`
+    removeByClassNameId (with the parameter long classNameId)
 
-    `countByClassNameId (with the parameter long classNameId)`
+    countByClassNameId (with the parameter long classNameId)
 
 ### Who is affected
 
@@ -983,27 +983,27 @@ These methods were removed as part of the solution for this https://issues.lifer
 
 The following methods were removed:
 
-    `findByClassNameId (with the parameter long classNameId)`
+    findByClassNameId (with the parameter long classNameId)
 
- 	`findByClassNameId (with the parameters long classNameId, int start and int end)`
+ 	findByClassNameId (with the parameters long classNameId, int start and int end)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end and OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId (with the parameters long classNameId, int start, int end and OrderByComparator<DDMStructure> orderByComparator)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end, OrderByComparator<DDMStructure> orderByComparator and boolean useFinderCache)`
+    findByClassNameId (with the parameters long classNameId, int start, int end, OrderByComparator<DDMStructure> orderByComparator and boolean useFinderCache)
 
-    `findByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)
 
-    `fetchByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)`
+    fetchByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)
 
-    `findByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)
 
-    `fetchByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)`
+    fetchByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMStructure> orderByComparator)
 
-    `findByClassNameId_PrevAndNext (with the parameters long structureId, long classNameId and OrderByComparator<DDMStructure> orderByComparator)`
+    findByClassNameId_PrevAndNext (with the parameters long structureId, long classNameId and OrderByComparator<DDMStructure> orderByComparator)
 
-    `removeByClassNameId(with the parameter long classNameId)`
+    removeByClassNameId(with the parameter long classNameId)
 
-    `countByClassNameId (with the parameter long classNameId)`
+    countByClassNameId (with the parameter long classNameId)
 
 
 ### Who is affected
@@ -1028,27 +1028,27 @@ These methods were removed as part of the solution for this https://issues.lifer
 
 The following methods were removed:
 
-    `findByClassNameId (with the parameter long classNameId)`
+    findByClassNameId (with the parameter long classNameId)
 
-    `findByClassNameId (with the parameters long classNameId, int start and int end)`
+    findByClassNameId (with the parameters long classNameId, int start and int end)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end and com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)`
+    findByClassNameId (with the parameters long classNameId, int start, int end and com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end, com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator and  boolean useFinderCache)`
+    findByClassNameId (with the parameters long classNameId, int start, int end, com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator and  boolean useFinderCache)
 
-    `findByClassNameId_First (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)`
+    findByClassNameId_First (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `fetchByClassNameId_First (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)`
+    fetchByClassNameId_First (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `findByClassNameId_Last (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)`
+    findByClassNameId_Last (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `fetchByClassNameId_Last (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)`
+    fetchByClassNameId_Last (with the parameters long classNameId and  com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `findByClassNameId_PrevAndNext (with the parameters long templateLinkId, long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)`
+    findByClassNameId_PrevAndNext (with the parameters long templateLinkId, long classNameId and com.liferay.portal.kernel.util.OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `removeByClassNameId (with the parameter long classNameId)`
+    removeByClassNameId (with the parameter long classNameId)
 
-    `countByClassNameId (with the parameter long classNameId)`
+    countByClassNameId (with the parameter long classNameId)
 
 
 ### Who is affected
@@ -1073,27 +1073,27 @@ These methods were removed as part of the solution for this https://issues.lifer
 
 The following methods were removed:
 
-    `findByClassNameId (with the parameter long classNameId)`
+    findByClassNameId (with the parameter long classNameId)
 
-    `findByClassNameId (with the parameters long classNameId, int start and int end)`
+    findByClassNameId (with the parameters long classNameId, int start and int end)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end and OrderByComparator<DDMTemplateLink> orderByComparator)`
+    findByClassNameId (with the parameters long classNameId, int start, int end and OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `findByClassNameId (with the parameters long classNameId, int start, int end, OrderByComparator<DDMTemplateLink> orderByComparator and boolean useFinderCache)`
+    findByClassNameId (with the parameters long classNameId, int start, int end, OrderByComparator<DDMTemplateLink> orderByComparator and boolean useFinderCache)
 
-    `findByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)` 
+    findByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `fetchByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)`
+    fetchByClassNameId_First (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `findByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)` 
+    findByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator) 
 
-    `fetchByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)`
+    fetchByClassNameId_Last (with the parameters long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)
 
-    `findByClassNameId_PrevAndNext (with the parameters long templateLinkId, long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)`
+    findByClassNameId_PrevAndNext (with the parameters long templateLinkId, long classNameId and OrderByComparator<DDMTemplateLink> orderByComparator)`
 
-    `removeByClassNameId (with the parameter long classNameId)`
+    removeByClassNameId (with the parameter long classNameId)
 
-    `countByClassNameId (with the parameter long classNameId)`
+    countByClassNameId (with the parameter long classNameId)
 
 ### Who is affected
 
