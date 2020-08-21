@@ -241,6 +241,7 @@ const withActionableFields = (ChildComponent) => {
 
 		_handleMouseLeaveField(event) {
 			const {delegateTarget} = event;
+			const {dispatch} = this.context;
 			const {hoveredFieldActions, selectedFieldActions} = this.refs;
 
 			if (
@@ -263,6 +264,8 @@ const withActionableFields = (ChildComponent) => {
 			if (event.stopPropagation) {
 				event.stopPropagation();
 			}
+
+			dispatch('fieldBlurred', {});
 		}
 
 		_handleClosestParent({
