@@ -29,21 +29,31 @@ export default ({fields}) => {
 		}
 	});
 
+	const setSearchParamsWithoutPageReload = (param, index) => {
+		const url = new URL(location.toString());
+		url.searchParams.set(param, index);
+		window.history.replaceState({path: url.toString()}, '', url.toString());
+	};
+
 	const {portletNamespace} = useContext(SidebarContext);
 
 	const shortcuts = fields.map((field, index) => {
 		if (Object.keys(fieldTypes).includes(field.type)) {
 			return (
-				<li
-					key={`card-item-${index}`}
-					onClick={() => setItemSelectedIndex(index)}
-				>
+				<li key={`card-item-${index}`}>
 					<a
 						className={`${
 							itemSelectedIndex == index ? 'selected' : ''
 						}`}
 						data-senna-off
 						href={`#${portletNamespace}card_${index}`}
+						onClick={() => {
+							setItemSelectedIndex(index);
+							setSearchParamsWithoutPageReload(
+								`#${portletNamespace}card_`,
+								`${index}`
+							);
+						}}
 					>
 						<div className="indicator"></div>
 						<div className="field-label">{field.label}</div>
