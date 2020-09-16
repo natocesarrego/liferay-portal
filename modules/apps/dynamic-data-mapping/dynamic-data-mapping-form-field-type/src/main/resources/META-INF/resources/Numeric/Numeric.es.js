@@ -79,12 +79,18 @@ const Numeric = ({
 	useEffect(() => {
 		let maskInstance = null;
 
-		if (inputRef.current) {
+		if (inputRef.current && !inputRef.current.readOnly) {
 			let newValue = value;
+
+			let decimalSymbol = symbols.decimalSymbol;
+
+			if(!newValue.includes('.') && symbols.decimalSymbol != ',') {
+				decimalSymbol = ',';
+			}
 
 			if (dataType === 'integer' && value) {
 				newValue = String(
-					Math.round(newValue.replace(symbols.decimalSymbol, '.'))
+					Math.round(newValue.replace(decimalSymbol, '.'))
 				);
 			}
 
