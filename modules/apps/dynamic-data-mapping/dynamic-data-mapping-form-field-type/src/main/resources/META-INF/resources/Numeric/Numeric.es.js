@@ -82,9 +82,15 @@ const Numeric = ({
 		if (inputRef.current) {
 			let newValue = value;
 
+			let decimalSymbol = symbols.decimalSymbol;
+
+			if (!newValue.includes('.') && symbols.decimalSymbol != ',') {
+				decimalSymbol = ',';
+			}
+
 			if (dataType === 'integer' && value) {
 				newValue = String(
-					Math.round(newValue.replace(symbols.decimalSymbol, '.'))
+					Math.round(newValue.replace(decimalSymbol, '.'))
 				);
 			}
 
