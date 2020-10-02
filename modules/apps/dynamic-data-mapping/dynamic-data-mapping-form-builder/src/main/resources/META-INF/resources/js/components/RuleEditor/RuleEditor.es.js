@@ -1096,6 +1096,10 @@ class RuleEditor extends Component {
 				valueType = 'option';
 				secondOperandType = 'option';
 			}
+			else if (fieldType.type === 'grid') {
+				valueType = 'json';
+				secondOperandType = 'json';
+			}
 			else {
 				valueType = 'string';
 				secondOperandType = fieldType.dataType;
