@@ -314,7 +314,9 @@ class RuleEditor extends Component {
 
 		const conditions = state.conditions.map((condition) => {
 			const fieldName = condition.operands[0].value;
+			let firstOperandColumns = [];
 			let firstOperandOptions = [];
+			let firstOperandRows = [];
 			let operators = [];
 
 			if (fieldName) {
@@ -322,18 +324,36 @@ class RuleEditor extends Component {
 
 				operators = this._getOperatorsByFieldType(dataType);
 
-				firstOperandOptions = RulesSupport.getFieldOptions(
-					fieldName,
-					pages
-				);
+				const {columns, rows} = this.getFieldColumnsAndRows(fieldName);
+
+				firstOperandColumns = columns;
+				firstOperandRows = rows;
+
+				firstOperandOptions = this.getFieldOptions(fieldName);
 			}
 
 			return {
 				...condition,
 				binaryOperator: this._isBinary(condition.operator),
+				firstOperandColumns,
 				firstOperandOptions,
+				firstOperandRows,
 				operands: condition.operands.map((operand, index) => {
 					if (index === 1 && this.isValueOperand(operand)) {
+						const firstOperandType = getFieldProperty(
+							pages,
+							condition.operands[0].value,
+							'type'
+						);
+
+						if (
+							firstOperandType === 'grid' &&
+							!!operand.value &&
+							typeof operand.value == 'string'
+						) {
+							operand.value = JSON.parse(operand.value);
+						}
+
 						operand = {
 							...operand,
 							dataType: getFieldProperty(
@@ -341,11 +361,7 @@ class RuleEditor extends Component {
 								condition.operands[0].value,
 								'dataType'
 							),
-							type: getFieldProperty(
-								pages,
-								condition.operands[0].value,
-								'type'
-							),
+							type: firstOperandType,
 						};
 					}
 
