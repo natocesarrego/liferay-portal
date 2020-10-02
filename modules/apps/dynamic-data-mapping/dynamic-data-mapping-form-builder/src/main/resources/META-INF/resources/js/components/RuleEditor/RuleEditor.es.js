@@ -171,6 +171,32 @@ class RuleEditor extends Component {
 		return promise;
 	}
 
+	getFieldColumnsAndRows(fieldName) {
+		const visitor = new PagesVisitor(this.pages);
+
+		const field = visitor.findField((field) => {
+			return field.fieldName === fieldName;
+		});
+
+		const columns = field.columns ?? [];
+		const rows = field.rows ?? [];
+
+		return {columns, rows};
+	}
+
+	getFieldOptions(fieldName) {
+		let options = [];
+		const visitor = new PagesVisitor(this.pages);
+
+		const field = visitor.findField((field) => {
+			return field.fieldName === fieldName;
+		});
+
+		options = field ? field.options : [];
+
+		return options;
+	}
+
 	getFieldsByTypes(fields, types) {
 		return fields.filter((field) =>
 			types.some((fieldType) => field.type == fieldType)
