@@ -1752,7 +1752,7 @@ RuleEditor.STATE = {
 					label: Config.string(),
 					repeatable: Config.bool(),
 					type: Config.string(),
-					value: Config.string(),
+					value: Config.any(),
 				})
 			),
 			operator: Config.string(),
