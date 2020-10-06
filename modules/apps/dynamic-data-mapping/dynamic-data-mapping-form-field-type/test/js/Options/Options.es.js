@@ -532,7 +532,9 @@ describe('Options', () => {
 			jest.runAllTimers();
 		});
 
-		const removeOptionButton = document.querySelector('.ddm-option-entry .close');
+		const removeOptionButton = document.querySelector(
+			'.ddm-option-entry .close'
+		);
 
 		fireEvent.click(removeOptionButton);
 
