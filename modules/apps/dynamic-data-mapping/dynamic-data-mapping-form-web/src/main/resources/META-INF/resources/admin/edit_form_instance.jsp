@@ -358,3 +358,16 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 
 	Liferay.on('destroyPortlet', clearPortletHandlers);
 </aui:script>
+
+<aui:script>
+	if (Liferay.Browser.isIe()) {
+		document
+			.querySelectorAll(
+				'.forms-navigation-bar, ' +
+					'.navigation-bar-secondary, .management-bar'
+			)
+			.forEach(function (element) {
+				element.classList.add('forms-bar-ie');
+			});
+	}
+</aui:script>
