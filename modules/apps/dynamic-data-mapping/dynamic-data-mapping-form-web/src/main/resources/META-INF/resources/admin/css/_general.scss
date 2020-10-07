@@ -219,6 +219,11 @@ td.lfr-name-column {
 
 .form-builder-sidebar,
 .portlet-forms {
+	.forms-bar-ie {
+		position: inherit !important;
+		top: 0 !important;
+	}
+
 	.form-group
 		.alloy-editor-container.input-group
 		.alloy-editor-placeholder.ae-placeholder {
