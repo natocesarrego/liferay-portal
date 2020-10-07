@@ -230,9 +230,9 @@ td.lfr-name-column {
 	.forms-navigation-bar,
 	.navigation-bar-secondary,
 	.management-bar {
-		position: sticky;
+		position: fixed;
 		top: 56px;
-		width: 100%;
+		width: 82%;
 		z-index: 10;
 	}
 
