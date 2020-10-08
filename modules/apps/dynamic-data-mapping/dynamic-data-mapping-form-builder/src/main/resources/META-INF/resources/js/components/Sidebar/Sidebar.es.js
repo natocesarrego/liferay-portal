@@ -732,6 +732,12 @@ class Sidebar extends Component {
 				const {rules} = this.props;
 
 				if (RulesSupport.findRuleByFieldName(fieldName, rules)) {
+					const dropdown = document.querySelector(
+						'.dropdown-menu.show'
+					);
+
+					dropdown.classList.remove('show');
+
 					this.refs.existingRuleModal.data = {
 						fieldName,
 					};
