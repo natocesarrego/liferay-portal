@@ -28,6 +28,20 @@ import org.mockito.Mock;
 public class DefaultDDMFormRuleActionSerializerTest {
 
 	@Test
+	public void testSerializeEmptyTarget() {
+		DefaultDDMFormRuleAction defaultDDMFormRuleAction =
+			new DefaultDDMFormRuleAction("show", "");
+
+		DefaultDDMFormRuleActionSerializer defaultDDMFormRuleActionSerializer =
+			new DefaultDDMFormRuleActionSerializer(defaultDDMFormRuleAction);
+
+		String result = defaultDDMFormRuleActionSerializer.serialize(
+			_spiDDMFormRuleSerializerContext);
+
+		Assert.assertNull(result);
+	}
+
+	@Test
 	public void testSerializeSetEnabled() {
 		DefaultDDMFormRuleAction defaultDDMFormRuleAction =
 			new DefaultDDMFormRuleAction("enable", "field0");

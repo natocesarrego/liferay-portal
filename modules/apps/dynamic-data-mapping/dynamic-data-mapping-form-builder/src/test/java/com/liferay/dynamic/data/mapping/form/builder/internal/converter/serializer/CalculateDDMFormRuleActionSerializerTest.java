@@ -203,6 +203,25 @@ public class CalculateDDMFormRuleActionSerializerTest extends PowerMockito {
 			result);
 	}
 
+	@Test
+	public void testSerializeEmptyTarget() {
+		when(
+			_calculateDDMFormRuleAction.getTarget()
+		).thenReturn(
+			""
+		);
+
+		CalculateDDMFormRuleActionSerializer
+			calculateDDMFormRuleActionSerializer =
+				new CalculateDDMFormRuleActionSerializer(
+					_calculateDDMFormRuleAction);
+
+		String result = calculateDDMFormRuleActionSerializer.serialize(
+			_spiDDMFormRuleSerializerContext);
+
+		Assert.assertNull(result);
+	}
+
 	protected void setUpServiceContextThreadLocal() {
 		mockStatic(ServiceContextThreadLocal.class);
 

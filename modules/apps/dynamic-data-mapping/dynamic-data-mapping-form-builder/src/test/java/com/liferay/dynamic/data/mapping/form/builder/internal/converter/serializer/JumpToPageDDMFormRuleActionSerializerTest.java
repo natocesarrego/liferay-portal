@@ -57,6 +57,25 @@ public class JumpToPageDDMFormRuleActionSerializerTest extends PowerMockito {
 		Assert.assertEquals("jumpPage(1, 3)", result);
 	}
 
+	@Test
+	public void testSerializeEmptyTarget() {
+		when(
+			_jumpToPageDDMFormRuleAction.getTarget()
+		).thenReturn(
+			""
+		);
+
+		JumpToPageDDMFormRuleActionSerializer
+			jumpToPageDDMFormRuleActionSerializer =
+				new JumpToPageDDMFormRuleActionSerializer(
+					_jumpToPageDDMFormRuleAction);
+
+		String result = jumpToPageDDMFormRuleActionSerializer.serialize(
+			_spiDDMFormRuleSerializerContext);
+
+		Assert.assertNull(result);
+	}
+
 	@Mock
 	private JumpToPageDDMFormRuleAction _jumpToPageDDMFormRuleAction;
 
