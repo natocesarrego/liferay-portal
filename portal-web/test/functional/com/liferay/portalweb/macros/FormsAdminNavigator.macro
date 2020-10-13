@@ -68,6 +68,24 @@ definition {
 		Click(locator1 = "Form#SIDEBAR_MENUITEM_REMOVE_FIELD");
 	}
 
+	macro deleteFieldModalConfirmation {
+
+		FormsAdminNavigator.gotoDeleteField(fieldName = "${fieldLabel}");
+
+		while (IsElementPresent(locator1 = "Form#VALIDATE_DELETE_FIELD_MODAL_DELETE_MESSAGE")) {
+
+			Click(locator1 = "Form#SIDEBAR_DELETE_FIELD_MODAL_DELETE_BUTTON");
+		}
+
+		FormsAdminNavigator.validateNoFieldLabel();
+	}
+
+	macro validateNoFieldLabel {
+		AssertElementNotPresent(
+			locator1 = "Form#FIELD_LABEL",
+			value1 = "${fieldLabel}");
+	}
+
 	macro gotoEditField {
 		var key_fieldName = "${fieldName}";
 		var key_fieldPositionNumber = "${fieldPositionNumber}";
