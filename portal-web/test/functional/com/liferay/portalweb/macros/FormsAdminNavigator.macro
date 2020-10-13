@@ -185,5 +185,4 @@ definition {
 
 		Navigator.openSpecificURL(url = "${publishFormURL}");
 	}
-
 }
