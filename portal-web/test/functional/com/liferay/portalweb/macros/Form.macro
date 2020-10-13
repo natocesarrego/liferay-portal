@@ -56,6 +56,16 @@ definition {
 		AssertVisible(locator1 = "Form#PUBLISH_URL_ICON");
 	}
 
+	macro changeFieldTypeModalConfirmation {
+
+		FormFields.changeFieldType(selectOption = "${selectOption}");
+
+		while (IsElementPresent(locator1 = "Form#SIDEBAR_VALIDATE_CHANGE_FIELD_TYPE_MODAL_MESSAGE")) {
+
+			Click(locator1 = "Form#SIDEBAR_CHANGE_FIELD_TYPE_MODAL_BUTTON");
+		}
+	}
+
 	macro closeSidebar {
 		Pause(locator1 = "1000");
 
@@ -129,12 +139,12 @@ definition {
 
 		FormsAdminNavigator.gotoDeleteField(fieldName = "${fieldLabel}");
 
-		while (IsElementPresent(locator1 = "Form#VALIDATE_DELETE_FIELD_MODAL_DELETE_MESSAGE")) {
+		while (IsElementPresent(locator1 = "Form#SIDEBAR_VALIDATE_DELETE_FIELD_MODAL_DELETE_MESSAGE")) {
 
 			Click(locator1 = "Form#SIDEBAR_DELETE_FIELD_MODAL_DELETE_BUTTON");
 		}
 
-		FormsAdminNavigator.validateNoFieldLabel();
+		Form.validateNoFieldLabel();
 	}
 
 	macro deleteSuccessPage {

@@ -35,6 +35,74 @@ definition {
 		}
 	}
 
+	@description = "This is a use case for LPS-80771."
+	@priority = "5"
+	test ChangeFieldTypeThatBelongsToARule {
+		property test.name.skip.portal.instance = "FormRules#ChangeFieldTypeThatBelongsToARule";
+		property portal.acceptance = "true";
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			portlet = "Forms");
+
+		FormsAdminNavigator.gotoAddForm();
+
+		Form.editName();
+
+		Form.addTextField(fieldPositionNumber = "1");
+
+		Form.editFieldLabelMetal(fieldValue = "Text Field");
+
+		Form.closeSidebar();
+
+		Form.addTextField(fieldPositionNumber = "2");
+
+		Form.editFieldLabelMetal(fieldValue = "Text Field 2");
+
+		Form.closeSidebar();
+
+		FormsAdminNavigator.gotoRules();
+
+		FormRules.addRule();
+
+		FormRules.configureConditionOptions(
+			conditionField = "Text Field",
+			conditionFieldValue = "test",
+			conditionOperator = "Is equal to",
+			conditionRowNumber = "1",
+			conditionValueType = "Value");
+
+		FormRules.configureActionOptions(
+			action = "Require",
+			actionRowNumber = "1",
+			actionTarget = "Text Field 2");
+
+		FormsAdminNavigator.gotoFormBuilder();
+
+		AssertVisible(locator1 = "Form#ADD_FIELD");
+
+		FormsAdminNavigator.gotoRules();
+
+		FormRules.save();
+
+		FormsAdminNavigator.gotoFormBuilder();
+
+		Form.save();
+
+		FormsAdminNavigator.gotoEditField(fieldName = "Text Field");
+
+		Form.changeFieldTypeModalConfirmation(selectOption = "Select from List");
+
+		FormFields.viewTextLabel(
+			fieldLabel = "Text Field",
+			fieldName = "Text Field");
+
+		FormsAdminNavigator.gotoRules();
+
+		FormRules.viewBrokenRule(ruleNumber = "1");
+	}
+
 	@description = "This is a use case for LPS-70446."
 	@priority = "5"
 	test ConfigureAutofillRule {
@@ -702,7 +770,7 @@ definition {
 
 		Form.save();
 
-		FormsAdminNavigator.deleteFieldModalConfirmation(
+		Form.deleteFieldModalConfirmation(
 			fieldLabel = "Text Field",
 			fieldName = "Text Field");
 	}
