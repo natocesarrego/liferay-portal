@@ -3,6 +3,18 @@ definition {
 	var formName = "Created Form Name";
 	var rowIndexNumber = "1";
 
+	macro deleteFieldModalConfirmation {
+
+		FormsAdminNavigator.gotoDeleteField(fieldName = "${fieldLabel}");
+
+		while (IsElementPresent(locator1 = "Form#VALIDATE_DELETE_FIELD_MODAL_DELETE_MESSAGE")) {
+
+			Click(locator1 = "Form#SIDEBAR_DELETE_FIELD_MODAL_DELETE_BUTTON");
+		}
+
+		FormsAdminNavigator.validateNoFieldLabel();
+	}
+
 	macro enableLocalNetworkDataProvider {
 		Navigator.openURL();
 
@@ -184,6 +196,12 @@ definition {
 		var publishFormURL = selenium.getElementValue("Form#PUBLISH_FORM_PUBLIC_URL");
 
 		Navigator.openSpecificURL(url = "${publishFormURL}");
+	}
+
+	macro validateNoFieldLabel {
+		AssertElementNotPresent(
+			locator1 = "Form#FIELD_LABEL",
+			value1 = "${fieldLabel}");
 	}
 
 }
