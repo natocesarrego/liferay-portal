@@ -25,7 +25,6 @@ import {
 	generateName,
 } from 'dynamic-data-mapping-form-renderer';
 import {makeFetch} from 'dynamic-data-mapping-form-renderer/js/util/fetch.es';
-import {openModal} from 'frontend-js-web';
 import dom from 'metal-dom';
 import {Drag, DragDrop} from 'metal-drag-drop';
 import {EventHandler} from 'metal-events';
@@ -532,10 +531,6 @@ class Sidebar extends Component {
 		this.close();
 	}
 
-	_handleDeleteFieldModalButtonClicked(fieldName) {
-		this._deleteField(fieldName);
-	}
-
 	_handleDocumentMouseDown({target}) {
 		const {transitionEnd} = this;
 		const {open} = this.state;
@@ -708,35 +703,6 @@ class Sidebar extends Component {
 
 					dropdown.classList.remove('show');
 
-					openModal({
-						bodyHTML: Liferay.Language.get(
-							'a-rule-is-applied-to-this-field'
-						),
-						buttons: [
-							{
-								displayType: 'secondary',
-								label: Liferay.Language.get('cancel'),
-								type: 'cancel',
-							},
-							{
-								displayType: 'danger',
-								label: Liferay.Language.get('delete'),
-								onClick: () => {
-									this._handleDeleteFieldModalButtonClicked(
-										fieldName
-									);
-								},
-								type: 'cancel',
-							},
-						],
-						id: 'ddm-delete-field-with-rule-modal',
-						size: 'md',
-						title: Liferay.Language.get(
-							'delete-field-with-rule-applied'
-						),
-					});
-				}
-				else {
 					this._deleteField(fieldName);
 				}
 			}
