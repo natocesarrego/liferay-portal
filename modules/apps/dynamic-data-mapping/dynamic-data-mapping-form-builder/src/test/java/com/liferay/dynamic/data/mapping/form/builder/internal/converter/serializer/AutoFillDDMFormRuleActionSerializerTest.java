@@ -36,29 +36,11 @@ public class AutoFillDDMFormRuleActionSerializerTest extends PowerMockito {
 
 	@Test
 	public void testSerialize() {
-		when(
-			_autoFillDDMFormRuleAction.getDDMDataProviderInstanceUUID()
-		).thenReturn(
-			"0"
-		);
+		_mockGetDDMDataProviderInstanceUUID();
 
-		when(
-			_autoFillDDMFormRuleAction.getInputParametersMapper()
-		).thenReturn(
-			HashMapBuilder.put(
-				"key1", "field1"
-			).build()
-		);
+		_mockGetInputParametersMapper("field1");
 
-		when(
-			_autoFillDDMFormRuleAction.getOutputParametersMapper()
-		).thenReturn(
-			HashMapBuilder.put(
-				"key1", "field2"
-			).put(
-				"key2", "field3"
-			).build()
-		);
+		_mockGetOutputParametersMapper("field2", "field3");
 
 		AutoFillDDMFormRuleActionSerializer
 			autoFillDDMFormRuleActionSerializer =
@@ -74,23 +56,9 @@ public class AutoFillDDMFormRuleActionSerializerTest extends PowerMockito {
 
 	@Test
 	public void testSerializeWithEmptyInputParameter() {
-		when(
-			_autoFillDDMFormRuleAction.getInputParametersMapper()
-		).thenReturn(
-			HashMapBuilder.put(
-				"key1", StringPool.BLANK
-			).build()
-		);
+		_mockGetInputParametersMapper(StringPool.BLANK);
 
-		when(
-			_autoFillDDMFormRuleAction.getOutputParametersMapper()
-		).thenReturn(
-			HashMapBuilder.put(
-				"key1", "field2"
-			).put(
-				"key2", "field3"
-			).build()
-		);
+		_mockGetOutputParametersMapper("field2", "field3");
 
 		AutoFillDDMFormRuleActionSerializer
 			autoFillDDMFormRuleActionSerializer =
@@ -105,23 +73,9 @@ public class AutoFillDDMFormRuleActionSerializerTest extends PowerMockito {
 
 	@Test
 	public void testSerializeWithEmptyOutputParameter() {
-		when(
-			_autoFillDDMFormRuleAction.getInputParametersMapper()
-		).thenReturn(
-			HashMapBuilder.put(
-				"key1", "field1"
-			).build()
-		);
+		_mockGetInputParametersMapper("field1");
 
-		when(
-			_autoFillDDMFormRuleAction.getOutputParametersMapper()
-		).thenReturn(
-			HashMapBuilder.put(
-				"key1", "field2"
-			).put(
-				"key2", StringPool.BLANK
-			).build()
-		);
+		_mockGetOutputParametersMapper("field2", StringPool.BLANK);
 
 		AutoFillDDMFormRuleActionSerializer
 			autoFillDDMFormRuleActionSerializer =
@@ -132,6 +86,38 @@ public class AutoFillDDMFormRuleActionSerializerTest extends PowerMockito {
 			_spiDDMFormRuleSerializerContext);
 
 		Assert.assertNull(result);
+	}
+
+	private void _mockGetDDMDataProviderInstanceUUID() {
+		when(
+			_autoFillDDMFormRuleAction.getDDMDataProviderInstanceUUID()
+		).thenReturn(
+			"0"
+		);
+	}
+
+	private void _mockGetInputParametersMapper(String fieldName) {
+		when(
+			_autoFillDDMFormRuleAction.getInputParametersMapper()
+		).thenReturn(
+			HashMapBuilder.put(
+				"key1", fieldName
+			).build()
+		);
+	}
+
+	private void _mockGetOutputParametersMapper(
+		String fieldName1, String fieldName2) {
+
+		when(
+			_autoFillDDMFormRuleAction.getOutputParametersMapper()
+		).thenReturn(
+			HashMapBuilder.put(
+				"key1", fieldName1
+			).put(
+				"key2", fieldName2
+			).build()
+		);
 	}
 
 	@Mock
