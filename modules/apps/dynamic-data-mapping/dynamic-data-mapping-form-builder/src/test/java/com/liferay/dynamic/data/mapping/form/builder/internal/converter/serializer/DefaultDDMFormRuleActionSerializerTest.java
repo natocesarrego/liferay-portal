@@ -98,6 +98,20 @@ public class DefaultDDMFormRuleActionSerializerTest {
 		Assert.assertEquals("setVisible('field0', true)", result);
 	}
 
+	@Test
+	public void testSerializeWithEmptyTarget() {
+		DefaultDDMFormRuleAction defaultDDMFormRuleAction =
+			new DefaultDDMFormRuleAction("show", StringPool.BLANK);
+
+		DefaultDDMFormRuleActionSerializer defaultDDMFormRuleActionSerializer =
+			new DefaultDDMFormRuleActionSerializer(defaultDDMFormRuleAction);
+
+		String result = defaultDDMFormRuleActionSerializer.serialize(
+			_spiDDMFormRuleSerializerContext);
+
+		Assert.assertNull(result);
+	}
+
 	@Mock
 	private SPIDDMFormRuleSerializerContext _spiDDMFormRuleSerializerContext;
 
