@@ -57,6 +57,10 @@ class RuleList extends Component {
 		this._eventHandler.removeAllListeners();
 	}
 
+	getPages() {
+		return this.pages;
+	}
+
 	prepareStateForRender(states) {
 		const rules = RulesSupport.formatRules(
 			this.pages,
@@ -76,7 +80,7 @@ class RuleList extends Component {
 					logicalOperator = rule.logicalOperator.toLowerCase();
 				}
 
-				invalidRule = RulesSupport.findInvalidRule(rule);
+				invalidRule = RulesSupport.findInvalidRule(this.pages, rule);
 
 				return {
 					...rule,

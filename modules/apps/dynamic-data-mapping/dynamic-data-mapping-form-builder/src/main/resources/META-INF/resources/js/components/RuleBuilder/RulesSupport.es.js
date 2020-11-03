@@ -16,6 +16,7 @@ import {PagesVisitor} from 'dynamic-data-mapping-form-renderer';
 
 import {DEFAULT_FIELD_NAMES_REGEX_FOR_EXPRESSION} from '../../util/regex.es';
 import {getFieldProperty} from '../LayoutProvider/util/fields.es';
+import {getPages} from '../RuleList/RuleList.es';
 
 const clearTargetValue = (actions, index) => {
 	if (actions[index]) {
@@ -86,7 +87,7 @@ const getFieldType = (fieldName, pages) => {
 
 const optionBelongsToRule = (condition, options) => {
 	return options.some(
-		(option) => option.value === condition.operands[1].value
+		(option) => option.value === condition.operands[1]?.value
 	);
 };
 
@@ -201,13 +202,15 @@ const formatRules = (pages, rules) => {
 			if (
 				firstOperandFieldExists &&
 				fieldWithOptions(firstOperandFieldType) &&
-				condition.operands[1].type != 'field'
+				condition.operands[1]?.type != 'field'
 			) {
 				const fieldName = condition.operands[0].value;
 				const options = getFieldOptions(fieldName, pages);
 
 				secondOperandFieldExists =
-					options && optionBelongsToRule(condition, options);
+					options &&
+					options[0]?.value !== '' &&
+					optionBelongsToRule(condition, options);
 			}
 
 			if (
@@ -262,7 +265,22 @@ const formatRules = (pages, rules) => {
 	return formattedRules;
 };
 
-const fieldNameBelongsToAction = (fieldName, actions) => {
+const expressionHasNonNumericFields = (action, pages) => {
+	const expressionFields = getExpressionFields(action);
+	let hasNonNumericFields = false;
+
+	if (expressionFields && expressionFields.length > 0) {
+		expressionFields.forEach((field) => {
+			if (getFieldType(field, pages) !== 'numeric') {
+				hasNonNumericFields = true;
+			}
+		});
+	}
+
+	return hasNonNumericFields;
+};
+
+const fieldNameBelongsToAction = (actions, fieldName) => {
 	const emptyField = '[]';
 
 	return actions
@@ -283,7 +301,8 @@ const fieldNameBelongsToAction = (fieldName, actions) => {
 				if (fieldName === '') {
 					return (
 						expression.indexOf(emptyField) !== -1 ||
-						target === fieldName
+						target === fieldName ||
+						expressionHasNonNumericFields(action, getPages())
 					);
 				}
 				else {
@@ -300,7 +319,7 @@ const fieldNameBelongsToAction = (fieldName, actions) => {
 		.some((fieldFound) => fieldFound === true);
 };
 
-const fieldNameBelongsToCondition = (fieldName, conditions) => {
+const fieldNameBelongsToCondition = (conditions, fieldName) => {
 	return conditions
 		.map((condition) => {
 			return condition.operands
@@ -313,12 +332,12 @@ const fieldNameBelongsToCondition = (fieldName, conditions) => {
 const findRuleByFieldName = (fieldName, rules) => {
 	return rules.some(
 		(rule) =>
-			fieldNameBelongsToAction(fieldName, rule.actions) ||
-			fieldNameBelongsToCondition(fieldName, rule.conditions)
+			fieldNameBelongsToAction(rule.actions, fieldName) ||
+			fieldNameBelongsToCondition(rule.conditions, fieldName)
 	);
 };
 
-const findInvalidRule = (rule) => {
+const findInvalidRule = (pages, rule) => {
 	return findRuleByFieldName('', [rule]);
 };
 
