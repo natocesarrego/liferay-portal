@@ -528,7 +528,7 @@ class Sidebar extends Component {
 		const {fieldName} = this.props.focusedField;
 		const {rules} = this.props;
 
-		if (rules && RulesSupport.findRuleByFieldName(fieldName, rules)) {
+		if (rules && RulesSupport.findRuleByFieldName(fieldName, null, rules)) {
 			const dropdown = document.querySelector('.dropdown-menu.show');
 
 			dropdown.classList.remove('show');
