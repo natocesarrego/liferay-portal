@@ -23,6 +23,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
 import com.liferay.dynamic.data.mapping.util.DDMFormDeserializeUtil;
 import com.liferay.dynamic.data.mapping.util.DDMFormSerializeUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -33,6 +34,8 @@ import java.sql.ResultSet;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Marcos Martins
@@ -54,6 +57,16 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 		_upgradeDDMStructure();
 	}
 
+	private String _normalizeFieldName(String fieldName) {
+		Matcher matcher = _normalizedFieldNamePattern.matcher(fieldName);
+
+		if (matcher.matches()) {
+			return StringPool.UNDERLINE + fieldName;
+		}
+
+		return fieldName;
+	}
+
 	private void _updateDDMFormFieldOptionsReferences(
 		DDMFormFieldOptions ddmFormFieldOptions) {
 
@@ -70,7 +83,8 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 	}
 
 	private void _updateDDMFormFieldReference(DDMFormField ddmFormField) {
-		ddmFormField.setFieldReference(ddmFormField.getName());
+		ddmFormField.setFieldReference(
+			_normalizeFieldName(ddmFormField.getName()));
 
 		if (!StringUtil.equals(ddmFormField.getType(), "fieldset")) {
 			_updateDDMFormFieldOptionsReferences(
@@ -178,6 +192,9 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 
 		return DDMFormSerializeUtil.serialize(ddmForm, _ddmFormSerializer);
 	}
+
+	private static final Pattern _normalizedFieldNamePattern = Pattern.compile(
+		"^[0-9].*$");
 
 	private final DDMFormDeserializer _ddmFormDeserializer;
 	private final DDMFormSerializer _ddmFormSerializer;
