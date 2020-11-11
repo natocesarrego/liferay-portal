@@ -74,6 +74,10 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 
 		Map<String, Object> parameters = new HashMap<>();
 
+		parameters.put(
+			"allowGuestUsers",
+			GetterUtil.getBoolean(ddmFormField.getProperty("allowGuestUsers")));
+
 		HttpServletRequest httpServletRequest =
 			ddmFormFieldRenderingContext.getHttpServletRequest();
 
