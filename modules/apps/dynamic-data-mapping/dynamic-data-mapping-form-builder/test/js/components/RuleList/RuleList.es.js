@@ -43,6 +43,39 @@ const pages = [
 	},
 ];
 
+const pagesWithNumbers = [
+	{
+		rows: [
+			{
+				columns: [
+					{
+						fields: [
+							{
+								fieldName: 'Field11122233',
+								fieldReference: 'NumericField1',
+								label: 'Numeric Field 1',
+								type: 'numeric',
+							},
+							{
+								fieldName: 'Field11122244',
+								fieldReference: 'NumericField2',
+								label: 'Numeric Field 2',
+								type: 'numeric',
+							},
+							{
+								fieldName: 'Field11122255',
+								fieldReference: 'total',
+								label: 'Total',
+								type: 'numeric',
+							},
+						],
+					},
+				],
+			},
+		],
+	},
+];
+
 const brokenRuleConfig = {
 	pages,
 	rules: [
@@ -158,6 +191,34 @@ const configDefault = {
 	spritemap,
 };
 
+const configNumeric = {
+	pages: pagesWithNumbers,
+	rules: [
+		{
+			actions: [
+				{
+					action: 'calculate',
+					expression: '[Field11122233]+[Field11122244]',
+					target: 'Field11122255',
+				},
+			],
+			conditions: [
+				{
+					operands: [
+						{
+							type: 'field',
+							value: 'Field11122233',
+						},
+					],
+					operator: 'not-is-empty',
+				},
+			],
+			['logical-operator']: 'AND',
+		},
+	],
+	spritemap,
+};
+
 describe('RuleList', () => {
 	beforeEach(() => {
 		jest.useFakeTimers();
@@ -198,6 +259,12 @@ describe('RuleList', () => {
 
 	it('shows rule list', () => {
 		component = new RuleList(configDefault);
+
+		expect(component).toMatchSnapshot();
+	});
+
+	it('shows rule list for calculator', () => {
+		component = new RuleList(configNumeric);
 
 		expect(component).toMatchSnapshot();
 	});
