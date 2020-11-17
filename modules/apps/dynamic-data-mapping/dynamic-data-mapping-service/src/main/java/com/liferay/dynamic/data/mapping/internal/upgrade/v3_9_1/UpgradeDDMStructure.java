@@ -57,15 +57,30 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 		_upgradeDDMStructure();
 	}
 
-	private String _normalizeFieldName(String fieldName) {
-		Matcher matcher = _normalizedFieldNamePattern.matcher(fieldName);
+	private String _normalizeFieldReference(String fieldReference) {
+		Matcher matcher = _normalizedFieldReferencePattern.matcher(fieldReference);
 
 		if (matcher.matches()) {
-			return StringPool.UNDERLINE + fieldName;
+			return StringPool.UNDERLINE + fieldReference;
 		}
 
-		return fieldName;
+		return fieldReference;
 	}
+	
+	private void _updateDDMFormFieldOptionsNames(
+			DDMFormFieldOptions ddmFormFieldOptions) {
+
+			if (ddmFormFieldOptions == null) {
+				return;
+			}
+
+			Set<String> ddmFormFieldOptionsValues =
+				ddmFormFieldOptions.getOptionsValues();
+
+			ddmFormFieldOptionsValues.forEach(
+				ddmFormFieldOptionsValue -> ddmFormFieldOptions.addOption(
+					ddmFormFieldOptionsValue));
+		}
 
 	private void _updateDDMFormFieldOptionsReferences(
 		DDMFormFieldOptions ddmFormFieldOptions) {
@@ -81,10 +96,15 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 			ddmFormFieldOptionsValue -> ddmFormFieldOptions.addOptionReference(
 				ddmFormFieldOptionsValue, ddmFormFieldOptionsValue));
 	}
+	
+	private void _updateDDMFormFieldName(DDMFormField ddmFormField) {
+		ddmFormField.setName(
+				_normalizeFieldReference(ddmFormField.getName()));
+	}
 
 	private void _updateDDMFormFieldReference(DDMFormField ddmFormField) {
 		ddmFormField.setFieldReference(
-			_normalizeFieldName(ddmFormField.getName()));
+				_normalizeFieldReference(ddmFormField.getName()));
 
 		if (!StringUtil.equals(ddmFormField.getType(), "fieldset")) {
 			_updateDDMFormFieldOptionsReferences(
@@ -188,12 +208,17 @@ public class UpgradeDDMStructure extends UpgradeProcess {
 		List<DDMFormField> ddmFormFields = ddmForm.getDDMFormFields();
 
 		ddmFormFields.forEach(
-			ddmFormField -> _updateDDMFormFieldReference(ddmFormField));
-
+			ddmFormField -> 
+			{
+				_updateDDMFormFieldReference(ddmFormField);
+				_updateDDMFormFieldName(ddmFormField);
+			}
+			);
+		
 		return DDMFormSerializeUtil.serialize(ddmForm, _ddmFormSerializer);
 	}
 
-	private static final Pattern _normalizedFieldNamePattern = Pattern.compile(
+	private static final Pattern _normalizedFieldReferencePattern = Pattern.compile(
 		"^[0-9].*$");
 
 	private final DDMFormDeserializer _ddmFormDeserializer;
