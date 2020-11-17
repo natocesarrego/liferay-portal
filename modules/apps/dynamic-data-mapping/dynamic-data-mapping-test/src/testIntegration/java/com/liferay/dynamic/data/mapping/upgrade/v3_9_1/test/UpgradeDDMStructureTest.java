@@ -127,6 +127,34 @@ public class UpgradeDDMStructureTest {
 			ddmFormField -> Assert.assertEquals(
 				ddmFormField.getName(), ddmFormField.getFieldReference()));
 	}
+	
+	@Test
+	public void testUpgradeDDMFormFieldReferencesNormalization() throws Exception {
+		DDMForm ddmForm = DDMFormTestUtil.createDDMForm("1field");
+
+		List<DDMFormField> ddmFormFields = ddmForm.getDDMFormFields();
+
+		ddmFormFields.forEach(
+			ddmFormField -> {
+				if (ddmFormField.getFieldReference() != null) {
+					ddmFormField.setFieldReference(null);
+				}
+			});
+
+		DDMFormInstance ddmFormInstance =
+			DDMFormInstanceTestUtil.addDDMFormInstance(
+				ddmForm, _group, _userId);
+
+		_upgradeDDMStructure.upgrade();
+
+		ddmForm = _getUpgradedDDMForm(ddmFormInstance);
+
+		ddmFormFields = ddmForm.getDDMFormFields();
+
+		ddmFormFields.forEach(
+			ddmFormField -> Assert.assertEquals(
+				"_1field", ddmFormField.getFieldReference()));
+	}
 
 	@Test
 	public void testUpgradeFieldSetDDMFormFieldReference() throws Exception {
