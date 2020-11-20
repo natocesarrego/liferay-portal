@@ -64,6 +64,8 @@ public class DDMFormUploadFileEntryHandler implements UploadFileEntryHandler {
 
 			file = FileUtil.createTempFile(inputStream);
 
+			_ddmFormUploadValidator.validateFileSize(file, fileName);
+
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay)uploadPortletRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
@@ -112,6 +114,9 @@ public class DDMFormUploadFileEntryHandler implements UploadFileEntryHandler {
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
+
+	@Reference
+	private DDMFormUploadValidator _ddmFormUploadValidator;
 
 	@Reference
 	private UserLocalService _userLocalService;
