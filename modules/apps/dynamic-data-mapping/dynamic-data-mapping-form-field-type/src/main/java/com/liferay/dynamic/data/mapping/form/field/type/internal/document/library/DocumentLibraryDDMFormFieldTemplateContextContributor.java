@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Repository;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
@@ -43,6 +44,7 @@ import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -235,8 +237,14 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 			Collections.<ItemSelectorReturnType>singletonList(
 				new FileEntryItemSelectorReturnType()));
 
+		long groupId = GetterUtil.getLong(
+			ddmFormFieldRenderingContext.getProperty("groupId"));
+
+		Group group = _groupLocalService.fetchGroup(groupId);
+
 		PortletURL itemSelectorURL = _itemSelector.getItemSelectorURL(
 			RequestBackedPortletURLFactoryUtil.create(httpServletRequest),
+			group, groupId,
 			ddmFormFieldRenderingContext.getPortletNamespace() +
 				"selectDocumentLibrary",
 			fileItemSelectorCriterion);
@@ -505,6 +513,9 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private ItemSelector _itemSelector;
