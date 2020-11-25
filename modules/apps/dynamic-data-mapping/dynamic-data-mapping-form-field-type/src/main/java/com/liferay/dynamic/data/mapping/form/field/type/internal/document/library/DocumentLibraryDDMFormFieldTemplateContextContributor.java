@@ -124,14 +124,22 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 
 		parameters.put("folderId", folderId);
 
-		parameters.put(
-			"guestUploadURL",
-			getGuestUploadURL(
-				folderId, ddmFormFieldRenderingContext, httpServletRequest));
-		parameters.put(
-			"itemSelectorURL",
-			getItemSelectorURL(
-				folderId, ddmFormFieldRenderingContext, httpServletRequest));
+		ThemeDisplay themeDisplay = getThemeDisplay(httpServletRequest);
+
+		if (themeDisplay.isSignedIn()) {
+			parameters.put(
+				"itemSelectorURL",
+				getItemSelectorURL(
+					folderId, ddmFormFieldRenderingContext,
+					httpServletRequest));
+		}
+		else {
+			parameters.put(
+				"guestUploadURL",
+				getGuestUploadURL(
+					folderId, ddmFormFieldRenderingContext,
+					httpServletRequest));
+		}
 
 		String value = ddmFormFieldRenderingContext.getValue();
 
