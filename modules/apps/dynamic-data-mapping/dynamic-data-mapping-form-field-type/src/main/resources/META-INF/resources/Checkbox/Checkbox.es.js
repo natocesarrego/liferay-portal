@@ -66,13 +66,15 @@ const Switcher = ({
 				</span>
 			</label>
 			{checked && showMaximumRepetitionsInfo && (
-				<div>
+				<div className="ddm-info">
 					<span className="ddm-tooltip">
 						<ClayIcon symbol="info-circle" />
 					</span>
-					{Liferay.Language.get(
-						'for-the-upload-field-the-repeatable-function-is-limited'
-					)}
+					<div className="ddm-info-text">
+						{Liferay.Language.get(
+							'for-the-upload-field-the-repeatable-function-is-limited'
+						)}
+					</div>
 				</div>
 			)}
 		</>
