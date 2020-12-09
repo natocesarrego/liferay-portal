@@ -26,43 +26,56 @@ const Switcher = ({
 	onChange,
 	required,
 	showLabel,
+	showMaximumRepetitionsInfo,
 	spritemap,
 }) => {
 	const [checked, setChecked] = useState(initialChecked);
 
 	return (
-		<label className="ddm-toggle-switch toggle-switch">
-			<input
-				checked={checked}
-				className="toggle-switch-check"
-				disabled={disabled}
-				name={name}
-				onChange={(event) => {
-					setChecked(event.target.checked);
-					onChange(event, event.target.checked);
-				}}
-				type="checkbox"
-				value={true}
-			/>
+		<>
+			<label className="ddm-toggle-switch toggle-switch">
+				<input
+					checked={checked}
+					className="toggle-switch-check"
+					disabled={disabled}
+					name={name}
+					onChange={(event) => {
+						setChecked(event.target.checked);
+						onChange(event, event.target.checked);
+					}}
+					type="checkbox"
+					value={true}
+				/>
 
-			<span aria-hidden="true" className="toggle-switch-bar">
-				<span className="toggle-switch-handle"></span>
+				<span aria-hidden="true" className="toggle-switch-bar">
+					<span className="toggle-switch-handle"></span>
 
-				{(showLabel || required) && (
-					<span className="toggle-switch-text toggle-switch-text-right">
-						{showLabel && label}
+					{(showLabel || required) && (
+						<span className="toggle-switch-text toggle-switch-text-right">
+							{showLabel && label}
 
-						{required && (
-							<ClayIcon
-								className="reference-mark"
-								spritemap={spritemap}
-								symbol="asterisk"
-							/>
-						)}
+							{required && (
+								<ClayIcon
+									className="reference-mark"
+									spritemap={spritemap}
+									symbol="asterisk"
+								/>
+							)}
+						</span>
+					)}
+				</span>
+			</label>
+			{checked && showMaximumRepetitionsInfo && (
+				<div>
+					<span className="ddm-tooltip">
+						<ClayIcon symbol="info-circle" />
 					</span>
-				)}
-			</span>
-		</label>
+					{Liferay.Language.get(
+						'for-the-upload-field-the-repeatable-function-is-limited'
+					)}
+				</div>
+			)}
+		</>
 	);
 };
 
@@ -109,6 +122,7 @@ const Main = ({
 	required,
 	showAsSwitcher = true,
 	showLabel = true,
+	showMaximumRepetitionsInfo = false,
 	spritemap,
 	value,
 	...otherProps
@@ -132,6 +146,7 @@ const Main = ({
 				onChange={onChange}
 				required={required}
 				showLabel={showLabel}
+				showMaximumRepetitionsInfo={showMaximumRepetitionsInfo}
 				spritemap={spritemap}
 			/>
 		</FieldBase>
