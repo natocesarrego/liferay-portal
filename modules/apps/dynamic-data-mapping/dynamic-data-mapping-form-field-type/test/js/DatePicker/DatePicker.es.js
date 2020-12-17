@@ -194,4 +194,36 @@ describe('DatePicker', () => {
 
 		expect(onChange).toHaveBeenCalledWith({}, date);
 	});
+
+	it('fills the input with the current date according to the locale', async () => {
+		const handleFieldEdited = jest.fn();
+
+		const {container, getAllByDisplayValue, getByLabelText} = render(
+			<DatePickerWithProvider
+				{...defaultDatePickerConfig}
+				locale="ja_JP"
+				onChange={handleFieldEdited}
+			/>
+		);
+
+		userEvent.click(
+			container.querySelector('.date-picker-dropdown-toggle')
+		);
+
+		act(() => {
+			jest.runAllTimers();
+		});
+
+		userEvent.click(getByLabelText('Select current date'));
+
+		act(() => {
+			jest.runAllTimers();
+		});
+
+		await wait(() =>
+			expect(
+				getAllByDisplayValue(moment().format('YYYY/MM/DD'))
+			).toBeTruthy()
+		);
+	});
 });
