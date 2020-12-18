@@ -1,0 +1,230 @@
+{
+	"availableLanguageIds": [
+		"en_US"
+	],
+	"defaultLanguageId": "en_US",
+	"fields": [
+		{
+			"dataSourceType": "[\"manual\"]",
+			"dataType": "string",
+			"ddmDataProviderInstanceId": "[\"\"]",
+			"ddmDataProviderInstanceOutput": "[\"Default-Output\"]",
+			"fieldNamespace": "",
+			"fieldReference": "3SelectFromList",
+			"indexType": "keyword",
+			"label": {
+				"en_US": "3Select From List"
+			},
+			"localizable": true,
+			"multiple": false,
+			"name": "3SelectFromList",
+			"options": [
+				{
+					"label": {
+						"en_US": "1Option"
+					},
+					"reference": "1Option",
+					"value": "1Option"
+				},
+				{
+					"label": {
+						"en_US": "2Option"
+					},
+					"reference": "2Option",
+					"value": "2Option"
+				},
+				{
+					"label": {
+						"en_US": "3Option"
+					},
+					"reference": "3Option",
+					"value": "3Option"
+				}
+			],
+			"predefinedValue": {
+				"en_US": "[]"
+			},
+			"readOnly": false,
+			"repeatable": false,
+			"required": false,
+			"showLabel": true,
+			"tip": {
+				"en_US": ""
+			},
+			"type": "select",
+			"visibilityExpression": ""
+		},
+		{
+			"autocomplete": false,
+			"dataType": "string",
+			"displayStyle": "singleline",
+			"fieldNamespace": "",
+			"fieldReference": "4TextField",
+			"indexType": "keyword",
+			"label": {
+				"en_US": "4Text Field"
+			},
+			"localizable": true,
+			"name": "4TextField",
+			"placeholder": {
+				"en_US": ""
+			},
+			"predefinedValue": {
+				"en_US": ""
+			},
+			"readOnly": false,
+			"repeatable": false,
+			"required": false,
+			"showLabel": true,
+			"tip": {
+				"en_US": ""
+			},
+			"tooltip": {
+				"en_US": ""
+			},
+			"type": "text",
+			"visibilityExpression": ""
+		},
+		{
+			"autocomplete": false,
+			"dataType": "string",
+			"displayStyle": "singleline",
+			"fieldNamespace": "",
+			"fieldReference": "3TextField",
+			"indexType": "keyword",
+			"label": {
+				"en_US": "3Text Field"
+			},
+			"localizable": true,
+			"name": "3TextField",
+			"placeholder": {
+				"en_US": ""
+			},
+			"predefinedValue": {
+				"en_US": ""
+			},
+			"readOnly": false,
+			"repeatable": false,
+			"required": false,
+			"showLabel": true,
+			"tip": {
+				"en_US": ""
+			},
+			"tooltip": {
+				"en_US": ""
+			},
+			"type": "text",
+			"validation": {
+				"errorMessage": {
+					"en_US": "Invalid word"
+				},
+				"expression": {
+					"name": "contains",
+					"value": "contains(3TextField, \"{parameter}\")"
+				},
+				"parameter": {
+					"en_US": "aaaa"
+				}
+			},
+			"visibilityExpression": ""
+		},
+		{
+			"ddmStructureId": "",
+			"ddmStructureLayoutId": "",
+			"fieldReference": "Field89498921",
+			"label": {
+				"en_US": "Fields Group"
+			},
+			"name": "Field89498921",
+			"nestedFields": [
+				{
+					"autocomplete": false,
+					"dataType": "string",
+					"displayStyle": "singleline",
+					"fieldNamespace": "",
+					"fieldReference": "1TextField",
+					"indexType": "keyword",
+					"label": {
+						"en_US": "1Text Field"
+					},
+					"localizable": true,
+					"name": "1TextField",
+					"placeholder": {
+						"en_US": ""
+					},
+					"predefinedValue": {
+						"en_US": ""
+					},
+					"readOnly": false,
+					"repeatable": false,
+					"required": false,
+					"showLabel": true,
+					"tip": {
+						"en_US": ""
+					},
+					"tooltip": {
+						"en_US": ""
+					},
+					"type": "text",
+					"visibilityExpression": ""
+				},
+				{
+					"autocomplete": false,
+					"dataType": "string",
+					"displayStyle": "singleline",
+					"fieldNamespace": "",
+					"fieldReference": "2TextField",
+					"indexType": "keyword",
+					"label": {
+						"en_US": "2Text Field"
+					},
+					"localizable": true,
+					"name": "2TextField",
+					"placeholder": {
+						"en_US": ""
+					},
+					"predefinedValue": {
+						"en_US": ""
+					},
+					"readOnly": false,
+					"repeatable": false,
+					"required": false,
+					"showLabel": true,
+					"tip": {
+						"en_US": ""
+					},
+					"tooltip": {
+						"en_US": ""
+					},
+					"type": "text",
+					"visibilityExpression": ""
+				}
+			],
+			"predefinedValue": {
+			},
+			"rows": "[{\"columns\":[{\"size\":12,\"fields\":[\"1TextField\"]}]},{\"columns\":[{\"size\":12,\"fields\":[\"2TextField\"]}]}]",
+			"showLabel": false,
+			"tip": {
+			},
+			"type": "fieldset"
+		}
+	],
+	"rules": [
+		{
+			"actions": [
+				"setVisible('4TextField', true)"
+			],
+			"condition": "equals(getValue('TextField'), \"test\")",
+			"enabled": true,
+			"name": {
+			}
+		}
+	],
+	"successPage": {
+		"body": {
+		},
+		"enabled": false,
+		"title": {
+		}
+	}
+}

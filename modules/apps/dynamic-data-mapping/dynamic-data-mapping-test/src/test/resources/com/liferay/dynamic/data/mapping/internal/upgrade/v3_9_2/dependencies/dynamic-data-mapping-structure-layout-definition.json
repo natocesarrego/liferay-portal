@@ -1,0 +1,36 @@
+{
+	"defaultLanguageId": "en_US",
+	"pages": [
+		{
+			"description": {
+				"en_US": ""
+			},
+			"rows": [
+				{
+					"columns": [
+						{
+							"fieldNames": [
+								"3TextField"
+							],
+							"size": 12
+						}
+					]
+				},
+				{
+					"columns": [
+						{
+							"fieldNames": [
+								"0TextField"
+							],
+							"size": 12
+						}
+					]
+				}
+			],
+			"title": {
+				"en_US": ""
+			}
+		}
+	],
+	"paginationMode": ""
+}
