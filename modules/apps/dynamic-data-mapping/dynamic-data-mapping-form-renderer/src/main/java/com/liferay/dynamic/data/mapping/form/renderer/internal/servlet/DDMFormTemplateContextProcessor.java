@@ -117,12 +117,17 @@ public class DDMFormTemplateContextProcessor {
 			jsonObject.getString("fieldName"), ddmFormField);
 		setDDMFormFieldFieldReference(
 			jsonObject.getString("fieldReference"), ddmFormField);
+		setDDMFormFieldGuestUploadURL(
+			jsonObject.getString("guestUploadURL"), ddmFormField);
 		setDDMFormFieldInline(jsonObject.getBoolean("inline"), ddmFormField);
 		setDDMFormFieldLabel(jsonObject.getString("label"), ddmFormField);
 		setDDMFormFieldLocalizable(
 			jsonObject.getBoolean("localizable", false), ddmFormField);
 		setDDMFormFieldMaximumRepetitions(
 			jsonObject.getInt("maximumRepetitions"), ddmFormField);
+		setDDMFormFieldMaximumSubmissionLimitReached(
+			jsonObject.getBoolean("maximumSubmissionLimitReached"),
+			ddmFormField);
 		setDDMFormFieldMultiple(
 			jsonObject.getBoolean("multiple"), ddmFormField);
 		setDDMFormFieldOptions(
@@ -294,6 +299,13 @@ public class DDMFormTemplateContextProcessor {
 		ddmFormField.setFieldReference(GetterUtil.getString(fieldReference));
 	}
 
+	protected void setDDMFormFieldGuestUploadURL(
+		String guestUploadURL, DDMFormField ddmFormField) {
+
+		ddmFormField.setProperty(
+			"guestUploadURL", GetterUtil.getString(guestUploadURL));
+	}
+
 	protected void setDDMFormFieldInline(
 		boolean inline, DDMFormField ddmFormField) {
 
@@ -316,6 +328,13 @@ public class DDMFormTemplateContextProcessor {
 		int maximumRepetitions, DDMFormField ddmFormField) {
 
 		ddmFormField.setProperty("maximumRepetitions", maximumRepetitions);
+	}
+
+	protected void setDDMFormFieldMaximumSubmissionLimitReached(
+		boolean maximumSubmissionLimitReached, DDMFormField ddmFormField) {
+
+		ddmFormField.setProperty(
+			"maximumSubmissionLimitReached", maximumSubmissionLimitReached);
 	}
 
 	protected void setDDMFormFieldMultiple(

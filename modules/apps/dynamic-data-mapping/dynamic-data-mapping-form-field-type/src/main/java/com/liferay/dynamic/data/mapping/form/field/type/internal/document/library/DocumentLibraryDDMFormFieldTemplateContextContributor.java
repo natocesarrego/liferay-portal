@@ -141,17 +141,25 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 					httpServletRequest));
 		}
 		else {
-			parameters.put(
-				"guestUploadURL",
-				getGuestUploadURL(
-					ddmFormFieldRenderingContext, folderId,
-					httpServletRequest));
+			String guestUploadURL = GetterUtil.getString(
+				ddmFormField.getProperty("guestUploadURL"));
+
+			if (Validator.isNull(guestUploadURL)) {
+				guestUploadURL = getGuestUploadURL(
+					ddmFormFieldRenderingContext, folderId, httpServletRequest);
+			}
+
+			parameters.put("guestUploadURL", guestUploadURL);
 		}
 
 		parameters.put(
 			"maximumRepetitions",
 			GetterUtil.getInteger(
 				ddmFormField.getProperty("maximumRepetitions")));
+		parameters.put(
+			"maximumSubmissionLimitReached",
+			GetterUtil.getBoolean(
+				ddmFormField.getProperty("maximumSubmissionLimitReached")));
 
 		String value = ddmFormFieldRenderingContext.getValue();
 
