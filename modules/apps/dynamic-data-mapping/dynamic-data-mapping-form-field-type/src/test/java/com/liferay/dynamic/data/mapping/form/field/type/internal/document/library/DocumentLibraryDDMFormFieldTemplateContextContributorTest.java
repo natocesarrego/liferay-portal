@@ -202,6 +202,9 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributorTest
 			itemSelectorURL,
 			CoreMatchers.containsString(
 				"param_folderId=" + _PRIVATE_FOLDER_ID));
+		Assert.assertThat(
+			itemSelectorURL,
+			CoreMatchers.containsString("param_showBreadcrumb=false"));
 	}
 
 	@Test
