@@ -295,6 +295,17 @@ public class DLItemSelectorViewDisplayContext<T extends ItemSelectorCriterion> {
 		return portletURL;
 	}
 
+	public boolean isShowBreadcrumb() {
+		if (_showBreadcrumb != null) {
+			return _showBreadcrumb;
+		}
+
+		_showBreadcrumb = ParamUtil.getBoolean(
+			_httpServletRequest, "showBreadcrumb", true);
+
+		return _showBreadcrumb;
+	}
+
 	public boolean isShowDragAndDropZone() throws PortalException {
 		if (_showDragAndDropZone != null) {
 			return _showDragAndDropZone;
@@ -578,6 +589,7 @@ public class DLItemSelectorViewDisplayContext<T extends ItemSelectorCriterion> {
 	private Repository _repository;
 	private final boolean _search;
 	private SearchContext _searchContext;
+	private Boolean _showBreadcrumb;
 	private Boolean _showDragAndDropZone;
 	private final StagingGroupHelper _stagingGroupHelper;
 	private int[] _startAndEnd;

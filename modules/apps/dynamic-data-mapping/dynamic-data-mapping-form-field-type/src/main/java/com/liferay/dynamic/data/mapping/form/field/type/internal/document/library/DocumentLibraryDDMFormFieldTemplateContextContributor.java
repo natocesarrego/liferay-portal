@@ -284,6 +284,8 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 			fileItemSelectorCriterion);
 
 		itemSelectorURL.setParameter("folderId", String.valueOf(folderId));
+		itemSelectorURL.setParameter(
+			"showBreadcrumb", Boolean.FALSE.toString());
 
 		return itemSelectorURL.toString();
 	}
