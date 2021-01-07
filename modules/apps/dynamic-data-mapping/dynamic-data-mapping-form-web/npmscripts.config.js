@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,19 +11,13 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+const standard = require('@liferay/npm-scripts/src/presets/standard');
 
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %><%@
-taglib uri="http://liferay.com/tld/clay" prefix="clay" %><%@
-taglib uri="http://liferay.com/tld/react" prefix="react" %>
-
-<%@ page import="com.liferay.dynamic.data.mapping.form.web.internal.display.context.DDMFormViewFormInstanceRecordDisplayContext" %><%@
-page import="com.liferay.portal.kernel.util.WebKeys" %>
-
-<portlet:defineObjects />
-
-<aui:script>
-	Liferay.namespace('Forms').portletNamespace = '<portlet:namespace />';
-</aui:script>
+module.exports = Object.assign(standard, {
+	build: Object.assign(standard.build, {
+		dependencies: standard.build.dependencies.concat([
+			'dynamic-data-mapping-form-renderer',
+		]),
+	}),
+});
