@@ -24,6 +24,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.util.DDM;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
 import com.liferay.petra.io.unsync.UnsyncStringWriter;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.template.react.renderer.ComponentDescriptor;
@@ -116,12 +117,18 @@ public class DDMFormRendererImpl implements DDMFormRenderer {
 
 		Writer writer = new UnsyncStringWriter();
 
+		writer.append("<div id=\"");
+		writer.append(ddmFormRenderingContext.getContainerId());
+		writer.append("\">");
+
 		_reactRenderer.renderReact(
 			new ComponentDescriptor(
 				_npmResolver.resolveModuleName(_MODULE_NAME),
 				ddmFormRenderingContext.getContainerId()),
 			getReactData(ddmForm, ddmFormLayout, ddmFormRenderingContext),
 			ddmFormRenderingContext.getHttpServletRequest(), writer);
+
+		writer.append("</div>");
 
 		return writer.toString();
 	}
