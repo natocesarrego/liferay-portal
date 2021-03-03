@@ -635,6 +635,18 @@ p.ddm-label {
 	word-wrap: break-word;
 }
 
+p.ddm-label-repeatable {
+	color: #272833;
+	cursor: default;
+	display: inline-block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	margin-bottom: 0.25rem;
+	max-width: 100%;
+	word-wrap: break-word;
+	padding-right: 50px;
+}
+
 legend .reference-mark,
 p .reference-mark {
 	color: #b95000;
