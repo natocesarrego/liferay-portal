@@ -246,7 +246,8 @@ function FieldBase({
 									aria-describedby={fieldDetailsId}
 									className={classNames({
 										'ddm-empty': !showLabel && !required,
-										'ddm-label': showLabel || required,
+										'ddm-label-repeatable': (showLabel || required) && repeatable,
+										'ddm-label': (showLabel || required) && !repeatable,
 									})}
 									tabIndex="0"
 								>

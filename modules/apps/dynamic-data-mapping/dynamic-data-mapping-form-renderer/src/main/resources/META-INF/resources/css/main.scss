@@ -79,12 +79,6 @@ body .ddm-user-view-content {
 	font-weight: 500;
 }
 
-
-.ddm-field label {
-	padding-right: 45px;
-}
-
-
 .lfr-ddm-form-field-container label,
 .lfr-ddm-form-field-container legend,
 .lfr-ddm-form-field-container p {
@@ -639,6 +633,18 @@ p.ddm-label {
 	margin-bottom: 0.25rem;
 	max-width: 100%;
 	word-wrap: break-word;
+}
+
+p.ddm-label-repeatable {
+	color: #272833;
+	cursor: default;
+	display: inline-block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	margin-bottom: 0.25rem;
+	max-width: 100%;
+	word-wrap: break-word;
+	padding-right: 50px;
 }
 
 legend .reference-mark,
