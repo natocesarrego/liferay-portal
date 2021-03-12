@@ -136,13 +136,11 @@ body .ddm-user-view-content {
 		}
 
 		.lfr-ddm-form-field-repeatable-add-button {
-			position: absolute;
 			right: 0;
 			top: 0;
 		}
 
 		.lfr-ddm-form-field-repeatable-delete-button {
-			position: absolute;
 			right: 15px;
 			top: 0;
 		}
@@ -484,7 +482,6 @@ body .ddm-user-view-content {
 		border-radius: 10px !important;
 		height: 18px;
 		padding: 2px !important;
-		position: absolute;
 		width: 18px;
 
 		.lexicon-icon {
@@ -638,6 +635,22 @@ p.ddm-label {
 	margin-bottom: 0.25rem;
 	max-width: 100%;
 	word-wrap: break-word;
+}
+
+.field-base-flex-container {
+	display: flex;
+}
+
+.field-base-flex-element {
+	flex-grow: 1;
+}
+
+.field-base-label {
+	word-break: break-word;
+}
+
+.field-base-legend {
+	word-break: break-word;
 }
 
 legend .reference-mark,
