@@ -159,6 +159,56 @@ function FieldBase({
 		fieldDetails += Liferay.Language.get('required');
 	}
 
+	const fieldPropertiesContent = (
+		<>
+			{label && showLabel && label}
+			<FieldProperties required={required} tooltip={tooltip} />
+		</>
+	);
+
+	const buttons = repeatable && (
+		<div className="field-base-flex-container lfr-ddm-form-field-repeatable-toolbar">
+			{repeatable && repeatedIndex > 0 && (
+				<ClayButton
+					className="ddm-form-field-repeatable-delete-button p-0"
+					disabled={readOnly}
+					onClick={() =>
+						dispatch({
+							payload: name,
+							type: CORE_EVENT_TYPES.FIELD.REMOVED,
+						})
+					}
+					small
+					title={Liferay.Language.get('remove')}
+					type="button"
+				>
+					<ClayIcon symbol="hr" />
+				</ClayButton>
+			)}
+
+			<ClayButton
+				className={classNames(
+					'ddm-form-field-repeatable-add-button p-0',
+					{
+						hide: overMaximumRepetitionsLimit,
+					}
+				)}
+				disabled={readOnly}
+				onClick={() =>
+					dispatch({
+						payload: name,
+						type: CORE_EVENT_TYPES.FIELD.REPEATED,
+					})
+				}
+				small
+				title={Liferay.Language.get('duplicate')}
+				type="button"
+			>
+				<ClayIcon symbol="plus" />
+			</ClayButton>
+		</div>
+	);
+
 	return (
 		<div
 			aria-labelledby={!renderLabel ? fieldDetailsId : null}
@@ -171,84 +221,46 @@ function FieldBase({
 			style={style}
 			tabIndex={!renderLabel ? 0 : null}
 		>
-			{repeatable && (
-				<div className="lfr-ddm-form-field-repeatable-toolbar">
-					{repeatable && repeatedIndex > 0 && (
-						<ClayButton
-							className="ddm-form-field-repeatable-delete-button p-0"
-							disabled={readOnly}
-							onClick={() =>
-								dispatch({
-									payload: name,
-									type: CORE_EVENT_TYPES.FIELD.REMOVED,
-								})
-							}
-							small
-							title={Liferay.Language.get('remove')}
-							type="button"
-						>
-							<ClayIcon symbol="hr" />
-						</ClayButton>
-					)}
-
-					<ClayButton
-						className={classNames(
-							'ddm-form-field-repeatable-add-button p-0',
-							{
-								hide: overMaximumRepetitionsLimit,
-							}
-						)}
-						disabled={readOnly}
-						onClick={() =>
-							dispatch({
-								payload: name,
-								type: CORE_EVENT_TYPES.FIELD.REPEATED,
-							})
-						}
-						small
-						title={Liferay.Language.get('duplicate')}
-						type="button"
-					>
-						<ClayIcon symbol="plus" />
-					</ClayButton>
-				</div>
-			)}
-
 			{renderLabel && (
 				<>
 					{showLegend ? (
 						<fieldset>
-							<legend
-								aria-labelledby={fieldDetailsId}
-								className="lfr-ddm-legend"
-								tabIndex="0"
-							>
-								{label && showLabel && label}
-
-								<FieldProperties
-									required={required}
-									tooltip={tooltip}
-								/>
-							</legend>
+							<div className="field-base-flex-container">
+								<legend
+									aria-labelledby={fieldDetailsId}
+									className={classNames(
+										'field-base-flex-element',
+										'field-base-legend',
+										'lfr-ddm-legend'
+									)}
+									tabIndex="0"
+								>
+									{fieldPropertiesContent}
+								</legend>
+								{buttons}
+							</div>
 							{children}
 						</fieldset>
 					) : (
 						<>
-							<label
-								aria-describedby={fieldDetailsId}
-								className={classNames({
-									'ddm-empty': !showLabel && !required,
-									'ddm-label': showLabel || required,
-								})}
-								tabIndex="0"
-							>
-								{label && showLabel && label}
-
-								<FieldProperties
-									required={required}
-									tooltip={tooltip}
-								/>
-							</label>
+							<div className="field-base-flex-container">
+								<label
+									aria-describedby={fieldDetailsId}
+									className={classNames(
+										'field-base-flex-element',
+										'field-base-label',
+										{
+											'ddm-empty':
+												!showLabel && !required,
+											'ddm-label': showLabel || required,
+										}
+									)}
+									tabIndex="0"
+								>
+									{fieldPropertiesContent}
+								</label>
+								{buttons}
+							</div>
 							{children}
 						</>
 					)}
