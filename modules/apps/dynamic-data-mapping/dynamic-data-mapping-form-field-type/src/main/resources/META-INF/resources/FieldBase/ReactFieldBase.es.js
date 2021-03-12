@@ -171,6 +171,48 @@ function FieldBase({
 	</>
 	);
 
+	const buttons = repeatable && (
+        <div className="lfr-ddm-form-field-repeatable-toolbar react-field-base-flex-container">
+			{repeatable && repeatedIndex > 0 && (
+				<ClayButton
+					className="ddm-form-field-repeatable-delete-button p-0"
+					disabled={readOnly}
+					onClick={() =>
+						dispatch({
+							payload: name,
+							type: EVENT_TYPES.FIELD_REMOVED,
+						})
+					}
+					small
+					title={Liferay.Language.get('remove')}
+					type="button"
+				>
+					<ClayIcon symbol="hr" />
+				</ClayButton>
+			)}
+
+			<ClayButton
+				className={classNames(
+					'ddm-form-field-repeatable-add-button p-0',
+					{
+						hide: overMaximumRepetitionsLimit,
+					}
+				)}
+				disabled={readOnly}
+				onClick={() =>
+					dispatch({
+						payload: name,
+						type: EVENT_TYPES.FIELD_REPEATED,
+					})
+				}
+				small
+				title={Liferay.Language.get('duplicate')}
+				type="button"
+			>
+				<ClayIcon symbol="plus" />
+			</ClayButton>
+		</div>)
+
 	return (
 		<div
 			aria-labelledby={!renderLabel ? fieldDetailsId : null}
@@ -230,27 +272,33 @@ function FieldBase({
 				<>
 					{showLegend ? (
 						<fieldset>
-							<legend
-								aria-labelledby={fieldDetailsId}
-								className="lfr-ddm-legend"
-								tabIndex="0"
-							>
-								{ fieldPropertiesContent }
-							</legend>
+							<div className="react-field-base-flex-container">
+								<legend
+									aria-labelledby={fieldDetailsId}
+									className={classNames( 'react-field-base-flex-element', 'lfr-ddm-legend', 'react-field-base-legend')}
+									tabIndex="0"
+								>
+									{ fieldPropertiesContent }
+								</legend>
+								{ buttons }
+							</div>
 							{children}
 						</fieldset>
 					) : (
 						<>
-							<label
-								aria-describedby={fieldDetailsId}
-								className={classNames({
-									'ddm-empty': !showLabel && !required,
-									'ddm-label': showLabel || required,
-								})}
-								tabIndex="0"
-							>
-								{ fieldPropertiesContent }
-							</label>
+							<div className="react-field-base-flex-container">
+								<label
+									aria-describedby={fieldDetailsId}
+									className={classNames( 'react-field-base-flex-element', 'react-field-base-label', {
+										'ddm-empty': !showLabel && !required,
+										'ddm-label': showLabel || required,
+									})}
+									tabIndex="0"
+								>
+									{ fieldPropertiesContent }
+								</label>
+								{ buttons }
+							</div>
 							{children}
 						</>
 					)}
