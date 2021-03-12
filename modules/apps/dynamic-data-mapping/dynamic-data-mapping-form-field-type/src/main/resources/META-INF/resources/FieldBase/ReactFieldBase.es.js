@@ -162,6 +162,15 @@ function FieldBase({
 		fieldDetails += Liferay.Language.get('required');
 	}
 
+	const fieldPropertiesContent = (<>
+		{label && showLabel && label}
+		<FieldProperties
+			required={required}
+			tooltip={tooltip}
+		/>
+	</>
+	);
+
 	return (
 		<div
 			aria-labelledby={!renderLabel ? fieldDetailsId : null}
@@ -226,12 +235,7 @@ function FieldBase({
 								className="lfr-ddm-legend"
 								tabIndex="0"
 							>
-								{label && showLabel && label}
-
-								<FieldProperties
-									required={required}
-									tooltip={tooltip}
-								/>
+								{ fieldPropertiesContent }
 							</legend>
 							{children}
 						</fieldset>
@@ -245,12 +249,7 @@ function FieldBase({
 								})}
 								tabIndex="0"
 							>
-								{label && showLabel && label}
-
-								<FieldProperties
-									required={required}
-									tooltip={tooltip}
-								/>
+								{ fieldPropertiesContent }
 							</label>
 							{children}
 						</>
