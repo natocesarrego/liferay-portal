@@ -29,13 +29,17 @@ export default (Component) => {
 			confirmationLabel,
 			confirmationValue,
 			direction,
+			errorMessage,
 			label,
 			name,
 			onChange,
+			valid,
 			value,
 		} = otherProps;
 
 		const className = getClassNameBasedOnDirection(direction);
+
+		const isConfirmationFieldValid = valid || errorMessage?.length > 0;
 
 		return (
 			<div className="row">
@@ -69,6 +73,7 @@ export default (Component) => {
 						predefinedValue=""
 						repeatable={false}
 						tip=""
+						valid={isConfirmationFieldValid}
 						value={confirmationValue}
 					/>
 				</div>
