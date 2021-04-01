@@ -152,8 +152,10 @@ const FieldLazy = ({
 				focusDurationRef.current.end = new Date();
 				onBlur(mountStruct(event, field), focusDurationRef.current);
 			}}
-			onChange={(event, value) =>
-				onChange(mountStruct(event, field, value))
+			onChange={(event, value, confirmationValue = null) =>
+				onChange(
+					mountStruct(event, {...field, confirmationValue}, value)
+				)
 			}
 			onFocus={(event) => {
 				focusDurationRef.current.start = new Date();

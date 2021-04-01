@@ -27,9 +27,12 @@ export default (Component) => {
 		const {
 			confirmationErrorMessage,
 			confirmationLabel,
+			confirmationValue,
 			direction,
 			label,
 			name,
+			onChange,
+			value,
 		} = otherProps;
 
 		const className = getClassNameBasedOnDirection(direction);
@@ -37,7 +40,16 @@ export default (Component) => {
 		return (
 			<div className="row">
 				<div className={className}>
-					<Component {...otherProps} />
+					<Component
+						{...otherProps}
+						onChange={(event) => {
+							onChange(
+								event,
+								event.target.value,
+								confirmationValue
+							);
+						}}
+					/>
 				</div>
 				<div className={className}>
 					<Component
@@ -49,12 +61,15 @@ export default (Component) => {
 						localizedValue={{}}
 						name={`${name}confirmationField`}
 						onBlur={() => {}}
-						onChange={() => {}}
+						onChange={(event) => {
+							onChange(event, value, event.target.value);
+						}}
 						onFocus={() => {}}
 						placeholder=""
 						predefinedValue=""
 						repeatable={false}
 						tip=""
+						value={confirmationValue}
 					/>
 				</div>
 			</div>

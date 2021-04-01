@@ -18,7 +18,13 @@ import {EVENT_TYPES} from '../actions/eventTypes.es';
 
 let REVALIDATE_UPDATES = [];
 
-const getEditedPages = ({editingLanguageId, name, pages, value}) => {
+const getEditedPages = ({
+	confirmationValue,
+	editingLanguageId,
+	name,
+	pages,
+	value,
+}) => {
 	const pageVisitor = new PagesVisitor(pages);
 
 	return pageVisitor.mapFields(
@@ -26,6 +32,7 @@ const getEditedPages = ({editingLanguageId, name, pages, value}) => {
 			if (field.name === name) {
 				return {
 					...field,
+					confirmationValue,
 					localizedValue: {
 						...field.localizedValue,
 						[editingLanguageId]: value,
@@ -58,9 +65,10 @@ export default function fieldChange({
 }) {
 	return (dispatch) => {
 		const {fieldInstance, value} = properties;
-		const {evaluable, fieldName} = fieldInstance;
+		const {confirmationValue, evaluable, fieldName} = fieldInstance;
 
 		const editedPages = getEditedPages({
+			confirmationValue,
 			editingLanguageId,
 			name: fieldInstance.name,
 			pages,
