@@ -12,6 +12,6 @@
  * details.
  */
 
-import {INITIAL_CONFIG_STATE} from 'dynamic-data-mapping-form-renderer/js/core/config/index.es';
+import {INITIAL_CONFIG_STATE} from 'data-engine-js-components-web/js/core/config/index.es';
 
 export default INITIAL_CONFIG_STATE;
