@@ -13,8 +13,8 @@
  */
 
 import {RulesSupport} from 'dynamic-data-mapping-form-builder';
-import {PagesVisitor, getUid} from 'dynamic-data-mapping-form-renderer';
-import {INITIAL_STATE} from 'dynamic-data-mapping-form-renderer/js/core/config/index.es';
+import {PagesVisitor, getUid} from 'data-engine-js-components-web';
+import {INITIAL_STATE} from 'data-engine-js-components-web/js/core/config/index.es';
 
 export const BUILDER_INITIAL_STATE = {
 	...INITIAL_STATE,
