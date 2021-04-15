@@ -23,20 +23,17 @@ import com.liferay.dynamic.data.mapping.service.DDMFormInstanceService;
 import com.liferay.headless.form.dto.v1_0.Form;
 import com.liferay.headless.form.dto.v1_0.FormContext;
 import com.liferay.headless.form.dto.v1_0.FormDocument;
-import com.liferay.headless.form.internal.dto.v1_0.util.CreatorUtil;
+import com.liferay.headless.form.dto.v1_0.util.StructureUtil;
 import com.liferay.headless.form.internal.dto.v1_0.util.FormContextUtil;
 import com.liferay.headless.form.internal.dto.v1_0.util.FormDocumentUtil;
-import com.liferay.headless.form.internal.dto.v1_0.util.StructureUtil;
 import com.liferay.headless.form.resource.v1_0.FormResource;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
 import java.util.Optional;
 
@@ -58,7 +55,10 @@ public class FormResourceImpl extends BaseFormResourceImpl {
 
 	@Override
 	public Form getForm(Long formId) throws Exception {
-		return _toForm(_ddmFormInstanceService.getFormInstance(formId));
+		return StructureUtil.toForm(
+			_ddmFormInstanceService.getFormInstance(formId),
+			contextAcceptLanguage.isAcceptAllLanguages(), _portal,
+			contextAcceptLanguage.getPreferredLocale(), _userLocalService);
 	}
 
 	@Override
@@ -70,7 +70,11 @@ public class FormResourceImpl extends BaseFormResourceImpl {
 				_ddmFormInstanceService.getFormInstances(
 					contextCompany.getCompanyId(), siteId,
 					pagination.getStartPosition(), pagination.getEndPosition()),
-				this::_toForm),
+				ddmFormInstance -> StructureUtil.toForm(
+					ddmFormInstance,
+					contextAcceptLanguage.isAcceptAllLanguages(), _portal,
+					contextAcceptLanguage.getPreferredLocale(),
+					_userLocalService)),
 			pagination,
 			_ddmFormInstanceService.getFormInstancesCount(
 				contextCompany.getCompanyId(), siteId));
