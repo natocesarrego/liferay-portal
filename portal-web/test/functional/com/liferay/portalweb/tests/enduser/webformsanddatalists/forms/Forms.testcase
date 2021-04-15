@@ -3928,6 +3928,7 @@ definition {
 			fieldValue = "Checkbox 1");
 	}
 
+	@ignore = "true"
 	@description = "This is a use case for LPS-125860."
 	@priority = "5"
 	test SubmitFormWithRequiredConfirmationTextField {
