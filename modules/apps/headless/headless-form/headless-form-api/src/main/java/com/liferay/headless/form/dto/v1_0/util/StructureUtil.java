@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.headless.form.internal.dto.v1_0.util;
+package com.liferay.headless.form.dto.v1_0.util;
 
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
+import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutColumn;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutPage;
@@ -27,6 +28,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormRule;
 import com.liferay.dynamic.data.mapping.model.DDMFormSuccessPageSettings;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
+import com.liferay.headless.form.dto.v1_0.Form;
 import com.liferay.headless.form.dto.v1_0.FormField;
 import com.liferay.headless.form.dto.v1_0.FormFieldOption;
 import com.liferay.headless.form.dto.v1_0.FormPage;
@@ -56,6 +58,41 @@ import java.util.stream.Stream;
  * @author Victor Oliveira
  */
 public class StructureUtil {
+
+	public static Form toForm(
+			DDMFormInstance ddmFormInstance, Boolean acceptAllLanguages,
+			Portal portal, Locale preferredLocale,
+			UserLocalService userLocalService)
+		throws Exception {
+
+		if (ddmFormInstance == null) {
+			return null;
+		}
+
+		return new Form() {
+			{
+				availableLanguages = LocaleUtil.toW3cLanguageIds(
+					ddmFormInstance.getAvailableLanguageIds());
+				creator = CreatorUtil.toCreator(
+					portal,
+					userLocalService.fetchUser(ddmFormInstance.getUserId()));
+				dateCreated = ddmFormInstance.getCreateDate();
+				dateModified = ddmFormInstance.getModifiedDate();
+				datePublished = ddmFormInstance.getLastPublishDate();
+				defaultLanguage = ddmFormInstance.getDefaultLanguageId();
+				description = ddmFormInstance.getDescription(preferredLocale);
+				description_i18n = LocalizedMapUtil.getI18nMap(
+					acceptAllLanguages, ddmFormInstance.getDescriptionMap());
+				id = ddmFormInstance.getFormInstanceId();
+				name = ddmFormInstance.getName(preferredLocale);
+				name_i18n = LocalizedMapUtil.getI18nMap(
+					acceptAllLanguages, ddmFormInstance.getNameMap());
+				structure = StructureUtil.toFormStructure(
+					acceptAllLanguages, ddmFormInstance.getStructure(),
+					preferredLocale, portal, userLocalService);
+			}
+		};
+	}
 
 	public static FormStructure toFormStructure(
 			boolean acceptAllLanguages, DDMStructure ddmStructure,

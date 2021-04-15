@@ -126,42 +126,6 @@ public class FormResourceImpl extends BaseFormResourceImpl {
 				new ServiceContext()));
 	}
 
-	private Form _toForm(DDMFormInstance ddmFormInstance) throws Exception {
-		if (ddmFormInstance == null) {
-			return null;
-		}
-
-		return new Form() {
-			{
-				availableLanguages = LocaleUtil.toW3cLanguageIds(
-					ddmFormInstance.getAvailableLanguageIds());
-				creator = CreatorUtil.toCreator(
-					_portal,
-					_userLocalService.fetchUser(ddmFormInstance.getUserId()));
-				dateCreated = ddmFormInstance.getCreateDate();
-				dateModified = ddmFormInstance.getModifiedDate();
-				datePublished = ddmFormInstance.getLastPublishDate();
-				defaultLanguage = ddmFormInstance.getDefaultLanguageId();
-				description = ddmFormInstance.getDescription(
-					contextAcceptLanguage.getPreferredLocale());
-				description_i18n = LocalizedMapUtil.getI18nMap(
-					contextAcceptLanguage.isAcceptAllLanguages(),
-					ddmFormInstance.getDescriptionMap());
-				id = ddmFormInstance.getFormInstanceId();
-				name = ddmFormInstance.getName(
-					contextAcceptLanguage.getPreferredLocale());
-				name_i18n = LocalizedMapUtil.getI18nMap(
-					contextAcceptLanguage.isAcceptAllLanguages(),
-					ddmFormInstance.getNameMap());
-				structure = StructureUtil.toFormStructure(
-					contextAcceptLanguage.isAcceptAllLanguages(),
-					ddmFormInstance.getStructure(),
-					contextAcceptLanguage.getPreferredLocale(), _portal,
-					_userLocalService);
-			}
-		};
-	}
-
 	@Reference
 	private DDMFormInstanceService _ddmFormInstanceService;
 
