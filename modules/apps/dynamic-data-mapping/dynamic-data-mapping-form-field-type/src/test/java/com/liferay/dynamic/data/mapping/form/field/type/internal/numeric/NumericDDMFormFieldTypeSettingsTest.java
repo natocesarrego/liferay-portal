@@ -118,12 +118,21 @@ public class NumericDDMFormFieldTypeSettingsTest
 		Assert.assertEquals(
 			"string", inputMaskFormatDDMFormField.getDataType());
 		Assert.assertEquals(
+			"/forms/input_mask_format.png",
+			inputMaskFormatDDMFormField.getProperty("popoverImagePath"));
+		Assert.assertEquals(
 			"^[^1-8]+$", inputMaskFormatDDMFormField.getProperty("regex"));
+		Assert.assertEquals(
+			"true", inputMaskFormatDDMFormField.getProperty("showPopover"));
 		Assert.assertEquals("text", inputMaskFormatDDMFormField.getType());
 		Assert.assertEquals(true, inputMaskFormatDDMFormField.isRequired());
 		Assert.assertNotNull(inputMaskFormatDDMFormField.getLabel());
 		Assert.assertNotNull(
 			inputMaskFormatDDMFormField.getProperty("placeholder"));
+		Assert.assertNotNull(
+			inputMaskFormatDDMFormField.getProperty("popoverHeader"));
+		Assert.assertNotNull(
+			inputMaskFormatDDMFormField.getProperty("tooltip"));
 		Assert.assertNotNull(inputMaskFormatDDMFormField.getTip());
 
 		DDMFormField placeholderDDMFormField = ddmFormFieldsMap.get(
