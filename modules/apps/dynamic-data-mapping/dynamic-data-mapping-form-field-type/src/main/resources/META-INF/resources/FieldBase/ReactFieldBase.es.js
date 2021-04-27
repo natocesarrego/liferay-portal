@@ -80,6 +80,7 @@ const Popover = ({popoverHeader, popoverImagePath, tooltip}) => {
 	return (
 		<ClayPopover
 			alignPosition="right-bottom"
+			data-testid="clayPopover"
 			disableScroll
 			header={popoverHeader}
 			show={isPopoverVisible}
