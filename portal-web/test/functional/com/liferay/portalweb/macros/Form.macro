@@ -40,6 +40,12 @@ definition {
 			key_fieldPositionNumber = "${fieldPositionNumber}");
 	}
 
+	macro addNumericField {
+        Form.gotoAddField(
+            fieldType = "Numeric",
+            fieldPositionNumber = "${fieldPositionNumber}");
+    }
+
 	macro addTranslation {
 		ScrollWebElementIntoView(locator1 = "Translation#ADD");
 

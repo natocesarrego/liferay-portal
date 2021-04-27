@@ -4116,6 +4116,98 @@ definition {
 			fieldValue = "Text Field Value");
 	}
 
+	@description = "This is a use case for LPS-125860."
+    
+    @priority = "5"
+    test SubmitFormWithRequiredConfirmationNumericField {
+        property portal.acceptance = "true";
+        property portal.upstream = "true";
+        property test.name.skip.portal.instance = "Forms#SubmitFormWithRequiredConfirmationNumericField";
+        
+		Navigator.openURL();
+        
+		ProductMenu.gotoPortlet(
+            category = "Content &amp; Data",
+            portlet = "Forms");
+        
+		FormsAdminNavigator.gotoAddForm();
+       
+	    Form.editName();
+       
+	    Form.editDescription();
+       
+	    Form.addNumericField(fieldPositionNumber = "1");
+        
+		var fieldNumericField = FormFields.getFieldName();
+        
+		Form.editFieldLabelMetal(fieldValue = "Numeric Field");
+    
+	    Form.gotoAdvancedTab();
+    
+	    FormFields.enableSwitcher(fieldName = "Require Confirmation");
+    
+	    Form.closeSidebar();
+    
+	    Form.save();
+    
+	    ProductMenu.gotoPortlet(
+            category = "Site Builder",
+            portlet = "Pages");
+    
+	    SitePages.addPublicPage(pageName = "Form Page");
+    
+	    Navigator.gotoPage(pageName = "Form Page");
+    
+	    Portlet.addPG(
+            pageName = "Form Page",
+            portletName = "Form");
+    
+	    FormPortletNavigator.gotoSelectForm();
+    
+	    FormPortletConfiguration.selectForm();
+    
+	    PortletEntry.save();
+    
+	    Navigator.gotoPage(pageName = "Form Page");
+    
+	    FormPortlet.waitFormRenderer(text = "Submit");
+    
+	
+	    FormFields.viewTextLabel(
+            fieldLabel = "Numeric Field",
+            fieldName = "${fieldNumericField}");
+    
+	    FormFields.viewConfirmationFieldTextLabel(
+            fieldLabel = "Numeric Field",
+            fieldName = "${fieldNumericField}");
+    
+	    FormFields.editText(
+            fieldName = "${fieldNumericField}",
+            fieldValue = "0");
+    
+	    FormPortlet.submitWithValidationError(validationErrorMessage = "The information does not match.");
+    
+	    FormFields.editConfirmationFieldText(
+            fieldName = "${fieldNumericField}",
+            fieldValue = "0");
+    
+	    FormPortlet.waitForValidationErrorNotPresent(validationErrorMessage = "The information does not match.");
+    
+	    FormPortlet.submitSuccessfully();
+    
+	    Navigator.openURL();
+    
+	    ProductMenu.gotoPortlet(
+            category = "Content &amp; Data",
+            portlet = "Forms");
+    
+	    FormsAdminNavigator.gotoViewEntries();
+    
+	    FormsAdmin.viewFormTableEntry(
+            fieldLabel = "Numeric Field",
+            fieldValue = "0");
+    }
+
 	@description = "This is a use case for LPS-98073."
 	@priority = "5"
 	test SubmitFormWithRequiredImageField {
