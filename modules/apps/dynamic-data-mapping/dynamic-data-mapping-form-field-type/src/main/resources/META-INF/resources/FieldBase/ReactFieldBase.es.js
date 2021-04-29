@@ -16,6 +16,7 @@ import './FieldBase.scss';
 
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
+import ClayPopover from '@clayui/popover';
 import classNames from 'classnames';
 import {
 	Layout,
@@ -25,7 +26,7 @@ import {
 } from 'dynamic-data-mapping-form-renderer';
 import {EVENT_TYPES as CORE_EVENT_TYPES} from 'dynamic-data-mapping-form-renderer/js/core/actions/eventTypes.es';
 import moment from 'moment/min/moment-with-locales';
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 
 const convertInputValue = (fieldType, locale, value) => {
 	if (fieldType === 'date') {
@@ -69,7 +70,52 @@ const getDefaultRows = (nestedFields) => {
 	});
 };
 
-const FieldProperties = ({required, tooltip}) => {
+const Popover = ({popoverHeader, popoverImagePath, tooltip}) => {
+	const [isPopoverVisible, setPopoverVisible] = useState(false);
+
+	const POPOVER_IMAGE_HEIGHT = 170;
+	const POPOVER_IMAGE_WIDTH = 232;
+	const POPOVER_MAX_WIDTH = 256;
+
+	return (
+		<ClayPopover
+			alignPosition="right-bottom"
+			data-testid="clayPopover"
+			disableScroll
+			header={popoverHeader}
+			show={isPopoverVisible}
+			style={{maxWidth: POPOVER_MAX_WIDTH}}
+			trigger={
+				<span
+					className="ddm-tooltip"
+					onMouseOut={() => setPopoverVisible(false)}
+					onMouseOver={() => setPopoverVisible(true)}
+				>
+					<ClayIcon symbol="question-circle-full" />
+				</span>
+			}
+		>
+			<p>{tooltip}</p>
+
+			{popoverImagePath && (
+				<img
+					alt={popoverHeader}
+					height={POPOVER_IMAGE_HEIGHT}
+					src={`${themeDisplay.getPathThemeImages()}${popoverImagePath}`}
+					width={POPOVER_IMAGE_WIDTH}
+				/>
+			)}
+		</ClayPopover>
+	);
+};
+
+const FieldProperties = ({
+	popoverHeader,
+	popoverImagePath,
+	required,
+	showPopover,
+	tooltip,
+}) => {
 	return (
 		<>
 			{required && (
@@ -79,9 +125,22 @@ const FieldProperties = ({required, tooltip}) => {
 			)}
 
 			{tooltip && (
-				<span className="ddm-tooltip">
-					<ClayIcon symbol="question-circle-full" title={tooltip} />
-				</span>
+				<>
+					{showPopover ? (
+						<Popover
+							popoverHeader={popoverHeader}
+							popoverImagePath={popoverImagePath}
+							tooltip={tooltip}
+						/>
+					) : (
+						<span className="ddm-tooltip">
+							<ClayIcon
+								symbol="question-circle-full"
+								title={tooltip}
+							/>
+						</span>
+					)}
+				</>
 			)}
 		</>
 	);
@@ -97,10 +156,13 @@ function FieldBase({
 	nestedFields,
 	onClick,
 	overMaximumRepetitionsLimit = false,
+	popoverHeader,
+	popoverImagePath,
 	readOnly,
 	repeatable,
 	required,
 	showLabel = true,
+	showPopover,
 	style,
 	text,
 	tip,
@@ -232,7 +294,10 @@ function FieldBase({
 								{label && showLabel && label}
 
 								<FieldProperties
+									popoverHeader={popoverHeader}
+									popoverImagePath={popoverImagePath}
 									required={required}
+									showPopover={showPopover}
 									tooltip={tooltip}
 								/>
 							</legend>
@@ -251,7 +316,10 @@ function FieldBase({
 								{label && showLabel && label}
 
 								<FieldProperties
+									popoverHeader={popoverHeader}
+									popoverImagePath={popoverImagePath}
 									required={required}
+									showPopover={showPopover}
 									tooltip={tooltip}
 								/>
 							</label>

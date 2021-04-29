@@ -77,11 +77,22 @@ public class TextDDMFormFieldTemplateContextContributor
 				DDMFormFieldTypeUtil.getPropertyValue(
 					ddmFormField, locale, "placeholder")
 			).put(
+				"popoverHeader",
+				DDMFormFieldTypeUtil.getPropertyValue(
+					ddmFormField, locale, "popoverHeader")
+			).put(
+				"popoverImagePath",
+				GetterUtil.getString(
+					ddmFormField.getProperty("popoverImagePath"))
+			).put(
 				"regex", GetterUtil.getString(ddmFormField.getProperty("regex"))
 			).put(
 				"requireConfirmation",
 				GetterUtil.getBoolean(
 					ddmFormField.getProperty("requireConfirmation"))
+			).put(
+				"showPopover",
+				GetterUtil.getBoolean(ddmFormField.getProperty("showPopover"))
 			).put(
 				"tooltip",
 				DDMFormFieldTypeUtil.getPropertyValue(

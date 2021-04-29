@@ -135,7 +135,11 @@ public interface NumericDDMFormFieldTypeSettings
 	@DDMFormField(
 		dataType = "string", label = "%format",
 		properties = {
-			"placeholder=%input-mask-format-placeholder", "regex=^[^1-8]+$"
+			"placeholder=%input-mask-format-placeholder",
+			"popoverHeader=%input-mask-format",
+			"popoverImagePath=/forms/input_mask_format.png", "regex=^[^1-8]+$",
+			"showPopover=true",
+			"tooltip=%an-input-mask-helps-to-ensure-a-predefined-format"
 		},
 		required = true,
 		tip = "%to-create-a-custom-input-mask-you-will-need-to-use-a-specific-set-of-characters",
