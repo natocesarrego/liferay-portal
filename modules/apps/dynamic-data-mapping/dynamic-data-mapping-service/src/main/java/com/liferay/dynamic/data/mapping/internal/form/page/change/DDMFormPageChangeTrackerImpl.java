@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Deactivate;
 public class DDMFormPageChangeTrackerImpl implements DDMFormPageChangeTracker {
 
 	@Override
-	public DDMFormPageChange getDDMFormPageChangeById(long id) {
+	public DDMFormPageChange getDDMFormPageChangeById(String id) {
 		return _ddmFormPageChangeIdTrackerMap.getService(id);
 	}
 
@@ -50,7 +50,7 @@ public class DDMFormPageChangeTrackerImpl implements DDMFormPageChangeTracker {
 		_ddmFormPageChangeIdTrackerMap.close();
 	}
 
-	private ServiceTrackerMap<Long, DDMFormPageChange>
+	private ServiceTrackerMap<String, DDMFormPageChange>
 		_ddmFormPageChangeIdTrackerMap;
 
 }
