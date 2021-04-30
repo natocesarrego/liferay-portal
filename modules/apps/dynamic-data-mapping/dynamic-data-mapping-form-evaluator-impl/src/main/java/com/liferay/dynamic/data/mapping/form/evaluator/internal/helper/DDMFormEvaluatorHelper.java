@@ -33,6 +33,8 @@ import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldValueAccesso
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldValueEditingAware;
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldValueLocalizer;
 import com.liferay.dynamic.data.mapping.form.field.type.DefaultDDMFormFieldValueAccessor;
+import com.liferay.dynamic.data.mapping.form.page.change.DDMFormPageChange;
+import com.liferay.dynamic.data.mapping.form.page.change.DDMFormPageChangeTracker;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
@@ -81,11 +83,13 @@ public class DDMFormEvaluatorHelper {
 	public DDMFormEvaluatorHelper(
 		DDMFormEvaluatorEvaluateRequest ddmFormEvaluatorEvaluateRequest,
 		DDMExpressionFactory ddmExpressionFactory,
-		DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker) {
+		DDMFormFieldTypeServicesTracker ddmFormFieldTypeServicesTracker,
+		DDMFormPageChangeTracker ddmFormPageChangeTracker) {
 
 		_ddmFormEvaluatorEvaluateRequest = ddmFormEvaluatorEvaluateRequest;
 		_ddmExpressionFactory = ddmExpressionFactory;
 		_ddmFormFieldTypeServicesTracker = ddmFormFieldTypeServicesTracker;
+		_ddmFormPageChangeTracker = ddmFormPageChangeTracker;
 
 		createResourceBundle(_ddmFormEvaluatorEvaluateRequest.getLocale());
 
@@ -122,6 +126,8 @@ public class DDMFormEvaluatorHelper {
 	}
 
 	public DDMFormEvaluatorEvaluateResponse evaluate() {
+		evaluateDDMFormPageChange();
+
 		evaluateVisibilityExpressions();
 
 		List<DDMFormRule> ddmFormRules = null;
@@ -199,6 +205,29 @@ public class DDMFormEvaluatorHelper {
 
 		_resourceBundle = new AggregateResourceBundle(
 			portletResourceBundle, portalResourceBundle);
+	}
+
+	protected void evaluateDDMFormPageChange() {
+		if (_ddmFormLayout == null) {
+			return;
+		}
+
+		if (_ddmFormLayout.getNextPage() != _ddmFormLayout.getPreviousPage()) {
+			DDMFormPageChange ddmFormPageChange =
+				_ddmFormPageChangeTracker.getDDMFormPageChangeById(
+					_ddmFormEvaluatorEvaluateRequest.getDDMFormInstanceId());
+
+			if (ddmFormPageChange == null) {
+				return;
+			}
+
+			DDMFormEvaluatorEvaluateResponse ddmFormEvaluatorEvaluateResponse =
+				ddmFormPageChange.evaluate(_ddmFormEvaluatorEvaluateRequest);
+
+			_ddmFormFieldsPropertyChanges.putAll(
+				ddmFormEvaluatorEvaluateResponse.
+					getDDMFormFieldsPropertyChanges());
+		}
 	}
 
 	protected void evaluateDDMFormRule(DDMFormRule ddmFormRule) {
@@ -927,6 +956,7 @@ public class DDMFormEvaluatorHelper {
 	private final DDMFormFieldTypeServicesTracker
 		_ddmFormFieldTypeServicesTracker;
 	private final DDMFormLayout _ddmFormLayout;
+	private final DDMFormPageChangeTracker _ddmFormPageChangeTracker;
 	private final DDMFormEvaluatorRuleHelper _ddmFormRuleHelper;
 	private List<String> _evaluatedActions;
 	private final Map<Integer, Integer> _pageFlow = new HashMap<>();
