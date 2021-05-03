@@ -76,6 +76,10 @@ public class DDMFormTemplateContextProcessor {
 		return _ddmFormValues;
 	}
 
+	public long getFormId() {
+		return _formId;
+	}
+
 	public long getGroupId() {
 		return _groupId;
 	}
@@ -230,6 +234,7 @@ public class DDMFormTemplateContextProcessor {
 		setDDMFormValuesDefaultLocale();
 		setDDMFormValuesAvailableLocales();
 
+		setFormId();
 		setGroupId();
 	}
 
@@ -541,6 +546,10 @@ public class DDMFormTemplateContextProcessor {
 		_ddmFormValues.setDefaultLocale(_locale);
 	}
 
+	protected void setFormId() {
+		_formId = _jsonObject.getLong("formId", 0);
+	}
+
 	protected void setGroupId() {
 		_groupId = _jsonObject.getLong("groupId", 0);
 	}
@@ -614,6 +623,7 @@ public class DDMFormTemplateContextProcessor {
 	private final DDMForm _ddmForm;
 	private final DDMFormLayout _ddmFormLayout;
 	private final DDMFormValues _ddmFormValues;
+	private long _formId;
 	private long _groupId;
 	private final JSONObject _jsonObject;
 	private final Locale _locale;
