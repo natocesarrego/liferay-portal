@@ -1638,7 +1638,7 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 
 		DDMFormEvaluatorHelper ddmFormEvaluatorHelper =
 			new DDMFormEvaluatorHelper(
-				builder.build(), _ddmExpressionFactory,
+				_ddmExpressionFactory, builder.build(),
 				mockDDMFormFieldTypeServicesTracker(),
 				mockDDMFormPageChangeTracker());
 
