@@ -1,14 +1,17 @@
-@import 'atlas-variables';
-
 @import '../../../css/variables';
-
+@import 'atlas-variables';
 $multiPanelSidebarButtonHeight: $multiPanelSidebarButtonWidth;
-
 // z-indexes for children of page-editor-sidebar (which is a stacking context).
-
 $zIndexButtons: 1;
 $zIndexContent: 0;
-
+.rtl .multi-panel-sidebar {
+	&-content {
+		transform: translateX(-100%);
+		&-open {
+			transform: translateX(0%);
+		}
+	}
+}
 .multi-panel-sidebar {
 	display: flex;
 	height: calc(100vh - #{$toolbarHeight});
@@ -16,7 +19,6 @@ $zIndexContent: 0;
 	right: 0;
 	top: $toolbarHeight;
 	z-index: $zIndexMultiPanelSidebar;
-
 	&-buttons {
 		background-color: $white;
 		border-left: solid thin $secondary-l3;
@@ -24,7 +26,6 @@ $zIndexContent: 0;
 		padding-top: 16px;
 		width: $multiPanelSidebarButtonWidth;
 		z-index: $zIndexButtons;
-
 		a {
 			align-items: center;
 			border-radius: 0.25rem;
@@ -32,33 +33,27 @@ $zIndexContent: 0;
 			display: flex;
 			height: 2.5em;
 			justify-content: center;
-
 			&.disabled {
 				color: $gray-500;
 			}
-
 			&.active,
 			&:focus,
 			&:hover {
 				background-color: $gray-200;
 				color: $gray-900;
 			}
-
 			&:focus {
 				box-shadow: 0 0 0 0.125rem $white, 0 0 0 0.25rem $primary-l1,
 					inset 0 0 fade-out($black, 1);
 				outline: none;
 			}
 		}
-
 		button {
 			border-radius: 0;
 			color: $gray-900;
-
 			&.disabled {
 				color: $gray-500;
 			}
-
 			&:active,
 			&:focus,
 			&:hover {
@@ -66,13 +61,11 @@ $zIndexContent: 0;
 				color: $gray-900;
 			}
 		}
-
 		hr {
 			border-color: $gray-200;
 			margin: 12px 8px;
 		}
 	}
-
 	&-content {
 		background-color: $white;
 		border-left: 1px solid $gray-300;
@@ -84,31 +77,25 @@ $zIndexContent: 0;
 		transition: transform ease $defaultTransitionDuration;
 		width: $multiPanelSidebarContentWidth;
 		z-index: $zIndexContent;
-
 		&-open {
 			transform: translateX(0);
 		}
 	}
-
 	body.has-control-menu & {
 		height: calc(100vh - #{$controlMenuHeight + $managementBarHeight});
 		top: $controlMenuHeight + $managementBarHeight;
-
 		@include media-breakpoint-up(lg) {
 			height: calc(100vh - #{$desktopControlMenuHeight + $toolbarHeight});
 			top: $desktopControlMenuHeight + $toolbarHeight;
 		}
 	}
-
 	&-dark {
 		& .multi-panel-sidebar-buttons {
 			background-color: $gray-800;
 			border-left-color: $secondary;
-
 			a,
 			button {
 				color: $gray-500;
-
 				&.active,
 				&:active,
 				&:focus,
@@ -117,21 +104,17 @@ $zIndexContent: 0;
 					color: $white;
 				}
 			}
-
 			hr {
 				border-color: $gray-600;
 			}
 		}
 	}
-
 	&.menu-indicator-enabled {
 		top: 144px !important;
-
 		.data-layout-builder-sidebar {
 			.sidebar .sidebar-body {
 				height: calc(100vh - 248px);
 			}
-
 			&.display-settings .sidebar .sidebar-body {
 				height: calc(100vh - (248px - #{$displaySettingsHeight}));
 			}
