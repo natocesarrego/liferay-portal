@@ -85,9 +85,9 @@ definition {
 
 		Form.addTextField(fieldPositionNumber = "1");
 
-		var fieldNameTextFieldAuto = FormFields.getFieldName();
-
 		Form.editFieldLabelMetal(fieldValue = "Text Field With Autocomplete");
+
+		var fieldNameTextFieldAuto = FormFields.getFieldName();
 
 		Form.gotoAutocompleteTab();
 

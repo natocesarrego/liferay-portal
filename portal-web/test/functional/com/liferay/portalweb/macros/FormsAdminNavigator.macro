@@ -72,6 +72,8 @@ definition {
 		var key_fieldName = "${fieldName}";
 		var key_fieldPositionNumber = "${fieldPositionNumber}";
 
+		Form.openSidebar();
+
 		if (isSet(key_fieldPositionNumber)) {
 			ScrollWebElementIntoView(locator1 = "Form#FIELD_BODY_IN_SPECIFIC_POSITION");
 

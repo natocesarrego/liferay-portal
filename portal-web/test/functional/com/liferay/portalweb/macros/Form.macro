@@ -4,20 +4,6 @@ definition {
 	var formName = "Created Form Name";
 	var rowNumber = "1";
 
-	macro _addField {
-		if (IsElementNotPresent(key_tabName = "Builder", locator1 = "Form#ACTIVE_TAB")) {
-			MouseOver.mouseOverNotVisible(
-				key_tabName = "Builder",
-				locator1 = "Form#ADD_FIELD_NEW");
-
-			ScrollBy(value1 = "0, 230");
-
-			Click(
-				key_tabName = "Builder",
-				locator1 = "Form#ADD_FIELD_NEW");
-		}
-	}
-
 	macro addPage {
 		var key_formAddNewPageNumber = "${formAddNewPageNumber}";
 
@@ -338,7 +324,7 @@ definition {
 	}
 
 	macro gotoAddElementSet {
-		Form._addField();
+		Form.openSidebar();
 
 		Form.gotoElementSetsTab();
 
@@ -355,7 +341,7 @@ definition {
 	}
 
 	macro gotoAddField {
-		Form._addField();
+		Form.openSidebar();
 
 		var key_fieldType = "${fieldType}";
 
@@ -465,6 +451,20 @@ definition {
 				value1 = "Properties");
 		}
 		Pause(locator1 = "1000");
+	}
+
+	macro openSidebar {
+		if (IsElementNotPresent(key_tabName = "Builder", locator1 = "Form#ACTIVE_TAB")) {
+			MouseOver.mouseOverNotVisible(
+				key_tabName = "Builder",
+				locator1 = "Form#ADD_FIELD_NEW");
+
+			ScrollBy(value1 = "0, 230");
+
+			Click(
+				key_tabName = "Builder",
+				locator1 = "Form#ADD_FIELD_NEW");
+		}
 	}
 
 	macro previewForm {
