@@ -308,7 +308,7 @@
 </tr>
 <tr>
     <td>SIDEBAR_AUTOCOMPLETE_TAB</td>
-    <td>//a[contains(@class,'tab') and .='Autocomplete'] | //a[contains(@aria-controls,'sidebarLightDetails')]//*[contains(text(),'Autocomplete')]</td>
+   <td>//*[contains(@class,'nav-link') and normalize-space()='Autocomplete'][not(contains(@id,'ProductMenu'))]</td>
     <td></td>
 </tr>
 <tr>
