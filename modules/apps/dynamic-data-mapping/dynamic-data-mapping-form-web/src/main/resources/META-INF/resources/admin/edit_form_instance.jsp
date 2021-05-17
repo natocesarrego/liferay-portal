@@ -26,9 +26,14 @@ long groupId = BeanParamUtil.getLong(formInstance, request, "groupId", scopeGrou
 long ddmStructureId = BeanParamUtil.getLong(formInstance, request, "structureId");
 
 boolean disableCopyButton = false;
+boolean disablePreviewButton = false;
 
 if (!ddmFormAdminDisplayContext.isFormPublished()) {
 	disableCopyButton = true;
+}
+
+if (formInstanceId == 0) {
+	disablePreviewButton = true;
 }
 
 portletDisplay.setShowBackIcon(true);
@@ -96,9 +101,18 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 					</c:choose>
 				</li>
 				<li class="nav-item pr-2">
-					<button class="btn btn-secondary btn-sm lfr-ddm-button lfr-ddm-preview-button">
-						<%= LanguageUtil.get(request, "preview") %>
-					</button>
+					<c:choose>
+						<c:when test="<%= disablePreviewButton %>">
+							<button class="btn btn-secondary btn-sm disabled lfr-ddm-button lfr-ddm-preview-button" data-original-title="<liferay-ui:message key="preview" />" title="<%= disablePreviewButton ? LanguageUtil.get(request, "save-the-form-to-get-its-preview") : "" %>">
+								<%= LanguageUtil.get(request, "preview") %>
+							</button>
+						</c:when>
+						<c:otherwise>
+							<button class="btn btn-secondary btn-sm lfr-ddm-button lfr-ddm-preview-button">
+								<%= LanguageUtil.get(request, "preview") %>
+							</button>
+						</c:otherwise>
+					</c:choose>
 				</li>
 				<li class="nav-item pl-2 pr-2">
 					<button class="btn btn-secondary btn-sm lfr-ddm-button lfr-ddm-save-button">
