@@ -3197,12 +3197,12 @@ definition {
 	}
 
 	@description = "This is a use case for LPS-64798."
-	@ignore = "true"
+	
 	@priority = "5"
 	test SubmitFormWithAllFieldTypesAndThreePages {
-		property test.name.skip.portal.instance = "Forms#SubmitFormWithAllFieldTypesAndThreePages";
-		property testray.component.names = "Training";
-
+		property portal.acceptance = "true";
+		property portal.upstream = "true";
+		
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
