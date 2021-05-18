@@ -117,6 +117,10 @@ export const FormBuilder = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [activePage, pages.length, setSidebarState]);
 
+	const getFormInstanceId = () => {
+		return document.querySelector(`#${portletNamespace}formInstanceId`).value;
+	};
+
 	const getFormUrl = useCallback(
 		async (path) => {
 			const settingsDDMForm = await Liferay.componentReady(
@@ -128,6 +132,8 @@ export const FormBuilder = () => {
 			const {value: requireAuthentication} = fields.find(
 				({fieldName}) => fieldName === 'requireAuthentication'
 			);
+
+			const formInstanceId = getFormInstanceId();
 
 			return createFormURL(path, {
 				formInstanceId,
@@ -168,9 +174,9 @@ export const FormBuilder = () => {
 			event.preventDefault();
 
 			try {
-				const url = await getFormUrl('/preview');
-
 				await doSave(true);
+
+				const url = await getFormUrl('/preview');
 
 				window.open(url, '_blank');
 			}
