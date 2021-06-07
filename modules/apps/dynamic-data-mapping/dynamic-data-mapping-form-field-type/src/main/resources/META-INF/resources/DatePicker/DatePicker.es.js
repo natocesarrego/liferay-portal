@@ -99,16 +99,10 @@ const transformToDate = (
 ) => {
 	if (typeof date === 'string' && date.indexOf('_') === -1 && date !== '') {
 		if (formatInEditingLocale) {
-			return moment(date, [
-				getLocaleDateFormat(locale),
-				'YYYY-MM-DD',
-			]).toDate();
+			return moment(date).format(getLocaleDateFormat(locale));
 		}
 
-		return moment(date, [
-			getLocaleDateFormat(defaultLanguageId),
-			'YYYY-MM-DD',
-		]).toDate();
+		return moment(date).format(getLocaleDateFormat(defaultLanguageId));
 	}
 
 	return date;
