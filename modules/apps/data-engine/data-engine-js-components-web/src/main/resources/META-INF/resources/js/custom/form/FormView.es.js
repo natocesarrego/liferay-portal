@@ -14,6 +14,7 @@
 
 import '../../../css/main.scss';
 
+import {fetch, openModal} from 'frontend-js-web';
 import React, {
 	useCallback,
 	useEffect,
@@ -48,53 +49,107 @@ import {paginationReducer} from './reducers/index.es';
  */
 const useFormSubmit = ({apiRef, containerRef}) => {
 	const {activePage, pages} = useFormState();
-	const {submittable} = useConfig();
+	const {submittable, validateCsrfTokenURL} = useConfig();
 
 	const handleFormSubmitted = useCallback(
 		(event) => {
 			event.preventDefault();
 
-			apiRef.current
-				.validate()
-				.then((validForm) => {
-					if (validForm) {
-						const liferayForm =
-							event.target.id &&
-							Liferay.Form.get(event.target.id);
+			fetch(validateCsrfTokenURL, {
+				headers: new Headers({
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				}),
+				method: 'GET',
+			})
+				.then((response) => {
+					return response.json();
+				})
+				.then((jsonResponse) => {
+					const validCsrfToken = jsonResponse.validCsrfToken;
 
-						const validLiferayForm = !Object.keys(
-							liferayForm?.formValidator?.errors ?? {}
-						).length;
+					event.preventDefault();
 
-						if (!validLiferayForm) {
-							return;
-						}
+					if (validCsrfToken) {
+						apiRef.current
+							.validate()
+							.then((validForm) => {
+								if (validForm) {
+									const liferayForm =
+										event.target.id &&
+										Liferay.Form.get(event.target.id);
 
-						if (submittable) {
-							Liferay.Util.submitForm(event.target);
-						}
+									const validLiferayForm = !Object.keys(
+										liferayForm?.formValidator?.errors ?? {}
+									).length;
 
-						Liferay.fire('ddmFormValid', {
-							formWrapperId: event.target.id,
-						});
+									if (!validLiferayForm) {
+										return;
+									}
 
-						Liferay.fire('ddmFormSubmit', {
-							formId: getFormId(
-								getFormNode(containerRef.current)
-							),
-						});
+									if (submittable) {
+										Liferay.Util.submitForm(event.target);
+									}
+
+									Liferay.fire('ddmFormValid', {
+										formWrapperId: event.target.id,
+									});
+
+									Liferay.fire('ddmFormSubmit', {
+										formId: getFormId(
+											getFormNode(containerRef.current)
+										),
+									});
+								}
+								else {
+									Liferay.fire('ddmFormError', {
+										formWrapperId: event.target.id,
+									});
+								}
+							})
+							.catch((error) => {
+								console.error(error);
+							});
 					}
 					else {
-						Liferay.fire('ddmFormError', {
-							formWrapperId: event.target.id,
-						});
+						if (Liferay.ThemeDisplay.isSignedIn()) {
+							openModal({
+								bodyHTML: Liferay.Language.get(
+									'you-need-to-be-signed-in-to-submit-this-form'
+								),
+								buttons: [
+									{
+										displayType: 'secondary',
+										label: Liferay.Language.get('cancel'),
+										type: 'cancel',
+									},
+									{
+										label: Liferay.Language.get('ok'),
+										onClick: () => {
+											location.href =
+												themeDisplay.getPathMain() +
+												'/portal/login?redirect=' +
+												window.location.href;
+										},
+									},
+								],
+								id:
+									'<portlet:namespace />ddmFormSessionExpiredModal',
+								title: Liferay.Language.get(
+									'your-session-has-expired'
+								),
+							});
+						}
+						else {
+							window.location.reload();
+						}
 					}
 				})
 				.catch((error) => {
 					console.error(error);
 				});
 		},
-		[apiRef, containerRef, submittable]
+		[apiRef, containerRef, submittable, validateCsrfTokenURL]
 	);
 
 	useEffect(() => {
