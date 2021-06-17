@@ -14,6 +14,7 @@
 
 import '../../../css/main.scss';
 
+import {fetch, openModal} from 'frontend-js-web';
 import React, {
 	useCallback,
 	useEffect,
@@ -48,12 +49,10 @@ import {paginationReducer} from './reducers/index.es';
  */
 const useFormSubmit = ({apiRef, containerRef}) => {
 	const {activePage, pages} = useFormState();
-	const {submittable} = useConfig();
+	const {submittable, validateCSRFTokenURL} = useConfig();
 
 	const handleFormSubmitted = useCallback(
 		(event) => {
-			event.preventDefault();
-
 			apiRef.current
 				.validate()
 				.then((validForm) => {
@@ -97,6 +96,71 @@ const useFormSubmit = ({apiRef, containerRef}) => {
 		[apiRef, containerRef, submittable]
 	);
 
+	const sessionExpiredModal = () => {
+		openModal({
+			bodyHTML: Liferay.ThemeDisplay.isSignedIn()
+				? Liferay.Language.get(
+						'you-need-to-be-signed-in-to-submit-this-form'
+				  )
+				: Liferay.Language.get(
+						'you-need-to-reload-the-page-to-submit-this-form'
+				  ),
+			buttons: [
+				{
+					displayType: 'secondary',
+					label: Liferay.Language.get('cancel'),
+					type: 'cancel',
+				},
+				{
+					label: Liferay.Language.get('ok'),
+					onClick: () => {
+						if (Liferay.ThemeDisplay.isSignedIn()) {
+							location.href =
+								themeDisplay.getPathMain() +
+								'/portal/login?redirect=' +
+								window.location.href;
+						}
+						else {
+							window.location.reload();
+						}
+					},
+				},
+			],
+			id: '<portlet:namespace />ddmFormSessionExpiredModal',
+			title: Liferay.Language.get('your-session-has-expired'),
+		});
+	};
+
+	const validateCSRFToken = useCallback(
+		(event) => {
+			event.preventDefault();
+
+			fetch(validateCSRFTokenURL, {
+				headers: new Headers({
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				}),
+				method: 'GET',
+			})
+				.then((response) => {
+					return response.json();
+				})
+				.then((jsonResponse) => {
+					const validCSRFToken = jsonResponse.validCSRFToken;
+					if (validCSRFToken) {
+						handleFormSubmitted(event);
+					}
+					else {
+						sessionExpiredModal();
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		},
+		[handleFormSubmitted, validateCSRFTokenURL]
+	);
+
 	useEffect(() => {
 		if (containerRef.current) {
 			Liferay.fire('ddmFormPageShow', {
@@ -123,16 +187,16 @@ const useFormSubmit = ({apiRef, containerRef}) => {
 					this
 				);
 
-				form.addEventListener('submit', handleFormSubmitted);
+				form.addEventListener('submit', validateCSRFToken);
 
 				return () => {
 					onHandle.detach();
 
-					form.removeEventListener('submit', handleFormSubmitted);
+					form.removeEventListener('submit', validateCSRFToken);
 				};
 			}
 		}
-	}, [containerRef, handleFormSubmitted]);
+	}, [containerRef, validateCSRFToken]);
 };
 
 /**
