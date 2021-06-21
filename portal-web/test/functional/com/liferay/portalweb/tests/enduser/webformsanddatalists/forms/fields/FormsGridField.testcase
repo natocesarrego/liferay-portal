@@ -140,25 +140,13 @@ definition {
 
 		FormViewBuilder.validateFieldLabel(fieldLabel = "Copy of Grid");
 
-		AssertElementPresent(
-			key_bodyText = "Option 1",
-			key_fieldName = "Grid",
-			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
+		FormFields.validateGridBody(fieldName = "Grid",rowName = "Option 1");
 
-		AssertElementPresent(
-			key_bodyText = "Option 2",
-			key_fieldName = "Grid",
-			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
+		FormFields.validateGridHead(fieldName = "Grid",columnName = "Option 2");
 
-		AssertElementPresent(
-			key_bodyText = "Option 1",
-			key_fieldName = "Copy of Grid",
-			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
+		FormFields.validateGridBody(fieldName = "Copy of Grid",rowName = "Option 1");
 
-		AssertElementPresent(
-			key_bodyText = "Option 2",
-			key_fieldName = "Copy of Grid",
-			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
+		FormFields.validateGridHead(fieldName = "Copy of Grid",columnName = "Option 2");
 
 		FormViewBuilder.assertHelpTextPresent(
 			fieldName = "Grid",
