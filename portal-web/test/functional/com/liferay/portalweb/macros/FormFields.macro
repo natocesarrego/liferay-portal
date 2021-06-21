@@ -11,6 +11,20 @@ definition {
 			locator1 = "FormFields#FIELD_ADD_SPECIFIC");
 	}
 
+	macro validateGridBody {
+		AssertElementPresent(
+			key_fieldName = "${fieldName}",
+			key_rowName = "${rowName}",
+			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
+	}
+
+	macro validateGridHead {
+		AssertElementPresent(
+			key_fieldName = "${fieldName}",
+			key_columnName = "${columnName}",
+			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_HEAD_OPTION");
+	}
+
 	macro addSingleSelectionOption {
 		Type(
 			key_rowNumber = "${optionValue}",
