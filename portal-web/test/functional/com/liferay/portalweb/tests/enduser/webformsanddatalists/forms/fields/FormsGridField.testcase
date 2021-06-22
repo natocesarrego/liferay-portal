@@ -140,13 +140,21 @@ definition {
 
 		FormViewBuilder.validateFieldLabel(fieldLabel = "Copy of Grid");
 
-		FormFields.validateGridBody(fieldName = "Grid",rowName = "Option 1");
+		FormFields.validateGridBody(
+			fieldName = "Grid",
+			rowName = "Option 1");
 
-		FormFields.validateGridHead(fieldName = "Grid",columnName = "Option 2");
+		FormFields.validateGridHead(
+			columnName = "Option 2",
+			fieldName = "Grid");
 
-		FormFields.validateGridBody(fieldName = "Copy of Grid",rowName = "Option 1");
+		FormFields.validateGridBody(
+			fieldName = "Copy of Grid",
+			rowName = "Option 1");
 
-		FormFields.validateGridHead(fieldName = "Copy of Grid",columnName = "Option 2");
+		FormFields.validateGridHead(
+			columnName = "Option 2",
+			fieldName = "Copy of Grid");
 
 		FormViewBuilder.assertHelpTextPresent(
 			fieldName = "Grid",
@@ -615,18 +623,13 @@ definition {
 			gridField = "Rows",
 			rowNumber = "1");
 
-		FormFields.viewOptionRowName(
-			fieldTitle = "Grid",
-			optionName = "Option 1",
-			rowNumber = "1");
-
 		Form.save();
 
 		Form.publishForm();
 
 		FormsAdminNavigator.gotoPublishedForm();
 
-		FormFields.viewOptionRowName(
+		FormFields.notViewOptionRowName(
 			fieldTitle = "Grid",
 			optionName = "Option 1",
 			rowNumber = "1");
@@ -636,7 +639,7 @@ definition {
 			optionName = "Option 2",
 			rowNumber = "1");
 
-		FormFields.viewOptionRowName(
+		FormFields.viewOptionColumnsName(
 			fieldTitle = "Grid",
 			optionName = "Option A",
 			rowNumber = "1");

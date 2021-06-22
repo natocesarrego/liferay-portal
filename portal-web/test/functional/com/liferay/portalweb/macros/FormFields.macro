@@ -11,20 +11,6 @@ definition {
 			locator1 = "FormFields#FIELD_ADD_SPECIFIC");
 	}
 
-	macro validateGridBody {
-		AssertElementPresent(
-			key_fieldName = "${fieldName}",
-			key_rowName = "${rowName}",
-			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
-	}
-
-	macro validateGridHead {
-		AssertElementPresent(
-			key_fieldName = "${fieldName}",
-			key_columnName = "${columnName}",
-			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_HEAD_OPTION");
-	}
-
 	macro addSingleSelectionOption {
 		Type(
 			key_rowNumber = "${optionValue}",
@@ -595,6 +581,14 @@ definition {
 			value1 = "");
 	}
 
+	macro notViewOptionRowName {
+		AssertElementNotPresent(
+			key_fieldName = "${fieldTitle}",
+			key_optionName = "${optionName}",
+			key_rowNumber = "${rowNumber}",
+			locator1 = "FormFields#GRID_OPTIONS_OPTION_ROW_NAME");
+	}
+
 	macro removeSelectOption {
 		var key_fieldName = "${fieldName}";
 		var key_selectOption = "${selectOption}";
@@ -843,6 +837,20 @@ definition {
 		AssertElementPresent(
 			key_imageName = "${uploadFileName}",
 			locator1 = "Form#SIDEBAR_ADVANCED_PREDEFINED_VALUE");
+	}
+
+	macro validateGridBody {
+		AssertElementPresent(
+			key_fieldName = "${fieldName}",
+			key_rowName = "${rowName}",
+			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_BODY_OPTION");
+	}
+
+	macro validateGridHead {
+		AssertElementPresent(
+			key_columnName = "${columnName}",
+			key_fieldName = "${fieldName}",
+			locator1 = "FormFields#FIELD_TARGET_LABEL_AND_HEAD_OPTION");
 	}
 
 	macro validateImagePredefinedValue {
