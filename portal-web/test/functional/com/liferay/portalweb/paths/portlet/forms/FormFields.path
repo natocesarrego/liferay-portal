@@ -115,7 +115,7 @@
 </tr>
 <tr>
 	<td>FIELD_TARGET_LABEL_AND_BODY_OPTION</td>
-	<td>//div[contains(@class,'ddm-drag') and contains(*,'${key_fieldName}')]//tbody[contains(*,'${key_rowName}')]</td>
+	<td>//div[contains(@class,'ddm-drag') and contains(*,'${key_fieldName}')]//tbody[contains(*,'${key_rowName}')]|//div[contains(@class,'ddm-drag')]//div[contains(*,'${key_fieldName}')]/*/*/*/*/*/*[contains(text(),'${key_rowName}')]</td>
 	<td></td>
 </tr>
 <tr>

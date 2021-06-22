@@ -140,7 +140,7 @@ definition {
 
 		FormViewBuilder.validateFieldLabel(fieldLabel = "Copy of Grid");
 
-		FormFields.validateGridBody(
+		FormFields.validateBody(
 			fieldName = "Grid",
 			rowName = "Option 1");
 
@@ -148,7 +148,7 @@ definition {
 			columnName = "Option 2",
 			fieldName = "Grid");
 
-		FormFields.validateGridBody(
+		FormFields.validateBody(
 			fieldName = "Copy of Grid",
 			rowName = "Option 1");
 
