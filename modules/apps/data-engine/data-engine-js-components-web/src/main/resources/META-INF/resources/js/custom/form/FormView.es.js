@@ -14,6 +14,7 @@
 
 import '../../../css/main.scss';
 
+import {fetch, openModal} from 'frontend-js-web';
 import React, {
 	useCallback,
 	useEffect,
@@ -48,12 +49,38 @@ import {paginationReducer} from './reducers/index.es';
  */
 const useFormSubmit = ({apiRef, containerRef}) => {
 	const {activePage, pages} = useFormState();
-	const {submittable} = useConfig();
+	const {submittable, validateCSRFTokenURL} = useConfig();
 
 	const handleFormSubmitted = useCallback(
 		(event) => {
 			event.preventDefault();
 
+			if (validateCSRFTokenURL) {
+				fetch(validateCSRFTokenURL, {
+					method: 'GET',
+				})
+					.then((response) => response.json())
+					.then((jsonResponse) => {
+						if (jsonResponse.validCSRFToken) {
+							submitForm(event);
+						}
+						else {
+							showSessionExpiredModal();
+						}
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			}
+			else {
+				submitForm(event);
+			}
+		},
+		[submitForm, validateCSRFTokenURL]
+	);
+
+	const submitForm = useCallback(
+		(event) => {
 			apiRef.current
 				.validate()
 				.then((validForm) => {
@@ -96,6 +123,41 @@ const useFormSubmit = ({apiRef, containerRef}) => {
 		},
 		[apiRef, containerRef, submittable]
 	);
+
+	const showSessionExpiredModal = () => {
+		openModal({
+			bodyHTML: Liferay.ThemeDisplay.isSignedIn()
+				? Liferay.Language.get(
+						'you-need-to-be-signed-in-to-submit-this-form'
+				  )
+				: Liferay.Language.get(
+						'you-need-to-reload-the-page-to-submit-this-form'
+				  ),
+			buttons: [
+				{
+					displayType: 'secondary',
+					label: Liferay.Language.get('cancel'),
+					type: 'cancel',
+				},
+				{
+					label: Liferay.Language.get('ok'),
+					onClick: () => {
+						if (Liferay.ThemeDisplay.isSignedIn()) {
+							location.href =
+								themeDisplay.getPathMain() +
+								'/portal/login?redirect=' +
+								window.location.href;
+						}
+						else {
+							window.location.reload();
+						}
+					},
+				},
+			],
+			id: '<portlet:namespace />ddmFormSessionExpiredModal',
+			title: Liferay.Language.get('your-session-has-expired'),
+		});
+	};
 
 	useEffect(() => {
 		if (containerRef.current) {
