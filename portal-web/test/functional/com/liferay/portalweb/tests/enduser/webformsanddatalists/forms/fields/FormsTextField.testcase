@@ -389,10 +389,10 @@ definition {
 			successPageTitle = "Thank you.");
 	}
 
-	@description = "Verify that the "Is Not URL" option can be used to validate a Text Field"
+	@description = "Verify that the Is Not URL option can be used to validate a Text Field"
 	@priority = "4"
 	test CanBeValidatedUsingTheIsNotURLOption {
-		property forms.functional = "quarantine";
+		property forms.functional = "true";
 		property portal.acceptance = "false";
 
 		ProductMenu.gotoPortlet(
@@ -413,11 +413,7 @@ definition {
 
 		FormFields.selectSelectOption(
 			fieldName = "If Input",
-			selectOption = "Is not URL");
-
-		FormFields.viewTextFieldNotPresent(
-			key_fieldLabel = "The Value",
-			key_fieldName = "The Value");
+			selectOption = "Is a URL");
 
 		FormFields.editText(
 			fieldName = "errorMessage",
