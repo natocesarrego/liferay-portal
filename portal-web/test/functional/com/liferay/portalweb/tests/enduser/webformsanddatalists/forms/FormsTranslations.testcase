@@ -18,6 +18,7 @@ definition {
 		if ("${testPortalInstance}" == "true") {
 			PortalInstances.tearDownCP();
 		}
+
 		else {
 			Navigator.openURL();
 
@@ -1090,7 +1091,9 @@ definition {
 			fieldLabel = "Texto Rico",
 			fieldName = "Texto Rico");
 
-		FormFields.viewRichTextPredefinedValue(fieldValue = "Valor Predefinido");
+		FormFields.viewRichTextPredefinedValue(
+			fieldLabel = "Texto Rico",
+			fieldValue = "Valor Predefinido");
 
 		FormFields.viewFieldHelpText(
 			fieldHelpText = "Texto de Ayuda",
