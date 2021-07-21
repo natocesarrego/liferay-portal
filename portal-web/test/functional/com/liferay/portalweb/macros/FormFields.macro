@@ -512,7 +512,9 @@ definition {
 		Type.clickAtType(
 			locator1 = "CKEditor#BODY",
 			value1 = "${content}");
+	}
 
+	macro toggleCKEditorContentStyle {
 		SelectFieldText(locator1 = "CKEditor#BODY");
 
 		SelectFrame(value1 = "relative=top");
@@ -525,7 +527,7 @@ definition {
 			key_titleName = "${optionTool}",
 			locator1 = "FormFields#TOOLBAR_ANY_ITEM_BUTTON");
 	}
-
+	
 	macro editTextDescription {
 		Pause(locator1 = "1000");
 
