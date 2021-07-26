@@ -65,6 +65,7 @@ public class AggregateTestRule implements TestRule {
 		TimeoutTestRule.class.getName(), HeapDumpTestRule.class.getName(),
 		CodeCoverageAssertor.class.getName(), NewEnvTestRule.class.getName(),
 		AssumeTestRule.class.getName(),
+		"com.liferay.portal.test.rule.PermissionCheckerMethodTestRule",
 		"com.liferay.portal.test.rule.LiferayIntegrationTestRule",
 		LiferayUnitTestRule.class.getName(),
 		"com.liferay.portal.test.rule.PersistenceTestRule",
@@ -73,7 +74,6 @@ public class AggregateTestRule implements TestRule {
 		"com.liferay.portal.test.rule.SynchronousMailTestRule",
 		"com.liferay.document.library.webdav.test." +
 			"WebDAVEnvironmentConfigClassTestRule",
-		"com.liferay.portal.test.rule.PermissionCheckerMethodTestRule",
 		InitializeKernelUtilTestRule.class.getName(),
 		"com.liferay.portal.search.test.util.logging.ExpectedLogMethodTestRule"
 	};
