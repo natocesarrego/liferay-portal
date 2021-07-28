@@ -40,8 +40,9 @@ public class DDMFormValuesConverterUtil {
 				List<DDMFormFieldValue> nestedDDMFormFieldValues =
 					new ArrayList<>();
 
-				if (StringUtil.equals(ddmFormField.getType(),
-					DDMFormFieldTypeConstants.FIELDSET)) {
+				if (StringUtil.equals(
+						ddmFormField.getType(),
+						DDMFormFieldTypeConstants.FIELDSET)) {
 
 					nestedDDMFormFieldValues.addAll(
 						addMissingDDMFormFieldValues(
