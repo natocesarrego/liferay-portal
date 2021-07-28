@@ -61,6 +61,7 @@ import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.GuestOrUserUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
@@ -245,19 +246,24 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 		DataDefinitionResource.Builder dataDefinitionResourcedBuilder =
 			_dataDefinitionResourceFactory.create();
 
-		DataDefinitionResource dataDefinitionResource =
-			dataDefinitionResourcedBuilder.user(
-				GuestOrUserUtil.getUser(GuestOrUserUtil.getUserId())
-			).build();
-
 		List<DDMStructure> ddmStructures =
 			_ddmStructureLocalService.getStructures(
 				portletDataContext.getScopeGroupId(),
 				_portal.getClassNameId(JournalArticle.class));
 
-		for (DDMStructure ddmStructure : ddmStructures) {
+		for (com.liferay.dynamic.data.mapping.kernel.DDMStructure ddmStructure : ddmStructures) {
 			dataDefinitionResource.deleteDataDefinition(
 				ddmStructure.getStructureId());
+
+			long userId = portletDataContext.getUserId(
+				ddmStructure.getUserUuid());
+
+			// Quem é o context user?
+
+			DataDefinitionResource dataDefinitionResource =
+				dataDefinitionResourcedBuilder.user(
+					_userLocalService.getUser(userId)
+				).build();
 		}
 
 		return portletPreferences;
@@ -771,5 +777,8 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 
 	@Reference
 	private Staging _staging;
+
+	@Reference
+	private UserLocalServicevice _userLocalService;
 
 }
