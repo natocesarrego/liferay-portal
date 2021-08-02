@@ -17,6 +17,7 @@ package com.liferay.journal.internal.exportimport.data.handler;
 import com.liferay.changeset.model.ChangesetCollection;
 import com.liferay.changeset.service.ChangesetCollectionLocalService;
 import com.liferay.changeset.service.ChangesetEntryLocalService;
+import com.liferay.data.engine.rest.resource.v2_0.DataDefinitionResource;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
@@ -59,6 +60,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
@@ -240,9 +242,27 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 			portletDataContext.getScopeGroupId(),
 			_portal.getClassNameId(DDMStructure.class));
 
-		_ddmStructureLocalService.deleteStructures(
-			portletDataContext.getScopeGroupId(),
-			_portal.getClassNameId(JournalArticle.class));
+		List<DDMStructure> ddmStructures =
+			_ddmStructureLocalService.getStructures(
+				portletDataContext.getScopeGroupId(),
+				_portal.getClassNameId(JournalArticle.class));
+
+		if (!ddmStructures.isEmpty()) {
+			DDMStructure firstDDMStructure = ddmStructures.get(0);
+
+			DataDefinitionResource.Builder dataDefinitionResourcedBuilder =
+				_dataDefinitionResourceFactory.create();
+
+			DataDefinitionResource dataDefinitionResource =
+				dataDefinitionResourcedBuilder.user(
+					_userLocalService.getUserById(firstDDMStructure.getUserId())
+				).build();
+
+			for (DDMStructure ddmStructure : ddmStructures) {
+				dataDefinitionResource.deleteDataDefinition(
+					ddmStructure.getStructureId());
+			}
+		}
 
 		return portletPreferences;
 	}
@@ -734,6 +754,9 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 	@Reference
 	private ChangesetEntryLocalService _changesetEntryLocalService;
 
+	@Reference
+	private DataDefinitionResource.Factory _dataDefinitionResourceFactory;
+
 	private DDMStructureLocalService _ddmStructureLocalService;
 	private DDMTemplateLocalService _ddmTemplateLocalService;
 
@@ -752,5 +775,8 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 
 	@Reference
 	private Staging _staging;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }
