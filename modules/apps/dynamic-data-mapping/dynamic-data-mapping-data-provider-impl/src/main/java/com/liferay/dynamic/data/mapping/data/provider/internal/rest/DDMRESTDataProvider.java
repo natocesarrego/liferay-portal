@@ -550,7 +550,7 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 			}
 		}
 
-		return "";
+		return bodyText;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
