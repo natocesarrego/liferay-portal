@@ -353,7 +353,6 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			evaluate(ddmForm, ddmFormValues), "field1", "field1_instanceId");
 
 		Assert.assertEquals(
-			_ddmFormFieldPropertyChanges.toString(),
 			expectedResponseFirstCalculateDDMFormRule,
 			_ddmFormFieldPropertyChanges.get("value"));
 
@@ -366,7 +365,6 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			evaluate(ddmForm, ddmFormValues), "field1", "field1_instanceId");
 
 		Assert.assertEquals(
-			_ddmFormFieldPropertyChanges.toString(),
 			expectedResponseSecondCalculateDDMFormRule,
 			_ddmFormFieldPropertyChanges.get("value"));
 
@@ -379,7 +377,6 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			evaluate(ddmForm, ddmFormValues), "field1", "field1_instanceId");
 
 		Assert.assertEquals(
-			_ddmFormFieldPropertyChanges.toString(),
 			expectedResponseFirstCalculateDDMFormRule,
 			_ddmFormFieldPropertyChanges.get("value"));
 	}
