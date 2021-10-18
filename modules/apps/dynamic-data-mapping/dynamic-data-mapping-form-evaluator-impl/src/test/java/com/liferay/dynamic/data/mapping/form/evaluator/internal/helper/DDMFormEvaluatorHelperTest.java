@@ -308,7 +308,9 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 	}
 
 	@Test
-	public void testFormRulesExecutionFlow() throws Exception {
+	public void testGetSameResponseAfterCalculateDDMFormRuleEvaluations()
+		throws Exception {
+
 		DDMForm ddmForm = new DDMForm();
 
 		ddmForm.addDDMFormField(
