@@ -318,8 +318,6 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 
 		BigDecimal expectedResponseFirstCalculateDDMFormRule = new BigDecimal(
 			1);
-		BigDecimal expectedResponseSecondCalculateDDMFormRule = new BigDecimal(
-			2);
 
 		ddmForm.addDDMFormRule(
 			new DDMFormRule(
@@ -328,6 +326,10 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 						"calculate(\"field1\", %s)",
 						expectedResponseFirstCalculateDDMFormRule.toString())),
 				"equals(getValue(\"field0\"),\"field0_value\")"));
+
+		BigDecimal expectedResponseSecondCalculateDDMFormRule = new BigDecimal(
+			2);
+
 		ddmForm.addDDMFormRule(
 			new DDMFormRule(
 				Arrays.asList(
