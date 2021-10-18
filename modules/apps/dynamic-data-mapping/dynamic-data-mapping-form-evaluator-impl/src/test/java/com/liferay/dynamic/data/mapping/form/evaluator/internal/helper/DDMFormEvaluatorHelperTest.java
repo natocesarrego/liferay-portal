@@ -316,22 +316,24 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 		ddmForm.addDDMFormField(
 			createDDMFormField("field1", "numeric", FieldConstants.DOUBLE));
 
-		String expectedResponseFirstCalculateDDMFormRule = "1";
-		String expectedResponseSecondCalculateDDMFormRule = "2";
+		BigDecimal expectedResponseFirstCalculateDDMFormRule = new BigDecimal(
+			1);
+		BigDecimal expectedResponseSecondCalculateDDMFormRule = new BigDecimal(
+			2);
 
 		ddmForm.addDDMFormRule(
 			new DDMFormRule(
 				Arrays.asList(
 					String.format(
 						"calculate(\"field1\", %s)",
-						expectedResponseFirstCalculateDDMFormRule)),
+						expectedResponseFirstCalculateDDMFormRule.toString())),
 				"equals(getValue(\"field0\"),\"field0_value\")"));
 		ddmForm.addDDMFormRule(
 			new DDMFormRule(
 				Arrays.asList(
 					String.format(
 						"calculate(\"field1\", %s)",
-						expectedResponseSecondCalculateDDMFormRule)),
+						expectedResponseSecondCalculateDDMFormRule.toString())),
 				"equals(getValue(\"field0\"),\"field0_value2\")"));
 
 		DDMFormValues ddmFormValues = DDMFormValuesTestUtil.createDDMFormValues(
@@ -349,7 +351,8 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			evaluate(ddmForm, ddmFormValues), "field1", "field1_instanceId");
 
 		Assert.assertEquals(
-			_ddmFormFieldPropertyChanges.toString(), new BigDecimal(1),
+			_ddmFormFieldPropertyChanges.toString(),
+			expectedResponseFirstCalculateDDMFormRule,
 			_ddmFormFieldPropertyChanges.get("value"));
 
 		ddmFormValues.addDDMFormFieldValue(
@@ -361,7 +364,8 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			evaluate(ddmForm, ddmFormValues), "field1", "field1_instanceId");
 
 		Assert.assertEquals(
-			_ddmFormFieldPropertyChanges.toString(), new BigDecimal(2),
+			_ddmFormFieldPropertyChanges.toString(),
+			expectedResponseSecondCalculateDDMFormRule,
 			_ddmFormFieldPropertyChanges.get("value"));
 
 		ddmFormValues.addDDMFormFieldValue(
@@ -373,7 +377,8 @@ public class DDMFormEvaluatorHelperTest extends PowerMockito {
 			evaluate(ddmForm, ddmFormValues), "field1", "field1_instanceId");
 
 		Assert.assertEquals(
-			_ddmFormFieldPropertyChanges.toString(), new BigDecimal(1),
+			_ddmFormFieldPropertyChanges.toString(),
+			expectedResponseFirstCalculateDDMFormRule,
 			_ddmFormFieldPropertyChanges.get("value"));
 	}
 
