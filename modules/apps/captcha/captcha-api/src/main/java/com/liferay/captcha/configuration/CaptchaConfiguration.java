@@ -79,7 +79,7 @@ public interface CaptchaConfiguration {
 		deflt = "https://www.google.com/recaptcha/api.js",
 		name = "recaptcha-script-url", required = false
 	)
-	public String reCaptchaScriptURL();
+	public String reCaptchaScriptURL(); 
 
 	@Meta.AD(
 		deflt = "https://www.google.com/recaptcha/api/fallback?k=",
