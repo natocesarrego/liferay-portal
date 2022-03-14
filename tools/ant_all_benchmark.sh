@@ -78,7 +78,7 @@ function log_durations {
 	if [ "${DURATION_LOG}" == true ]
 	then
 		echo "" >> ${ANT_ALL_DURATION_CSV_PATH}
-		echo -n "$(date +%c)," >> ${ANT_ALL_DURATION_CSV_PATH}
+		echo -n "$(date --iso-8601=seconds)," >> ${ANT_ALL_DURATION_CSV_PATH}
 
 		for (( i = 0 ; i < ${#DURATION_ARRAY[@]}; i++ ))
 		do
