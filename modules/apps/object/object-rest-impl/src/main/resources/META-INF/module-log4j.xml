@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<Configuration strict="true">
+	<Loggers>
+		<Logger level="ALL" name="com.liferay.object.rest.internal.resource.v1_0.ObjectEntryResourceImpl" />
+	</Loggers>
+</Configuration>

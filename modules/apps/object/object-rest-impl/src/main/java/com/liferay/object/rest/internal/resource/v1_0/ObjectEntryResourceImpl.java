@@ -204,9 +204,16 @@ public class ObjectEntryResourceImpl extends BaseObjectEntryResourceImpl {
 
 	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
-		return new ObjectEntryEntityModel(
-			_objectFieldLocalService.getObjectFields(
-				_objectDefinition.getObjectDefinitionId()));
+		try {
+			return new ObjectEntryEntityModel(
+				_objectFieldLocalService.getObjectFields(
+					_objectDefinition.getObjectDefinitionId()));
+		}
+		catch (Exception exception) {
+			_log.error(exception);
+
+			return null;
+		}
 	}
 
 	@Override
@@ -498,4 +505,6 @@ public class ObjectEntryResourceImpl extends BaseObjectEntryResourceImpl {
 	@Reference
 	private ObjectScopeProviderRegistry _objectScopeProviderRegistry;
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		ObjectEntryResourceImpl.class);
 }
