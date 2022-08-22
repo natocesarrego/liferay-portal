@@ -295,7 +295,8 @@ public class UpgradeProcess_6_2_0 extends Pre7UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		upgrade(new UpgradeSchema());
+System.exit(1);	
+	upgrade(new UpgradeSchema());
 
 		upgrade(new UpgradeAnnouncements());
 		upgrade(new UpgradeBlogs());
