@@ -34,7 +34,7 @@ public class UpgradeProcess_6_1_1 extends Pre7UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		upgrade(new UpgradeSchema());
+/*		upgrade(new UpgradeSchema());
 
 		upgrade(new UpgradeDocumentLibrary());
 		upgrade(new UpgradeJournal());
@@ -42,7 +42,7 @@ public class UpgradeProcess_6_1_1 extends Pre7UpgradeProcess {
 		upgrade(new UpgradeLayoutSet());
 		upgrade(new UpgradeLayoutSetBranch());
 
-		clearIndexesCache();
+		clearIndexesCache();*/
 	}
 
 }
