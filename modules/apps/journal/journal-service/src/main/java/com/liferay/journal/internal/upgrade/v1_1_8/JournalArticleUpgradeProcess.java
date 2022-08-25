@@ -14,7 +14,10 @@
 
 package com.liferay.journal.internal.upgrade.v1_1_8;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
@@ -44,11 +47,13 @@ public class JournalArticleUpgradeProcess extends UpgradeProcess {
 					"update JournalArticle set content = ? where id_ = ?")) {
 
 			while (resultSet.next()) {
+				long id = resultSet.getLong("id_");
+				String content = resultSet.getString("content");
+
 				preparedStatement2.setString(
-					1,
-					_convertRadioDynamicElements(
-						resultSet.getString("content")));
-				preparedStatement2.setLong(2, resultSet.getLong("id_"));
+					1, _convertRadioDynamicElements(id, content));
+
+				preparedStatement2.setLong(2, id);
 
 				preparedStatement2.addBatch();
 			}
@@ -57,10 +62,20 @@ public class JournalArticleUpgradeProcess extends UpgradeProcess {
 		}
 	}
 
-	private String _convertRadioDynamicElements(String content)
+	private String _convertRadioDynamicElements(long id, String content)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = null;
+
+		try {
+			document = SAXReaderUtil.read(content);
+		}
+		catch (Exception exception) {
+			_log.error(
+				StringBundler.concat("ID: ", id, "\nContent: ", content));
+
+			throw exception;
+		}
 
 		document = document.clone();
 
@@ -104,5 +119,8 @@ public class JournalArticleUpgradeProcess extends UpgradeProcess {
 
 		return data;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		JournalArticleUpgradeProcess.class);
 
 }

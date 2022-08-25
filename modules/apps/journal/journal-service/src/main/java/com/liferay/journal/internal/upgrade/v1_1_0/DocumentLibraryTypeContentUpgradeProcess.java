@@ -15,7 +15,10 @@
 package com.liferay.journal.internal.upgrade.v1_1_0;
 
 import com.liferay.journal.internal.upgrade.helper.JournalArticleImageUpgradeHelper;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.xml.Document;
@@ -45,34 +48,44 @@ public class DocumentLibraryTypeContentUpgradeProcess extends UpgradeProcess {
 		_updateContent();
 	}
 
-	private String _convertContent(String content) throws Exception {
-		Document contentDocument = SAXReaderUtil.read(content);
+	private String _convertContent(long id, String content) throws Exception {
+		Document document = null;
 
-		contentDocument = contentDocument.clone();
+		try {
+			document = SAXReaderUtil.read(content);
+		}
+		catch (Exception exception) {
+			_log.error(
+				StringBundler.concat("ID: ", id, "\nContent: ", content));
+
+			throw exception;
+		}
+
+		document = document.clone();
 
 		XPath xPath = SAXReaderUtil.createXPath(
 			"//dynamic-element[@type='document_library']");
 
-		List<Node> imageNodes = xPath.selectNodes(contentDocument);
+		List<Node> imageNodes = xPath.selectNodes(document);
 
 		for (Node imageNode : imageNodes) {
-			Element imageEl = (Element)imageNode;
+			Element imageElement = (Element)imageNode;
 
-			List<Element> dynamicContentEls = imageEl.elements(
+			List<Element> dynamicContentElements = imageElement.elements(
 				"dynamic-content");
 
-			for (Element dynamicContentEl : dynamicContentEls) {
+			for (Element dynamicContentElement : dynamicContentElements) {
 				String data =
 					_journalArticleImageUpgradeHelper.getDocumentLibraryValue(
-						dynamicContentEl.getText());
+						dynamicContentElement.getText());
 
-				dynamicContentEl.clearContent();
+				dynamicContentElement.clearContent();
 
-				dynamicContentEl.addCDATA(data);
+				dynamicContentElement.addCDATA(data);
 			}
 		}
 
-		return contentDocument.formattedString();
+		return document.formattedString();
 	}
 
 	private void _updateContent() throws Exception {
@@ -87,9 +100,11 @@ public class DocumentLibraryTypeContentUpgradeProcess extends UpgradeProcess {
 					"update JournalArticle set content = ? where id_ = ?")) {
 
 			while (resultSet.next()) {
+				long id = resultSet.getLong(2);
+
 				preparedStatement2.setString(
-					1, _convertContent(resultSet.getString(1)));
-				preparedStatement2.setLong(2, resultSet.getLong(2));
+					1, _convertContent(id, resultSet.getString(1)));
+				preparedStatement2.setLong(2, id);
 
 				preparedStatement2.addBatch();
 			}
@@ -97,6 +112,9 @@ public class DocumentLibraryTypeContentUpgradeProcess extends UpgradeProcess {
 			preparedStatement2.executeBatch();
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		DocumentLibraryTypeContentUpgradeProcess.class);
 
 	private final JournalArticleImageUpgradeHelper
 		_journalArticleImageUpgradeHelper;

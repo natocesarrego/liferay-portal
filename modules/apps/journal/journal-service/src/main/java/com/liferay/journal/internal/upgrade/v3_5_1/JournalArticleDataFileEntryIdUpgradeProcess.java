@@ -14,7 +14,10 @@
 
 package com.liferay.journal.internal.upgrade.v3_5_1;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -48,13 +51,14 @@ public class JournalArticleDataFileEntryIdUpgradeProcess
 					"update JournalArticle set content = ? where id_ = ?")) {
 
 			while (resultSet.next()) {
+				long id = resultSet.getLong("id_");
 				String content = resultSet.getString("content");
 
-				String upgradedContent = _upgradeContent(content);
+				String upgradedContent = _upgradeContent(id, content);
 
 				if (!Objects.equals(content, upgradedContent)) {
 					preparedStatement2.setString(1, upgradedContent);
-					preparedStatement2.setLong(2, resultSet.getLong("id_"));
+					preparedStatement2.setLong(2, id);
 
 					preparedStatement2.addBatch();
 				}
@@ -64,8 +68,20 @@ public class JournalArticleDataFileEntryIdUpgradeProcess
 		}
 	}
 
-	private String _upgradeContent(String content) throws DocumentException {
-		Document document = SAXReaderUtil.read(content);
+	private String _upgradeContent(long id, String content)
+		throws DocumentException {
+
+		Document document = null;
+
+		try {
+			document = SAXReaderUtil.read(content);
+		}
+		catch (Exception exception) {
+			_log.error(
+				StringBundler.concat("ID: ", id, "\nContent: ", content));
+
+			throw exception;
+		}
 
 		XPath xPath = SAXReaderUtil.createXPath(
 			"//dynamic-element[@type='text_area']");
@@ -96,6 +112,9 @@ public class JournalArticleDataFileEntryIdUpgradeProcess
 
 		return document.asXML();
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		JournalArticleDataFileEntryIdUpgradeProcess.class);
 
 	private static final Pattern _dataFileEntryIdPattern = Pattern.compile(
 		"data-fileEntryId=", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
