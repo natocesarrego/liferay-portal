@@ -254,13 +254,14 @@ public class ContentImagesUpgradeProcess extends UpgradeProcess {
 
 			while (resultSet.next()) {
 				long id = resultSet.getLong(1);
+				String content = resultSet.getString(6);
 
-				preparedStatement2.setString(
-					1,
-					_convertTypeImageElements(
-						id, resultSet.getLong(2), resultSet.getLong(3),
-						resultSet.getLong(4), resultSet.getLong(5),
-						resultSet.getString(6)));
+				String newContent = _convertTypeImageElements(
+					id, resultSet.getLong(2), resultSet.getLong(3),
+					resultSet.getLong(4), resultSet.getLong(5), content);
+
+				preparedStatement2.setString(1, newContent);
+
 				preparedStatement2.setLong(2, id);
 
 				preparedStatement2.addBatch();

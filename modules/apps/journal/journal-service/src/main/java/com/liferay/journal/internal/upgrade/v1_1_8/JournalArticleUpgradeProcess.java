@@ -50,8 +50,9 @@ public class JournalArticleUpgradeProcess extends UpgradeProcess {
 				long id = resultSet.getLong("id_");
 				String content = resultSet.getString("content");
 
-				preparedStatement2.setString(
-					1, _convertRadioDynamicElements(id, content));
+				String newContent = _convertRadioDynamicElements(id, content);
+
+				preparedStatement2.setString(1, newContent);
 
 				preparedStatement2.setLong(2, id);
 

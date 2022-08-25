@@ -54,10 +54,10 @@ public class JournalArticleDataFileEntryIdUpgradeProcess
 				long id = resultSet.getLong("id_");
 				String content = resultSet.getString("content");
 
-				String upgradedContent = _upgradeContent(id, content);
+				String newContent = _upgradeContent(id, content);
 
-				if (!Objects.equals(content, upgradedContent)) {
-					preparedStatement2.setString(1, upgradedContent);
+				if (!Objects.equals(content, newContent)) {
+					preparedStatement2.setString(1, newContent);
 					preparedStatement2.setLong(2, id);
 
 					preparedStatement2.addBatch();

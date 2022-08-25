@@ -121,9 +121,12 @@ public class ImageTypeContentAttributesUpgradeProcess extends UpgradeProcess {
 
 			while (resultSet.next()) {
 				long id = resultSet.getLong(1);
+				String content = resultSet.getString(2);
 
-				preparedStatement2.setString(
-					1, _addImageContentAttributes(id, resultSet.getString(2)));
+				String newContent = _addImageContentAttributes(id, content);
+
+				preparedStatement2.setString(1, newContent);
+
 				preparedStatement2.setLong(2, id);
 
 				preparedStatement2.addBatch();

@@ -91,7 +91,7 @@ public class DocumentLibraryTypeContentUpgradeProcess extends UpgradeProcess {
 	private void _updateContent() throws Exception {
 		try (LoggingTimer loggingTimer = new LoggingTimer();
 			PreparedStatement preparedStatement1 = connection.prepareStatement(
-				"select content, id_ from JournalArticle where content like " +
+				"select id_, content from JournalArticle where content like " +
 					"'%type=\"document_library\"%'");
 			ResultSet resultSet = preparedStatement1.executeQuery();
 			PreparedStatement preparedStatement2 =
@@ -100,10 +100,13 @@ public class DocumentLibraryTypeContentUpgradeProcess extends UpgradeProcess {
 					"update JournalArticle set content = ? where id_ = ?")) {
 
 			while (resultSet.next()) {
-				long id = resultSet.getLong(2);
+				long id = resultSet.getLong(1);
+				String content = resultSet.getString(2);
 
-				preparedStatement2.setString(
-					1, _convertContent(id, resultSet.getString(1)));
+				String newContent = _convertContent(id, content);
+
+				preparedStatement2.setString(1, newContent);
+
 				preparedStatement2.setLong(2, id);
 
 				preparedStatement2.addBatch();
