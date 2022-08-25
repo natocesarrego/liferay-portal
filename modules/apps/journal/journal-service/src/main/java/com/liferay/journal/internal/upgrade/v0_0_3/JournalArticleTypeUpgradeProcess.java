@@ -71,6 +71,7 @@ public class JournalArticleTypeUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
+System.exit(1);
 		_updateArticleType();
 
 		_alterTable();
