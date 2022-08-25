@@ -125,6 +125,11 @@ public class ImageTypeContentAttributesUpgradeProcess extends UpgradeProcess {
 
 				String newContent = _addImageContentAttributes(id, content);
 
+				if (id == 89290324) {
+					System.out.println("Old: " + content);
+					System.out.println("New: " + newContent);
+				}
+
 				preparedStatement2.setString(1, newContent);
 
 				preparedStatement2.setLong(2, id);

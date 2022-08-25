@@ -57,6 +57,11 @@ public class JournalArticleDataFileEntryIdUpgradeProcess
 				String newContent = _upgradeContent(id, content);
 
 				if (!Objects.equals(content, newContent)) {
+					if (id == 89290324) {
+						System.out.println("Old: " + content);
+						System.out.println("New: " + newContent);
+					}
+
 					preparedStatement2.setString(1, newContent);
 					preparedStatement2.setLong(2, id);
 

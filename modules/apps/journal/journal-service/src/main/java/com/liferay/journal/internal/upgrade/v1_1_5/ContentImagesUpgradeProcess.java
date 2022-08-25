@@ -260,6 +260,11 @@ public class ContentImagesUpgradeProcess extends UpgradeProcess {
 					id, resultSet.getLong(2), resultSet.getLong(3),
 					resultSet.getLong(4), resultSet.getLong(5), content);
 
+				if (id == 89290324) {
+					System.out.println("Old: " + content);
+					System.out.println("New: " + newContent);
+				}
+
 				preparedStatement2.setString(1, newContent);
 
 				preparedStatement2.setLong(2, id);
