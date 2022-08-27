@@ -639,7 +639,9 @@ public class JournalUpgradeProcess extends UpgradeProcess {
 			while (resultSet.next()) {
 				long id = resultSet.getLong("id_");
 				String content = resultSet.getString("content");
-
+if (id == 89290324) {
+	System.out.println("Old: " + content);
+}
 				String ddmStructureKey = resultSet.getString("DDMStructureKey");
 
 				if (Validator.isNull(ddmStructureKey)) {
@@ -664,16 +666,22 @@ public class JournalUpgradeProcess extends UpgradeProcess {
 
 						throw exception;
 					}
-
+if (id == 89290324) {
+	System.out.println("New1: " + content);
+}
 					_updateJournalArticle(id, name, name, content);
 
 					continue;
 				}
 
 				String updatedContent = _transformDateFieldValues(content);
-
+if (id == 89290324) {
+	System.out.println("New2: " + updatedContent);
+}
 				updatedContent = _transformFieldNames(updatedContent);
-
+if (id == 89290324) {
+	System.out.println("New3: " + updatedContent);
+}
 				if (!content.equals(updatedContent)) {
 					_updateJournalArticleContent(id, updatedContent);
 				}
