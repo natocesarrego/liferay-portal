@@ -273,6 +273,7 @@ const Main = ({
 	maximumSubmissionLimitReached,
 	message,
 	name,
+	objectInformation,
 	onBlur,
 	onChange,
 	onFocus,
@@ -363,6 +364,12 @@ const Main = ({
 
 	const handleFieldChanged = (selectedItem) => {
 		if (selectedItem?.value) {
+			const file = JSON.parse(selectedItem.value);
+
+			if (isInvalidExtension(file.extension)) {
+				return;
+			}
+
 			setCurrentValue(selectedItem.value);
 
 			onChange(selectedItem, selectedItem.value);
@@ -429,12 +436,37 @@ const Main = ({
 		return true;
 	};
 
+	const isInvalidExtension = (extension) => {
+		const supportedExtensions = ['jpeg', 'jpg', 'pdf', 'png'];
+
+		if (supportedExtensions.includes(extension) || !objectInformation) {
+			return false;
+		}
+
+		const errorMessage = Liferay.Util.sub(
+			Liferay.Language.get(
+				'please-enter-a-file-with-a-valid-extension-x'
+			),
+			['jpeg, jpg, pdf, png']
+		);
+
+		handleGuestUploadFileChanged(errorMessage, {}, null);
+
+		return true;
+	};
+
 	const handleUploadSelectButtonClicked = (event) => {
 		onFocus(event);
 
 		const file = event.target.files[0];
 
 		if (isExceededUploadRequestSizeLimit(file.size)) {
+			onBlur(event);
+
+			return;
+		}
+
+		if (isInvalidExtension(file.type.split('/')[1])) {
 			onBlur(event);
 
 			return;
