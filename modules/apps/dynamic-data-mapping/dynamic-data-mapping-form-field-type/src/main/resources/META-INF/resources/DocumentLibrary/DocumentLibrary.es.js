@@ -295,7 +295,7 @@ const Main = ({
 
 	const isSignedIn = Liferay.ThemeDisplay.isSignedIn();
 
-	const getErrorMessages = (errorMessage, isSignedIn) => {
+	const getErrorMessages = (errorMessage, invalidExtension, isSignedIn) => {
 		const errorMessages = [errorMessage];
 
 		if (!allowGuestUsers && !isSignedIn) {
@@ -319,6 +319,16 @@ const Main = ({
 				)
 			);
 		}
+		else if (invalidExtension) {
+			errorMessages.push(
+				Liferay.Util.sub(
+					Liferay.Language.get(
+						'please-enter-a-file-with-a-valid-extension-x'
+					),
+					['jpeg, jpg, pdf, png']
+				)
+			);
+		}
 
 		return errorMessages.join(' ');
 	};
@@ -336,10 +346,12 @@ const Main = ({
 	}, [allowGuestUsers, isSignedIn, showUploadPermissionMessage]);
 
 	useEffect(() => {
-		setCurrentValue(value);
-		setDisplayErrors(initialDisplayErrors);
-		setErrorMessage(getErrorMessages(initialErrorMessage, isSignedIn));
-		setValid(initialValid);
+		const invalidExtension = isInvalidExtension(value);
+
+		setCurrentValue(invalidExtension ? null : value);
+		setDisplayErrors(invalidExtension ? true : initialDisplayErrors);
+		setErrorMessage(getErrorMessages(initialErrorMessage, invalidExtension, isSignedIn));
+		setValid(invalidExtension ? false : initialValid);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [initialDisplayErrors, initialErrorMessage, initialValid, value]);
@@ -364,12 +376,6 @@ const Main = ({
 
 	const handleFieldChanged = (selectedItem) => {
 		if (selectedItem?.value) {
-			const file = JSON.parse(selectedItem.value);
-
-			if (isInvalidExtension(file.extension)) {
-				return;
-			}
-
 			setCurrentValue(selectedItem.value);
 
 			onChange(selectedItem, selectedItem.value);
@@ -436,21 +442,24 @@ const Main = ({
 		return true;
 	};
 
-	const isInvalidExtension = (extension) => {
-		const supportedExtensions = ['jpeg', 'jpg', 'pdf', 'png'];
-
-		if (supportedExtensions.includes(extension) || !objectFieldName) {
+	const isInvalidExtension = (value) => {
+		if (!value || !objectFieldName) {
 			return false;
 		}
 
-		const errorMessage = Liferay.Util.sub(
-			Liferay.Language.get(
-				'please-enter-a-file-with-a-valid-extension-x'
-			),
-			['jpeg, jpg, pdf, png']
-		);
+		const fileEntryJSON = JSON.parse(value);
 
-		handleGuestUploadFileChanged(errorMessage, {}, null);
+		const fileExtension = fileEntryJSON.mimeType ? fileEntryJSON.mimeType.split('/')[1] : fileEntryJSON.extension;
+
+		if (!fileExtension) {
+			return false;
+		}
+
+		const supportedExtensions = ['jpeg', 'jpg', 'pdf', 'png'];
+
+		if (supportedExtensions.includes(fileExtension)) {
+			return false;
+		}
 
 		return true;
 	};
@@ -461,12 +470,6 @@ const Main = ({
 		const file = event.target.files[0];
 
 		if (isExceededUploadRequestSizeLimit(file.size)) {
-			onBlur(event);
-
-			return;
-		}
-
-		if (isInvalidExtension(file.type.split('/')[1])) {
 			onBlur(event);
 
 			return;
