@@ -8,23 +8,23 @@ public class DecoratorConfigurationCategory implements ConfigurationCategory {
 
 	@Override
 	public String getCategoryIcon() {
-		return "chatbot";
+		return _CATEGORY_ICON;
 	}
 
 	@Override
 	public String getCategoryKey() {
-		return "decorator-portlet";
+		return _CATEGORY_KEY;
 	}
 
 	@Override
 	public String getCategorySection() {
-		return "content-and-data";
+		return _CATEGORY_SECTION;
 	}
 
-	private static final String _CATEGORY_ICON = "chatbot";
+	private static final String _CATEGORY_ICON = "cog";
 
 	private static final String _CATEGORY_KEY = "decorator-portlet";
 
-	private static final String _CATEGORY_SECTION = "content-and-data";
+	private static final String _CATEGORY_SECTION = "other";
 
 }
