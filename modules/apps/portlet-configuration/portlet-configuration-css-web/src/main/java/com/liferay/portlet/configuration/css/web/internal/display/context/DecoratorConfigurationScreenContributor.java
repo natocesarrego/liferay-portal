@@ -88,10 +88,6 @@ public class DecoratorConfigurationScreenContributor implements
 			PropsUtil.set(PropsValues.DEFAULT_PORTLET_DECORATOR_ID
 				,PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID));
 
-			String text = PropsKeys.DEFAULT_PORTLET_DECORATOR_ID;
-
-			System.out.println(text);
-
 		}
 
 		httpServletRequest.setAttribute(
