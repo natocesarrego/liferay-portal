@@ -1,4 +1,5 @@
-
+<%@ page
+	import="com.liferay.user.associated.data.web.internal.configuration.AnonymousUserConfiguration" %>
 <%@ include file="/init.jsp" %>
 
 <%
