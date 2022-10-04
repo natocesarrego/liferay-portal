@@ -32,6 +32,7 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 public interface AnonymousUserLayoutConfiguration {
 
    public String userPublicLayout();
+   
 
 }
 

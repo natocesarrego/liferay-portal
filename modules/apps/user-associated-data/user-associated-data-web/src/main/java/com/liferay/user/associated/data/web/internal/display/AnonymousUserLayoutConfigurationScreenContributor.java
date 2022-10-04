@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * @author Albert Gomes
+ * @author Fernando Vilela
  */
 @Component(service = PortalSettingsConfigurationScreenContributor.class)
 public class AnonymousUserLayoutConfigurationScreenContributor implements
@@ -45,7 +45,7 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 
 	@Override
 	public String getKey() {
-		return "/anonymous-user-configuration";
+		return "anonymous-user-layout-configuration";
 	}
 
 	@Override
@@ -53,12 +53,12 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		return _language.get(resourceBundle, "/anonymous-user-configuration");
+		return _language.get(resourceBundle, "/anonymous-user-layout-configuration");
 	}
 
 	@Override
 	public String getSaveMVCActionCommandName() {
-		return "/anonymous-user-configuration";
+		return "/anonymous-user-layout-configuration";
 	}
 
 	@Override
@@ -71,10 +71,10 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse) {
 
-		AnonymousUserLayoutConfiguration anonymoususerlayoutConfiguration = null;
+		AnonymousUserLayoutConfiguration anonymousUserLayoutConfiguration = null;
 
 		try {
-			anonymoususerlayoutConfiguration =
+			anonymousUserLayoutConfiguration =
 				_configurationProvider.getCompanyConfiguration(
 					AnonymousUserLayoutConfiguration.class,
 					CompanyThreadLocal.getCompanyId());
@@ -85,13 +85,13 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 		}
 
 
-		if (Validator.isNotNull(anonymoususerlayoutConfiguration.userPublicLayout())){
+		if (Validator.isNotNull(anonymousUserLayoutConfiguration.userPublicLayout())){
 
-			PropsUtil.set(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED, anonymoususerlayoutConfiguration.userPublicLayout());
+			PropsUtil.set(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED, anonymousUserLayoutConfiguration.userPublicLayout());
 
 						httpServletRequest.setAttribute(
 				AnonymousUserLayoutConfiguration.class.getName(),
-				anonymoususerlayoutConfiguration);
+							anonymousUserLayoutConfiguration);
 
 		}
 
