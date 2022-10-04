@@ -2,15 +2,20 @@ package com.liferay.portlet.configuration.css.web.internal.portlet.action;
 
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -51,6 +56,8 @@ public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
 			return;
 		}
 
+
+
 		_configurationProvider.saveCompanyConfiguration(
 			DecoratorConfiguration.class, themeDisplay.getCompanyId(),
 			HashMapDictionaryBuilder.<String, Object>put(
@@ -58,15 +65,29 @@ public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
 				ParamUtil.getString(actionRequest, "applicationDecorators")
 			).build());
 
+
 		PropsUtil.set(
 			PropsKeys.DEFAULT_PORTLET_DECORATOR_ID,
 			ParamUtil.getString(actionRequest, "applicationDecorators"));
 
-		PropsUtil.set(PropsValues.DEFAULT_PORTLET_DECORATOR_ID,
-			PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID));
+		PropsValues.DEFAULT_PORTLET_DECORATOR_ID = PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
+
+
+		 _portalPreferencesLocalService.addPortalPreferences( themeDisplay.getCompanyId(),
+			PortletKeys.PREFS_OWNER_TYPE_COMPANY, PropsValues.DEFAULT_PORTLET_DECORATOR_ID);
+
+		 _portalPreferencesLocalService.getPreferences()
+
 	}
 
 	@Reference
+	PortalPreferenceValueLocalService _portalPreferenceValueLocalService;
+
+	@Reference
 	private ConfigurationProvider _configurationProvider;
+
+	@Reference
+	PortalPreferencesLocalService _portalPreferencesLocalService;
+
 
 }
