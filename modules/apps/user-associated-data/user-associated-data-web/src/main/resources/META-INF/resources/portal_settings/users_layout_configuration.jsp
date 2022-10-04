@@ -11,3 +11,8 @@
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-md-12">
+		<aui:input checked="<%= anonymousUserLayoutConfiguration.userPrivateLayout() %>" inlineLabel="right" label="enable-private-layouts"  labelCssClass="simple-toggle-switch" name="userPrivateLayout" type="toggle-switch" value="<%= anonymousUserLayoutConfiguration.userPrivateLayout() %>" />
+	</div>
+</div>

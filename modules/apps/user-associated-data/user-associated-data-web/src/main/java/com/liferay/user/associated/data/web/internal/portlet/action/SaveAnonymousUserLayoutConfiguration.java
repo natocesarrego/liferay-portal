@@ -54,7 +54,8 @@ public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
 				AnonymousUserLayoutConfiguration.class, themeDisplay.getSiteGroupId(),
 				HashMapDictionaryBuilder.<String, Object>put(
 					"userPublicLayout",
-					ParamUtil.getString(actionRequest, "userPublicLayout")).build());
+					ParamUtil.getString(actionRequest, "userPublicLayout"))
+					.put("userPrivateLayout", ParamUtil.getString(actionRequest,"userPrivateLayout")).build());
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
@@ -62,6 +63,14 @@ public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
 
 			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = Boolean.parseBoolean(
 				PropsUtil.get(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED));
+
+
+			PropsUtil.set(
+				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED,
+				ParamUtil.getString(actionRequest, "userPrivateLayout"));
+
+			PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED = Boolean.parseBoolean(
+				PropsUtil.get(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED));
 		}
 
 

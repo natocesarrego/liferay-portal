@@ -95,6 +95,16 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 
 		}
 
+		if (Validator.isNotNull(anonymousUserLayoutConfiguration.userPrivateLayout())){
+
+			PropsUtil.set(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED, anonymousUserLayoutConfiguration.userPrivateLayout());
+
+			httpServletRequest.setAttribute(
+				AnonymousUserLayoutConfiguration.class.getName(),
+				anonymousUserLayoutConfiguration);
+
+		}
+
 
 	}
 	@Reference(

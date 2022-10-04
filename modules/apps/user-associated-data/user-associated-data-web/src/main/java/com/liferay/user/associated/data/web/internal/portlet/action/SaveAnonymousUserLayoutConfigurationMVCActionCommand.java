@@ -61,12 +61,17 @@ public class SaveAnonymousUserLayoutConfigurationMVCActionCommand extends
 
 		_configurationProvider.saveCompanyConfiguration(
 			AnonymousUserLayoutConfiguration.class, themeDisplay.getCompanyId(),
-			HashMapDictionaryBuilder.<String, Object>put("userPublicLayout", ParamUtil.getString(actionRequest,"userPublicLayout" )
+			HashMapDictionaryBuilder.<String, Object>put("userPublicLayout", ParamUtil.getString(actionRequest,"userPublicLayout"))
+				.put("userPrivateLayout", ParamUtil.getString(actionRequest, "userPrivateLayout")
 			).build());
 
-		PropsUtil.set(
+			PropsUtil.set(
 			PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
 			ParamUtil.getString(actionRequest, "userPublicLayout"));
+
+			PropsUtil.set(
+			PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED,
+			ParamUtil.getString(actionRequest, "userPrivateLayout"));
 
 	}
 
