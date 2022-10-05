@@ -89,22 +89,29 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 
 			PropsUtil.set(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED, anonymousUserLayoutConfiguration.userPublicLayout());
 
-						httpServletRequest.setAttribute(
-				AnonymousUserLayoutConfiguration.class.getName(),
-							anonymousUserLayoutConfiguration);
+		}
+
+		if (Validator.isNotNull(anonymousUserLayoutConfiguration.userPublicLayout())){
+
+			PropsUtil.set(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE, anonymousUserLayoutConfiguration.userPublicLayoutAutoCreate());
 
 		}
+
 
 		if (Validator.isNotNull(anonymousUserLayoutConfiguration.userPrivateLayout())){
 
 			PropsUtil.set(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED, anonymousUserLayoutConfiguration.userPrivateLayout());
-
-			httpServletRequest.setAttribute(
-				AnonymousUserLayoutConfiguration.class.getName(),
-				anonymousUserLayoutConfiguration);
-
 		}
 
+		if (Validator.isNotNull(anonymousUserLayoutConfiguration.userPrivateLayoutAutoCreate())){
+
+			PropsUtil.set(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE, anonymousUserLayoutConfiguration.userPrivateLayoutAutoCreate());
+		}
+
+
+		httpServletRequest.setAttribute(
+			AnonymousUserLayoutConfiguration.class.getName(),
+			anonymousUserLayoutConfiguration);
 
 	}
 	@Reference(

@@ -33,8 +33,11 @@ public interface AnonymousUserLayoutConfiguration {
 
    public String userPublicLayout();
 
+   public String userPublicLayoutAutoCreate();
+
    public String userPrivateLayout();
-   
+
+   public String userPrivateLayoutAutoCreate();
 
 }
 

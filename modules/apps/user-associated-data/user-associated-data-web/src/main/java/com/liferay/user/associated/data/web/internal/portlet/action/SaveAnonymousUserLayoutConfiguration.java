@@ -55,22 +55,40 @@ public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
 				HashMapDictionaryBuilder.<String, Object>put(
 					"userPublicLayout",
 					ParamUtil.getString(actionRequest, "userPublicLayout"))
-					.put("userPrivateLayout", ParamUtil.getString(actionRequest,"userPrivateLayout")).build());
+					.put("userPublicLayoutAutoCreate", ParamUtil.getString(actionRequest,"userPublicLayoutAutoCreate"))
+					.put("userPrivateLayout", ParamUtil.getString(actionRequest,"userPrivateLayout"))
+					.build());
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
 				ParamUtil.getString(actionRequest, "userPublicLayout"));
 
-			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = Boolean.parseBoolean(
-				PropsUtil.get(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED));
-
+			PropsUtil.set(
+				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE,
+				ParamUtil.getString(actionRequest, "userPublicLayoutAutoCreate"));
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED,
 				ParamUtil.getString(actionRequest, "userPrivateLayout"));
 
+			PropsUtil.set(
+				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE,
+				ParamUtil.getString(actionRequest, "userPrivateLayoutAutoCreate"));
+
+
+			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = Boolean.parseBoolean(
+				PropsUtil.get(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED));
+
+			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE = Boolean.parseBoolean(
+				PropsUtil.get(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE));
+
+
 			PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED = Boolean.parseBoolean(
 				PropsUtil.get(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED));
+
+			PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE = Boolean.parseBoolean(
+				PropsUtil.get(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE));
+
 		}
 
 
