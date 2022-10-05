@@ -1,8 +1,11 @@
 package com.liferay.portlet.configuration.css.web.internal.portlet.action;
 
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.model.PortalPreferenceValue;
+import com.liferay.portal.kernel.model.PortalPreferences;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
-import com.liferay.portal.kernel.portlet.PortalPreferences;
+import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -11,6 +14,8 @@ import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
+import com.liferay.portal.kernel.service.persistence.PortalPreferenceValuePersistence;
+import com.liferay.portal.kernel.service.persistence.PortalPreferencesPersistence;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -21,9 +26,13 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
 
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.PortalPreferenceKey;
+import com.liferay.portlet.PortalPreferencesImpl;
+import com.liferay.portlet.PortalPreferencesWrapper;
 import com.liferay.portlet.configuration.css.web.internal.decorator.configuration.DecoratorConfiguration;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,6 +53,7 @@ public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
+
 
 		PermissionChecker permissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
@@ -70,24 +80,38 @@ public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
 			PropsKeys.DEFAULT_PORTLET_DECORATOR_ID,
 			ParamUtil.getString(actionRequest, "applicationDecorators"));
 
-		PropsValues.DEFAULT_PORTLET_DECORATOR_ID = PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
+		PropsUtil.set(
+			PropsValues.DEFAULT_PORTLET_DECORATOR_ID,
+			PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID));
+
+		PortalPreferences portalPreferences =
+			 _portalPreferencesLocalService.fetchPortalPreferences(themeDisplay.getCompanyId(),
+				PortletKeys.PREFS_OWNER_TYPE_COMPANY
+			);
 
 
-		 _portalPreferencesLocalService.addPortalPreferences( themeDisplay.getCompanyId(),
-			PortletKeys.PREFS_OWNER_TYPE_COMPANY, PropsValues.DEFAULT_PORTLET_DECORATOR_ID);
+		PortalPreferencesImpl portalPreferencesImpl =
+			(PortalPreferencesImpl)portalPreferences;
 
-		 _portalPreferencesLocalService.getPreferences()
+		portalPreferences.set
+
+
+
+		_portalPreferencesLocalService.updatePortalPreferences(
+			portalPreferences);
 
 	}
 
 	@Reference
-	PortalPreferenceValueLocalService _portalPreferenceValueLocalService;
-
-	@Reference
 	private ConfigurationProvider _configurationProvider;
 
+	com.liferay.portal.kernel.portlet.PortalPreferences
+
 	@Reference
-	PortalPreferencesLocalService _portalPreferencesLocalService;
+	private PortalPreferencesLocalService _portalPreferencesLocalService;
+
+
+
 
 
 }
