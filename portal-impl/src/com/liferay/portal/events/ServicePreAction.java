@@ -980,12 +980,9 @@ public class ServicePreAction extends Action {
 
 		//Getting layout properties
 
-		ThemeDisplay getthemeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-				PortalPreferences portalPreferences =
+			PortalPreferences portalPreferences =
 			PortalPreferencesLocalServiceUtil.fetchPortalPreferences(
-				getthemeDisplay.getCompanyId(),
+				PortalUtil.getCompanyId(httpServletRequest),
 				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		com.liferay.portal.kernel.portlet.PortalPreferences newPortalPreferences =
