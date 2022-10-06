@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.service;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.model.PortalPreferences;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -219,7 +220,7 @@ public class PortalPreferencesLocalServiceUtil {
 	}
 
 	public static PortalPreferences fetchPortalPreferences(
-		long portalPreferencesId) {
+		Company company, long portalPreferencesId) {
 
 		return getService().fetchPortalPreferences(portalPreferencesId);
 	}
