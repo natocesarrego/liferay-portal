@@ -1,16 +1,20 @@
 package com.liferay.user.associated.data.web.internal.portlet.action;
 
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
+import com.liferay.portal.kernel.model.PortalPreferences;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsUtil;
@@ -50,15 +54,6 @@ public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
 				return;
 			}
 
-			_configurationProvider.saveGroupConfiguration(
-				AnonymousUserLayoutConfiguration.class, themeDisplay.getSiteGroupId(),
-				HashMapDictionaryBuilder.<String, Object>put(
-					"userPublicLayout",
-					ParamUtil.getString(actionRequest, "userPublicLayout"))
-					.put("userPublicLayoutAutoCreate", ParamUtil.getString(actionRequest,"userPublicLayoutAutoCreate"))
-					.put("userPrivateLayout", ParamUtil.getString(actionRequest,"userPrivateLayout"))
-					.build());
-
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
 				ParamUtil.getString(actionRequest, "userPublicLayout"));
@@ -89,9 +84,41 @@ public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
 			PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE = Boolean.parseBoolean(
 				PropsUtil.get(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE));
 
-		}
 
+			PortalPreferences portalPreferences =
+				_portalPreferencesLocalService.fetchPortalPreferences(
+					themeDisplay.getCompanyId(),
+					PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+
+			com.liferay.portal.kernel.portlet.PortalPreferences newPortalPreferences =
+				_portalPreferenceValueLocalService.getPortalPreferences(
+					portalPreferences, false);
+
+			newPortalPreferences.setValue(
+				null, "userPublicLayout",
+				ParamUtil.getString(actionRequest, "userPublicLayout"));
+
+			newPortalPreferences.setValue(
+				null, "userPublicLayoutAutoCreate",
+				ParamUtil.getString(actionRequest, "userPublicLayoutAutoCreate"));
+
+			newPortalPreferences.setValue(
+				null, "userPrivateLayout",
+				ParamUtil.getString(actionRequest, "userPrivateLayout"));
+
+			newPortalPreferences.setValue(
+				null, "userPrivateLayoutAutoCreate",
+				ParamUtil.getString(actionRequest, "userPrivateLayoutAutoCreate"));
+
+			_portalPreferencesLocalService.updatePreferences(
+				themeDisplay.getCompanyId(), PortletKeys.PREFS_OWNER_TYPE_COMPANY, newPortalPreferences);
+
+		}
+	@Reference
+	private PortalPreferencesLocalService _portalPreferencesLocalService;
 
 	@Reference
-	private ConfigurationProvider _configurationProvider;
+	private PortalPreferenceValueLocalService _portalPreferenceValueLocalService;
+
+
 }

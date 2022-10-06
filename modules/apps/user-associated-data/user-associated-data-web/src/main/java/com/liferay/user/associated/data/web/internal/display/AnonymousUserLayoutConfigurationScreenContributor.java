@@ -53,7 +53,7 @@ public class AnonymousUserLayoutConfigurationScreenContributor implements
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		return _language.get(resourceBundle, "/anonymous-user-layout-configuration");
+		return _language.get(resourceBundle, "anonymous-user-layout-configuration");
 	}
 
 	@Override
