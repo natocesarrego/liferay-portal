@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.exception.LayoutPermissionException;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.interval.IntervalActionProcessor;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -124,7 +123,6 @@ import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
@@ -145,14 +143,12 @@ public class ServicePreAction extends Action {
 
 	public ServicePreAction() {
 		_initImportLARFiles();
-
 	}
-
 
 	@Override
 	public void run(
-		HttpServletRequest httpServletRequest,
-		HttpServletResponse httpServletResponse)
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse)
 		throws ActionException {
 
 		StopWatch stopWatch = new StopWatch();
@@ -172,9 +168,9 @@ public class ServicePreAction extends Action {
 	}
 
 	public void servicePre(
-		HttpServletRequest httpServletRequest,
-		HttpServletResponse httpServletResponse,
-		boolean initPermissionChecker)
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse,
+			boolean initPermissionChecker)
 		throws Exception {
 
 		// Theme display
@@ -230,7 +226,7 @@ public class ServicePreAction extends Action {
 	}
 
 	private void _addDefaultLayoutsByLAR(
-		long userId, long groupId, boolean privateLayout, File larFile)
+			long userId, long groupId, boolean privateLayout, File larFile)
 		throws Exception {
 
 		User user = UserLocalServiceUtil.getUser(userId);
@@ -241,34 +237,34 @@ public class ServicePreAction extends Action {
 					user, groupId, privateLayout, null,
 					HashMapBuilder.put(
 						PortletDataHandlerKeys.PERMISSIONS,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS_ALL,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_CONFIGURATION,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_CONFIGURATION_ALL,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_DATA,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_DATA_ALL,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_DATA_CONTROL_DEFAULT,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_SETUP_ALL,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.PORTLET_USER_PREFERENCES_ALL,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).put(
 						PortletDataHandlerKeys.THEME_REFERENCE,
-						new String[]{Boolean.TRUE.toString()}
+						new String[] {Boolean.TRUE.toString()}
 					).build());
 
 		ExportImportConfiguration exportImportConfiguration =
@@ -283,7 +279,7 @@ public class ServicePreAction extends Action {
 	}
 
 	private void _addDefaultUserPrivateLayoutByProperties(
-		long userId, long groupId)
+			long userId, long groupId)
 		throws Exception {
 
 		Map<Locale, String> nameMap = Collections.singletonMap(
@@ -302,7 +298,7 @@ public class ServicePreAction extends Action {
 			StringPool.BLANK, false, friendlyURLMap, new ServiceContext());
 
 		LayoutTypePortlet layoutTypePortlet =
-			(LayoutTypePortlet) layout.getLayoutType();
+			(LayoutTypePortlet)layout.getLayoutType();
 
 		layoutTypePortlet.setLayoutTemplateId(
 			0, PropsValues.DEFAULT_USER_PRIVATE_LAYOUT_TEMPLATE_ID, false);
@@ -327,7 +323,7 @@ public class ServicePreAction extends Action {
 		LayoutSet layoutSet = layout.getLayoutSet();
 
 		if (Validator.isNotNull(
-			PropsValues.DEFAULT_USER_PRIVATE_LAYOUT_REGULAR_THEME_ID)) {
+				PropsValues.DEFAULT_USER_PRIVATE_LAYOUT_REGULAR_THEME_ID)) {
 
 			layoutSet.setThemeId(
 				PropsValues.DEFAULT_USER_PRIVATE_LAYOUT_REGULAR_THEME_ID);
@@ -336,8 +332,8 @@ public class ServicePreAction extends Action {
 		}
 
 		if (Validator.isNotNull(
-			PropsValues.
-				DEFAULT_USER_PRIVATE_LAYOUT_REGULAR_COLOR_SCHEME_ID)) {
+				PropsValues.
+					DEFAULT_USER_PRIVATE_LAYOUT_REGULAR_COLOR_SCHEME_ID)) {
 
 			layoutSet.setColorSchemeId(
 				PropsValues.
@@ -365,7 +361,7 @@ public class ServicePreAction extends Action {
 	}
 
 	private void _addDefaultUserPublicLayoutByProperties(
-		long userId, long groupId)
+			long userId, long groupId)
 		throws Exception {
 
 		Map<Locale, String> nameMap = Collections.singletonMap(
@@ -384,7 +380,7 @@ public class ServicePreAction extends Action {
 			StringPool.BLANK, false, friendlyURLMap, new ServiceContext());
 
 		LayoutTypePortlet layoutTypePortlet =
-			(LayoutTypePortlet) layout.getLayoutType();
+			(LayoutTypePortlet)layout.getLayoutType();
 
 		layoutTypePortlet.setLayoutTemplateId(
 			0, PropsValues.DEFAULT_USER_PUBLIC_LAYOUT_TEMPLATE_ID, false);
@@ -409,7 +405,7 @@ public class ServicePreAction extends Action {
 		LayoutSet layoutSet = layout.getLayoutSet();
 
 		if (Validator.isNotNull(
-			PropsValues.DEFAULT_USER_PUBLIC_LAYOUT_REGULAR_THEME_ID)) {
+				PropsValues.DEFAULT_USER_PUBLIC_LAYOUT_REGULAR_THEME_ID)) {
 
 			layoutSet.setThemeId(
 				PropsValues.DEFAULT_USER_PUBLIC_LAYOUT_REGULAR_THEME_ID);
@@ -418,8 +414,8 @@ public class ServicePreAction extends Action {
 		}
 
 		if (Validator.isNotNull(
-			PropsValues.
-				DEFAULT_USER_PUBLIC_LAYOUT_REGULAR_COLOR_SCHEME_ID)) {
+				PropsValues.
+					DEFAULT_USER_PUBLIC_LAYOUT_REGULAR_COLOR_SCHEME_ID)) {
 
 			layoutSet.setColorSchemeId(
 				PropsValues.DEFAULT_USER_PUBLIC_LAYOUT_REGULAR_COLOR_SCHEME_ID);
@@ -543,9 +539,9 @@ public class ServicePreAction extends Action {
 	}
 
 	private LayoutComposite _getDefaultViewableLayoutComposite(
-		HttpServletRequest httpServletRequest, User user,
-		PermissionChecker permissionChecker, boolean signedIn,
-		boolean ignoreHiddenLayouts)
+			HttpServletRequest httpServletRequest, User user,
+			PermissionChecker permissionChecker, boolean signedIn,
+			boolean ignoreHiddenLayouts)
 		throws Exception {
 
 		LayoutComposite defaultLayoutComposite =
@@ -588,13 +584,13 @@ public class ServicePreAction extends Action {
 	}
 
 	private LayoutComposite _getDefaultVirtualHostLayoutComposite(
-		HttpServletRequest httpServletRequest)
+			HttpServletRequest httpServletRequest)
 		throws Exception {
 
 		Layout layout = null;
 		List<Layout> layouts = null;
 
-		LayoutSet layoutSet = (LayoutSet) httpServletRequest.getAttribute(
+		LayoutSet layoutSet = (LayoutSet)httpServletRequest.getAttribute(
 			WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 		if (layoutSet != null) {
@@ -681,9 +677,9 @@ public class ServicePreAction extends Action {
 	}
 
 	private LayoutComposite _getViewableLayoutComposite(
-		HttpServletRequest httpServletRequest, User user,
-		PermissionChecker permissionChecker, Layout layout,
-		List<Layout> layouts, boolean ignoreHiddenLayouts)
+			HttpServletRequest httpServletRequest, User user,
+			PermissionChecker permissionChecker, Layout layout,
+			List<Layout> layouts, boolean ignoreHiddenLayouts)
 		throws Exception {
 
 		if (ListUtil.isEmpty(layouts)) {
@@ -737,8 +733,8 @@ public class ServicePreAction extends Action {
 	}
 
 	private boolean _hasAccessPermission(
-		PermissionChecker permissionChecker, Layout layout,
-		boolean checkViewableGroup)
+			PermissionChecker permissionChecker, Layout layout,
+			boolean checkViewableGroup)
 		throws Exception {
 
 		return LayoutPermissionUtil.contains(
@@ -799,9 +795,9 @@ public class ServicePreAction extends Action {
 	}
 
 	private ThemeDisplay _initThemeDisplay(
-		HttpServletRequest httpServletRequest,
-		HttpServletResponse httpServletResponse,
-		boolean initPermissionChecker)
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse,
+			boolean initPermissionChecker)
 		throws Exception {
 
 		// Company
@@ -833,7 +829,7 @@ public class ServicePreAction extends Action {
 			PortalUtil.getPathImage());
 		String mainPath = _PATH_MAIN;
 
-		String i18nPath = (String) httpServletRequest.getAttribute(
+		String i18nPath = (String)httpServletRequest.getAttribute(
 			WebKeys.I18N_PATH);
 
 		if (Validator.isNotNull(i18nPath)) {
@@ -924,7 +920,7 @@ public class ServicePreAction extends Action {
 
 		User realUser = user;
 
-		Long realUserId = (Long) httpSession.getAttribute(WebKeys.USER_ID);
+		Long realUserId = (Long)httpSession.getAttribute(WebKeys.USER_ID);
 
 		if ((realUserId != null) &&
 			(user.getUserId() != realUserId.longValue())) {
@@ -978,22 +974,54 @@ public class ServicePreAction extends Action {
 			timeZone = company.getTimeZone();
 		}
 
-		//Getting layout properties
+		// Getting layout properties
 
-			PortalPreferences portalPreferences =
+		PortalPreferences portalPreferences =
 			PortalPreferencesLocalServiceUtil.fetchPortalPreferences(
 				PortalUtil.getCompanyId(httpServletRequest),
 				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
-		com.liferay.portal.kernel.portlet.PortalPreferences newPortalPreferences =
-			PortalPreferenceValueLocalServiceUtil.getPortalPreferences(
-				portalPreferences, false);
+		com.liferay.portal.kernel.portlet.PortalPreferences
+			newPortalPreferences =
+				PortalPreferenceValueLocalServiceUtil.getPortalPreferences(
+					portalPreferences, false);
 
-		PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = Boolean.parseBoolean(newPortalPreferences.getValue(null, "userPublicLayout"));
-		PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE = Boolean.parseBoolean(newPortalPreferences.getValue(null, "userPublicLayoutAutoCreate"));
-		PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED = Boolean.parseBoolean(newPortalPreferences.getValue(null, "userPrivateLayout"));
-		PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE = Boolean.parseBoolean(newPortalPreferences.getValue(null, "userPrivateLayoutAutoCreate"));
-		
+		if (Validator.isNotNull(
+				newPortalPreferences.getValue(null, "userPublicLayout"))) {
+
+			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED =
+				Boolean.parseBoolean(
+					newPortalPreferences.getValue(null, "userPublicLayout"));
+		}
+
+		if (Validator.isNotNull(
+				newPortalPreferences.getValue(
+					null, "userPublicLayoutAutoCreate"))) {
+
+			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE =
+				Boolean.parseBoolean(
+					newPortalPreferences.getValue(
+						null, "userPublicLayoutAutoCreate"));
+		}
+
+		if (Validator.isNotNull(
+				newPortalPreferences.getValue(null, "userPrivateLayout"))) {
+
+			PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED =
+				Boolean.parseBoolean(
+					newPortalPreferences.getValue(null, "userPrivateLayout"));
+		}
+
+		if (Validator.isNotNull(
+				newPortalPreferences.getValue(
+					null, "userPrivateLayoutAutoCreate"))) {
+
+			PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE =
+				Boolean.parseBoolean(
+					newPortalPreferences.getValue(
+						null, "userPrivateLayoutAutoCreate"));
+		}
+
 		// Layouts
 
 		if (signedIn) {
@@ -1025,7 +1053,7 @@ public class ServicePreAction extends Action {
 
 			if (layoutGroup.isUser()) {
 				if (!GetterUtil.getBoolean(
-					PropsUtil.get("feature.flag.LPS-155692"))) {
+						PropsUtil.get("feature.flag.LPS-155692"))) {
 
 					long originalPlid = ParamUtil.getLong(
 						PortalUtil.getOriginalServletRequest(
@@ -1115,7 +1143,7 @@ public class ServicePreAction extends Action {
 		boolean loginRequest = _isLoginRequest(httpServletRequest);
 
 		Boolean redirectToDefaultLayout =
-			(Boolean) httpServletRequest.getAttribute(
+			(Boolean)httpServletRequest.getAttribute(
 				WebKeys.REDIRECT_TO_DEFAULT_LAYOUT);
 
 		if (redirectToDefaultLayout == null) {
@@ -1305,7 +1333,7 @@ public class ServicePreAction extends Action {
 
 			plid = layout.getPlid();
 
-			layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
+			layoutTypePortlet = (LayoutTypePortlet)layout.getLayoutType();
 
 			boolean customizable = layoutTypePortlet.isCustomizable();
 
@@ -1381,7 +1409,7 @@ public class ServicePreAction extends Action {
 
 		// Locale
 
-		String i18nLanguageId = (String) httpServletRequest.getAttribute(
+		String i18nLanguageId = (String)httpServletRequest.getAttribute(
 			WebKeys.I18N_LANGUAGE_ID);
 
 		Locale locale = PortalUtil.getLocale(
@@ -1481,7 +1509,7 @@ public class ServicePreAction extends Action {
 
 		boolean widget = false;
 
-		Boolean widgetObj = (Boolean) httpServletRequest.getAttribute(
+		Boolean widgetObj = (Boolean)httpServletRequest.getAttribute(
 			WebKeys.WIDGET);
 
 		if (widgetObj != null) {
@@ -1849,9 +1877,9 @@ public class ServicePreAction extends Action {
 	}
 
 	private List<Layout> _mergeAdditionalLayouts(
-		HttpServletRequest httpServletRequest, User user,
-		PermissionChecker permissionChecker, Layout layout,
-		List<Layout> layouts)
+			HttpServletRequest httpServletRequest, User user,
+			PermissionChecker permissionChecker, Layout layout,
+			List<Layout> layouts)
 		throws Exception {
 
 		if ((layout == null) || layout.isPrivateLayout()) {
@@ -1897,7 +1925,7 @@ public class ServicePreAction extends Action {
 		else {
 			HttpSession httpSession = httpServletRequest.getSession();
 
-			Long previousGroupId = (Long) httpSession.getAttribute(
+			Long previousGroupId = (Long)httpSession.getAttribute(
 				WebKeys.VISITED_GROUP_ID_PREVIOUS);
 
 			if ((previousGroupId != null) &&
@@ -1961,10 +1989,10 @@ public class ServicePreAction extends Action {
 
 		HttpSession httpSession = httpServletRequest.getSession();
 
-		Long recentGroupId = (Long) httpSession.getAttribute(
+		Long recentGroupId = (Long)httpSession.getAttribute(
 			WebKeys.VISITED_GROUP_ID_RECENT);
 
-		Long previousGroupId = (Long) httpSession.getAttribute(
+		Long previousGroupId = (Long)httpSession.getAttribute(
 			WebKeys.VISITED_GROUP_ID_PREVIOUS);
 
 		if (recentGroupId == null) {
@@ -2046,7 +2074,6 @@ public class ServicePreAction extends Action {
 				hasPrivateLayouts = LayoutLocalServiceUtil.hasLayouts(
 					user, true, false);
 			}
-
 
 			if (hasPrivateLayouts) {
 				_deleteDefaultUserPrivateLayouts(user);
