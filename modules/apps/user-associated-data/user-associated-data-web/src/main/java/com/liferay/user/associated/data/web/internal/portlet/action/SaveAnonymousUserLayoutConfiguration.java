@@ -1,0 +1,129 @@
+package com.liferay.user.associated.data.web.internal.portlet.action;
+
+import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
+import com.liferay.portal.kernel.model.PortalPreferences;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.util.PropsUtil;
+import com.liferay.portal.util.PropsValues;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+/**
+ * @author Fernando Vilela
+ */
+@Component(
+	immediate = true,
+	property = {
+		"javax.portlet.name=" + ConfigurationAdminPortletKeys.INSTANCE_SETTINGS,
+		"mvc.command.name=/anonymous-user-layout-configuration"
+	},
+	service = MVCActionCommand.class
+)
+public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
+
+	@Override
+	protected void doProcessAction(
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		if (!permissionChecker.isCompanyAdmin(themeDisplay.getCompanyId())) {
+			SessionErrors.add(actionRequest, PrincipalException.class);
+
+			actionResponse.setRenderParameter("mvcPath", "/error.jsp");
+
+			return;
+		}
+
+		PropsUtil.set(
+			PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
+			ParamUtil.getString(actionRequest, "userPublicLayout"));
+
+		PropsUtil.set(
+			PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE,
+			ParamUtil.getString(actionRequest, "userPublicLayoutAutoCreate"));
+
+		PropsUtil.set(
+			PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED,
+			ParamUtil.getString(actionRequest, "userPrivateLayout"));
+
+		PropsUtil.set(
+			PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE,
+			ParamUtil.getString(actionRequest, "userPrivateLayoutAutoCreate"));
+
+		PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = Boolean.parseBoolean(
+			PropsUtil.get(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED));
+
+		PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE =
+			Boolean.parseBoolean(
+				PropsUtil.get(
+					PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE));
+
+		PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED = Boolean.parseBoolean(
+			PropsUtil.get(PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED));
+
+		PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE =
+			Boolean.parseBoolean(
+				PropsUtil.get(
+					PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE));
+
+		PortalPreferences portalPreferences =
+			_portalPreferencesLocalService.fetchPortalPreferences(
+				themeDisplay.getCompanyId(),
+				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+
+		com.liferay.portal.kernel.portlet.PortalPreferences
+			newPortalPreferences =
+			_portalPreferenceValueLocalService.getPortalPreferences(
+				portalPreferences, false);
+
+		newPortalPreferences.setValue(
+			null, "userPublicLayout",
+			ParamUtil.getString(actionRequest, "userPublicLayout"));
+
+		newPortalPreferences.setValue(
+			null, "userPublicLayoutAutoCreate",
+			ParamUtil.getString(actionRequest, "userPublicLayoutAutoCreate"));
+
+		newPortalPreferences.setValue(
+			null, "userPrivateLayout",
+			ParamUtil.getString(actionRequest, "userPrivateLayout"));
+
+		newPortalPreferences.setValue(
+			null, "userPrivateLayoutAutoCreate",
+			ParamUtil.getString(actionRequest, "userPrivateLayoutAutoCreate"));
+
+		_portalPreferencesLocalService.updatePreferences(
+			themeDisplay.getCompanyId(), PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+			newPortalPreferences);
+	}
+
+	@Reference
+	private PortalPreferencesLocalService _portalPreferencesLocalService;
+
+	@Reference
+	private PortalPreferenceValueLocalService
+		_portalPreferenceValueLocalService;
+
+}
