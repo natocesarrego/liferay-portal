@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -13,10 +12,6 @@
  * details.
  */
 
-/**
- * @author Fernando Vilela
- */
-
 package com.liferay.user.associated.data.web.internal.configuration.settings.definition;
 
 import com.liferay.portal.kernel.settings.definition.ConfigurationBeanDeclaration;
@@ -24,6 +19,9 @@ import com.liferay.user.associated.data.web.internal.configuration.AnonymousUser
 
 import org.osgi.service.component.annotations.Component;
 
+/**
+ * @author Fernando Vilela
+ */
 @Component(service = ConfigurationBeanDeclaration.class)
 public class AnonymousUserLayoutConfigurationBeanDeclaration
 	implements ConfigurationBeanDeclaration {

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.user.associated.data.web.internal.portlet.action;
 
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
@@ -31,15 +45,16 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + ConfigurationAdminPortletKeys.INSTANCE_SETTINGS,
-		"mvc.command.name=/anonymous-user-layout-configuration"
+		"mvc.command.name=/portal_settings/save_anonymous_user_layout_configuration"
 	},
 	service = MVCActionCommand.class
 )
-public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
+public class SaveAnonymousUserLayoutConfigurationMVCActionCommand
+	extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
@@ -95,8 +110,8 @@ public class SaveAnonymousUserLayoutConfiguration extends BaseMVCActionCommand {
 
 		com.liferay.portal.kernel.portlet.PortalPreferences
 			newPortalPreferences =
-			_portalPreferenceValueLocalService.getPortalPreferences(
-				portalPreferences, false);
+				_portalPreferenceValueLocalService.getPortalPreferences(
+					portalPreferences, false);
 
 		newPortalPreferences.setValue(
 			null, "userPublicLayout",

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.user.associated.data.web.internal.display;
+package com.liferay.user.associated.data.web.internal.portal.settings.configuration.admin.display;
 
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -40,7 +40,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Fernando Vilela
  */
 @Component(service = PortalSettingsConfigurationScreenContributor.class)
-public class AnonymousUserLayoutConfigurationScreenContributor
+public class AnonymousUserLayoutPortalSettingsConfigurationScreenContributor
 	implements PortalSettingsConfigurationScreenContributor {
 
 	@Override
@@ -96,32 +96,29 @@ public class AnonymousUserLayoutConfigurationScreenContributor
 		}
 
 		if (Validator.isNotNull(
-			anonymousUserLayoutConfiguration.userPublicLayout())) {
+				anonymousUserLayoutConfiguration.userPublicLayout())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
 				anonymousUserLayoutConfiguration.userPublicLayout());
 		}
-
-		if (Validator.isNotNull(
-			anonymousUserLayoutConfiguration.userPublicLayout())) {
+		else if (Validator.isNotNull(
+					anonymousUserLayoutConfiguration.userPublicLayout())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE,
 				anonymousUserLayoutConfiguration.userPublicLayoutAutoCreate());
 		}
-
-		if (Validator.isNotNull(
-			anonymousUserLayoutConfiguration.userPrivateLayout())) {
+		else if (Validator.isNotNull(
+					anonymousUserLayoutConfiguration.userPrivateLayout())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED,
 				anonymousUserLayoutConfiguration.userPrivateLayout());
 		}
-
-		if (Validator.isNotNull(
-			anonymousUserLayoutConfiguration.
-				userPrivateLayoutAutoCreate())) {
+		else if (Validator.isNotNull(
+					anonymousUserLayoutConfiguration.
+						userPrivateLayoutAutoCreate())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE,
