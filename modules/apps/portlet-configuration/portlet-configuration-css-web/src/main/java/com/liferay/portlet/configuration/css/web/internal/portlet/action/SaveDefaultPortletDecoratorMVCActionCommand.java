@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.portlet.configuration.css.web.internal.portlet.action;
 
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
@@ -24,15 +38,19 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+/**
+ * @author João Torres
+ */
 @Component(
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + ConfigurationAdminPortletKeys.INSTANCE_SETTINGS,
-		"mvc.command.name=/save_decorator/save_company_configuration"
+		"mvc.command.name=/portal_settings/save_default_portlet_decorator"
 	},
 	service = MVCActionCommand.class
 )
-public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
+public class SaveDefaultPortletDecoratorMVCActionCommand
+	extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
@@ -57,24 +75,23 @@ public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
 
 		PropsUtil.set(
 			PropsKeys.DEFAULT_PORTLET_DECORATOR_ID,
-			ParamUtil.getString(actionRequest, "applicationDecorators"));
+			ParamUtil.getString(actionRequest, "defaultPortletDecoratorId"));
 
-		PropsValues.DEFAULT_PORTLET_DECORATOR_ID =
-			PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
+		PropsValues.DEFAULT_PORTLET_DECORATOR_ID = PropsUtil.get(
+			PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
 
 		PortalPreferences portalPreferences =
 			_portalPreferencesLocalService.fetchPortalPreferences(
-				companyId,
-				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+				companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		com.liferay.portal.kernel.portlet.PortalPreferences
 			newPortalPreferences =
-				_portalPreferencesValueLocalService.getPortalPreferences(
+				_portalPreferenceValueLocalService.getPortalPreferences(
 					portalPreferences, false);
 
 		newPortalPreferences.setValue(
-			null, "applicationDecorators",
-			ParamUtil.getString(actionRequest, "applicationDecorators"));
+			null, "defaultPortletDecoratorId",
+			ParamUtil.getString(actionRequest, "defaultPortletDecoratorId"));
 
 		_portalPreferencesLocalService.updatePreferences(
 			companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY,
@@ -86,6 +103,6 @@ public class SaveDecoratorMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private PortalPreferenceValueLocalService
-		_portalPreferencesValueLocalService;
+		_portalPreferenceValueLocalService;
 
 }

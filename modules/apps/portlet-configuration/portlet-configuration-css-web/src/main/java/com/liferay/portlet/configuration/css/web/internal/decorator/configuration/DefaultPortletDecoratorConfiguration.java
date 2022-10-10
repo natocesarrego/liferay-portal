@@ -22,15 +22,16 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
  * @author João Torres
  */
 @ExtendedObjectClassDefinition(
-	category = "decorator-portlet", generateUI = false,
+	category = "default-portlet-decorator", generateUI = false,
 	scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
-	id = "com.liferay.portlet.configuration.css.web.internal.decorator.configuration.DecoratorConfiguration",
-	localization = "content/Language", name = "decorator-configuration"
+	id = "com.liferay.portlet.configuration.css.web.internal.decorator.configuration.DefaultPortletDecoratorConfiguration",
+	localization = "content/Language",
+	name = "default-portlet-decorator-configuration-name"
 )
-public interface DecoratorConfiguration {
+public interface DefaultPortletDecoratorConfiguration {
 
-	public String applicationDecorators();
+	public String defaultPortletDecoratorId();
 
 }
