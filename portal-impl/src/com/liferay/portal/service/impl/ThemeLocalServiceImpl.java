@@ -509,7 +509,6 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		List<Element> portletDecoratorElements = themeElement.elements(
 			"portlet-decorator");
 
-
 		for (Element portletDecoratorElement : portletDecoratorElements) {
 			ContextReplace portletDecoratorContextReplace =
 				(ContextReplace)themeContextReplace.clone();
@@ -870,26 +869,26 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return themes;
 	}
 
-	private void _updateDefaultPortletDecorateId(long companyId){
+	private void _updateDefaultPortletDecorateId(long companyId) {
 		PortalPreferences portalPreferences =
 			PortalPreferencesLocalServiceUtil.fetchPortalPreferences(
-				companyId,
-				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+				companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		com.liferay.portal.kernel.portlet.PortalPreferences
 			newPortalPreferences =
 				PortalPreferenceValueLocalServiceUtil.getPortalPreferences(
 					portalPreferences, false);
 
-		String decorate = newPortalPreferences.getValue(
-			null, "applicationDecorators");
+		String defaultPortletDecoratorId = newPortalPreferences.getValue(
+			null, "defaultPortletDecoratorId");
 
-		if(decorate != null){
+		if (defaultPortletDecoratorId != null) {
 			PropsUtil.set(
-				PropsKeys.DEFAULT_PORTLET_DECORATOR_ID, decorate);
+				PropsKeys.DEFAULT_PORTLET_DECORATOR_ID,
+				defaultPortletDecoratorId);
 
-			PropsValues.DEFAULT_PORTLET_DECORATOR_ID =
-				PropsUtil.get(PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
+			PropsValues.DEFAULT_PORTLET_DECORATOR_ID = PropsUtil.get(
+				PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
 		}
 	}
 
