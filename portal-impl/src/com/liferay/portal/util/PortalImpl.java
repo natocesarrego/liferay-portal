@@ -72,6 +72,7 @@ import com.liferay.portal.kernel.model.LayoutType;
 import com.liferay.portal.kernel.model.LayoutTypeController;
 import com.liferay.portal.kernel.model.LayoutTypePortlet;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.PortalPreferences;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.PublicRenderParameter;
 import com.liferay.portal.kernel.model.ResourceConstants;
@@ -133,6 +134,8 @@ import com.liferay.portal.kernel.service.LayoutFriendlyURLLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.kernel.service.PortalPreferenceValueLocalServiceUtil;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.service.ResourceLocalServiceUtil;
@@ -8099,6 +8102,26 @@ public class PortalImpl implements Portal {
 			String canonicalURL, ThemeDisplay themeDisplay, Layout layout,
 			Set<Locale> availableLocales)
 		throws PortalException {
+
+		PortalPreferences portalPreferences =
+			PortalPreferencesLocalServiceUtil.fetchPortalPreferences(
+				themeDisplay.getCompanyId(),
+				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+
+		com.liferay.portal.kernel.portlet.PortalPreferences
+			newPortalPreferences =
+				PortalPreferenceValueLocalServiceUtil.getPortalPreferences(
+					portalPreferences, false);
+
+		if (Validator.isNotNull(
+				newPortalPreferences.getValue(
+					null, "localePrependFriendlyUrl"))) {
+
+			PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE =
+				GetterUtil.getInteger(
+					newPortalPreferences.getValue(
+						null, "localePrependFriendlyUrl"));
+		}
 
 		String defaultVirtualHostname = _getDefaultVirtualHostname(
 			themeDisplay.getCompany());
