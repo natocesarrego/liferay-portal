@@ -15,26 +15,16 @@
 --%>
 
 <%@ include file="/init.jsp" %>
-<%@ page import="com.liferay.portal.util.PropsValues" %>
 
 <%
-DecoratorConfiguration decoratorConfiguration = (DecoratorConfiguration)request.getAttribute(DecoratorConfiguration.class.getName());
-
-String decorate = null;
-
-if (decorateConfiguration.equals("")) {
-	decorate = PropsValues.DEFAULT_PORTLET_DECORATOR_ID;
-}
-else {
-	decorate = decoratorConfiguration.applicationDecorators();
-}
+DefaultPortletDecoratorConfiguration defaultPortletDecoratorConfiguration = (DefaultPortletDecoratorConfiguration)request.getAttribute(DefaultPortletDecoratorConfiguration.class.getName());
 %>
 
 <div class="row">
 	<div class="col-md-12">
 		<br />
 
-		<aui:select label="select-properties-application-decorators" name="applicationDecorators" required="<%= true %>" type="text" value="<%= decorate %>">
+		<aui:select label="select-default-portlet-decorator-id" name="defaultPortletDecoratorId" value="<%= Validator.isNotNull(defaultPortletDecoratorConfiguration.defaultPortletDecoratorId()) ? defaultPortletDecoratorConfiguration.defaultPortletDecoratorId() : PropsValues.DEFAULT_PORTLET_DECORATOR_ID %>">
 			<aui:option label="Barebone" value="barebone" />
 			<aui:option label="Borderless" value="borderless" />
 			<aui:option label="Decorate" value="decorate" />
