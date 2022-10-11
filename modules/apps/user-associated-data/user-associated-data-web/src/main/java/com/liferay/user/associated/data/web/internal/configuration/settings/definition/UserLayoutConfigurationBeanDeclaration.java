@@ -15,7 +15,7 @@
 package com.liferay.user.associated.data.web.internal.configuration.settings.definition;
 
 import com.liferay.portal.kernel.settings.definition.ConfigurationBeanDeclaration;
-import com.liferay.user.associated.data.web.internal.configuration.AnonymousUserLayoutConfiguration;
+import com.liferay.user.associated.data.web.internal.configuration.UserLayoutConfiguration;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -23,12 +23,12 @@ import org.osgi.service.component.annotations.Component;
  * @author Fernando Vilela
  */
 @Component(service = ConfigurationBeanDeclaration.class)
-public class AnonymousUserLayoutConfigurationBeanDeclaration
+public class UserLayoutConfigurationBeanDeclaration
 	implements ConfigurationBeanDeclaration {
 
 	@Override
 	public Class<?> getConfigurationBeanClass() {
-		return AnonymousUserLayoutConfiguration.class;
+		return UserLayoutConfiguration.class;
 	}
 
 }

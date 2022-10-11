@@ -45,11 +45,11 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + ConfigurationAdminPortletKeys.INSTANCE_SETTINGS,
-		"mvc.command.name=/portal_settings/save_anonymous_user_layout_configuration"
+		"mvc.command.name=/portal_settings/save_user_layout_configuration"
 	},
 	service = MVCActionCommand.class
 )
-public class SaveAnonymousUserLayoutConfigurationMVCActionCommand
+public class SaveUserLayoutConfigurationMVCActionCommand
 	extends BaseMVCActionCommand {
 
 	@Override

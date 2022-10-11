@@ -15,8 +15,8 @@
 package com.liferay.user.associated.data.web.internal.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
-
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
+
 
 /**
  * @author Fernando Vilela
@@ -26,11 +26,12 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 	scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
-	id = "com.liferay.user.associated.data.web.internal.configuration.AnonymousUserLayoutConfiguration",
+	id = "com.liferay.user.associated.data.web.internal.configuration.UserLayoutConfiguration",
 	localization = "content/Language",
-	name = "anonymous-user-layout-configuration-name"
+	name = "user-layout-configuration-name"
 )
-public interface AnonymousUserLayoutConfiguration {
+
+public interface UserLayoutConfiguration {
 
 	public String userPublicLayout();
 
@@ -39,5 +40,6 @@ public interface AnonymousUserLayoutConfiguration {
 	public String userPrivateLayout();
 
 	public String userPrivateLayoutAutoCreate();
+
 
 }

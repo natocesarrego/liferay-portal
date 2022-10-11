@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.settings.configuration.admin.display.PortalSettingsConfigurationScreenContributor;
 import com.liferay.portal.util.PropsUtil;
-import com.liferay.user.associated.data.web.internal.configuration.AnonymousUserLayoutConfiguration;
+import com.liferay.user.associated.data.web.internal.configuration.UserLayoutConfiguration;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -40,7 +40,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Fernando Vilela
  */
 @Component(service = PortalSettingsConfigurationScreenContributor.class)
-public class AnonymousUserLayoutPortalSettingsConfigurationScreenContributor
+public class UserLayoutPortalSettingsConfigurationScreenContributor
 	implements PortalSettingsConfigurationScreenContributor {
 
 	@Override
@@ -55,7 +55,7 @@ public class AnonymousUserLayoutPortalSettingsConfigurationScreenContributor
 
 	@Override
 	public String getKey() {
-		return "anonymous-user-layout-configuration";
+		return "user-layout-configuration";
 	}
 
 	@Override
@@ -64,12 +64,12 @@ public class AnonymousUserLayoutPortalSettingsConfigurationScreenContributor
 			"content.Language", locale, getClass());
 
 		return _language.get(
-			resourceBundle, "anonymous-user-layout-configuration-name");
+			resourceBundle, "user-layout-configuration-name");
 	}
 
 	@Override
 	public String getSaveMVCActionCommandName() {
-		return "/anonymous-user-layout-configuration";
+		return "/user-layout-configuration";
 	}
 
 	@Override
@@ -82,13 +82,13 @@ public class AnonymousUserLayoutPortalSettingsConfigurationScreenContributor
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse) {
 
-		AnonymousUserLayoutConfiguration anonymousUserLayoutConfiguration =
+		UserLayoutConfiguration userLayoutConfiguration =
 			null;
 
 		try {
-			anonymousUserLayoutConfiguration =
+			userLayoutConfiguration =
 				_configurationProvider.getCompanyConfiguration(
-					AnonymousUserLayoutConfiguration.class,
+					UserLayoutConfiguration.class,
 					CompanyThreadLocal.getCompanyId());
 		}
 		catch (PortalException portalException) {
@@ -96,38 +96,38 @@ public class AnonymousUserLayoutPortalSettingsConfigurationScreenContributor
 		}
 
 		if (Validator.isNotNull(
-				anonymousUserLayoutConfiguration.userPublicLayout())) {
+				userLayoutConfiguration.userPublicLayout())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED,
-				anonymousUserLayoutConfiguration.userPublicLayout());
+				userLayoutConfiguration.userPublicLayout());
 		}
 		else if (Validator.isNotNull(
-					anonymousUserLayoutConfiguration.userPublicLayout())) {
+					userLayoutConfiguration.userPublicLayout())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE,
-				anonymousUserLayoutConfiguration.userPublicLayoutAutoCreate());
+				userLayoutConfiguration.userPublicLayoutAutoCreate());
 		}
 		else if (Validator.isNotNull(
-					anonymousUserLayoutConfiguration.userPrivateLayout())) {
+					userLayoutConfiguration.userPrivateLayout())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED,
-				anonymousUserLayoutConfiguration.userPrivateLayout());
+				userLayoutConfiguration.userPrivateLayout());
 		}
 		else if (Validator.isNotNull(
-					anonymousUserLayoutConfiguration.
+					userLayoutConfiguration.
 						userPrivateLayoutAutoCreate())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE,
-				anonymousUserLayoutConfiguration.userPrivateLayoutAutoCreate());
+				userLayoutConfiguration.userPrivateLayoutAutoCreate());
 		}
 
 		httpServletRequest.setAttribute(
-			AnonymousUserLayoutConfiguration.class.getName(),
-			anonymousUserLayoutConfiguration);
+			UserLayoutConfiguration.class.getName(),
+			userLayoutConfiguration);
 	}
 
 	@Reference
