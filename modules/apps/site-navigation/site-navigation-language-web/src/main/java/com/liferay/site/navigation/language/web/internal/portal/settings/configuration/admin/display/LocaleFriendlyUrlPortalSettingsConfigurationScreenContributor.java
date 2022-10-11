@@ -70,7 +70,7 @@ public class LocaleFriendlyUrlPortalSettingsConfigurationScreenContributor
 
 	@Override
 	public String getSaveMVCActionCommandName() {
-		return "/configuration_admin/save_locale_friendly_url_configuration";
+		return "/portal_settings/save_locale_friendly_url_configuration";
 	}
 
 	@Override
