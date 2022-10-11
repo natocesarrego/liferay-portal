@@ -69,7 +69,7 @@ public class UserLayoutPortalSettingsConfigurationScreenContributor
 
 	@Override
 	public String getSaveMVCActionCommandName() {
-		return "/user-layout-configuration";
+		return "/portal_settings/save_user_layout_configuration";
 	}
 
 	@Override
