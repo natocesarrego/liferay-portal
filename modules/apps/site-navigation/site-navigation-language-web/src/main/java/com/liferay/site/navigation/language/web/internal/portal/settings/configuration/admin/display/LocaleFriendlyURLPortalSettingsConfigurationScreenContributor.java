@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.settings.configuration.admin.display.PortalSettingsConfigurationScreenContributor;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocalePrependFriendlyUrlStyleConfiguration;
+import com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocaleFriendlyURLConfiguration;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
  * @author Albert Gomes Cabral
  */
 @Component(service = PortalSettingsConfigurationScreenContributor.class)
-public class LocaleFriendlyUrlPortalSettingsConfigurationScreenContributor
+public class LocaleFriendlyURLPortalSettingsConfigurationScreenContributor
 	implements PortalSettingsConfigurationScreenContributor {
 
 	@Override
@@ -50,7 +50,7 @@ public class LocaleFriendlyUrlPortalSettingsConfigurationScreenContributor
 
 	@Override
 	public String getJspPath() {
-		return "/portal_settings/locale_friendly_url_style.jsp";
+		return "/portal_settings/locale_friendly_url.jsp";
 	}
 
 	@Override
@@ -83,13 +83,13 @@ public class LocaleFriendlyUrlPortalSettingsConfigurationScreenContributor
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse) {
 
-		SiteNavigationLocalePrependFriendlyUrlStyleConfiguration
+		SiteNavigationLocaleFriendlyURLConfiguration
 			siteNavigationLocaleFriendlyUrlConfiguration = null;
 
 		try {
 			siteNavigationLocaleFriendlyUrlConfiguration =
 				_configurationProvider.getCompanyConfiguration(
-					SiteNavigationLocalePrependFriendlyUrlStyleConfiguration.
+					SiteNavigationLocaleFriendlyURLConfiguration.
 						class,
 					CompanyThreadLocal.getCompanyId());
 		}
@@ -99,12 +99,12 @@ public class LocaleFriendlyUrlPortalSettingsConfigurationScreenContributor
 
 		if (Validator.isNotNull(
 				siteNavigationLocaleFriendlyUrlConfiguration.
-					localePrependFriendlyUrlStyle())) {
+					localeFriendlyURL())) {
 
 			PropsUtil.set(
 				PropsKeys.LOCALE_PREPEND_FRIENDLY_URL_STYLE,
 				siteNavigationLocaleFriendlyUrlConfiguration.
-					localePrependFriendlyUrlStyle());
+					localeFriendlyURL());
 
 			PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE =
 				GetterUtil.getInteger(
@@ -112,7 +112,7 @@ public class LocaleFriendlyUrlPortalSettingsConfigurationScreenContributor
 		}
 
 		httpServletRequest.setAttribute(
-			SiteNavigationLocalePrependFriendlyUrlStyleConfiguration.class.
+			SiteNavigationLocaleFriendlyURLConfiguration.class.
 				getName(),
 			siteNavigationLocaleFriendlyUrlConfiguration);
 	}

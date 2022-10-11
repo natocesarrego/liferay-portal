@@ -34,7 +34,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocalePrependFriendlyUrlStyleConfiguration;
+import com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocaleFriendlyURLConfiguration;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -52,7 +52,7 @@ import javax.portlet.ActionResponse;
 	},
 	service = MVCActionCommand.class
 )
-public class SaveLocaleFriendlyUrlConfigurationMVCActionCommand
+public class SaveLocaleFriendlyURLConfigurationMVCActionCommand
 	extends BaseMVCActionCommand {
 
 	@Override
@@ -75,18 +75,18 @@ public class SaveLocaleFriendlyUrlConfigurationMVCActionCommand
 		}
 
 		_configurationProvider.saveCompanyConfiguration(
-			SiteNavigationLocalePrependFriendlyUrlStyleConfiguration.class,
+			SiteNavigationLocaleFriendlyURLConfiguration.class,
 			themeDisplay.getCompanyId(),
 			HashMapDictionaryBuilder.<String, Object>put(
-				"localePrependFriendlyUrlStyle",
+				"localePrependFriendlyURLStyle",
 				ParamUtil.getString(
-					actionRequest, "localePrependFriendlyUrlStyle")
+					actionRequest, "localePrependFriendlyURLStyle")
 			).build());
 
 		PropsUtil.set(
 			PropsKeys.LOCALE_PREPEND_FRIENDLY_URL_STYLE,
 			ParamUtil.getString(
-				actionRequest, "localePrependFriendlyUrlStyle"));
+				actionRequest, "localePrependFriendlyURLStyle"));
 
 		PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE = GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.LOCALE_PREPEND_FRIENDLY_URL_STYLE));
@@ -104,7 +104,7 @@ public class SaveLocaleFriendlyUrlConfigurationMVCActionCommand
 		newPortalPreferences.setValue(
 			null, "localePrependFriendlyUrl",
 			ParamUtil.getString(
-				actionRequest, "localePrependFriendlyUrlStyle"));
+				actionRequest, "localePrependFriendlyURLStyle"));
 
 		_portalPreferencesLocalService.updatePreferences(
 			themeDisplay.getCompanyId(), PortletKeys.PREFS_OWNER_TYPE_COMPANY,

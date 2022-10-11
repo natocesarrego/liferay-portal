@@ -15,7 +15,7 @@
 package com.liferay.site.navigation.language.web.internal.configuration.settings.definition;
 
 import com.liferay.portal.kernel.settings.definition.ConfigurationBeanDeclaration;
-import com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocalePrependFriendlyUrlStyleConfiguration;
+import com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocaleFriendlyURLConfiguration;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -23,12 +23,12 @@ import org.osgi.service.component.annotations.Component;
  * @author Albert Gomes Cabral
  */
 @Component(service = ConfigurationBeanDeclaration.class)
-public class LocalePrependFriendlyUrlStyleConfigurationBeanDeclaration
+public class LocaleFriendlyUrlConfigurationBeanDeclaration
 	implements ConfigurationBeanDeclaration {
 
 	@Override
 	public Class<?> getConfigurationBeanClass() {
-		return SiteNavigationLocalePrependFriendlyUrlStyleConfiguration.class;
+		return SiteNavigationLocaleFriendlyURLConfiguration.class;
 	}
 
 }

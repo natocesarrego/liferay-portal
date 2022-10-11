@@ -26,12 +26,12 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 	scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
-	id = "com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocalePrependFriendlyUrlStyleConfiguration",
+	id = "com.liferay.site.navigation.language.web.internal.configuration.SiteNavigationLocaleFriendlyUrlConfiguration",
 	localization = "content/Language",
 	name = "site-navigation-locale-friendly-url-configuration-name"
 )
-public interface SiteNavigationLocalePrependFriendlyUrlStyleConfiguration {
+public interface SiteNavigationLocaleFriendlyURLConfiguration {
 
-	public String localePrependFriendlyUrlStyle();
+	public String localeFriendlyURL();
 
 }

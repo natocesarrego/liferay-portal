@@ -17,14 +17,14 @@
 <%@ include file="/init.jsp" %>
 
 <%
-SiteNavigationLocalePrependFriendlyUrlStyleConfiguration siteNavigationLocalePrependFriendlyUrlConfiguration = (SiteNavigationLocalePrependFriendlyUrlStyleConfiguration)request.getAttribute(SiteNavigationLocalePrependFriendlyUrlStyleConfiguration.class.getName());
+SiteNavigationLocaleFriendlyURLConfiguration siteNavigationLocaleFriendlyURLConfiguration = (SiteNavigationLocaleFriendlyURLConfiguration)request.getAttribute(SiteNavigationLocaleFriendlyURLConfiguration.class.getName());
 %>
 
 <div class="row">
 	<div class="col-md-12">
 		<br />
 
-		<aui:select label="site-navigation-locale-friendly-url-configuration-name" name="localePrependFriendlyUrlStyle" required="<%= true %>" type="text" value="<%= siteNavigationLocalePrependFriendlyUrlConfiguration.localePrependFriendlyUrlStyle() %>">
+		<aui:select label="site-navigation-locale-friendly-url-configuration-name" name="localePrependFriendlyURLStyle" required="<%= true %>" type="text" value="<%= siteNavigationLocaleFriendlyURLConfiguration.localeFriendlyURL() %>">
 			<aui:option label="locale-is-not-automatically-prepended-to-a-url" value="0" />
 			<aui:option label="locale-is-automatically-prepended-to-a-url-when-the-requested-locale-is-not-the-default-locale" value="1" />
 			<aui:option label="locale-is-automatically-prepended-to-every-url" value="2" />
