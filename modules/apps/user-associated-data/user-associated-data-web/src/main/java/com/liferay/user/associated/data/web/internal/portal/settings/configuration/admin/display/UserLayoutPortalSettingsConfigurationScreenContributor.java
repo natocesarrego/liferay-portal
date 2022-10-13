@@ -103,7 +103,7 @@ public class UserLayoutPortalSettingsConfigurationScreenContributor
 				userLayoutConfiguration.userPublicLayout());
 		}
 		else if (Validator.isNotNull(
-					userLayoutConfiguration.userPublicLayout())) {
+					userLayoutConfiguration.userPublicLayoutAutoCreate())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE,
@@ -117,8 +117,7 @@ public class UserLayoutPortalSettingsConfigurationScreenContributor
 				userLayoutConfiguration.userPrivateLayout());
 		}
 		else if (Validator.isNotNull(
-					userLayoutConfiguration.
-						userPrivateLayoutAutoCreate())) {
+					userLayoutConfiguration.userPrivateLayoutAutoCreate())) {
 
 			PropsUtil.set(
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_AUTO_CREATE,
