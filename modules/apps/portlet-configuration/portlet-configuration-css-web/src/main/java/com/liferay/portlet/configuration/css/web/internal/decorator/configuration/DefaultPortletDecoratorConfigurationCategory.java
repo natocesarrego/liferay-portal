@@ -27,17 +27,17 @@ public class DefaultPortletDecoratorConfigurationCategory
 
 	@Override
 	public String getCategoryIcon() {
-		return "cog";
+		return "format";
 	}
 
 	@Override
 	public String getCategoryKey() {
-		return "decorator-portlet";
+		return "default-portlet-decorator";
 	}
 
 	@Override
 	public String getCategorySection() {
-		return "other";
+		return "platform";
 	}
 
 }
