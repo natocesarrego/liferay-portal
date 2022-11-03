@@ -62,6 +62,7 @@ public class ContentElementEntityModel implements EntityModel {
 				object -> _getFilterableFieldFunction(
 					dtoConverterRegistry, object)),
 			new IntegerEntityField("creatorId", locale -> Field.USER_ID),
+			new StringEntityField("key", locale -> Field.ARTICLE_ID),
 			new StringEntityField(
 				"title",
 				locale -> Field.getSortableFieldName(
