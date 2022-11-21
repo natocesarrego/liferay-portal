@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.model.Team;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.Website;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.EmailAddressGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGenerator;
 import com.liferay.portal.kernel.security.auth.FullNameGeneratorFactory;
@@ -733,7 +734,9 @@ public class UserImpl extends UserBaseImpl {
 			return false;
 		}
 
-		if ((PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED ||
+		if ((PrefsPropsUtil.getBoolean(
+				CompanyThreadLocal.getCompanyId(),
+				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED) ||
 			 PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) &&
 			(getUserId() == PrincipalThreadLocal.getUserId())) {
 
