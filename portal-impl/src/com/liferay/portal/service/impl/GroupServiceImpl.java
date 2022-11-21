@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.membershippolicy.SiteMembershipPolicyUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -64,7 +63,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.comparator.GroupIdComparator;
 import com.liferay.portal.service.base.GroupServiceBaseImpl;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.ratings.kernel.transformer.RatingsDataTransformerUtil;
 
 import java.io.Serializable;
@@ -658,7 +656,9 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			(PrefsPropsUtil.getBoolean(
 				user.getCompanyId(),
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED) ||
-			 PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED)) {
+			 PrefsPropsUtil.getBoolean(
+				 user.getCompanyId(),
+				 PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED))) {
 
 			userSiteGroups.add(user.getGroup());
 

@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.membershippolicy.OrganizationMembershipPolicyUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.permission.UserPermissionUtil;
@@ -101,7 +100,9 @@ public class UserActionDropdownItems {
 						(PrefsPropsUtil.getBoolean(
 							_themeDisplay.getCompanyId(),
 							PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED) ||
-						 PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) &&
+						 PrefsPropsUtil.getBoolean(
+							 _themeDisplay.getCompanyId(),
+							 PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED)) &&
 						hasUpdatePermission,
 					_getManagePagesActionUnsafeConsumer()
 				).add(
