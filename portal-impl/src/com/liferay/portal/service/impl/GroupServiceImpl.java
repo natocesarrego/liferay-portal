@@ -64,7 +64,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.comparator.GroupIdComparator;
 import com.liferay.portal.service.base.GroupServiceBaseImpl;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.ratings.kernel.transformer.RatingsDataTransformerUtil;
 
 import java.io.Serializable;
@@ -658,7 +657,9 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			(PrefsPropsUtil.getBoolean(
 				CompanyThreadLocal.getCompanyId(),
 				PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED) ||
-			 PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED)) {
+			 PrefsPropsUtil.getBoolean(
+				 CompanyThreadLocal.getCompanyId(),
+				 PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED))) {
 
 			userSiteGroups.add(user.getGroup());
 

@@ -1033,7 +1033,9 @@ public class ServicePreAction extends Action {
 						 CompanyThreadLocal.getCompanyId(),
 						 PropsKeys.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED)) ||
 					(layout.isPublicLayout() &&
-					 !PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED)) {
+					 !PrefsPropsUtil.getBoolean(
+						 CompanyThreadLocal.getCompanyId(),
+						 PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED))) {
 
 					User layoutUser = UserLocalServiceUtil.getUserById(
 						company.getCompanyId(), layoutGroup.getClassPK());
@@ -2043,7 +2045,9 @@ public class ServicePreAction extends Action {
 
 		boolean addDefaultUserPublicLayouts = false;
 
-		if (PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED &&
+		if (PrefsPropsUtil.getBoolean(
+				CompanyThreadLocal.getCompanyId(),
+				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) &&
 			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE) {
 
 			addDefaultUserPublicLayouts = true;
@@ -2072,7 +2076,10 @@ public class ServicePreAction extends Action {
 
 		boolean deleteDefaultUserPublicLayouts = false;
 
-		if (!PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) {
+		if (!PrefsPropsUtil.getBoolean(
+				CompanyThreadLocal.getCompanyId(),
+				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED)) {
+
 			deleteDefaultUserPublicLayouts = true;
 		}
 		else if (PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_POWER_USER_REQUIRED) {
