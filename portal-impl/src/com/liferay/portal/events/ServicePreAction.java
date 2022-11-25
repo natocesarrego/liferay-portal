@@ -55,7 +55,6 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -2048,7 +2047,9 @@ public class ServicePreAction extends Action {
 		if (PrefsPropsUtil.getBoolean(
 				user.getCompanyId(),
 				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) &&
-			PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE) {
+			PrefsPropsUtil.getBoolean(
+				user.getCompanyId(),
+				PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE)) {
 
 			addDefaultUserPublicLayouts = true;
 
