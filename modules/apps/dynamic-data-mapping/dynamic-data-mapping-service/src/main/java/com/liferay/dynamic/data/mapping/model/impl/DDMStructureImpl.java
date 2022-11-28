@@ -170,6 +170,17 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 	}
 
 	@Override
+	public Map<String, DDMFormField> getDDMFormFieldsMap() {
+		if (_ddmFormFieldsMap == null) {
+			DDMForm ddmForm = _getDDMForm();
+
+			_ddmFormFieldsMap = ddmForm.getDDMFormFieldsMap(true);
+		}
+
+		return _ddmFormFieldsMap;
+	}
+
+	@Override
 	public DDMFormLayout getDDMFormLayout() throws PortalException {
 		DDMStructureVersion structureVersion = getStructureVersion();
 
@@ -425,10 +436,9 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 
 	@Override
 	public boolean hasField(String fieldName) {
-		DDMForm ddmForm = _getDDMForm();
+		Map<String, DDMFormField> ddmFormFieldsMap = getDDMFormFieldsMap();
 
-		DDMFormField ddmFormField = _fetchDDMFormField(
-			ddmForm.getDDMFormFields(), fieldName);
+		DDMFormField ddmFormField = ddmFormFieldsMap.get(fieldName);
 
 		if (ddmFormField != null) {
 			return true;
@@ -518,6 +528,13 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 	@Override
 	public void setDDMForm(DDMForm ddmForm) {
 		_ddmForm = ddmForm;
+	}
+
+	@Override
+	public void setDDMFormFieldsMap(
+		Map<String, DDMFormField> ddmFormFieldsMap) {
+
+		_ddmFormFieldsMap = ddmFormFieldsMap;
 	}
 
 	@Override
@@ -628,10 +645,9 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 	private DDMFormField _getDDMFormField(String fieldName)
 		throws PortalException {
 
-		DDMForm ddmForm = _getDDMForm();
+		Map<String, DDMFormField> ddmFormFieldsMap = getDDMFormFieldsMap();
 
-		DDMFormField ddmFormField = _fetchDDMFormField(
-			ddmForm.getDDMFormFields(), fieldName);
+		DDMFormField ddmFormField = ddmFormFieldsMap.get(fieldName);
 
 		if (ddmFormField != null) {
 			return ddmFormField;
@@ -715,5 +731,8 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 
 	@CacheField(methodName = "DDMForm", propagateToInterface = true)
 	private DDMForm _ddmForm;
+
+	@CacheField(methodName = "DDMFormFieldsMap")
+	private Map<String, DDMFormField> _ddmFormFieldsMap;
 
 }
