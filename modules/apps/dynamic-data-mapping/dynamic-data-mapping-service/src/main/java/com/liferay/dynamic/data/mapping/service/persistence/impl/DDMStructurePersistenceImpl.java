@@ -10389,6 +10389,9 @@ public class DDMStructurePersistenceImpl
 
 				ddmStructureModelImpl.setDDMForm(
 					cachedDDMStructureModelImpl.getDDMForm());
+
+				ddmStructureModelImpl.setDDMFormFieldsMap(
+					cachedDDMStructureModelImpl.getDDMFormFieldsMap());
 			}
 		}
 	}

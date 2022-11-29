@@ -1088,6 +1088,17 @@ public class DDMStructureModelImpl
 		com.liferay.dynamic.data.mapping.model.DDMForm ddmForm) {
 	}
 
+	public Map<String, com.liferay.dynamic.data.mapping.model.DDMFormField>
+		getDDMFormFieldsMap() {
+
+		return null;
+	}
+
+	public void setDDMFormFieldsMap(
+		Map<String, com.liferay.dynamic.data.mapping.model.DDMFormField>
+			ddmFormFieldsMap) {
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1385,6 +1396,8 @@ public class DDMStructureModelImpl
 
 		setDDMForm(null);
 
+		setDDMFormFieldsMap(null);
+
 		_columnBitmask = 0;
 	}
 
@@ -1519,6 +1532,10 @@ public class DDMStructureModelImpl
 		setDDMForm(null);
 
 		ddmStructureCacheModel._ddmForm = getDDMForm();
+
+		setDDMFormFieldsMap(null);
+
+		ddmStructureCacheModel._ddmFormFieldsMap = getDDMFormFieldsMap();
 
 		return ddmStructureCacheModel;
 	}
