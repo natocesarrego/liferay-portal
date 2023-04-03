@@ -86,7 +86,7 @@ public abstract class BaseSourceProcessorTestCase {
 	protected void test(String fileName, List<String> relatedFilesNames)
 		throws Exception {
 
-		test(fileName, new String[0], null, relatedFilesNames);
+		test(fileName, new String[0], null, relatedFilesNames, null);
 	}
 
 	protected void test(String fileName, String expectedErrorMessage)
@@ -101,18 +101,18 @@ public abstract class BaseSourceProcessorTestCase {
 
 		test(
 			fileName, new String[] {expectedErrorMessage},
-			new Integer[] {lineNumber}, null);
+			new Integer[] {lineNumber}, null, null);
 	}
 
 	protected void test(String fileName, String[] expectedErrorMessages)
 		throws Exception {
 
-		test(fileName, expectedErrorMessages, null, null);
+		test(fileName, expectedErrorMessages, null, null, null);
 	}
 
 	protected void test(
 			String fileName, String[] expectedMessages, Integer[] lineNumbers,
-			List<String> relatedFilesNames)
+			List<String> relatedFilesNames, String expectedFileName)
 		throws Exception {
 
 		File newFile = _generateTempFile(fileName);
@@ -179,8 +179,19 @@ public abstract class BaseSourceProcessorTestCase {
 			String actualFormattedContent = FileUtil.read(
 				new File(modifiedFileNames.get(0)));
 
-			String expectedFileName = StringBundler.concat(
-				_DIR_NAME, "/expected/", fileName);
+			if (expectedFileName != null) {
+				actualFormattedContent = FileUtil.read(
+					new File(
+						_temporaryFolder,
+						StringUtil.replace(expectedFileName, ".test", ".")));
+
+				expectedFileName = StringBundler.concat(
+					_DIR_NAME, "/expected/", expectedFileName);
+			}
+			else {
+				expectedFileName = StringBundler.concat(
+					_DIR_NAME, "/expected/", fileName);
+			}
 
 			URL expectedURL = classLoader.getResource(expectedFileName);
 
@@ -198,6 +209,12 @@ public abstract class BaseSourceProcessorTestCase {
 			Assert.assertEquals(
 				expectedFormattedContent, actualFormattedContent);
 		}
+	}
+
+	protected void testMigration(String fileName, String expectedFileName)
+		throws Exception {
+
+		test(fileName, new String[0], null, null, expectedFileName);
 	}
 
 	protected final ClassLoader classLoader =
