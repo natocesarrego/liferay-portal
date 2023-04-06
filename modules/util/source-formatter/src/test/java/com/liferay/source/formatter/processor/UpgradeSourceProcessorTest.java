@@ -54,10 +54,10 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
-	public void testUpgradeVelocityCommentMigrationCheck() throws Exception {
+	public void testUpgradeVelocityMigrationCheck() throws Exception {
 		testMigration(
-			"upgrade/UpgradeVelocityCommentMigrationCheck.testvm",
-			"upgrade/migrated/UpgradeVelocityCommentMigrationCheck.testftl");
+			"upgrade/UpgradeVelocityMigrationCheck.testvm",
+			"upgrade/migrated/UpgradeVelocityMigrationCheck.testftl");
 	}
 
 	@Test
