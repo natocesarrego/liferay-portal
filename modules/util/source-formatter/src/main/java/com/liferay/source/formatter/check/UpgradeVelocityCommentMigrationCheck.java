@@ -15,11 +15,9 @@
 package com.liferay.source.formatter.check;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.source.formatter.util.FileUtil;
+import com.liferay.source.formatter.check.util.VelocityMigrationUtil;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -36,24 +34,11 @@ public class UpgradeVelocityCommentMigrationCheck extends BaseFileCheck {
 			return content;
 		}
 
-		int posPeriod = fileName.lastIndexOf(StringPool.PERIOD);
-		int posSlash = fileName.lastIndexOf(StringPool.SLASH);
-
-		String ftlFileName = StringBundler.concat(
-			fileName.substring(0, posSlash), "/migrated/",
-			fileName.substring(posSlash + 1, posPeriod), ".ftl");
-
-		File file = new File(ftlFileName);
-
-		String contentFTLFile = content;
-
-		if (file.length() != 0) {
-			contentFTLFile = FileUtil.read(file);
-		}
-
-		contentFTLFile = _formatContent(contentFTLFile);
-
-		FileUtil.write(file, contentFTLFile);
+		VelocityMigrationUtil.writeMigratedContent(
+			_formatContent(
+				VelocityMigrationUtil.getContentMigratedFTLFile(
+					content, fileName)),
+			fileName);
 
 		return content;
 	}
