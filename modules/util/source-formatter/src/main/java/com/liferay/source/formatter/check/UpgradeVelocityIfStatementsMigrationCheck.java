@@ -45,7 +45,7 @@ public class UpgradeVelocityIfStatementsMigrationCheck
 
 				newLine = StringUtil.replace(
 					newLine, VelocityMigrationConstants.VELOCITY_IF_START,
-					"<#if");
+					VelocityMigrationConstants.FREEMARKER_IF_START);
 
 				VelocityMigrationUtil.replaceStatementEnd(
 					i, lines, VelocityMigrationConstants.VELOCITY_IF_START);
@@ -90,7 +90,7 @@ public class UpgradeVelocityIfStatementsMigrationCheck
 				}
 
 				newLine = VelocityMigrationUtil.removeFirstParenthesis(
-					newLine, "<#if");
+					newLine, VelocityMigrationConstants.FREEMARKER_IF_START);
 			}
 
 			lines[i] = newLine;
