@@ -17,6 +17,7 @@ package com.liferay.source.formatter.check;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.source.formatter.check.constants.VelocityMigrationConstants;
 
 /**
  * @author Nícolas Moura
@@ -29,8 +30,9 @@ public class UpgradeVelocityVariableSetMigrationCheck
 		String[] lines = content.split(StringPool.NEW_LINE);
 
 		for (String line : lines) {
-			if (line.contains("#set")) {
-				String newLine = line.replace("#set", "<#assign");
+			if (line.contains(VelocityMigrationConstants.VELOCITY_SET)) {
+				String newLine = line.replace(
+					VelocityMigrationConstants.VELOCITY_SET, "<#assign");
 
 				newLine = StringUtil.removeFirst(
 					newLine, StringPool.OPEN_PARENTHESIS);
