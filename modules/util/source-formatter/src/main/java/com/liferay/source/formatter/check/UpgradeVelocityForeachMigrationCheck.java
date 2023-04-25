@@ -49,11 +49,14 @@ public class UpgradeVelocityForeachMigrationCheck
 				newLine = StringUtil.replaceLast(
 					newLine, CharPool.CLOSE_PARENTHESIS, CharPool.GREATER_THAN);
 
+				int foreachStartIndex = line.indexOf(
+					VelocityMigrationConstants.VELOCITY_FOREACH_START);
+
+				int foreachStartLength =
+					VelocityMigrationConstants.VELOCITY_FOREACH_START.length();
+
 				char nextChar = line.charAt(
-					line.indexOf(
-						VelocityMigrationConstants.VELOCITY_FOREACH_START) +
-							VelocityMigrationConstants.VELOCITY_FOREACH_START.
-								length());
+					foreachStartIndex + foreachStartLength);
 
 				if (nextChar == CharPool.OPEN_PARENTHESIS) {
 					newLine = StringUtil.replaceFirst(
