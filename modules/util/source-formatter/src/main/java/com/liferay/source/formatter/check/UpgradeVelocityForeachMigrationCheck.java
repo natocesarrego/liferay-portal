@@ -17,6 +17,7 @@ package com.liferay.source.formatter.check;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.source.formatter.check.constants.VelocityMigrationConstants;
 import com.liferay.source.formatter.check.util.VelocityMigrationUtil;
 
 /**
@@ -34,19 +35,25 @@ public class UpgradeVelocityForeachMigrationCheck
 
 			String newLine = line;
 
-			if (newLine.contains(_VELOCITY_FOREACH_START)) {
-				newLine = StringUtil.replace(
-					newLine, _VELOCITY_FOREACH_START, _FREEMARKER_LIST_START);
+			if (newLine.contains(
+					VelocityMigrationConstants.VELOCITY_FOREACH_START)) {
 
 				newLine = StringUtil.replace(
-					newLine, "in", _FREEMARKER_LIST_SEPARATOR);
+					newLine, VelocityMigrationConstants.VELOCITY_FOREACH_START,
+					VelocityMigrationConstants.FREEMARKER_LIST_START);
+
+				newLine = StringUtil.replace(
+					newLine, "in",
+					VelocityMigrationConstants.FREEMARKER_LIST_SEPARATOR);
 
 				newLine = StringUtil.replaceLast(
 					newLine, CharPool.CLOSE_PARENTHESIS, CharPool.GREATER_THAN);
 
 				char nextChar = line.charAt(
-					line.indexOf(_VELOCITY_FOREACH_START) +
-						_VELOCITY_FOREACH_START.length());
+					line.indexOf(
+						VelocityMigrationConstants.VELOCITY_FOREACH_START) +
+							VelocityMigrationConstants.VELOCITY_FOREACH_START.
+								length());
 
 				if (nextChar == CharPool.OPEN_PARENTHESIS) {
 					newLine = StringUtil.replaceFirst(
@@ -60,7 +67,8 @@ public class UpgradeVelocityForeachMigrationCheck
 				newLine = _changeForeachDeclarationOrder(newLine);
 
 				VelocityMigrationUtil.replaceStatementEnd(
-					i, lines, _VELOCITY_FOREACH_START);
+					i, lines,
+					VelocityMigrationConstants.VELOCITY_FOREACH_START);
 			}
 
 			lines[i] = newLine;
@@ -72,12 +80,14 @@ public class UpgradeVelocityForeachMigrationCheck
 
 	private static String _changeForeachDeclarationOrder(String line) {
 		String firstArgument = line.substring(
-			line.indexOf(_FREEMARKER_LIST_START) +
-				_FREEMARKER_LIST_START.length() + 1,
-			line.indexOf(_FREEMARKER_LIST_SEPARATOR) - 1);
+			line.indexOf(VelocityMigrationConstants.FREEMARKER_LIST_START) +
+				VelocityMigrationConstants.FREEMARKER_LIST_START.length() + 1,
+			line.indexOf(VelocityMigrationConstants.FREEMARKER_LIST_SEPARATOR) -
+				1);
 		String secondArgument = line.substring(
-			line.indexOf(_FREEMARKER_LIST_SEPARATOR) +
-				_FREEMARKER_LIST_SEPARATOR.length() + 1,
+			line.indexOf(VelocityMigrationConstants.FREEMARKER_LIST_SEPARATOR) +
+				VelocityMigrationConstants.FREEMARKER_LIST_SEPARATOR.length() +
+					1,
 			line.indexOf(CharPool.GREATER_THAN));
 
 		String newLine = StringUtil.replaceFirst(
@@ -85,11 +95,5 @@ public class UpgradeVelocityForeachMigrationCheck
 
 		return StringUtil.replaceLast(newLine, secondArgument, firstArgument);
 	}
-
-	private static final String _FREEMARKER_LIST_SEPARATOR = "as";
-
-	private static final String _FREEMARKER_LIST_START = "<#list";
-
-	private static final String _VELOCITY_FOREACH_START = "#foreach";
 
 }
