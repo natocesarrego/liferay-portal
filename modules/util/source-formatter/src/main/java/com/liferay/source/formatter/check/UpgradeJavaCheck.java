@@ -15,6 +15,7 @@
 package com.liferay.source.formatter.check;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.source.formatter.parser.JavaClass;
 import com.liferay.source.formatter.parser.JavaClassParser;
@@ -54,13 +55,29 @@ public class UpgradeJavaCheck extends BaseFileCheck {
 			String newImportName = importsMap.get(importName);
 
 			if (newImportName != null) {
-				content = StringUtil.replace(
-					content, StringBundler.concat("import ", importName, ";"),
-					StringBundler.concat("import ", newImportName, ";"));
+				String className = _getClassNameByImport(importName);
+				String newClassName = _getClassNameByImport(newImportName);
+
+				if (className.equals(newClassName)) {
+					content = _replaceImport(
+						content, importName, newImportName);
+				}
+				else {
+					content = _replaceImport(
+						content, importName, newImportName);
+
+					content = _replaceImpl(content, className, newClassName);
+				}
 			}
 		}
 
 		return content;
+	}
+
+	private String _getClassNameByImport(String importName) {
+		String[] splitImport = StringUtil.split(importName, StringPool.PERIOD);
+
+		return splitImport[splitImport.length - 1];
 	}
 
 	private synchronized Map<String, String> _getImportsMap() throws Exception {
@@ -87,7 +104,7 @@ public class UpgradeJavaCheck extends BaseFileCheck {
 		String[] lines = StringUtil.splitLines(FileUtil.read(importsFile));
 
 		for (String line : lines) {
-			int separatorIndex = line.indexOf("=");
+			int separatorIndex = line.indexOf(StringPool.EQUAL);
 
 			map.put(
 				line.substring(0, separatorIndex),
@@ -95,6 +112,43 @@ public class UpgradeJavaCheck extends BaseFileCheck {
 		}
 
 		return map;
+	}
+
+	private String _replaceImpl(
+		String content, String className, String newClassName) {
+
+		String[] lines = content.split(StringPool.NEW_LINE);
+
+		for (String line : lines) {
+			if (line.contains(className) && !line.contains("import")) {
+				String newLine = StringUtil.replace(
+					line, className, newClassName);
+
+				content = StringUtil.replace(content, line, newLine);
+			}
+
+			String implClass = StringUtil.lowerCaseFirstLetter(className);
+
+			if (line.contains(implClass)) {
+				String newLine = StringUtil.replace(
+					line, implClass,
+					StringUtil.lowerCaseFirstLetter(newClassName));
+
+				content = StringUtil.replace(content, line, newLine);
+			}
+		}
+
+		return content;
+	}
+
+	private String _replaceImport(
+		String content, String importName, String newImportName) {
+
+		return StringUtil.replace(
+			content,
+			StringBundler.concat("import ", importName, StringPool.SEMICOLON),
+			StringBundler.concat(
+				"import ", newImportName, StringPool.SEMICOLON));
 	}
 
 	private Map<String, String> _importsMap;
