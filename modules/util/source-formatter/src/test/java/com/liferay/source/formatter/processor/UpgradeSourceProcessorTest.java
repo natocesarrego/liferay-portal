@@ -69,6 +69,11 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testUpgradeJavaMultiVMPoolUtilCheck() throws Exception {
+		test("upgrade/UpgradeJavaMultiVMPoolUtilCheck.testjava");
+	}
+
+	@Test
 	public void testUpgradeJavaServiceTrackerListCheck() throws Exception {
 		test("upgrade/UpgradeJavaServiceTrackerListCheck.testjava");
 	}
