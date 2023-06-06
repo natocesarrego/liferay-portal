@@ -1,0 +1,67 @@
+import com.liferay.portal.kernel.service.ServiceContext;
+
+/**
+ * @author Michael Cavalcanti
+ */
+@Component(
+	immediate = true
+)
+public class UpgradeJavaModelPermissionsCheck {
+
+	@Override
+	public App addOrUpdate(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+		serviceContext.setGroupPermissions(groupPermissions);
+		serviceContext.setGuestPermissions(guestPermissions);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+	@Override
+	public App addOrUpdate2(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+		serviceContext.setGroupPermissions(groupPermissions);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+	@Override
+	public App addOrUpdate3(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+		serviceContext.setGuestPermissions(guestPermissions);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+	@Override
+	public App addOrUpdate4(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+}

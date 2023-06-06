@@ -1,0 +1,99 @@
+import com.liferay.portal.kernel.service.ServiceContext;
+
+import com.liferay.portal.kernel.model.role.RoleConstants;
+
+import com.liferay.portal.kernel.service.permission.ModelPermissions;
+
+/**
+ * @author Michael Cavalcanti
+ */
+@Component(
+	immediate = true
+)
+public class UpgradeJavaModelPermissionsCheck {
+
+	@Override
+	public App addOrUpdate(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+
+		ModelPermissions modelPermissions = serviceContext.getModelPermissions();
+
+		if (modelPermissions == null) {
+			modelPermissions = ModelPermissionsFactory.create(groupPermissions, guestPermissions);
+		} else {
+			modelPermissions.addRolePermissions(RoleConstants.PLACEHOLDER_DEFAULT_GROUP_ROLE, groupPermissions);
+			modelPermissions.addRolePermissions(RoleConstants.GUEST, guestPermissions);
+		}
+
+		serviceContext.setModelPermissions(modelPermissions);
+
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+	@Override
+	public App addOrUpdate2(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+
+		ModelPermissions modelPermissions = serviceContext.getModelPermissions();
+
+		if (modelPermissions == null) {
+			modelPermissions = ModelPermissionsFactory.create(groupPermissions, new String[0]);
+		} else {
+			modelPermissions.addRolePermissions(RoleConstants.PLACEHOLDER_DEFAULT_GROUP_ROLE, groupPermissions);
+		}
+
+		serviceContext.setModelPermissions(modelPermissions);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+	@Override
+	public App addOrUpdate3(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+
+		ModelPermissions modelPermissions = serviceContext.getModelPermissions();
+
+		if (modelPermissions == null) {
+			modelPermissions = ModelPermissionsFactory.create(new String[0], guestPermissions);
+		} else {
+			modelPermissions.addRolePermissions(RoleConstants.GUEST, guestPermissions);
+		}
+
+		serviceContext.setModelPermissions(modelPermissions);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+	@Override
+	public App addOrUpdate4(long appId, String name, String description, String link, Long fileEntryId, Long categoryId, boolean ImageDeleted, boolean hasToolbar, boolean hasPage, ServiceContext serviceContext) throws PortalException, IOException{
+		App app = null;
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setDeriveDefaultPermissions(true);
+
+		DLFileEntry dlFileEntry = null;
+		if (fileEntry != 0){
+			dlFileEntry = setDLFileEntry(appId, fileEntryId, serviceContext);
+		}
+	}
+
+}
