@@ -13,8 +13,9 @@ UpgradeGradleIncludeResourceCheck | .bnd, .gradle, .java or .vm | Replaces with 
 UpgradeJavaAddFolderParameterCheck | .bnd, .gradle, .java or .vm | Fill the new parameter of the method `addFolder` of `JournalFolderService`, `JournalFolderLocalService`, and `JournalFolderLocalServiceUtil` classes |
 UpgradeJavaCheck | .bnd, .gradle, .java or .vm | Performs upgrade checks for `java` files |
 UpgradeJavaExtractTextMethodCheck | .bnd, .gradle, .java or .vm | Replaces the references of the method `HtmlUtil.extractText(` with the method `extractText(` of `HtmlParser` class |
+UpgradeJavaGetPortletGroupIdMethodCheck | .bnd, .gradle, .java or .vm | Run code migration of the method 'getPortletGroupId' to 'getScopeGroupId' |
 UpgradeRemovedAPICheck | .java | Finds cases where calls are made to removed API after an upgrade. |
-UpgradeVelocityCommentMigrationCheck | .bnd, .gradle, .java or .vm | Run code migration of comments from a Velocity file to a Freemarker file with the syntax replacements |
+UpgradeVelocityCommentMigrationCheck | .bnd, .gradle, .java or .vm | Performs upgrade checks for `java` files |
 UpgradeVelocityFileImportMigrationCheck | .bnd, .gradle, .java or .vm | Run code migration of file import from a Velocity file to a Freemarker file with the syntax replacements |
 UpgradeVelocityForeachMigrationCheck | .bnd, .gradle, .java or .vm | Run code migration of references to Foreach statement from a Velocity file to a Freemarker file with the syntax replacements |
 UpgradeVelocityIfStatementsMigrationCheck | .bnd, .gradle, .java or .vm | Run code migration of references to If statements from a Velocity file to a Freemarker file with the syntax replacements |
