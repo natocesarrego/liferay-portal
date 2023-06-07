@@ -12,26 +12,18 @@
  * details.
  */
 
-package com.liferay.account.admin.web.internal.dao.search;
-
-import java.util.Objects;
+package com.liferay.source.formatter.dependencies.upgrade;
 
 /**
  * @author Tamyris Bernardo
  */
-public class UpgradeJavaSetResultsAndTotalCheck {
+public class UpgradeJavaSetResultsSetTotalMethodCheck {
 
-	public static SearchContainer<AccountGroupDisplay> create(
-			LiferayPortletRequest liferayPortletRequest,
-			LiferayPortletResponse liferayPortletResponse)
-		throws PortalException {
+	public void method() {
 
 		SearchContainer searchContainer = new SearchContainer();
 
-		searchContainer.setTotal(
-			Long.valueOf(ConsumerLocalServiceUtil.countConsumerByCriterias(
-				this.keywords, this.status)).intValue());
 
-		searchContainer.setResults(consumers);
+		searchContainer.setResultsAndTotal(consumers);
 	}
 }
