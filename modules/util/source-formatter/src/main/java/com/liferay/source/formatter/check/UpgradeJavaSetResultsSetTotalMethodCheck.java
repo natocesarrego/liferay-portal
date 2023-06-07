@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 /**
  * @author Tamyris Bernardo
  */
-public class UpgradeJavaSetResultsAndTotalCheck extends BaseFileCheck {
+public class UpgradeJavaSetResultsSetTotalMethodCheck extends BaseFileCheck {
 
 	@Override
 	protected String doProcess(
