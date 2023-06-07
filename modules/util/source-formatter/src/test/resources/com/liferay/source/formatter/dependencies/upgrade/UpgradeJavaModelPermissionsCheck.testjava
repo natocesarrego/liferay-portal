@@ -1,0 +1,41 @@
+package com.liferay.source.formatter.dependencies.upgrade;
+
+import com.liferay.portal.kernel.service.ServiceContext;
+
+/**
+ * @author Michael Cavalcanti
+ */
+@Component(immediate = true)
+public class UpgradeJavaModelPermissionsCheck {
+
+	@Override
+	public App addOrUpdate() throws IOException, PortalException {
+		_serviceContext.setAddGroupPermissions(true);
+		_serviceContext.setDeriveDefaultPermissions(true);
+		_serviceContext.setGroupPermissions(groupPermissions);
+		_serviceContext.setGuestPermissions(guestPermissions);
+	}
+
+	@Override
+	public App addOrUpdate2() throws IOException, PortalException {
+		_serviceContext.setAddGroupPermissions(true);
+		_serviceContext.setDeriveDefaultPermissions(true);
+		_serviceContext.setGroupPermissions(groupPermissions);
+	}
+
+	@Override
+	public App addOrUpdate3() throws IOException, PortalException {
+		_serviceContext.setAddGroupPermissions(true);
+		_serviceContext.setDeriveDefaultPermissions(true);
+		_serviceContext.setGuestPermissions(guestPermissions);
+	}
+
+	@Override
+	public App addOrUpdate4() throws IOException, PortalException {
+		_serviceContext.setAddGroupPermissions(true);
+		_serviceContext.setDeriveDefaultPermissions(true);
+	}
+
+	private ServiceContext _serviceContext;
+
+}
