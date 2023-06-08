@@ -15,6 +15,8 @@
 package com.liferay.source.formatter.check;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.source.formatter.parser.JavaClass;
 import com.liferay.source.formatter.parser.JavaClassParser;
@@ -23,7 +25,9 @@ import com.liferay.source.formatter.util.SourceFormatterUtil;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,14 +54,43 @@ public class UpgradeJavaCheck extends BaseFileCheck {
 
 		Map<String, String> importsMap = _getImportsMap();
 
-		for (String importName : javaClass.getImportNames()) {
-			String newImportName = importsMap.get(importName);
+		List<String> oldVariablesList = new ArrayList<>();
+		List<String> newVariablesList = new ArrayList<>();
 
-			if (newImportName != null) {
-				content = StringUtil.replace(
-					content, StringBundler.concat("import ", importName, ";"),
-					StringBundler.concat("import ", newImportName, ";"));
+		for (String oldImportName : javaClass.getImportNames()) {
+			String newImportName = importsMap.get(oldImportName);
+
+			if (newImportName == null) {
+				continue;
 			}
+
+			content = StringUtil.replace(
+				content,
+				StringBundler.concat(
+					"import ", oldImportName, StringPool.SEMICOLON),
+				StringBundler.concat(
+					"import ", newImportName, StringPool.SEMICOLON));
+
+			String oldClassName = SourceFormatterUtil.getSimpleName(
+				oldImportName);
+			String newClassName = SourceFormatterUtil.getSimpleName(
+				newImportName);
+
+			if (!oldClassName.equals(newClassName)) {
+				oldVariablesList.add(oldClassName);
+				oldVariablesList.add(
+					StringUtil.lowerCaseFirstLetter(oldClassName));
+
+				newVariablesList.add(newClassName);
+				newVariablesList.add(
+					StringUtil.lowerCaseFirstLetter(newClassName));
+			}
+		}
+
+		if (!newVariablesList.isEmpty()) {
+			content = StringUtil.replace(
+				content, ArrayUtil.toStringArray(oldVariablesList),
+				ArrayUtil.toStringArray(newVariablesList));
 		}
 
 		return content;
@@ -87,7 +120,7 @@ public class UpgradeJavaCheck extends BaseFileCheck {
 		String[] lines = StringUtil.splitLines(FileUtil.read(importsFile));
 
 		for (String line : lines) {
-			int separatorIndex = line.indexOf("=");
+			int separatorIndex = line.indexOf(StringPool.EQUAL);
 
 			map.put(
 				line.substring(0, separatorIndex),
