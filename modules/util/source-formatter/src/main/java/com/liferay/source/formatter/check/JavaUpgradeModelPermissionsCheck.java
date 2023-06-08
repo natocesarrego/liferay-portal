@@ -184,10 +184,8 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 			"} else {"
 		);
 
-		StringBundler midModelPermissionImplSB = new StringBundler();
-
 		if (!groupPermissions.equals("new String[0]")) {
-			midModelPermissionImplSB.append(
+			modelPermissionsImplementation.append(
 				StringPool.NEW_LINE
 			).append(
 				indent
@@ -211,7 +209,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 		}
 
 		if (!guestPermissions.equals("new String[0]")) {
-			midModelPermissionImplSB.append(
+			modelPermissionsImplementation.append(
 				StringPool.NEW_LINE
 			).append(
 				indent
@@ -234,9 +232,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 			);
 		}
 
-		StringBundler endModelPermissionImplSB = new StringBundler();
-
-		endModelPermissionImplSB.append(
+		modelPermissionsImplementation.append(
 			StringPool.NEW_LINE
 		).append(
 			indent
@@ -254,9 +250,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 			".setModelPermissions(modelPermissions);"
 		);
 
-		return StringBundler.concat(
-			modelPermissionsImplementation, midModelPermissionImplSB,
-			endModelPermissionImplSB);
+		return modelPermissionsImplementation.toString();
 	}
 
 	private static final Pattern _setGroupPermissionsPattern = Pattern.compile(
