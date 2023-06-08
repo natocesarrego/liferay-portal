@@ -86,11 +86,12 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 		}
 
 		if (hasSetGroupPermissions && hasSetGuestPermissions) {
-			String method = _createMethod(
-				setGroupPermissionsMatcher.group(2),
-				setGuestPermissionsMatcher.group(2),
-				SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)),
-				setGroupPermissionsMatcher.group(1));
+			String modelPermissionsImplementation =
+				_getModelPermissionsImplementation(
+					setGroupPermissionsMatcher.group(2),
+					setGuestPermissionsMatcher.group(2),
+					SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)),
+					setGroupPermissionsMatcher.group(1));
 
 			javaTermContent = StringUtil.replace(
 				javaTermContent,
@@ -98,25 +99,29 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 					setGroupPermissionsMatcher.group(0),
 					setGuestPermissionsMatcher.group(0)
 				},
-				new String[] {method, StringPool.BLANK});
+				new String[] {modelPermissionsImplementation, StringPool.BLANK});
 		}
 		else if (hasSetGroupPermissions) {
-			String method = _createMethod(
-				setGroupPermissionsMatcher.group(2),
-				"new String[0]", SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)),
-				setGroupPermissionsMatcher.group(1));
+			String modelPermissionsImplementation =
+				_getModelPermissionsImplementation(
+					setGroupPermissionsMatcher.group(2), "new String[0]",
+					SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)),
+					setGroupPermissionsMatcher.group(1));
 
 			javaTermContent = StringUtil.replace(
-				javaTermContent, setGroupPermissionsMatcher.group(0), method);
+				javaTermContent, setGroupPermissionsMatcher.group(0),
+				modelPermissionsImplementation);
 		}
 		else if (hasSetGuestPermissions) {
-			String method = _createMethod(
-				"new String[0]", setGuestPermissionsMatcher.group(2),
-				SourceUtil.getIndent(setGuestPermissionsMatcher.group(0)),
-				setGuestPermissionsMatcher.group(1));
+			String modelPermissionsImplementation =
+				_getModelPermissionsImplementation(
+					"new String[0]", setGuestPermissionsMatcher.group(2),
+					SourceUtil.getIndent(setGuestPermissionsMatcher.group(0)),
+					setGuestPermissionsMatcher.group(1));
 
 			javaTermContent = StringUtil.replace(
-				javaTermContent, setGuestPermissionsMatcher.group(0), method);
+				javaTermContent, setGuestPermissionsMatcher.group(0),
+				modelPermissionsImplementation);
 		}
 
 		return javaTermContent;
@@ -127,13 +132,13 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 		return new String[] {JAVA_CLASS, JAVA_METHOD};
 	}
 
-	private String _createMethod(
+	private String _getModelPermissionsImplementation(
 		String groupPermissions, String guestPermissions, String indent,
 		String serviceContext) {
 
-		StringBundler startModelPermissionImplSB = new StringBundler();
+		StringBundler modelPermissionsImplementation = new StringBundler();
 
-		startModelPermissionImplSB.append(
+		modelPermissionsImplementation.append(
 			StringPool.NEW_LINE
 		).append(
 			indent
@@ -250,7 +255,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 		);
 
 		return StringBundler.concat(
-			startModelPermissionImplSB, midModelPermissionImplSB,
+			modelPermissionsImplementation, midModelPermissionImplSB,
 			endModelPermissionImplSB);
 	}
 
