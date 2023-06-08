@@ -87,10 +87,10 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 
 		if (hasSetGroupPermissions && hasSetGuestPermissions) {
 			String method = _createMethod(
-				setGroupPermissionsMatcher.group(1),
 				setGroupPermissionsMatcher.group(2),
 				setGuestPermissionsMatcher.group(2),
-				SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)));
+				SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)),
+				setGroupPermissionsMatcher.group(1));
 
 			javaTermContent = StringUtil.replace(
 				javaTermContent,
@@ -102,18 +102,18 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 		}
 		else if (hasSetGroupPermissions) {
 			String method = _createMethod(
-				setGroupPermissionsMatcher.group(1),
-				setGroupPermissionsMatcher.group(2), "new String[0]",
-				SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)));
+				setGroupPermissionsMatcher.group(2),
+				"new String[0]", SourceUtil.getIndent(setGroupPermissionsMatcher.group(0)),
+				setGroupPermissionsMatcher.group(1));
 
 			javaTermContent = StringUtil.replace(
 				javaTermContent, setGroupPermissionsMatcher.group(0), method);
 		}
 		else if (hasSetGuestPermissions) {
 			String method = _createMethod(
-				setGuestPermissionsMatcher.group(1), "new String[0]",
-				setGuestPermissionsMatcher.group(2),
-				SourceUtil.getIndent(setGuestPermissionsMatcher.group(0)));
+				"new String[0]", setGuestPermissionsMatcher.group(2),
+				SourceUtil.getIndent(setGuestPermissionsMatcher.group(0)),
+				setGuestPermissionsMatcher.group(1));
 
 			javaTermContent = StringUtil.replace(
 				javaTermContent, setGuestPermissionsMatcher.group(0), method);
@@ -128,8 +128,8 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 	}
 
 	private String _createMethod(
-		String serviceContext, String groupPermissions, String guestPermissions,
-		String indent) {
+		String groupPermissions, String guestPermissions, String indent,
+		String serviceContext) {
 
 		StringBundler startModelPermissionImplSB = new StringBundler();
 
