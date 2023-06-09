@@ -1600,6 +1600,9 @@
 		<check name="UpgradeJavaMultiVMPoolUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the references of the MultiVMPoolUtil class and also its methods usages." />
+		<check name="UpgradeJavaGetPortletGroupIdMethodCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of the method 'getPortletGroupId' to 'getScopeGroupId'" />
 		</check>
 		<check name="UpgradeJavaServiceReferenceAnnotationCheck">
 			<category name="Upgrade" />
