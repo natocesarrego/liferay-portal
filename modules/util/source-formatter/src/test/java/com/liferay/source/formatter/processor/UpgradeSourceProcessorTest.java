@@ -69,6 +69,11 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testUpgradeJavaGetPortletGroupIdMethodCheck() throws Exception {
+		test("upgrade/UpgradeJavaGetPortletGroupIdMethodCheck.testjava");
+	}
+
+	@Test
 	public void testUpgradeJavaServiceReferenceAnnotationCheck()
 		throws Exception {
 
