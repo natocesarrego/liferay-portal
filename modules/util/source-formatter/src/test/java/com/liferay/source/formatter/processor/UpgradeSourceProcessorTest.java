@@ -69,6 +69,13 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testUpgradeJavaGetImagePreviewURLMethodCheck()
+		throws Exception {
+
+		test("upgrade/UpgradeJavaGetImagePreviewURLMethodCheck.testjava");
+	}
+
+	@Test
 	public void testUpgradeJavaServiceReferenceAnnotationCheck()
 		throws Exception {
 
