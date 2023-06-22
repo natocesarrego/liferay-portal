@@ -1585,6 +1585,11 @@
 			<description name="Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file." />
 			<weight>2</weight>
 		</check>
+		<check name="UpgradeJavaAddFDSTableSchemaFieldCheck">
+			<category name="Upgrade" />
+			<description name="Replace method addFDSTableSchemaFieldCheck by add" />
+			<weight>1</weight>
+		</check>
 		<check name="UpgradeJavaAddFolderParameterCheck">
 			<category name="Upgrade" />
 			<description name="Fill the new parameter of the method `addFolder` of `JournalFolderService`, `JournalFolderLocalService`, and `JournalFolderLocalServiceUtil` classes" />
@@ -1592,6 +1597,7 @@
 		<check name="UpgradeJavaCheck">
 			<category name="Upgrade" />
 			<description name="Performs upgrade checks for `java` files" />
+			<weight>2</weight>
 		</check>
 		<check name="UpgradeJavaExtractTextMethodCheck">
 			<category name="Upgrade" />
