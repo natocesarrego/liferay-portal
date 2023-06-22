@@ -1,0 +1,17 @@
+[#assign otherServices = "other service test" /]
+
+
+
+
+
+[#assign
+
+variableA = "variable A test"
+variableB = "variable B test"
+/]
+
+[#assign
+
+variableA = "variable A test"
+variableB = "variable B test"
+]
