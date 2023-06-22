@@ -78,7 +78,12 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 		test(
 			"upgrade/UpgradeJavaMultiVMPoolUtilCheck.testjava",
 			"Could not resolve types for MultiVMPool.getPortalCache(). " +
-				"Replace 'TO_BE_REPLACED' with the correct type");
+			"Replace 'TO_BE_REPLACED' with the correct type");
+	}
+
+	@Test
+	public void testUpgradeJavaOnAfterUpdateParameterCheck() throws Exception {
+		test("upgrade/UpgradeJavaOnAfterUpdateParameterCheck.testjava");
 	}
 
 	@Test
