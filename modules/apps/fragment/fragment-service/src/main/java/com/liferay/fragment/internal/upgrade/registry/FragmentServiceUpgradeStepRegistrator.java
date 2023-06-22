@@ -203,6 +203,11 @@ public class FragmentServiceUpgradeStepRegistrator
 				}
 
 			});
+
+		registry.register(
+			"2.10.2", "2.10.3",
+			new com.liferay.fragment.internal.upgrade.v2_10_3.
+				FragmentEntryBrowserSnifferUpgradeProcess());
 	}
 
 	@Reference
