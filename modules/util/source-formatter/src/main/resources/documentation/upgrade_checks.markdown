@@ -11,6 +11,7 @@ PropertiesUpgradeLiferayPluginPackageLiferayVersionsCheck | .eslintignore, .pret
 UpgradeBNDIncludeResourceCheck | .bnd, .gradle, .java or .vm | Checks if the property value `-includeresource` or `Include-Resource` exists and removes it |
 UpgradeDeprecatedAPICheck | .java | Finds calls to deprecated classes, constructors, fields or methods after an upgrade |
 UpgradeGradleIncludeResourceCheck | .bnd, .gradle, .java or .vm | Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file. |
+UpgradeJavaAddFDSTableSchemaFieldCheck | .bnd, .gradle, .java or .vm | Replace method addFDSTableSchemaFieldCheck by add |
 UpgradeJavaAddFolderParameterCheck | .bnd, .gradle, .java or .vm | Fill the new parameter of the method `addFolder` of `JournalFolderService`, `JournalFolderLocalService`, and `JournalFolderLocalServiceUtil` classes |
 UpgradeJavaCheck | .bnd, .gradle, .java or .vm | Performs upgrade checks for `java` files |
 UpgradeJavaExtractTextMethodCheck | .bnd, .gradle, .java or .vm | Replaces the references of the method `HtmlUtil.extractText(` with the method `extractText(` of `HtmlParser` class |
