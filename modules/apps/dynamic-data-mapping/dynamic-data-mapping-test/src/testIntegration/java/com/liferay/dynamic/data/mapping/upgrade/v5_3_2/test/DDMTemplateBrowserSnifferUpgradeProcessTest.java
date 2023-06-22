@@ -110,7 +110,8 @@ public class DDMTemplateBrowserSnifferUpgradeProcessTest {
 			).build(),
 			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY, StringPool.BLANK,
 			TemplateConstants.LANG_TYPE_FTL,
-			_read("ddm-template-browser-sniffer-content.testftl"), serviceContext);
+			_read("ddm-template-browser-sniffer-content.testftl"),
+			serviceContext);
 
 		return _ddmTemplateService.getTemplates(
 			_group.getCompanyId(), _group.getClassNameId(),

@@ -101,8 +101,8 @@ public class FragmentEntryBrowserSnifferUpgradeProcessTest {
 		_fragmentEntryService.addFragmentEntry(
 			_group.getGroupId(), fragmentCollection.getFragmentCollectionId(),
 			null, "FragmentEntry Name", null,
-			_read("fragment-entry-content.testhtml"), null, false, null, null, 0,
-			FragmentConstants.TYPE_COMPONENT, null,
+			_read("fragment-entry-content.testhtml"), null, false, null, null,
+			0, FragmentConstants.TYPE_COMPONENT, null,
 			WorkflowConstants.STATUS_DRAFT, serviceContext);
 
 		return _fragmentEntryService.getFragmentEntries(
