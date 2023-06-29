@@ -1606,6 +1606,10 @@
 			<category name="Upgrade" />
 			<description name="Replaces the references of the method `HtmlUtil.extractText(` with the method `extractText(` of `HtmlParser` class" />
 		</check>
+		<check name="UpgradeJavaGetLayoutDisplayPageProviderCheck">
+			<category name="Upgrade" />
+			<description name="Replace getLayoutDisplayPageProvider by getLayoutDisplayPageProviderByClassName" />
+		</check>
 		<check name="UpgradeJavaMultiVMPoolUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the references of the MultiVMPoolUtil class and also its methods usages." />
