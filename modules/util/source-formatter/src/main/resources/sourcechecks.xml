@@ -1612,6 +1612,10 @@
 			<description name="Reorder parameters in the getItems and getItemsCount methods of the FDSDataProvider interface" />
 			<weight>1</weight>
 		</check>
+		<check name="UpgradeJavaHashUtilImportCheck">
+			<category name="Upgrade" />
+			<description name="Replace the import 'com.liferay.portal.kernel.util.HashUtil' by 'com.liferay.petra.lang.HashUtil'" />
+		</check>
 		<check name="UpgradeJavaMultiVMPoolUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the references of the MultiVMPoolUtil class and also its methods usages." />
