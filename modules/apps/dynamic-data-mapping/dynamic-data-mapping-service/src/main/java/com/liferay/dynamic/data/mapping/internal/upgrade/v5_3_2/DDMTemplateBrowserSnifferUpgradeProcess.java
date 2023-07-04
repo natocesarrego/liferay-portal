@@ -21,11 +21,14 @@ import java.util.regex.Pattern;
 /**
  * @author Albert Gomes Cabral
  */
-public class DDMTemplateBrowserSnifferUpgradeProcess extends BaseTemplateUpgradeProcess {
+public class DDMTemplateBrowserSnifferUpgradeProcess
+	extends BaseTemplateUpgradeProcess {
+
 	@Override
 	protected Pattern getTemplatePattern() throws Exception {
 		return Pattern.compile(
 			"\\w*\\s*\\=\\s*.+com\\.liferay\\.portal\\.kernel\\.servlet\\." +
-			"BrowserSnifferUtil\\\"\\)");
+				"BrowserSnifferUtil\\\"\\)");
 	}
+
 }
