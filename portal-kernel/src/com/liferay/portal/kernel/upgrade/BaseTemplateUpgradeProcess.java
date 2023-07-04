@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
  */
 public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
+	protected abstract Pattern getTemplatePattern() throws Exception;
+
 	@Override
 	protected void doUpgrade() throws Exception {
 		upgradeDDMTemplateRemoveOldVariablesInject();
@@ -44,13 +46,14 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
 			try (ResultSet resultSet = selectPreparedStatement.executeQuery()) {
 				while (resultSet.next()) {
-					String script = resultSet.getString(2);
+					String script =
+						resultSet.getString(2);
 
-					Matcher oldRemoveVariableInjectMatcher =
+					Matcher removeServiceAutoInjectedMatcher =
 						getTemplatePattern().matcher(script);
 
-					if (oldRemoveVariableInjectMatcher.find()) {
-						script = oldRemoveVariableInjectMatcher.replaceAll(
+					if (removeServiceAutoInjectedMatcher.find()) {
+						script = removeServiceAutoInjectedMatcher.replaceAll(
 							StringPool.BLANK);
 
 						Matcher isAssignEmptyMatcher =
@@ -88,13 +91,14 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
 			try (ResultSet resultSet = selectPreparedStatement.executeQuery()) {
 				while (resultSet.next()) {
-					String html = resultSet.getString(2);
+					String html =
+						resultSet.getString(2);
 
-					Matcher oldRemoveVariableInjectMatcher =
+					Matcher removeServiceAutoInjectedMatcher =
 						getTemplatePattern().matcher(html);
 
-					if (oldRemoveVariableInjectMatcher.find()) {
-						html = oldRemoveVariableInjectMatcher.replaceAll(
+					if (removeServiceAutoInjectedMatcher.find()) {
+						html = removeServiceAutoInjectedMatcher.replaceAll(
 							StringPool.BLANK);
 
 						Matcher isAssignEmptyMatcher =
@@ -117,8 +121,6 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 			}
 		}
 	}
-
-	protected abstract Pattern getTemplatePattern() throws Exception;
 
 	private static final Pattern _isAssignEmptyDDMTEmplatePattern = Pattern.compile(
 		"\\<\\#assign\\s*\\/?\\>");
