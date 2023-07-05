@@ -29,13 +29,15 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
 	protected abstract Pattern getTemplatePattern() throws Exception;
 
+	protected abstract String getTemplatePatternReplacement() throws Exception;
+
 	@Override
 	protected void doUpgrade() throws Exception {
-		upgradeDDMTemplateRemoveOldVariablesInject();
-		upgradeFragmentEntryRemoveOldVariablesInject();
+		upgradeDDMTemplates();
+		upgradeFragmentEntries();
 	}
 
-	protected void upgradeDDMTemplateRemoveOldVariablesInject() throws Exception {
+	protected void upgradeDDMTemplates() throws Exception {
 		try (PreparedStatement selectPreparedStatement =
 				 connection.prepareStatement(
 					 "select templateId, script from DDMTemplate");
@@ -49,18 +51,19 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 					String script =
 						resultSet.getString(2);
 
-					Matcher removeServiceAutoInjectedMatcher =
+					Matcher templateMatcher =
 						getTemplatePattern().matcher(script);
 
-					if (removeServiceAutoInjectedMatcher.find()) {
-						script = removeServiceAutoInjectedMatcher.replaceAll(
-							StringPool.BLANK);
+					if (templateMatcher.find()) {
+						script = templateMatcher.replaceAll(
+							getTemplatePatternReplacement());
 
 						Matcher isAssignEmptyMatcher =
 							_isAssignEmptyDDMTEmplatePattern.matcher(script);
 
 						if (isAssignEmptyMatcher.find()) {
-							script = isAssignEmptyMatcher.replaceAll(StringPool.BLANK);
+							script = isAssignEmptyMatcher.replaceAll(
+								getTemplatePatternReplacement());
 						}
 
 						long templateId = resultSet.getLong(1);
@@ -77,9 +80,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 		}
 	}
 
-	protected void upgradeFragmentEntryRemoveOldVariablesInject()
-		throws Exception {
-
+	protected void upgradeFragmentEntries() throws Exception {
 		try (PreparedStatement selectPreparedStatement =
 				 connection.prepareStatement(
 					 "select fragmentEntryId, html from FragmentEntry");
@@ -94,12 +95,11 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 					String html =
 						resultSet.getString(2);
 
-					Matcher removeServiceAutoInjectedMatcher =
+					Matcher templateMatcher =
 						getTemplatePattern().matcher(html);
 
-					if (removeServiceAutoInjectedMatcher.find()) {
-						html = removeServiceAutoInjectedMatcher.replaceAll(
-							StringPool.BLANK);
+					if (templateMatcher.find()) {
+						html = templateMatcher.replaceAll(StringPool.BLANK);
 
 						Matcher isAssignEmptyMatcher =
 							_isAssignEmptyFragmentEntryPattern.matcher(html);

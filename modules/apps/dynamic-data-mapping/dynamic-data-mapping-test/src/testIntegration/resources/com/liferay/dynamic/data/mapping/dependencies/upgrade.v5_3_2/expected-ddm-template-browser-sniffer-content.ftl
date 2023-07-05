@@ -13,12 +13,12 @@ Autocomplete is also available and can be invoked by typing "${".
 
 <#assign
 
-variableA = "variable A"
+variableA = "variableACaseThree"
 assetEntryLocalService = serviceLocator.findService("com.liferay.asset.kernel.service.AssetEntryLocalService")
 />
 
 <#assign
 
-variableB = "variable B"
+variableB = "variableBCaseFour"
 assetEntryLocalService = serviceLocator.findService("com.liferay.asset.kernel.service.AssetEntryLocalService")
 >

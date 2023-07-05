@@ -14,6 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.internal.upgrade.v5_3_2;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.upgrade.BaseTemplateUpgradeProcess;
 
 import java.util.regex.Pattern;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 /**
  * @author Albert Gomes Cabral
  */
-public class DDMTemplateBrowserSnifferUpgradeProcess
+public class TemplateBrowserSnifferUpgradeProcess
 	extends BaseTemplateUpgradeProcess {
 
 	@Override
@@ -29,6 +30,11 @@ public class DDMTemplateBrowserSnifferUpgradeProcess
 		return Pattern.compile(
 			"\\w*\\s*\\=\\s*.+com\\.liferay\\.portal\\.kernel\\.servlet\\." +
 				"BrowserSnifferUtil\\\"\\)");
+	}
+
+	@Override
+	protected String getTemplatePatternReplacement() throws Exception {
+		return StringPool.BLANK;
 	}
 
 }

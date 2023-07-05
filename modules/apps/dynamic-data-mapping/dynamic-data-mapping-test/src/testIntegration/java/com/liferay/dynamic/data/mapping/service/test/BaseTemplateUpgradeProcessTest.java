@@ -14,7 +14,6 @@
 
 package com.liferay.dynamic.data.mapping.service.test;
 
-import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.dynamic.data.mapping.constants.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateService;
@@ -24,7 +23,6 @@ import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.service.FragmentCollectionService;
 import com.liferay.fragment.service.FragmentEntryService;
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.cache.MultiVMPool;
@@ -47,25 +45,20 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 import com.liferay.portal.upgrade.test.util.UpgradeTestUtil;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 
 /**
  * @author Albert Gomes Cabral
  */
-@RunWith(Arquillian.class)
 public abstract class BaseTemplateUpgradeProcessTest {
 
-	protected abstract String classNameTemplateUpgradeProcessTest()
-		throws Exception;
+	protected abstract String getUpgradeStepClassName() throws Exception;
 
 	@Before
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
 	}
 
-	protected DDMTemplate addDDMTemplateUpgradeProcessTest
-		(String relativePath, String templateFile) throws Exception {
-
+	protected DDMTemplate addDDMTemplate(String pathFile) throws Exception {
 		ServiceContext serviceContext = ServiceContextTestUtil.getServiceContext();
 		long classPK = ParamUtil.getLong(serviceContext, "classPK");
 
@@ -79,15 +72,10 @@ public abstract class BaseTemplateUpgradeProcessTest {
 				LocaleUtil.US, "DDMTemplate Description"
 			).build(),
 			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY, StringPool.BLANK,
-			TemplateConstants.LANG_TYPE_FTL,
-			_read(relativePath, templateFile),
-			serviceContext
-		);
+			TemplateConstants.LANG_TYPE_FTL, read(pathFile), serviceContext);
 	}
 
-	protected FragmentEntry addFragmentEntryUpgradeProcessTest
-		(String relativePath, String templateFile) throws Exception {
-
+	protected FragmentEntry addFragmentEntry(String pathFile) throws Exception {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
 				_group.getGroupId(), TestPropsValues.getUserId());
@@ -100,30 +88,29 @@ public abstract class BaseTemplateUpgradeProcessTest {
 		return _fragmentEntryService.addFragmentEntry(
 			_group.getGroupId(), fragmentCollection.getFragmentCollectionId(),
 			null, "FragmentEntry Name", null,
-			_read(relativePath, templateFile),
+			read(pathFile),
 			null, false, null, null,
 			0, FragmentConstants.TYPE_COMPONENT, null,
 			WorkflowConstants.STATUS_DRAFT, serviceContext);
 	}
 
-	protected String getBasePath() {
-		return "com/liferay/dynamic/data/mapping/dependencies/upgrade.";
+	private String getBasePath() {
+		return "com/liferay/dynamic/data/mapping/dependencies/upgrade";
 	}
 
-	protected String _read(String relativePath, String fileName) throws Exception {
+	protected String read(String pathFile) throws Exception {
 		Class<?> clazz = getClass();
 
 		return StringUtil.read(
-			clazz.getClassLoader(),
-			getBasePath() + relativePath + fileName);
+			clazz.getClassLoader(), getBasePath() + pathFile);
 	}
 
-	protected void _runUpgradeTemplate() throws Exception {
+	protected void runTemplateUpgrade() throws Exception {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-			classNameTemplateUpgradeProcessTest(), LoggerTestUtil.OFF)) {
+			getUpgradeStepClassName(), LoggerTestUtil.OFF)) {
 
 			UpgradeProcess upgradeProcess = UpgradeTestUtil.getUpgradeStep(
-				_upgradeStepRegistrator, classNameTemplateUpgradeProcessTest());
+				_upgradeStepRegistrator, getUpgradeStepClassName());
 
 			upgradeProcess.upgrade();
 
