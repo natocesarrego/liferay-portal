@@ -28,7 +28,7 @@ public class TemplateBrowserSnifferUpgradeProcess
 	@Override
 	protected Pattern getTemplatePattern() throws Exception {
 		return Pattern.compile(
-			"\\w*\\s*\\=\\s*.+com\\.liferay\\.portal\\.kernel\\.servlet\\." +
+			"(\\w+)\\s*\\=\\s*.+com\\.liferay\\.portal\\.kernel\\.servlet\\." +
 				"BrowserSnifferUtil\\\"\\)");
 	}
 
@@ -37,4 +37,8 @@ public class TemplateBrowserSnifferUpgradeProcess
 		return StringPool.BLANK;
 	}
 
+	@Override
+	protected String getTemplateContextVariable() {
+		return "browserSniffer";
+	}
 }
