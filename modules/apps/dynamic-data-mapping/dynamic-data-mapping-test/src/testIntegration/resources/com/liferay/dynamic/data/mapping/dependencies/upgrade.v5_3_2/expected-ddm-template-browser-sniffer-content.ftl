@@ -22,3 +22,8 @@ assetEntryLocalService = serviceLocator.findService("com.liferay.asset.kernel.se
 variableBCaseFour = "variableBCaseFour"
 assetEntryLocalService = serviceLocator.findService("com.liferay.asset.kernel.service.AssetEntryLocalService")
 >
+
+<#h1>${browserSniffer}</#h1>
+<#h1>${browserSniffer}</#h1>
+<#h1>${browserSniffer}</#h1>
+<#h1>${browserSniffer}</#h1>
