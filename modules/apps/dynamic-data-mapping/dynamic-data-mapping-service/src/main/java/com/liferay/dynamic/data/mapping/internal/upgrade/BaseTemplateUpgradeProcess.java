@@ -14,8 +14,10 @@
 
 package com.liferay.dynamic.data.mapping.internal.upgrade;
 
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,6 +34,10 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 	protected void doUpgrade() throws Exception {
 		_upgradeDDMTemplates();
 		_upgradeFragmentEntries();
+	}
+
+	protected String getTemplateContextVariable() {
+		return null;
 	}
 
 	protected abstract Pattern getTemplatePattern() throws Exception;
@@ -54,9 +60,16 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 					Matcher templateMatcher = getTemplatePattern().matcher(
 						script);
 
-					if (templateMatcher.find()) {
-						script = templateMatcher.replaceAll(
+					while (templateMatcher.find()) {
+						script = StringUtil.replace(
+							script, templateMatcher.group(),
 							getTemplatePatternReplacement());
+
+						if (Validator.isNotNull(getTemplateContextVariable())) {
+							script = StringUtil.replace(
+								script, templateMatcher.group(1),
+								getTemplateContextVariable());
+						}
 
 						Matcher isAssignEmptyMatcher =
 							_isAssignEmptyDDMTemplatePattern.matcher(script);
@@ -65,14 +78,14 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 							script = isAssignEmptyMatcher.replaceAll(
 								getTemplatePatternReplacement());
 						}
-
-						long templateId = resultSet.getLong(1);
-
-						updatePreparedStatement.setString(1, script);
-						updatePreparedStatement.setLong(2, templateId);
-
-						updatePreparedStatement.addBatch();
 					}
+
+					long templateId = resultSet.getLong(1);
+
+					updatePreparedStatement.setString(1, script);
+					updatePreparedStatement.setLong(2, templateId);
+
+					updatePreparedStatement.addBatch();
 				}
 
 				updatePreparedStatement.executeBatch();
@@ -97,9 +110,16 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 					Matcher templateMatcher = getTemplatePattern().matcher(
 						html);
 
-					if (templateMatcher.find()) {
-						html = templateMatcher.replaceAll(
+					while (templateMatcher.find()) {
+						html = StringUtil.replace(
+							html, templateMatcher.group(),
 							getTemplatePatternReplacement());
+
+						if (Validator.isNotNull(getTemplateContextVariable())) {
+							html = StringUtil.replace(
+								html, templateMatcher.group(1),
+								getTemplateContextVariable());
+						}
 
 						Matcher isAssignEmptyMatcher =
 							_isAssignEmptyFragmentEntryPattern.matcher(html);
@@ -108,17 +128,17 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 							html = isAssignEmptyMatcher.replaceAll(
 								getTemplatePatternReplacement());
 						}
-
-						long fragmentEntryId = resultSet.getLong(1);
-
-						updatePreparedStatement.setString(1, html);
-						updatePreparedStatement.setLong(2, fragmentEntryId);
-
-						updatePreparedStatement.addBatch();
 					}
 
-					updatePreparedStatement.executeBatch();
+					long fragmentEntryId = resultSet.getLong(1);
+
+					updatePreparedStatement.setString(1, html);
+					updatePreparedStatement.setLong(2, fragmentEntryId);
+
+					updatePreparedStatement.addBatch();
 				}
+
+				updatePreparedStatement.executeBatch();
 			}
 		}
 	}
