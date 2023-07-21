@@ -22,3 +22,8 @@ browserSnifferCaseFour = serviceLocator.findService("com.liferay.portal.kernel.s
 variableBCaseFour = "variableBCaseFour"
 assetEntryLocalService = serviceLocator.findService("com.liferay.asset.kernel.service.AssetEntryLocalService")
 >
+
+<#h1>${browserSnifferCaseOne}</#h1>
+<#h1>${browserSnifferCaseTwo}</#h1>
+<#h1>${browserSnifferCaseThree}</#h1>
+<#h1>${browserSnifferCaseFour}</#h1>
