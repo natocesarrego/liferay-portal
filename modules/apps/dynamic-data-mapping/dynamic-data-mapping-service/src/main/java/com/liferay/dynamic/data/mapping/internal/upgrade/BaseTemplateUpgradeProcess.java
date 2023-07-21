@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.util.Validator;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,13 +36,13 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 		_upgradeFragmentEntries();
 	}
 
-	protected abstract Pattern getTemplatePattern() throws Exception;
-
-	protected abstract String getTemplatePatternReplacement() throws Exception;
-
 	protected String getTemplateContextVariable() {
 		return null;
 	}
+
+	protected abstract Pattern getTemplatePattern() throws Exception;
+
+	protected abstract String getTemplatePatternReplacement() throws Exception;
 
 	private void _upgradeDDMTemplates() throws Exception {
 		try (PreparedStatement selectPreparedStatement =
@@ -62,7 +61,6 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 						script);
 
 					while (templateMatcher.find()) {
-
 						script = StringUtil.replace(
 							script, templateMatcher.group(),
 							getTemplatePatternReplacement());
@@ -81,6 +79,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 								getTemplatePatternReplacement());
 						}
 					}
+
 					long templateId = resultSet.getLong(1);
 
 					updatePreparedStatement.setString(1, script);
@@ -112,7 +111,6 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 						html);
 
 					while (templateMatcher.find()) {
-
 						html = StringUtil.replace(
 							html, templateMatcher.group(),
 							getTemplatePatternReplacement());
@@ -130,8 +128,8 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 							html = isAssignEmptyMatcher.replaceAll(
 								getTemplatePatternReplacement());
 						}
-
 					}
+
 					long fragmentEntryId = resultSet.getLong(1);
 
 					updatePreparedStatement.setString(1, html);
@@ -139,6 +137,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
 					updatePreparedStatement.addBatch();
 				}
+
 				updatePreparedStatement.executeBatch();
 			}
 		}
