@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.internal.upgrade;
+package com.liferay.dynamic.data.mapping.internal.upgrade.v5_3_2;
 
+import com.liferay.dynamic.data.mapping.internal.upgrade.Template;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
@@ -23,27 +24,36 @@ import com.liferay.portal.kernel.util.Validator;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * @author Albert Gomes Cabral
+ * @author Felipe Veloso
  */
-public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
+public class TemplateUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		_upgradeDDMTemplates();
-		_upgradeFragmentEntries();
+		ArrayList<Template> templates = new ArrayList<>();
+
+		templates.add(
+			new Template(
+				"\\w+\\s*\\=\\s*.+com\\.liferay\\.portal\\.kernel\\." +
+					"servlet\\.BrowserSnifferUtil\\\"\\)",
+				StringPool.BLANK, "browserSniffer"));
+
+		templates.add(
+			new Template(
+				"\\w+\\s*=\\s*serviceContext\\.getThemeDisplay\\(\\)",
+				StringPool.BLANK, "themeDisplay"));
+
+		for (Template template : templates) {
+			_upgradeDDMTemplates(template);
+			_upgradeFragmentEntries(template);
+		}
 	}
-
-	protected String getTemplateContextVariable() {
-		return null;
-	}
-
-	protected abstract Pattern getTemplatePattern() throws Exception;
-
-	protected abstract String getTemplatePatternReplacement() throws Exception;
 
 	private String _getVariableName(Matcher matcher) {
 		String matcherGroup = matcher.group();
@@ -54,7 +64,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 		return variableName.trim();
 	}
 
-	private void _upgradeDDMTemplates() throws Exception {
+	private void _upgradeDDMTemplates(Template template) throws Exception {
 		try (PreparedStatement selectPreparedStatement =
 				connection.prepareStatement(
 					"select templateId, script from DDMTemplate");
@@ -67,18 +77,22 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 				while (resultSet.next()) {
 					String script = resultSet.getString(2);
 
-					Matcher templateMatcher = getTemplatePattern().matcher(
-						script);
+					Matcher templateMatcher = template.getPattern(
+					).matcher(
+						script
+					);
 
 					while (templateMatcher.find()) {
 						script = StringUtil.replace(
 							script, templateMatcher.group(),
-							getTemplatePatternReplacement());
+							template.getPatternReplacement());
 
-						if (Validator.isNotNull(getTemplateContextVariable())) {
+						if (Validator.isNotNull(
+								template.getContextVariable())) {
+
 							script = StringUtil.replace(
 								script, _getVariableName(templateMatcher),
-								getTemplateContextVariable());
+								template.getContextVariable());
 						}
 
 						Matcher isAssignEmptyMatcher =
@@ -86,7 +100,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
 						if (isAssignEmptyMatcher.find()) {
 							script = isAssignEmptyMatcher.replaceAll(
-								getTemplatePatternReplacement());
+								template.getPatternReplacement());
 						}
 					}
 
@@ -103,7 +117,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 		}
 	}
 
-	private void _upgradeFragmentEntries() throws Exception {
+	private void _upgradeFragmentEntries(Template template) throws Exception {
 		try (PreparedStatement selectPreparedStatement =
 				connection.prepareStatement(
 					"select fragmentEntryId, html from FragmentEntry");
@@ -117,18 +131,22 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 				while (resultSet.next()) {
 					String html = resultSet.getString(2);
 
-					Matcher templateMatcher = getTemplatePattern().matcher(
-						html);
+					Matcher templateMatcher = template.getPattern(
+					).matcher(
+						html
+					);
 
 					while (templateMatcher.find()) {
 						html = StringUtil.replace(
 							html, templateMatcher.group(),
-							getTemplatePatternReplacement());
+							template.getPatternReplacement());
 
-						if (Validator.isNotNull(getTemplateContextVariable())) {
+						if (Validator.isNotNull(
+								template.getContextVariable())) {
+
 							html = StringUtil.replace(
 								html, _getVariableName(templateMatcher),
-								getTemplateContextVariable());
+								template.getContextVariable());
 						}
 
 						Matcher isAssignEmptyMatcher =
@@ -136,7 +154,7 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 
 						if (isAssignEmptyMatcher.find()) {
 							html = isAssignEmptyMatcher.replaceAll(
-								getTemplatePatternReplacement());
+								template.getPatternReplacement());
 						}
 					}
 
