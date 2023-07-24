@@ -63,7 +63,7 @@ public class TemplateBrowserSnifferUpgradeProcessTest
 	@Override
 	protected String getUpgradeStepClassName() throws Exception {
 		return "com.liferay.dynamic.data.mapping.internal.upgrade.v5_3_2." +
-			"TemplateBrowserSnifferUpgradeProcess";
+			"TemplateUpgradeProcess";
 	}
 
 }

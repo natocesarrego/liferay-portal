@@ -17,8 +17,13 @@ variableACaseFour = "variableACaseFour"
 variableBCaseFour = "variableACaseFour"
 ]
 
+[#assign serviceContext = staticUtil["com.liferay.portal.kernel.service.ServiceContextThreadLocal"].getServiceContext()]
+[#assign themeDisplayVariable = serviceContext.getThemeDisplay() /]
+
 	<h1>${browserSnifferCaseTwo}</h1>
 
 	<h1>${browserSnifferCaseTwo}</h1>
+
+	<#h1>${themeDisplayVariable.getURLCurrent()}</h1>
 
 </div>

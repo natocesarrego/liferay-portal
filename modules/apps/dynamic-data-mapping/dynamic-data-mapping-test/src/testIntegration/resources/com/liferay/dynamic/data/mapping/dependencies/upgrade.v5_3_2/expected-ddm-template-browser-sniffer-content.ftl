@@ -23,7 +23,11 @@ variableBCaseFour = "variableBCaseFour"
 assetEntryLocalService = serviceLocator.findService("com.liferay.asset.kernel.service.AssetEntryLocalService")
 >
 
-<#h1>${browserSniffer}</#h1>
-<#h1>${browserSniffer}</#h1>
-<#h1>${browserSniffer}</#h1>
-<#h1>${browserSniffer}</#h1>
+<#assign serviceContext = staticUtil["com.liferay.portal.kernel.service.ServiceContextThreadLocal"].getServiceContext()>
+
+
+<h1>${browserSniffer}</h1>
+<h1>${browserSniffer}</h1>
+<h1>${browserSniffer}</h1>
+<h1>${browserSniffer}</h1>
+<h1>${themeDisplay.getURLCurrent()}</h1>
