@@ -182,6 +182,16 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testUpgradeJavaLayoutServicesCheck() throws Exception {
+		test(
+			"upgrade/UpgradeJavaLayoutServicesCheck.testjava",
+			StringBundler.concat(
+				"Could not conclude upgrade of one the addLayout() or ",
+				"updateLayout() methods. The method signature has changed ",
+				"with new parameters. Fill the new parameters manually."));
+	}
+
+	@Test
 	public void testUpgradeJavaModelPermissionsCheck() throws Exception {
 		test("upgrade/UpgradeJavaModelPermissionsCheck.testjava");
 	}
