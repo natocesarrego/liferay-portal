@@ -1,10 +1,11 @@
 /**
- * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.dynamic.data.mapping.internal.upgrade.v5_3_2;
 
+import com.liferay.dynamic.data.mapping.internal.upgrade.Template;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
@@ -14,27 +15,30 @@ import com.liferay.portal.kernel.util.Validator;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * @author Albert Gomes Cabral
+ * @author Felipe Veloso
  */
-public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
+public class TemplateUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		_upgradeDDMTemplates();
-		_upgradeFragmentEntries();
+		ArrayList<Template> templates = new ArrayList<>();
+
+		templates.add(
+			new Template(
+				"browserSniffer",
+				"\\w+\\s*\\=\\s*.+com\\.liferay\\.portal\\.kernel\\." +
+					"servlet\\.BrowserSnifferUtil\\\"\\)",
+				StringPool.BLANK));
+
+		_upgradeDDMTemplates(templates);
+		_upgradeFragmentEntries(templates);
 	}
-
-	protected String getTemplateContextVariable() {
-		return null;
-	}
-
-	protected abstract Pattern getTemplatePattern() throws Exception;
-
-	protected abstract String getTemplatePatternReplacement() throws Exception;
 
 	private String _getVariableName(Matcher matcher) {
 		String matcherGroup = matcher.group();
@@ -45,88 +49,123 @@ public abstract class BaseTemplateUpgradeProcess extends UpgradeProcess {
 		return variableName.trim();
 	}
 
-	private String _replaceTemplatePattern(
-			Pattern isAssignEmptyPattern, String template)
+	private void _upgradeDDMTemplates(ArrayList<Template> templates)
 		throws Exception {
 
-		Pattern templatePattern = getTemplatePattern();
+		for (Template template : templates) {
+			try (PreparedStatement selectPreparedStatement =
+					connection.prepareStatement(
+						"select templateId, script from DDMTemplate");
+				PreparedStatement updatePreparedStatement =
+					AutoBatchPreparedStatementUtil.concurrentAutoBatch(
+						connection,
+						"update DDMTemplate set script = ? where templateId " +
+							"= ?")) {
 
-		Matcher templateMatcher = templatePattern.matcher(template);
+				try (ResultSet resultSet =
+						selectPreparedStatement.executeQuery()) {
 
-		while (templateMatcher.find()) {
-			template = StringUtil.replace(
-				template, templateMatcher.group(),
-				getTemplatePatternReplacement());
+					while (resultSet.next()) {
+						String script = resultSet.getString(2);
 
-			if (Validator.isNotNull(getTemplateContextVariable())) {
-				template = StringUtil.replace(
-					template, _getVariableName(templateMatcher),
-					getTemplateContextVariable());
-			}
+						Pattern templatePattern = template.getPattern();
 
-			Matcher isAssignEmptyMatcher = isAssignEmptyPattern.matcher(
-				template);
+						Matcher templateMatcher = templatePattern.matcher(
+							script);
 
-			if (isAssignEmptyMatcher.find()) {
-				template = isAssignEmptyMatcher.replaceAll(
-					getTemplatePatternReplacement());
+						while (templateMatcher.find()) {
+							script = StringUtil.replace(
+								script, templateMatcher.group(),
+								template.getPatternReplacement());
+
+							if (Validator.isNotNull(
+									template.getContextVariable())) {
+
+								script = StringUtil.replace(
+									script, _getVariableName(templateMatcher),
+									template.getContextVariable());
+							}
+
+							Matcher isAssignEmptyMatcher =
+								_isAssignEmptyDDMTemplatePattern.matcher(
+									script);
+
+							if (isAssignEmptyMatcher.find()) {
+								script = isAssignEmptyMatcher.replaceAll(
+									template.getPatternReplacement());
+							}
+						}
+
+						long templateId = resultSet.getLong(1);
+
+						updatePreparedStatement.setString(1, script);
+						updatePreparedStatement.setLong(2, templateId);
+
+						updatePreparedStatement.addBatch();
+					}
+
+					updatePreparedStatement.executeBatch();
+				}
 			}
 		}
-
-		return template;
 	}
 
-	private void _upgradeDDMTemplates() throws Exception {
-		try (PreparedStatement selectPreparedStatement =
-				connection.prepareStatement(
-					"select templateId, script from DDMTemplate");
-			PreparedStatement updatePreparedStatement =
-				AutoBatchPreparedStatementUtil.concurrentAutoBatch(
-					connection,
-					"update DDMTemplate set script = ? where templateId = ?")) {
+	private void _upgradeFragmentEntries(ArrayList<Template> templates)
+		throws Exception {
 
-			try (ResultSet resultSet = selectPreparedStatement.executeQuery()) {
-				while (resultSet.next()) {
-					updatePreparedStatement.setString(
-						1,
-						_replaceTemplatePattern(
-							_isAssignEmptyDDMTemplatePattern,
-							resultSet.getString("script")));
-					updatePreparedStatement.setLong(
-						2, resultSet.getLong("templateId"));
+		for (Template template : templates) {
+			try (PreparedStatement selectPreparedStatement =
+					connection.prepareStatement(
+						"select fragmentEntryId, html from FragmentEntry");
+				PreparedStatement updatePreparedStatement =
+					AutoBatchPreparedStatementUtil.concurrentAutoBatch(
+						connection,
+						"update FragmentEntry set html = ? where " +
+							"fragmentEntryId = ?")) {
 
-					updatePreparedStatement.addBatch();
+				try (ResultSet resultSet =
+						selectPreparedStatement.executeQuery()) {
+
+					while (resultSet.next()) {
+						String html = resultSet.getString(2);
+
+						Pattern templatePattern = template.getPattern();
+
+						Matcher templateMatcher = templatePattern.matcher(html);
+
+						while (templateMatcher.find()) {
+							html = StringUtil.replace(
+								html, templateMatcher.group(),
+								template.getPatternReplacement());
+
+							if (Validator.isNotNull(
+									template.getContextVariable())) {
+
+								html = StringUtil.replace(
+									html, _getVariableName(templateMatcher),
+									template.getContextVariable());
+							}
+
+							Matcher isAssignEmptyMatcher =
+								_isAssignEmptyFragmentEntryPattern.matcher(
+									html);
+
+							if (isAssignEmptyMatcher.find()) {
+								html = isAssignEmptyMatcher.replaceAll(
+									template.getPatternReplacement());
+							}
+						}
+
+						long fragmentEntryId = resultSet.getLong(1);
+
+						updatePreparedStatement.setString(1, html);
+						updatePreparedStatement.setLong(2, fragmentEntryId);
+
+						updatePreparedStatement.addBatch();
+					}
+
+					updatePreparedStatement.executeBatch();
 				}
-
-				updatePreparedStatement.executeBatch();
-			}
-		}
-	}
-
-	private void _upgradeFragmentEntries() throws Exception {
-		try (PreparedStatement selectPreparedStatement =
-				connection.prepareStatement(
-					"select fragmentEntryId, html from FragmentEntry");
-			PreparedStatement updatePreparedStatement =
-				AutoBatchPreparedStatementUtil.concurrentAutoBatch(
-					connection,
-					"update FragmentEntry set html = ? where fragmentEntryId " +
-						"= ?")) {
-
-			try (ResultSet resultSet = selectPreparedStatement.executeQuery()) {
-				while (resultSet.next()) {
-					updatePreparedStatement.setString(
-						1,
-						_replaceTemplatePattern(
-							_isAssignEmptyFragmentEntryPattern,
-							resultSet.getString("html")));
-					updatePreparedStatement.setLong(
-						2, resultSet.getLong("fragmentEntryId"));
-
-					updatePreparedStatement.addBatch();
-				}
-
-				updatePreparedStatement.executeBatch();
 			}
 		}
 	}
