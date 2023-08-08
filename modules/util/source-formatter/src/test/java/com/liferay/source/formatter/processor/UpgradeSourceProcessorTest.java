@@ -42,18 +42,6 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
-	public void testUpgradeGetClassNamesMethodCheck() throws Exception {
-		test("upgrade/UpgradeJavaGetClassNamesMethodCheck.testjava");
-		test("upgrade/UpgradeJSPFGetClassNamesMethodCheck.testjspf");
-	}
-
-	@Test
-	public void testUpgradeGetImagePreviewURLMethodCheck() throws Exception {
-		test("upgrade/UpgradeJavaGetImagePreviewURLMethodCheck.testjava");
-		test("upgrade/UpgradeJSPGetImagePreviewURLMethodCheck.testjsp");
-	}
-
-	@Test
 	public void testUpgradeGetPortletGroupIdMethodCheck() throws Exception {
 		test("upgrade/UpgradeFTLGetPortletGroupIdMethodCheck.testftl");
 		test("upgrade/UpgradeJavaGetPortletGroupIdMethodCheck.testjava");
@@ -98,16 +86,6 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
-	public void testUpgradeJavaCommerceCountryServiceCheck() throws Exception {
-		test("upgrade/UpgradeJavaCommerceCountryServiceCheck.testjava");
-	}
-
-	@Test
-	public void testUpgradeJavaCommerceRegionCheck() throws Exception {
-		test("upgrade/UpgradeJavaCommerceRegionCheck.testjava");
-	}
-
-	@Test
 	public void testUpgradeJavaCommerceShippingOptionCheck() throws Exception {
 		test("upgrade/UpgradeJavaCommerceShippingOptionCheck.testjava");
 	}
@@ -120,11 +98,6 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	@Test
 	public void testUpgradeJavaCookieUtilCheck() throws Exception {
 		test("upgrade/UpgradeJavaCookieUtilCheck.testjava");
-	}
-
-	@Test
-	public void testUpgradeJavaExtractTextMethodCheck() throws Exception {
-		test("upgrade/UpgradeJavaExtractTextMethodCheck.testjava");
 	}
 
 	@Test
@@ -174,11 +147,6 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 		throws Exception {
 
 		test("upgrade/UpgradeJavaGetLayoutDisplayPageProviderCheck.testjava");
-	}
-
-	@Test
-	public void testUpgradeJavaIndexerCheck() throws Exception {
-		test("upgrade/UpgradeJavaIndexerCheck.testjava");
 	}
 
 	@Test
@@ -247,6 +215,18 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	@Test
 	public void testUpgradeRejectedExecutionHandlerCheck() throws Exception {
 		test("upgrade/UpgradeRejectedExecutionHandlerCheck.testjava");
+	}
+
+	@Test
+	public void testUpgradeReplacementCheck() throws Exception {
+		test("upgrade/UpgradeJavaExtractTextMethodCheck.testjava");
+		test("upgrade/UpgradeJavaGetClassNamesMethodCheck.testjava");
+		test("upgrade/UpgradeJSPFGetClassNamesMethodCheck.testjspf");
+		test("upgrade/UpgradeJavaGetImagePreviewURLMethodCheck.testjava");
+		test("upgrade/UpgradeJSPGetImagePreviewURLMethodCheck.testjsp");
+		test("upgrade/UpgradeJavaCommerceCountryServiceCheck.testjava");
+		test("upgrade/UpgradeJavaCommerceRegionCheck.testjava");
+		test("upgrade/UpgradeJavaIndexerCheck.testjava");
 	}
 
 	@Test
