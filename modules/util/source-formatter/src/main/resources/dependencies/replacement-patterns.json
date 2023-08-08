@@ -1,0 +1,90 @@
+[
+	{
+		"className": "CommerceAddress",
+		"newImports": [
+		],
+		"newReference": "",
+		"original": "getCode",
+		"originalReplacement": "getRegionCode",
+		"regex": "\\w+\\.\\w*\\(?\\s*\\)?\\s*\\.?getCode\\(",
+		"validExtensions": [
+			"java"
+		]
+	},
+	{
+		"className": "CountryService",
+		"newImports": [
+		],
+		"newReference": "",
+		"original": "fetchCommerceCountry",
+		"originalReplacement": "fetchCountryByA2",
+		"regex": "\\w+\\.\\w*\\(?\\s*\\)?\\s*\\.?fetchCommerceCountry\\(",
+		"validExtensions": [
+			"java"
+		]
+	},
+	{
+		"className": "HtmlUtil",
+		"newImports": [
+			"com.liferay.portal.kernel.util.HtmlParser"
+		],
+		"newReference": "HtmlParser _htmlParser",
+		"original": "HtmlUtil.extractText(",
+		"originalReplacement": "_htmlParser.extractText(",
+		"regex": "HtmlUtil\\.extractText\\(",
+		"validExtensions": [
+			"java"
+		]
+	},
+	{
+		"className": "Indexer",
+		"newImports": [
+		],
+		"newReference": "",
+		"original": "getClassNames",
+		"originalReplacement": "getSearchClassNames",
+		"regex": "\\w+\\.getClassNames\\(",
+		"validExtensions": [
+			"java",
+			"jspf"
+		]
+	},
+	{
+		"className": "Region",
+		"newImports": [
+		],
+		"newReference": "",
+		"original": "getCode",
+		"originalReplacement": "getRegionCode",
+		"regex": "\\w+\\.\\w*\\(?\\s*\\)?\\s*\\.?getCode\\(",
+		"validExtensions": [
+			"java"
+		]
+	},
+	{
+		"className": "DLUtil",
+		"newImports": [
+			"com.liferay.document.library.util.DLURLHelper"
+		],
+		"newReference": "DLURLHelper _dlURLHelper",
+		"original": "DLUtil",
+		"originalReplacement": "_dlURLHelper",
+		"regex": "DLUtil\\.\\s*getImagePreviewURL\\(",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"className": "",
+		"newImports": [
+		],
+		"newReference": "",
+		"original": "Indexer",
+		"originalReplacement": "Indexer<?>",
+		"regex": "[(<,\\s]Indexer[\\s,>]",
+		"validExtensions": [
+			"java"
+		]
+	}
+]

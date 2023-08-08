@@ -1723,6 +1723,11 @@
 			<category name="Upgrade" />
 			<description name="Replace Liferay's RejectedExecutionHandler with Java's RejectedExecutionHandler" />
 		</check>
+		<check name="UpgradeReplacementCheck">
+			<category name="Upgrade" />
+			<description name="Performs replacements on Liferay's outdated code" />
+			<weight>1</weight>
+		</check>
 		<check name="UpgradeSetResultsSetTotalMethodCheck">
 			<category name="Upgrade" />
 			<description name="Run code migration of method searchContainer.setResults to the searchContainer.setResultsAndTotal and delete searchContainer.setTotal" />
