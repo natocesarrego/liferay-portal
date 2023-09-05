@@ -9,3 +9,5 @@
 
 <div class="item-preview" data-href="<%= Validator.isNotNull(thumbnailSrc) ? HtmlUtil.escapeHREF(_dlURLHelper.getImagePreviewURL(fileEntry, themeDisplay)) : themeDisplay.getPathThemeImages() + "/file_system/large/default.png" %>">
 </div>
+
+<%@ page import="com.liferay.document.library.util.DLURLHelper" %>
