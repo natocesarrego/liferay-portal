@@ -60,41 +60,30 @@ public abstract class BaseUpgradeCheck extends BaseFileCheck {
 	}
 
 	protected String addNewImportsJSP(String newContent, String[] newImports) {
-		Matcher includesMatcher = _includesPattern.matcher(newContent);
-
 		Arrays.sort(newImports);
 
+		Matcher includesMatcher = _includesPattern.matcher(newContent);
+
 		if (includesMatcher.find()) {
-			String includeDirective = includesMatcher.group();
+			String jspHeader = includesMatcher.group();
 
-			String[] includeDirectives = StringUtil.splitLines(
-				includeDirective);
-
-			newContent = StringUtil.replaceFirst(
-				newContent,
-				com.liferay.petra.string.StringUtil.merge(
-					includeDirectives, "\n"),
-				getJspHeader(newImports, includeDirectives));
-		}
-		else {
-			Matcher copyrightMatcher = _copyrightPattern.matcher(newContent);
-
-			if (copyrightMatcher.find()) {
-				String copyright = copyrightMatcher.group(1);
-
-				newContent = StringUtil.replaceFirst(
-					newContent, copyright, getJspHeader(newImports, copyright));
-			}
-			else {
-				for (String newImport : newImports) {
-					newContent = StringBundler.concat(
-						"<%@ page import=\"", newImport, "\" %>",
-						StringPool.NEW_LINE, newContent);
-				}
-			}
+			return StringUtil.replaceFirst(
+				newContent, jspHeader,
+				getJspHeader(newImports, StringUtil.splitLines(jspHeader)));
 		}
 
-		return newContent;
+		Matcher copyrightMatcher = _copyrightPattern.matcher(newContent);
+
+		if (copyrightMatcher.find()) {
+			String jspHeader = copyrightMatcher.group(1);
+
+			return StringUtil.replaceFirst(
+				newContent, jspHeader,
+				getJspHeader(newImports, new String[]{ jspHeader }));
+		}
+
+		return StringBundler.concat(
+			getJspHeader(newImports, new String[]{}), newContent);
 	}
 
 	protected String afterFormat(
