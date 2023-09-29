@@ -106,6 +106,19 @@ public class DDMForm implements Serializable {
 		return _ddmFormFields;
 	}
 
+	public List<String> getPropertyListFieldReference() {
+
+		List<String> propertyList = new ArrayList<>();
+
+		for (DDMFormField property : _ddmFormFields) {
+
+			propertyList.add(
+				property.getProperty("fieldReference").toString());
+		}
+
+		return propertyList;
+	}
+
 	public Map<String, DDMFormField> getDDMFormFieldsMap(
 		boolean includeNestedDDMFormFields) {
 
