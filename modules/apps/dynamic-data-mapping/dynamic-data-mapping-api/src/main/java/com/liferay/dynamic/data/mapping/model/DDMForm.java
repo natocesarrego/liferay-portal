@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -104,6 +105,19 @@ public class DDMForm implements Serializable {
 
 	public List<DDMFormField> getDDMFormFields() {
 		return _ddmFormFields;
+	}
+
+	public List<String> getPropertiesListFieldReference() {
+
+		List<String> propertiesList = new ArrayList<>();
+
+		for (DDMFormField prop : _ddmFormFields) {
+
+			propertiesList.add(
+				prop.getProperty("fieldReference").toString());
+		}
+
+		return propertiesList;
 	}
 
 	public Map<String, DDMFormField> getDDMFormFieldsMap(
