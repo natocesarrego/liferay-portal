@@ -547,6 +547,35 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 		if (classNameId != PortalUtil.getClassNameId(
 				_CLASS_NAME_DDL_RECORD_SET)) {
 
+			for (DDMFormFieldValue ddmFormFieldValue :
+						ddmFormValues.getDDMFormFieldValues()) {
+
+				String fieldReference =
+					ddmFormFieldValue.getFieldReference();
+
+				List<String> propertiesList =
+					ddmForm.getPropertyListFieldReference();
+
+				if (!propertiesList.contains(fieldReference)) {
+
+					deleteDDMContentPreparedStatement.setLong(
+						1, contentId);
+
+					deleteDDMContentPreparedStatement.addBatch();
+
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							StringBundler.concat(
+								"Unable to migrate contentId ", contentId,
+								" with fieldReference value ", fieldReference,
+								" not was found."));
+					}
+
+					return;
+				}
+
+			}
+
 			ddmFormValues.setDDMFormFieldValues(
 				_upgradeDDMFormValuesHierarchy(
 					ddmFormValues.getDDMFormFieldValues()));
