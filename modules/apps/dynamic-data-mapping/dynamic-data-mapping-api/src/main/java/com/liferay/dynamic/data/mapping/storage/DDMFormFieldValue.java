@@ -9,6 +9,7 @@ import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.petra.lang.HashUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -72,6 +73,27 @@ public class DDMFormFieldValue implements Serializable {
 		return ddmFormFieldsMap.get(_name);
 	}
 
+	public DDMFormField getDDMFormField(String property) {
+		DDMForm ddmForm = _ddmFormValues.getDDMForm();
+
+		List<String> propertyList = new ArrayList<>();
+
+		for (DDMFormField ddmFormField : ddmForm.getDDMFormFields()) {
+
+			propertyList.add(
+				ddmFormField.getProperty(property).toString());
+		}
+
+		if (!propertyList.contains(_fieldReference)) {
+			return null;
+		}
+
+		Map<String, DDMFormField> ddmFormFieldsMap =
+			ddmForm.getDDMFormFieldsMap(true);
+
+		return ddmFormFieldsMap.get(_name);
+	}
+
 	public DDMFormValues getDDMFormValues() {
 		return _ddmFormValues;
 	}
@@ -127,6 +149,16 @@ public class DDMFormFieldValue implements Serializable {
 
 	public String getType() {
 		DDMFormField ddmFormField = getDDMFormField();
+
+		return ddmFormField.getType();
+	}
+
+	public String getType(String property) {
+		DDMFormField ddmFormField = getDDMFormField(property);
+
+		if (ddmFormField == null) {
+			return StringPool.BLANK;
+		}
 
 		return ddmFormField.getType();
 	}

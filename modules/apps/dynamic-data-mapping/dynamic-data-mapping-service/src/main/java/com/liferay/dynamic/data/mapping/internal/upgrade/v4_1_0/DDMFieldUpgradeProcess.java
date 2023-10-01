@@ -129,6 +129,7 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 					connection,
 					"delete from DDMContent where contentId = ? and " +
 						"ctCollectionId = 0");
+
 			ResultSet resultSet = selectPreparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
@@ -141,7 +142,8 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 					resultSet.getString("data_"),
 					deleteDDMContentPreparedStatement,
 					resultSet.getLong("structureId"),
-					resultSet.getLong("structureVersionId"));
+					resultSet.getLong("structureVersionId"),
+					false, StringPool.BLANK);
 			}
 
 			insertDDMFieldPreparedStatement.executeBatch();
@@ -437,13 +439,89 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 				structureId);
 	}
 
-	private DDMForm _getFullHierarchyDDMForm(long structureId)
-		throws Exception {
+	private DDMForm _getDDMFormCurrentVersion(
+		long structureVersionId, String propertyName) throws Exception {
+
+		DDMForm ddmForm = _ddmForms.get(structureVersionId);
+
+		if (ddmForm != null) {
+			return ddmForm;
+		}
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+			StringBundler.concat(
+				"select definition from DDMStructureVersion where ",
+				"structureVersionId = ? and ctCollectionId = 0 and ",
+				"definition like \"%", propertyName, "%\""))) {
+
+			preparedStatement.setLong(1, structureVersionId);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					ddmForm = DDMFormDeserializeUtil.deserialize(
+						_jsonDDMFormJSONDeserializer,
+						resultSet.getString("definition"));
+
+					_ddmForms.put(structureVersionId, ddmForm);
+
+					return ddmForm;
+				}
+			}
+		}
+
+		throw new UpgradeException(
+			"Unable to find dynamic data mapping structure with ID " +
+				structureVersionId);
+	}
+
+	private DDMForm _getFullHierarchyDDMForm(
+		long structureId, long structureVersionId, boolean enableSafeMood,
+		String propertyName) throws Exception {
 
 		DDMForm fullHierarchyDDMForm = _fullHierarchyDDMForms.get(structureId);
 
 		if (fullHierarchyDDMForm != null) {
 			return fullHierarchyDDMForm;
+		}
+
+		if (enableSafeMood) {
+			try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"select parentStructureId from DDMStructureVersion where " +
+				"structureVersionId = ? and ctCollectionId = 0")) {
+
+				preparedStatement.setLong(1, structureVersionId);
+
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+					if (resultSet.next()) {
+						long parentStructureId = resultSet.getLong(
+							"parentStructureId");
+
+						fullHierarchyDDMForm = _getDDMFormCurrentVersion(
+							structureVersionId, propertyName);
+
+						if (parentStructureId > 0) {
+							DDMForm parentDDMForm =
+								_getFullHierarchyDDMForm(
+									parentStructureId, structureVersionId,
+									false, propertyName);
+
+							List<DDMFormField> ddmFormFields =
+								fullHierarchyDDMForm.getDDMFormFields();
+
+							ddmFormFields.addAll(parentDDMForm.getDDMFormFields());
+						}
+
+						_fullHierarchyDDMForms.put(
+							structureVersionId, fullHierarchyDDMForm);
+
+						return fullHierarchyDDMForm;
+					}
+				}
+			}
+
+			throw new UpgradeException(
+				"Unable to find dynamic data mapping structure with ID " +
+					structureVersionId);
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
@@ -461,7 +539,8 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 
 					if (parentStructureId > 0) {
 						DDMForm parentDDMForm = _getFullHierarchyDDMForm(
-							parentStructureId);
+							parentStructureId, structureVersionId,
+							false, propertyName);
 
 						List<DDMFormField> ddmFormFields =
 							fullHierarchyDDMForm.getDDMFormFields();
@@ -521,11 +600,12 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 			long classNameId, long companyId, long contentId,
 			PreparedStatement insertDDMFieldAttributePreparedStatement,
 			PreparedStatement insertDDMFieldPreparedStatement, String data,
-			PreparedStatement deleteDDMContentPreparedStatement,
-			long structureId, long structureVersionId)
+			PreparedStatement deleteDDMContentPreparedStatement, long structureId,
+			long structureVersionId, boolean enableSafeMood, String propertyName)
 		throws Exception {
 
-		DDMForm ddmForm = _getFullHierarchyDDMForm(structureId);
+		DDMForm ddmForm = _getFullHierarchyDDMForm(
+			structureId, structureVersionId, enableSafeMood, propertyName);
 
 		DDMFormValuesDeserializerDeserializeResponse
 			ddmFormValuesDeserializerDeserializeResponse =
@@ -548,37 +628,48 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 				_CLASS_NAME_DDL_RECORD_SET)) {
 
 			for (DDMFormFieldValue ddmFormFieldValue :
-						ddmFormValues.getDDMFormFieldValues()) {
+				       ddmFormValues.getDDMFormFieldValues()) {
 
 				String fieldReference =
-					ddmFormFieldValue.getFieldReference();
+						ddmFormFieldValue.getFieldReference();
 
-				List<String> propertiesList =
-					ddmForm.getPropertyListFieldReference();
+				List<String> propertyList =
+					ddmForm.getPropertyList("fieldReference");
 
-				if (!propertiesList.contains(fieldReference)) {
+				if (!propertyList.contains(fieldReference)) {
+					_ddmForms.clear();
+
+					_fullHierarchyDDMForms.clear();
+
+					_upgradeDDMContent(
+						classNameId, companyId, contentId,
+						insertDDMFieldAttributePreparedStatement,
+						insertDDMFieldPreparedStatement, data,
+						deleteDDMContentPreparedStatement,
+						structureId, structureVersionId,
+						true, fieldReference);
+				}
+
+				if (ddmFormFieldValue.getType(
+					fieldReference).equals(StringPool.BLANK)) {
+
+					_log.warn(StringBundler.concat(
+						"Unable to migrate content with ", contentId,
+						" and the identifier name ", fieldReference));
 
 					deleteDDMContentPreparedStatement.setLong(
 						1, contentId);
 
 					deleteDDMContentPreparedStatement.addBatch();
 
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							StringBundler.concat(
-								"Unable to migrate contentId ", contentId,
-								" with fieldReference value ", fieldReference,
-								" not was found."));
-					}
-
 					return;
 				}
-
 			}
 
 			ddmFormValues.setDDMFormFieldValues(
 				_upgradeDDMFormValuesHierarchy(
 					ddmFormValues.getDDMFormFieldValues()));
+
 		}
 
 		Map<String, DDMFormField> ddmFormFieldsMap =
@@ -632,16 +723,16 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 			String type = null;
 
 			try {
-				type = ddmFormFieldValue.getType();
+				type = ddmFormFieldValue.getType(
+					ddmFormFieldValue.getFieldReference());
 			}
 			catch (Exception exception) {
 				if (_log.isWarnEnabled()) {
 					_log.warn(exception);
 				}
 			}
-
 			if (ListUtil.isNotEmpty(
-					ddmFormFieldValue.getNestedDDMFormFieldValues()) &&
+				ddmFormFieldValue.getNestedDDMFormFieldValues()) &&
 				(type != null) &&
 				!com.liferay.portal.kernel.util.StringUtil.equals(
 					type, "fieldset")) {
@@ -674,7 +765,6 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 				newDDMFormFieldValues.add(ddmFormFieldValue);
 			}
 		}
-
 		return newDDMFormFieldValues;
 	}
 
