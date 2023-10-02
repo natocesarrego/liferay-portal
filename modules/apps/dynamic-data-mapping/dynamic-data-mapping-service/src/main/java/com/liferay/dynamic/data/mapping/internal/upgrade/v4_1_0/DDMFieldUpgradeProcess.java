@@ -406,7 +406,9 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 		return Collections.singletonList(ddmFieldAttributeInfo);
 	}
 
-	private DDMForm _getDDMForm(long structureId) throws Exception {
+	private DDMForm _getDDMForm(long structureId, long structureVersionId)
+		throws Exception {
+
 		DDMForm ddmForm = _ddmForms.get(structureId);
 
 		if (ddmForm != null) {
@@ -414,10 +416,17 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"select definition from DDMStructure where structureId = ? " +
-					"and ctCollectionId = 0")) {
+				StringBundler.concat(
+					"select DDMStructureVersion.definition from DDMStructure ",
+					"inner join DDMStructureVersion on ",
+					"DDMStructure.structureId = ",
+					"DDMStructureVersion.structureId where ",
+					"DDMStructureVersion.structureId = ? and ",
+					"DDMStructureVersion.structureVersionId = ? and ",
+					"DDMStructure.ctCollectionId = 0"))) {
 
 			preparedStatement.setLong(1, structureId);
+			preparedStatement.setLong(2, structureVersionId);
 
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
@@ -437,7 +446,8 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 				structureId);
 	}
 
-	private DDMForm _getFullHierarchyDDMForm(long structureId)
+	private DDMForm _getFullHierarchyDDMForm(
+			long structureId, long structureVersionId)
 		throws Exception {
 
 		DDMForm fullHierarchyDDMForm = _fullHierarchyDDMForms.get(structureId);
@@ -457,11 +467,12 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 					long parentStructureId = resultSet.getLong(
 						"parentStructureId");
 
-					fullHierarchyDDMForm = _getDDMForm(structureId);
+					fullHierarchyDDMForm = _getDDMForm(
+						structureId, structureVersionId);
 
 					if (parentStructureId > 0) {
 						DDMForm parentDDMForm = _getFullHierarchyDDMForm(
-							parentStructureId);
+							parentStructureId, structureVersionId);
 
 						List<DDMFormField> ddmFormFields =
 							fullHierarchyDDMForm.getDDMFormFields();
@@ -525,7 +536,8 @@ public class DDMFieldUpgradeProcess extends UpgradeProcess {
 			long structureId, long structureVersionId)
 		throws Exception {
 
-		DDMForm ddmForm = _getFullHierarchyDDMForm(structureId);
+		DDMForm ddmForm = _getFullHierarchyDDMForm(
+			structureId, structureVersionId);
 
 		DDMFormValuesDeserializerDeserializeResponse
 			ddmFormValuesDeserializerDeserializeResponse =
