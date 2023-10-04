@@ -1624,6 +1624,10 @@
 			<category name="Upgrade" />
 			<description name="Run code migration of the method 'getPortletGroupId' to 'getScopeGroupId'" />
 		</check>
+		<check name="UpgradeGetQuantityMethodCheck">
+			<category name="Upgrade" />
+			<description name="Run code to send a message when find the 'getQuantity' method from 'commerceOrderItem'." />
+		</check>
 		<check name="UpgradeGradleIncludeResourceCheck">
 			<category name="Upgrade" />
 			<description name="Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file." />
