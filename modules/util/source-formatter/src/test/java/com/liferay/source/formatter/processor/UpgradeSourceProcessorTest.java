@@ -68,6 +68,22 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testUpgradeGetQuantityMethodCheck() throws Exception {
+		test(
+			"upgrade/UpgradeJavaGetQuantityMethodCheck.testjava",
+			StringBundler.concat(
+				"Unable to format  getQuantity method from CommerceOrderItem. ",
+				"The method has been changed to return BigDecimal type, see ",
+				"LPS-197931."));
+		test(
+			"upgrade/UpgradeJSPGetQuantityMethodCheck.testjsp",
+			StringBundler.concat(
+				"Unable to format  getQuantity method from CommerceOrderItem. ",
+				"The method has been changed to return BigDecimal type, see ",
+				"LPS-197931."));
+	}
+
+	@Test
 	public void testUpgradeGradleIncludeResourceCheck() throws Exception {
 		test(
 			SourceProcessorTestParameters.create(
