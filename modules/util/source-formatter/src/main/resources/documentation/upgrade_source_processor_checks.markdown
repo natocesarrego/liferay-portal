@@ -7,6 +7,7 @@ UpgradeDLUtilCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Replace
 UpgradeGetClassNamesMethodCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Run code migration of method from 'getClassNames' to 'getSearchClassNames' |
 UpgradeGetImagePreviewURLMethodCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Replaces the references of the method 'DLUtil.getImagePreviewURL' with the method 'getImagePreviewURL' of 'DLURLHelper' class |
 UpgradeGetPortletGroupIdMethodCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Run code migration of the method 'getPortletGroupId' to 'getScopeGroupId' |
+UpgradeGetQuantityMethodCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Run code to send a message when find the 'getQuantity' method from 'commerceOrderItem'. |
 UpgradeGradleIncludeResourceCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file. |
 UpgradeJSPFieldSetGroupCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Run code to remove 'fieldset-group' tag |
 UpgradeJavaAccountPortletKeysCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | Replace constants of CommerceAccountPortletKeys by constants of AccountPortletKeys |
