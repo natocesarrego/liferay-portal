@@ -33,6 +33,10 @@ import java.util.regex.Pattern;
  */
 public class UpgradeCatchAllCheck extends BaseFileCheck {
 
+	public static void setTestMode(boolean testMode) {
+		_testMode = testMode;
+	}
+
 	@Override
 	protected String doProcess(
 			String fileName, String absolutePath, String content)
@@ -49,13 +53,25 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 				continue;
 			}
 
+			String actualContent = newContent;
+
 			if (fileName.endsWith(".java")) {
 				newContent = _formatJava(newContent, fileName, jsonObject);
 			}
 			else {
 				newContent = _formatGeneral(newContent, fileName, jsonObject);
 			}
+
+			if (_testMode && _firstExecution &&
+				actualContent.equals(newContent)) {
+
+				newContent = newContent.concat("Pattern without test");
+
+				break;
+			}
 		}
+
+		_firstExecution = false;
 
 		return newContent;
 	}
@@ -370,4 +386,6 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 		return false;
 	}
 
+	private static boolean _firstExecution = true;
+	private static boolean _testMode;
 }
