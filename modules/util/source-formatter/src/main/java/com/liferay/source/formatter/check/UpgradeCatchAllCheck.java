@@ -217,13 +217,8 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 				newContent, jsonObject.getString("newReference"));
 		}
 		else if (fileName.endsWith(".jsp")) {
-			for (String newImport : newImports) {
-				if (!newContent.contains(newImport)) {
-					newContent = StringBundler.concat(
-						"<%@ page import=\"", newImport, "\" %>\n\n",
-						newContent);
-				}
-			}
+			newContent = BaseUpgradeCheck.addNewImportsJSPHeader(
+				newContent, newImports);
 		}
 
 		return newContent;
