@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.source.formatter.check.util.JavaSourceUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -47,6 +48,20 @@ public abstract class BaseUpgradeCheck extends BaseFileCheck {
 
 		Arrays.sort(newImports);
 
+		List<String> missingImports = new ArrayList<>();
+
+		for (String newImport : newImports) {
+			if (!newContent.contains("import=\"" + newImport)) {
+				missingImports.add(newImport);
+			}
+		}
+
+		if (missingImports.isEmpty()) {
+			return newContent;
+		}
+
+		newImports = missingImports.toArray(new String[0]);
+
 		Matcher includesMatcher = _includesPattern.matcher(newContent);
 
 		if (includesMatcher.find()) {
@@ -81,15 +96,16 @@ public abstract class BaseUpgradeCheck extends BaseFileCheck {
 			sb.append(StringPool.NEW_LINE);
 		}
 
+		sb.append(StringPool.NEW_LINE);
+
 		for (String newImport : newImports) {
 			sb.append("<%@ page import=\"");
 			sb.append(newImport);
 			sb.append("\" %>");
 			sb.append(StringPool.NEW_LINE);
-			sb.append(StringPool.NEW_LINE);
 		}
 
-		return sb.toString();
+		return StringUtil.removeLast(sb.toString(), StringPool.NEW_LINE);
 	}
 
 	protected String addNewImports(String fileName, String newContent) {
