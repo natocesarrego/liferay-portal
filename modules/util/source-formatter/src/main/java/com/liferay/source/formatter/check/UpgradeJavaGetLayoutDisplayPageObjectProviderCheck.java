@@ -48,13 +48,13 @@ public class UpgradeJavaGetLayoutDisplayPageObjectProviderCheck
 			while (methodMatcher.find()) {
 				boolean infoItemReference = Objects.equals(
 					getVariableTypeName(
-						javaMethodContent, content, methodMatcher.group(2)),
+						javaMethodContent, content, fileName, methodMatcher.group(2)),
 					"InfoItemReference");
 
 				if (infoItemReference ||
 					!hasClassOrVariableName(
 						"LayoutDisplayPageProvider", javaMethodContent, content,
-						methodMatcher.group(1))) {
+						fileName, methodMatcher.group(1))) {
 
 					continue;
 				}

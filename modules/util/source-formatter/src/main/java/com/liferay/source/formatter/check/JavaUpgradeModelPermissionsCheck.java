@@ -41,7 +41,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 			return _formatClass(javaTermContent, importNames);
 		}
 
-		return _formatMethod(javaTermContent, fileContent);
+		return _formatMethod(javaTermContent, fileContent, fileName);
 	}
 
 	@Override
@@ -81,7 +81,9 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 		return content;
 	}
 
-	private String _formatMethod(String content, String fileContent) {
+	private String _formatMethod(String content, String fileContent, String fileName)
+	throws Exception {
+
 		boolean hasSetGroupPermissions = false;
 
 		Matcher setGroupPermissionsMatcher =
@@ -89,7 +91,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 
 		if (setGroupPermissionsMatcher.find()) {
 			hasSetGroupPermissions = _isServiceContextMethodCall(
-				content, fileContent, setGroupPermissionsMatcher.group(1));
+				content, fileContent, fileName, setGroupPermissionsMatcher.group(1));
 		}
 
 		boolean hasSetGuestPermissions = false;
@@ -99,7 +101,7 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 
 		if (setGuestPermissionsMatcher.find()) {
 			hasSetGuestPermissions = _isServiceContextMethodCall(
-				content, fileContent, setGuestPermissionsMatcher.group(1));
+				content, fileContent, fileName, setGuestPermissionsMatcher.group(1));
 		}
 
 		if (hasSetGroupPermissions || hasSetGuestPermissions) {
@@ -199,10 +201,11 @@ public class JavaUpgradeModelPermissionsCheck extends BaseJavaTermCheck {
 	}
 
 	private boolean _isServiceContextMethodCall(
-		String methodCall, String fileContent, String variableName) {
+		String methodCall, String fileContent, String fileName, String variableName)
+	throws Exception{
 
 		return Objects.equals(
-			getVariableTypeName(methodCall, fileContent, variableName),
+			getVariableTypeName(methodCall, fileContent, fileName, variableName),
 			"ServiceContext");
 	}
 

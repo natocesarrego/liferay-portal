@@ -51,9 +51,9 @@ public class UpgradeJavaAddAddressMethodCheck extends BaseUpgradeCheck {
 				if (!variableName.contains("AddressLocalServiceUtil") &&
 					!variableName.contains("AddressServiceUtil") &&
 					!hasClassOrVariableName(
-						"AddressLocalService", content, content, methodCall) &&
+						"AddressLocalService", javaMethodContent, content, fileName, methodCall) &&
 					!hasClassOrVariableName(
-						"AddressService", content, content, methodCall)) {
+						"AddressService", javaMethodContent, content, fileName, methodCall)) {
 
 					continue;
 				}
@@ -79,8 +79,8 @@ public class UpgradeJavaAddAddressMethodCheck extends BaseUpgradeCheck {
 						"boolean"
 					};
 
-					if (!hasValidParameters(
-							13, fileName, javaMethodContent, message,
+					if (!hasValidParameters(javaMethodContent,
+							13, content, fileName, message,
 							parameterList, parameterTypes)) {
 
 						continue;
@@ -109,8 +109,8 @@ public class UpgradeJavaAddAddressMethodCheck extends BaseUpgradeCheck {
 						"boolean", "ServiceContext"
 					};
 
-					if (!hasValidParameters(
-							14, fileName, javaMethodContent, message,
+					if (!hasValidParameters(javaMethodContent,
+							14, content, fileName, message,
 							parameterList, parameterTypes)) {
 
 						continue;

@@ -18,10 +18,10 @@ public class UpgradeJavaCommerceCountryCheck
 
 	@Override
 	protected String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) {
+		String content, String newContent, Matcher matcher) throws Exception {
 
 		String variableTypeName = getVariableTypeName(
-			newContent, newContent, matcher.group(1));
+			newContent, newContent, newContent, matcher.group(1));
 
 		if (!variableTypeName.equals("Country") &&
 			!variableTypeName.equals("CommerceAddress")) {

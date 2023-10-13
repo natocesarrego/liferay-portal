@@ -50,7 +50,7 @@ public class JavaUpgradeFetchCPDefinitionByCProductExternalReferenceCodeCheck
 			String methodCall = JavaSourceUtil.getMethodCall(
 				content, matcher.start());
 
-			if (_checkMethodCall(content, fileContent, methodCall)) {
+			if (_checkMethodCall(content, fileContent, fileName, methodCall)) {
 				newContent = StringUtil.replace(
 					newContent, methodCall,
 					_reorderParameters(methodCall, matcher.group(1)));
@@ -66,7 +66,8 @@ public class JavaUpgradeFetchCPDefinitionByCProductExternalReferenceCodeCheck
 	}
 
 	private boolean _checkMethodCall(
-		String content, String fileContent, String methodCall) {
+		String content, String fileContent, String fileName, String methodCall)
+	throws Exception{
 
 		List<String> parameterList = JavaSourceUtil.getParameterList(
 			methodCall);
@@ -75,16 +76,16 @@ public class JavaUpgradeFetchCPDefinitionByCProductExternalReferenceCodeCheck
 
 		if (!SourceUtil.isLiteralString(secondParameter) &&
 			!Objects.equals(
-				getVariableTypeName(content, fileContent, secondParameter),
+				getVariableTypeName(content, fileContent, fileName, secondParameter),
 				"String")) {
 
 			return false;
 		}
 
 		if (hasClassOrVariableName(
-				"CPDefinitionService", content, fileContent, methodCall) ||
+				"CPDefinitionService", content, fileContent, fileName, methodCall) ||
 			hasClassOrVariableName(
-				"CPDefinitionLocalService", content, fileContent, methodCall)) {
+				"CPDefinitionLocalService", content, fileContent, fileName, methodCall)) {
 
 			return true;
 		}

@@ -50,7 +50,8 @@ public class UpgradeJavaAddFileEntryParameterCheck extends BaseUpgradeCheck {
 
 				if (!variableName.contains("DLAppLocalServiceUtil") &&
 					!hasClassOrVariableName(
-						"DLAppLocalService", content, content, methodCall)) {
+						"DLAppLocalService", javaMethodContent, content,
+						fileName, methodCall)) {
 
 					continue;
 				}
@@ -68,8 +69,8 @@ public class UpgradeJavaAddFileEntryParameterCheck extends BaseUpgradeCheck {
 					"String", "String", "byte[]", "ServiceContext"
 				};
 
-				if (!hasValidParameters(
-						10, fileName, javaMethodContent, message, parameterList,
+				if (!hasValidParameters(javaMethodContent,
+						10, content, fileName, message, parameterList,
 						parameterTypes)) {
 
 					continue;

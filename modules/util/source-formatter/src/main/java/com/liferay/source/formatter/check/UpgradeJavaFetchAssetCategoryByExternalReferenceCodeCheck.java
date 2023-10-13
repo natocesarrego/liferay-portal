@@ -58,8 +58,8 @@ public class UpgradeJavaFetchAssetCategoryByExternalReferenceCodeCheck
 				if ((variableName != null) &&
 					!variableName.contains("AssetCategoryLocalServiceUtil") &&
 					!hasClassOrVariableName(
-						"AssetCategoryLocalService", content, content,
-						methodCall)) {
+						"AssetCategoryLocalService", javaMethodContent, content,
+						fileName, methodCall)) {
 
 					continue;
 				}
@@ -73,8 +73,8 @@ public class UpgradeJavaFetchAssetCategoryByExternalReferenceCodeCheck
 					"has changed the order of its parameters. Fill the new ",
 					"parameters manually, see LPS-194134.");
 
-				if (!hasValidParameters(
-						parameterTypes.length, fileName, javaMethodContent,
+				if (!hasValidParameters(javaMethodContent,
+						parameterTypes.length, content, fileName,
 						message, parameterList, parameterTypes)) {
 
 					continue;

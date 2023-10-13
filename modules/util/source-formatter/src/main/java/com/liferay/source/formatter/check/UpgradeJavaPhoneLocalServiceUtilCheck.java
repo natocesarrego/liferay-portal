@@ -39,7 +39,7 @@ public class UpgradeJavaPhoneLocalServiceUtilCheck
 		};
 
 		if (!hasParameterTypes(
-				content, content, ArrayUtil.toStringArray(parameterList),
+				content, content, content, ArrayUtil.toStringArray(parameterList),
 				parameterTypes)) {
 
 			return newContent;

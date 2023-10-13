@@ -18,11 +18,11 @@ public class UpgradeGetClassNamesMethodCheck
 
 	@Override
 	protected String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) {
+		String content, String newContent, Matcher matcher) throws Exception{
 
 		String methodStart = matcher.group();
 
-		if (!hasClassOrVariableName("Indexer", content, content, methodStart)) {
+		if (!hasClassOrVariableName("Indexer", content, content, content, methodStart)) {
 			return content;
 		}
 

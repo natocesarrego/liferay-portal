@@ -50,7 +50,7 @@ public class UpgradeJavaFDSDataProviderCheck extends BaseUpgradeCheck {
 			}
 
 			newJavaMethodContent = _checkMethodCalls(
-				javaClass.getContent(), newJavaMethodContent);
+				content, fileName, newJavaMethodContent);
 
 			content = StringUtil.replace(
 				content, javaMethodContent, newJavaMethodContent);
@@ -60,17 +60,18 @@ public class UpgradeJavaFDSDataProviderCheck extends BaseUpgradeCheck {
 	}
 
 	private boolean _checkMethodCall(
-		String content, String javaMethodContent, String methodCall) {
+		String content, String javaMethodContent, String fileName, String methodCall)
+		throws Exception {
 
 		List<String> parameterList = JavaSourceUtil.getParameterList(
 			methodCall);
 
 		String variableTypeName = getVariableTypeName(
-			javaMethodContent, content, parameterList.get(0));
+			javaMethodContent, content, fileName, parameterList.get(0));
 
 		if (variableTypeName.equals("HttpServletRequest") &&
 			hasClassOrVariableName(
-				"FDSDataProvider", javaMethodContent, content, methodCall)) {
+				"FDSDataProvider", javaMethodContent, content, fileName, methodCall)) {
 
 			return true;
 		}
@@ -78,7 +79,8 @@ public class UpgradeJavaFDSDataProviderCheck extends BaseUpgradeCheck {
 		return false;
 	}
 
-	private String _checkMethodCalls(String content, String javaMethodContent) {
+	private String _checkMethodCalls(String content, String fileName, String javaMethodContent)
+		throws Exception {
 		Matcher methodCallGetItemsMatcher = _methodCallGetItemsPattern.matcher(
 			javaMethodContent);
 
@@ -86,7 +88,7 @@ public class UpgradeJavaFDSDataProviderCheck extends BaseUpgradeCheck {
 			String methodCall = JavaSourceUtil.getMethodCall(
 				javaMethodContent, methodCallGetItemsMatcher.start());
 
-			if (_checkMethodCall(content, javaMethodContent, methodCall)) {
+			if (_checkMethodCall(content, javaMethodContent, fileName, methodCall)) {
 				javaMethodContent = StringUtil.replace(
 					javaMethodContent, methodCall,
 					_reorderGetItems(methodCall));
@@ -100,7 +102,7 @@ public class UpgradeJavaFDSDataProviderCheck extends BaseUpgradeCheck {
 			String methodCall = JavaSourceUtil.getMethodCall(
 				javaMethodContent, methodCallGetItemsCountMatcher.start());
 
-			if (_checkMethodCall(content, javaMethodContent, methodCall)) {
+			if (_checkMethodCall(content, javaMethodContent, fileName, methodCall)) {
 				javaMethodContent = StringUtil.replace(
 					javaMethodContent, methodCall,
 					_reorderGetItemsCount(methodCall));

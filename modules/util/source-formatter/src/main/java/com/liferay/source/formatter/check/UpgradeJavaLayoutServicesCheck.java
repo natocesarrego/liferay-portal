@@ -52,10 +52,10 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 				if (!variableName.contains("LayoutLocalServiceUtil") &&
 					!variableName.contains("LayoutServiceUtil") &&
 					!hasClassOrVariableName(
-						"LayoutLocalService", newContent, newContent,
-						methodCall) &&
+						"LayoutLocalService", javaMethodContent, newContent,
+						fileName, methodCall) &&
 					!hasClassOrVariableName(
-						"LayoutService", newContent, newContent, methodCall)) {
+						"LayoutService", javaMethodContent, newContent, fileName, methodCall)) {
 
 					continue;
 				}
@@ -83,8 +83,8 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 						"ServiceContext"
 					};
 
-					if (!hasValidParameters(
-							17, fileName, javaMethodContent, message,
+					if (!hasValidParameters(javaMethodContent,
+							17, content, fileName, message,
 							parameterList, parameterTypes)) {
 
 						continue;
@@ -110,8 +110,8 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 						"ServiceContext"
 					};
 
-					if (!hasValidParameters(
-							15, fileName, javaMethodContent, message,
+					if (!hasValidParameters(javaMethodContent,
+							15, content, fileName, message,
 							parameterList, parameterTypes)) {
 
 						continue;

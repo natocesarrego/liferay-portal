@@ -56,11 +56,11 @@ public class UpgradeJavaCommerceOrderItemServicesCheck
 						"CommerceOrderItemLocalServiceUtil") &&
 					!variableName.contains("CommerceOrderItemServiceUtil") &&
 					!hasClassOrVariableName(
-						"CommerceOrderItemLocalService", newContent, newContent,
-						methodCall) &&
+						"CommerceOrderItemLocalService", javaMethodContent, newContent,
+						fileName, methodCall) &&
 					!hasClassOrVariableName(
-						"CommerceOrderItemService", newContent, newContent,
-						methodCall)) {
+						"CommerceOrderItemService", javaMethodContent, newContent,
+						fileName, methodCall)) {
 
 					continue;
 				}
@@ -83,8 +83,8 @@ public class UpgradeJavaCommerceOrderItemServicesCheck
 						"CommerceContext", "ServiceContext"
 					};
 
-					if (!hasValidParameters(
-							7, fileName, javaMethodContent, message,
+					if (!hasValidParameters(javaMethodContent,
+							7, content, fileName, message,
 							parameterList, parameterTypes)) {
 
 						continue;
@@ -133,13 +133,13 @@ public class UpgradeJavaCommerceOrderItemServicesCheck
 						 (variableName.contains(
 							 "CommerceOrderItemLocalServiceUtil") ||
 						  hasClassOrVariableName(
-							  "CommerceOrderItemLocalService", newContent,
-							  newContent, methodCall))) {
+							  "CommerceOrderItemLocalService", javaMethodContent,
+							  newContent, fileName, methodCall))) {
 
 					String[] parameterTypes = {"long"};
 
-					if (!hasValidParameters(
-							1, fileName, javaMethodContent, message,
+					if (!hasValidParameters(javaMethodContent,
+							1, content, fileName, message,
 							parameterList, parameterTypes)) {
 
 						continue;

@@ -18,7 +18,7 @@ public class UpgradeJavaGetLeftCategoryIdMethodCheck
 
 	@Override
 	protected String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) {
+		String content, String newContent, Matcher matcher) throws Exception {
 
 		String methodStart = matcher.group();
 
@@ -26,7 +26,7 @@ public class UpgradeJavaGetLeftCategoryIdMethodCheck
 
 		if (!className.equals("AssetCategory") &&
 			!hasClassOrVariableName(
-				"AssetCategory", content, content, methodStart)) {
+				"AssetCategory", content, content, content, methodStart)) {
 
 			return content;
 		}

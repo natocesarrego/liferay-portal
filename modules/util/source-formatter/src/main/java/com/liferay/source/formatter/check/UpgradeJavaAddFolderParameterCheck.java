@@ -20,7 +20,7 @@ public class UpgradeJavaAddFolderParameterCheck
 
 	@Override
 	protected String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) {
+		String content, String newContent, Matcher matcher) throws Exception {
 
 		String methodCall = JavaSourceUtil.getMethodCall(
 			content, matcher.start());
@@ -39,7 +39,7 @@ public class UpgradeJavaAddFolderParameterCheck
 		}
 
 		String variableTypeName = getVariableTypeName(
-			newContent, newContent, variable);
+			newContent, newContent, newContent, variable);
 
 		if (variableTypeName.equals("JournalFolderService") ||
 			variableTypeName.equals("JournalFolderLocalService")) {

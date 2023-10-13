@@ -42,7 +42,7 @@ public class UpgradeJavaUpdateCommerceAddressCheck extends BaseUpgradeCheck {
 			Matcher matcher = _pattern.matcher(javaMethodContent);
 
 			while (matcher.find() &&
-				   _isCommerceAddress(javaMethodContent, content, matcher)) {
+				   _isCommerceAddress(javaMethodContent, content, fileName, matcher)) {
 
 				String line = matcher.group();
 
@@ -98,17 +98,18 @@ public class UpgradeJavaUpdateCommerceAddressCheck extends BaseUpgradeCheck {
 	}
 
 	private boolean _isCommerceAddress(
-		String content, String fileContent, Matcher matcher) {
+		String content, String fileContent, String fileName, Matcher matcher)
+	throws Exception {
 
 		if (Objects.equals(
-				getVariableTypeName(content, fileContent, matcher.group(2)),
+				getVariableTypeName(content, fileContent, fileName, matcher.group(2)),
 				"CommerceAddress") &&
 			(hasClassOrVariableName(
 				"CommerceAddressService", content, fileContent,
-				matcher.group()) ||
+				fileName, matcher.group()) ||
 			 hasClassOrVariableName(
 				 "CommerceAddressLocalService", content, fileContent,
-				 matcher.group()))) {
+				 fileName, matcher.group()))) {
 
 			return true;
 		}
