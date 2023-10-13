@@ -103,10 +103,10 @@ public class JavaStagedModelDataHandlerCheck extends BaseJavaTermCheck {
 
 		if (stagedModelType.equals(
 				getVariableTypeName(
-					javaMethodContent, fileContent, existingVariableName)) &&
+					javaMethodContent, fileContent, fileName, existingVariableName)) &&
 			stagedModelType.equals(
 				getVariableTypeName(
-					javaMethodContent, fileContent, importedVariableName))) {
+					javaMethodContent, fileContent, fileName, importedVariableName))) {
 
 			javaMethodContent = StringUtil.insert(
 				javaMethodContent,

@@ -15,10 +15,7 @@ import com.liferay.source.formatter.parser.JavaClass;
 import com.liferay.source.formatter.parser.JavaSignature;
 import com.liferay.source.formatter.parser.JavaTerm;
 
-import java.io.IOException;
-
 import java.lang.reflect.Modifier;
-
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,9 +29,9 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 	protected String doProcess(
 			String fileName, String absolutePath, JavaTerm javaTerm,
 			String fileContent)
-		throws IOException {
+		throws Exception {
 
-		return _formatGenerics(javaTerm, fileContent);
+		return _formatGenerics(fileName, javaTerm, fileContent);
 	}
 
 	@Override
@@ -42,7 +39,8 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 		return new String[] {JAVA_CONSTRUCTOR, JAVA_METHOD, JAVA_VARIABLE};
 	}
 
-	private String _formatGenerics(JavaTerm javaTerm, String fileContent) {
+	private String _formatGenerics(String fileName, JavaTerm javaTerm, String fileContent)
+	throws Exception {
 		String content = javaTerm.getContent();
 
 		Matcher matcher = _mapBuilderPattern.matcher(content);
@@ -57,7 +55,7 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 			}
 			else {
 				genericTypesArray = _getGenericTypesArray(
-					javaTerm, fileContent, matcher);
+					fileContent, fileName, javaTerm, matcher);
 			}
 
 			if (genericTypesArray == null) {
@@ -162,7 +160,8 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 	}
 
 	private String[] _getGenericTypesArray(
-		JavaTerm javaTerm, String fileContent, Matcher matcher) {
+		 String fileContent, String fileName, JavaTerm javaTerm,Matcher matcher)
+	throws Exception {
 
 		if (matcher.group(1) == null) {
 			return null;
@@ -181,7 +180,7 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 		}
 		else {
 			mapTypeName = getVariableTypeName(
-				javaTerm.getContent(), fileContent, matcher.group(3), true);
+				javaTerm.getContent(), fileContent, fileName, matcher.group(3), true);
 		}
 
 		if (mapTypeName == null) {

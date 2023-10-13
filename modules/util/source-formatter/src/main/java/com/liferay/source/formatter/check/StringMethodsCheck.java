@@ -72,7 +72,7 @@ public class StringMethodsCheck extends BaseFileCheck {
 
 			if (s.equals("String") ||
 				Objects.equals(
-					getVariableTypeName(content, content, s), "String")) {
+					getVariableTypeName(content, content, fileName, s), "String")) {
 
 				addMessage(
 					fileName, "Use StringUtil." + methodName,
@@ -90,7 +90,7 @@ public class StringMethodsCheck extends BaseFileCheck {
 			String variableName = matcher.group(1);
 
 			if (!Objects.equals(
-					getVariableTypeName(content, content, variableName),
+					getVariableTypeName(content, content, fileName, variableName),
 					"String")) {
 
 				continue;
