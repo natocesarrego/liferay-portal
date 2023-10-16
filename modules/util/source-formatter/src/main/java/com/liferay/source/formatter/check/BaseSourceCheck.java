@@ -25,10 +25,8 @@ import com.liferay.source.formatter.check.util.JSPSourceUtil;
 import com.liferay.source.formatter.check.util.SourceUtil;
 import com.liferay.source.formatter.parser.JavaClass;
 import com.liferay.source.formatter.parser.JavaClassParser;
-import com.liferay.source.formatter.parser.JavaMethod;
 import com.liferay.source.formatter.parser.JavaTerm;
 import com.liferay.source.formatter.parser.JavaVariable;
-import com.liferay.source.formatter.parser.ParseException;
 import com.liferay.source.formatter.processor.JSPSourceProcessor;
 import com.liferay.source.formatter.processor.JavaSourceProcessor;
 import com.liferay.source.formatter.processor.SourceProcessor;
@@ -77,11 +75,12 @@ public abstract class BaseSourceCheck implements SourceCheck {
 	}
 
 	public boolean hasParameterTypes(
-		String content, String fileContent, String fileName, String[] parameterList,
-		String[] parameterTypes) {
+		String content, String fileContent, String fileName,
+		String[] parameterList, String[] parameterTypes) {
 
 		for (int i = 0; i < parameterTypes.length; i++) {
 			String variableTypeName = null;
+
 			try {
 				variableTypeName = getVariableTypeName(
 					content, fileContent, fileName, parameterList[i], true);
@@ -639,20 +638,22 @@ public abstract class BaseSourceCheck implements SourceCheck {
 	}
 
 	protected String getVariableTypeName(
-		String content, String fileContent, String fileName, String variableName)
-		{
+		String content, String fileContent, String fileName,
+		String variableName) {
 
-			try {
-				return getVariableTypeName(content, fileContent, fileName, variableName, false);
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
+		try {
+			return getVariableTypeName(
+				content, fileContent, fileName, variableName, false);
 		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
 
 	protected String getVariableTypeName(
-		String content, String fileContent, String fileName, String variableName,
-		boolean includeArrayOrCollectionTypes) throws Exception {
+			String content, String fileContent, String fileName,
+			String variableName, boolean includeArrayOrCollectionTypes)
+		throws Exception {
 
 		if (variableName == null) {
 			return null;
@@ -665,20 +666,19 @@ public abstract class BaseSourceCheck implements SourceCheck {
 			return variableTypeName;
 		}
 
-		JavaClass javaClass = JavaClassParser.parseJavaClass(fileName, fileContent);
+		JavaClass javaClass = JavaClassParser.parseJavaClass(
+			fileName, fileContent);
 
-		for (JavaTerm childJavaTerm : javaClass.getChildJavaTerms()){
-			if (childJavaTerm.isJavaVariable()){
-
+		for (JavaTerm childJavaTerm : javaClass.getChildJavaTerms()) {
+			if (childJavaTerm.isJavaVariable()) {
 				JavaVariable javaVariable = (JavaVariable)childJavaTerm;
 
 				String variable = javaVariable.getContent();
 
 				variableTypeName = _getVariableTypeName(
-					variable, variableName,
-					includeArrayOrCollectionTypes);
+					variable, variableName, includeArrayOrCollectionTypes);
 
-				if (variableTypeName != null){
+				if (variableTypeName != null) {
 					return variableTypeName;
 				}
 			}
@@ -688,8 +688,9 @@ public abstract class BaseSourceCheck implements SourceCheck {
 	}
 
 	protected boolean hasClassOrVariableName(
-		String className, String content, String fileContent, String fileName,
-		String methodCall) throws Exception{
+			String className, String content, String fileContent,
+			String fileName, String methodCall)
+		throws Exception {
 
 		String variable = getVariableName(methodCall);
 

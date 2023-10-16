@@ -36,8 +36,11 @@ public class UpgradeJavaAssetEntryAssetCategoriesCheck
 
 	@Override
 	protected String format(
-		String fileName, String absolutePath, String content) throws Exception {
-		String newContent = _replaceAddOrDeleteAssetCategories(content, fileName);
+			String fileName, String absolutePath, String content)
+		throws Exception {
+
+		String newContent = _replaceAddOrDeleteAssetCategories(
+			content, fileName);
 
 		return _replaceAddOrDeleteAssetCategory(newContent, fileName);
 	}
@@ -51,8 +54,9 @@ public class UpgradeJavaAssetEntryAssetCategoriesCheck
 		};
 	}
 
-	private String _replaceAddOrDeleteAssetCategories(String content, String fileName)
-	throws Exception {
+	private String _replaceAddOrDeleteAssetCategories(
+			String content, String fileName)
+		throws Exception {
 
 		String newContent = content;
 
@@ -127,8 +131,10 @@ public class UpgradeJavaAssetEntryAssetCategoriesCheck
 		return newContent;
 	}
 
-	private String _replaceAddOrDeleteAssetCategory(String content, String fileName)
-	throws Exception {
+	private String _replaceAddOrDeleteAssetCategory(
+			String content, String fileName)
+		throws Exception {
+
 		String newContent = content;
 
 		Matcher matcher = _addOrDeleteAssetEntryAssetCategoryPattern.matcher(

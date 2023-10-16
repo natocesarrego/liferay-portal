@@ -22,7 +22,8 @@ public abstract class BaseUpgradeMatcherReplacementCheck
 
 	@Override
 	protected String format(
-		String fileName, String absolutePath, String content) throws Exception {
+			String fileName, String absolutePath, String content)
+		throws Exception {
 
 		String newContent = beforeFormatMatcherIteration(
 			fileName, absolutePath, content);
@@ -39,7 +40,8 @@ public abstract class BaseUpgradeMatcherReplacementCheck
 	}
 
 	protected abstract String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) throws Exception;
+			String content, String newContent, Matcher matcher)
+		throws Exception;
 
 	protected abstract Pattern getPattern();
 

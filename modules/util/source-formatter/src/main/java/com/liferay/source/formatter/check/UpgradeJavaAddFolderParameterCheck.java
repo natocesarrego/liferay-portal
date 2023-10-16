@@ -20,7 +20,8 @@ public class UpgradeJavaAddFolderParameterCheck
 
 	@Override
 	protected String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) throws Exception {
+			String content, String newContent, Matcher matcher)
+		throws Exception {
 
 		String methodCall = JavaSourceUtil.getMethodCall(
 			content, matcher.start());

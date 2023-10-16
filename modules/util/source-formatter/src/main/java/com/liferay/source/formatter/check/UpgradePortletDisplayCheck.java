@@ -94,8 +94,9 @@ public class UpgradePortletDisplayCheck extends BaseUpgradeCheck {
 	}
 
 	private String _getNewContent(
-		String content, String fileContent, String fileName, Matcher matcher, String newContent,
-		String newParameters) throws Exception {
+			String content, String fileContent, String fileName,
+			Matcher matcher, String newContent, String newParameters)
+		throws Exception {
 
 		String methodCall = JavaSourceUtil.getMethodCall(
 			content, matcher.start());

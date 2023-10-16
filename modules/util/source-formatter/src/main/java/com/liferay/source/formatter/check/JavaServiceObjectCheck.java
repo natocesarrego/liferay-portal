@@ -75,7 +75,8 @@ public class JavaServiceObjectCheck extends BaseJavaTermCheck {
 	}
 
 	private String _formatGetterMethodCalls(
-			String content, String fileContent, String fileName, List<String> importNames)
+			String content, String fileContent, String fileName,
+			List<String> importNames)
 		throws IOException {
 
 		Matcher matcher = _getterCallPattern.matcher(content);
@@ -105,7 +106,8 @@ public class JavaServiceObjectCheck extends BaseJavaTermCheck {
 	}
 
 	private String _formatSetterMethodCalls(
-			String content, String fileContent, String fileName, List<String> importNames)
+			String content, String fileContent, String fileName,
+			List<String> importNames)
 		throws IOException {
 
 		Matcher matcher1 = _setterCallsPattern.matcher(content);

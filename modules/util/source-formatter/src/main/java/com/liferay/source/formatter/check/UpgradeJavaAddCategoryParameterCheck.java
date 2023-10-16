@@ -50,8 +50,8 @@ public class UpgradeJavaAddCategoryParameterCheck extends BaseUpgradeCheck {
 
 				if (!variableName.contains("AssetCategoryLocalServiceUtil") &&
 					!hasClassOrVariableName(
-						"AssetCategoryLocalService", javaMethodContent, content, fileName,
-						methodCall)) {
+						"AssetCategoryLocalService", javaMethodContent, content,
+						fileName, methodCall)) {
 
 					continue;
 				}
@@ -70,9 +70,9 @@ public class UpgradeJavaAddCategoryParameterCheck extends BaseUpgradeCheck {
 					"Map<Locale, String>", "long", "String[]", "ServiceContext"
 				};
 
-				if (!hasValidParameters(javaMethodContent,
-						8, content, fileName, message, parameterList,
-						parameterTypes)) {
+				if (!hasValidParameters(
+						javaMethodContent, 8, content, fileName, message,
+						parameterList, parameterTypes)) {
 
 					continue;
 				}

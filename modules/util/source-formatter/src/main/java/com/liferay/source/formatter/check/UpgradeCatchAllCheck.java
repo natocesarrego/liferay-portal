@@ -292,7 +292,9 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 					jsonObject.getJSONArray("classNames"));
 
 				if ((classNames.length > 0) &&
-					!_hasValidClassName(classNames, javaMethodContent, content, fileName, methodCall)) {
+					!_hasValidClassName(
+						classNames, javaMethodContent, content, fileName,
+						methodCall)) {
 
 					continue;
 				}
@@ -363,7 +365,8 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 	}
 
 	private boolean _hasValidClassName(
-		String[] classNames, String content, String fileContent, String fileName, String methodCall)
+			String[] classNames, String content, String fileContent,
+			String fileName, String methodCall)
 		throws Exception {
 
 		for (String className : classNames) {
@@ -374,7 +377,8 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 			}
 			else if (!className.endsWith("Util") &&
 					 hasClassOrVariableName(
-						 className, content, fileContent, fileName, methodCall)) {
+						 className, content, fileContent, fileName,
+						 methodCall)) {
 
 				return true;
 			}

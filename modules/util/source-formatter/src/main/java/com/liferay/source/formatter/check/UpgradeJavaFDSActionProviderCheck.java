@@ -50,8 +50,7 @@ public class UpgradeJavaFDSActionProviderCheck extends BaseUpgradeCheck {
 			}
 
 			newJavaMethodContent = _formatMethodCalls(
-				content, fileName,
-				newJavaMethodContent);
+				content, fileName, newJavaMethodContent);
 
 			content = StringUtil.replace(
 				content, javaMethodContent, newJavaMethodContent);
@@ -61,8 +60,7 @@ public class UpgradeJavaFDSActionProviderCheck extends BaseUpgradeCheck {
 	}
 
 	private String _formatMethodCalls(
-			String fileContent, String fileName,
-			String javaMethodContent)
+			String fileContent, String fileName, String javaMethodContent)
 		throws Exception {
 
 		Matcher matcher = _getDropdownItemsMethodCallPattern.matcher(
@@ -125,6 +123,6 @@ public class UpgradeJavaFDSActionProviderCheck extends BaseUpgradeCheck {
 	private static final Pattern _getDropdownItemsMethodPattern =
 		Pattern.compile(
 			"getDropdownItems\\s*\\(\\s*HttpServletRequest\\s+.+,\\s*.+," +
-			"\\s*.+\\s*\\)");
+				"\\s*.+\\s*\\)");
 
 }

@@ -16,6 +16,7 @@ import com.liferay.source.formatter.parser.JavaSignature;
 import com.liferay.source.formatter.parser.JavaTerm;
 
 import java.lang.reflect.Modifier;
+
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,8 +40,10 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 		return new String[] {JAVA_CONSTRUCTOR, JAVA_METHOD, JAVA_VARIABLE};
 	}
 
-	private String _formatGenerics(String fileName, JavaTerm javaTerm, String fileContent)
-	throws Exception {
+	private String _formatGenerics(
+			String fileName, JavaTerm javaTerm, String fileContent)
+		throws Exception {
+
 		String content = javaTerm.getContent();
 
 		Matcher matcher = _mapBuilderPattern.matcher(content);
@@ -159,44 +162,6 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 		return null;
 	}
 
-	private String[] _getGenericTypesArray(
-		 String fileContent, String fileName, JavaTerm javaTerm,Matcher matcher)
-	throws Exception {
-
-		if (matcher.group(1) == null) {
-			return null;
-		}
-
-		String mapTypeName = null;
-
-		if (Objects.equals(matcher.group(2), "return")) {
-			JavaSignature javaSignature = javaTerm.getSignature();
-
-			if (javaSignature == null) {
-				return null;
-			}
-
-			mapTypeName = javaSignature.getReturnType();
-		}
-		else {
-			mapTypeName = getVariableTypeName(
-				javaTerm.getContent(), fileContent, fileName, matcher.group(3), true);
-		}
-
-		if (mapTypeName == null) {
-			return null;
-		}
-
-		int x = mapTypeName.indexOf("<");
-
-		if (x == -1) {
-			return null;
-		}
-
-		return _getGenericTypesArray(
-			mapTypeName.substring(x + 1, mapTypeName.length() - 1));
-	}
-
 	private String[] _getGenericTypesArray(String genericTypes) {
 		int x = -1;
 
@@ -216,6 +181,46 @@ public class JavaMapBuilderGenericsCheck extends BaseJavaTermCheck {
 				StringUtil.trim(genericTypes.substring(x + 1))
 			};
 		}
+	}
+
+	private String[] _getGenericTypesArray(
+			String fileContent, String fileName, JavaTerm javaTerm,
+			Matcher matcher)
+		throws Exception {
+
+		if (matcher.group(1) == null) {
+			return null;
+		}
+
+		String mapTypeName = null;
+
+		if (Objects.equals(matcher.group(2), "return")) {
+			JavaSignature javaSignature = javaTerm.getSignature();
+
+			if (javaSignature == null) {
+				return null;
+			}
+
+			mapTypeName = javaSignature.getReturnType();
+		}
+		else {
+			mapTypeName = getVariableTypeName(
+				javaTerm.getContent(), fileContent, fileName, matcher.group(3),
+				true);
+		}
+
+		if (mapTypeName == null) {
+			return null;
+		}
+
+		int x = mapTypeName.indexOf("<");
+
+		if (x == -1) {
+			return null;
+		}
+
+		return _getGenericTypesArray(
+			mapTypeName.substring(x + 1, mapTypeName.length() - 1));
 	}
 
 	private boolean _requiresGenerics(Class<?> clazz) {

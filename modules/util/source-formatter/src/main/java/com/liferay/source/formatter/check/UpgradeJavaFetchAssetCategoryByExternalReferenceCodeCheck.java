@@ -73,9 +73,9 @@ public class UpgradeJavaFetchAssetCategoryByExternalReferenceCodeCheck
 					"has changed the order of its parameters. Fill the new ",
 					"parameters manually, see LPS-194134.");
 
-				if (!hasValidParameters(javaMethodContent,
-						parameterTypes.length, content, fileName,
-						message, parameterList, parameterTypes)) {
+				if (!hasValidParameters(
+						javaMethodContent, parameterTypes.length, content,
+						fileName, message, parameterList, parameterTypes)) {
 
 					continue;
 				}

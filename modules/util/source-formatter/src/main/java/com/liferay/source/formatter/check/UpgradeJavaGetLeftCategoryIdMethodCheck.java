@@ -18,7 +18,8 @@ public class UpgradeJavaGetLeftCategoryIdMethodCheck
 
 	@Override
 	protected String formatMatcherIteration(
-		String content, String newContent, Matcher matcher) throws Exception {
+			String content, String newContent, Matcher matcher)
+		throws Exception {
 
 		String methodStart = matcher.group();
 

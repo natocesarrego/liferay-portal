@@ -36,15 +36,18 @@ public class UpgradeJavaAddFDSTableSchemaFieldCheck extends BaseUpgradeCheck {
 			return content;
 		}
 
-		return _replaceAddFDSTableSchemaFieldMethodCalls(content, fileName, javaClass);
+		return _replaceAddFDSTableSchemaFieldMethodCalls(
+			content, fileName, javaClass);
 	}
 
 	private String _replaceAddFDSTableSchemaFieldMethodCall(
-		String content, String fileContent, String fileName, String methodCall)
-	throws Exception {
+			String content, String fileContent, String fileName,
+			String methodCall)
+		throws Exception {
 
 		if (!hasClassOrVariableName(
-				"FDSTableSchemaBuilder", content, fileContent, fileName, methodCall)) {
+				"FDSTableSchemaBuilder", content, fileContent, fileName,
+				methodCall)) {
 
 			return methodCall;
 		}
@@ -53,7 +56,8 @@ public class UpgradeJavaAddFDSTableSchemaFieldCheck extends BaseUpgradeCheck {
 	}
 
 	private String _replaceAddFDSTableSchemaFieldMethodCalls(
-		String content, String fileName, JavaClass javaClass) throws Exception {
+			String content, String fileName, JavaClass javaClass)
+		throws Exception {
 
 		for (JavaTerm childJavaTerm : javaClass.getChildJavaTerms()) {
 			if (!childJavaTerm.isJavaMethod()) {
@@ -71,7 +75,8 @@ public class UpgradeJavaAddFDSTableSchemaFieldCheck extends BaseUpgradeCheck {
 				javaMethodContent = StringUtil.replace(
 					javaMethodContent, matcher.group(0),
 					_replaceAddFDSTableSchemaFieldMethodCall(
-						javaMethodContent, content, fileName, matcher.group(0)));
+						javaMethodContent, content, fileName,
+						matcher.group(0)));
 			}
 
 			content = StringUtil.replace(

@@ -59,7 +59,8 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 	}
 
 	private String _checkAddUser(
-		String content, String fileContent, String fileName) throws Exception {
+			String content, String fileContent, String fileName)
+		throws Exception {
 
 		String newContent = content;
 
@@ -83,8 +84,8 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 			List<String> parameterList = JavaSourceUtil.getParameterList(
 				methodCall);
 
-			if (!hasValidParameters(content,
-					26, fileContent, fileName, message, parameterList,
+			if (!hasValidParameters(
+					content, 26, fileContent, fileName, message, parameterList,
 					new String[] {
 						"long", "boolean", "String", "String", "boolean",
 						"String", "String", "long", "String", "Locale",
@@ -92,8 +93,8 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 						"int", "int", "int", "String", "long[]", "long[]",
 						"long[]", "long[]", "boolean", "ServiceContext"
 					}) &&
-				!hasValidParameters(content,
-					27, fileContent, fileName, message, parameterList,
+				!hasValidParameters(
+					content, 27, fileContent, fileName, message, parameterList,
 					new String[] {
 						"long", "long", "boolean", "String", "String",
 						"boolean", "String", "String", "long", "String",
@@ -102,8 +103,8 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 						"long[]", "long[]", "long[]", "boolean",
 						"ServiceContext"
 					}) &&
-				!hasValidParameters(content,
-					31, fileContent, fileName, message, parameterList,
+				!hasValidParameters(
+					content, 31, fileContent, fileName, message, parameterList,
 					new String[] {
 						"long", "boolean", "String", "String", "boolean",
 						"String", "String", "long", "String", "Locale",
@@ -129,15 +130,17 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 	}
 
 	private boolean _checkMethodCall(
-		String content, String fileContent, String fileName, String methodCall)
-	throws Exception {
+			String content, String fileContent, String fileName,
+			String methodCall)
+		throws Exception {
 
 		String variableName = getVariableName(methodCall);
 
 		if (variableName.equals("UserLocalServiceUtil") ||
 			variableName.equals("UserServiceUtil") ||
 			hasClassOrVariableName(
-				"UserLocalService", content, fileContent, fileName, methodCall) ||
+				"UserLocalService", content, fileContent, fileName,
+				methodCall) ||
 			hasClassOrVariableName(
 				"UserService", content, fileContent, fileName, methodCall)) {
 
@@ -148,7 +151,8 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 	}
 
 	private String _checkUpdateStatus(
-		String content, String fileContent, String fileName) throws Exception {
+			String content, String fileContent, String fileName)
+		throws Exception {
 
 		String newContent = content;
 
@@ -169,9 +173,10 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 				methodCall);
 
 			if (!_checkMethodCall(
-					content, fileContent, fileName, updateStatusMatcher.group(2)) ||
-				!hasValidParameters(content,
-					2, fileContent, fileName, message, parameterList,
+					content, fileContent, fileName,
+					updateStatusMatcher.group(2)) ||
+				!hasValidParameters(
+					content, 2, fileContent, fileName, message, parameterList,
 					new String[] {"long", "int"})) {
 
 				continue;

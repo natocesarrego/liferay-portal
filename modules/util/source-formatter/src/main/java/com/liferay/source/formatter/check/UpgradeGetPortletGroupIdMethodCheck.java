@@ -36,7 +36,8 @@ public class UpgradeGetPortletGroupIdMethodCheck extends BaseFileCheck {
 
 			if (fileName.endsWith(".java")) {
 				if (!hasClassOrVariableName(
-						"ThemeDisplay", newContent, newContent, fileName, methodCall)) {
+						"ThemeDisplay", newContent, newContent, fileName,
+						methodCall)) {
 
 					continue;
 				}

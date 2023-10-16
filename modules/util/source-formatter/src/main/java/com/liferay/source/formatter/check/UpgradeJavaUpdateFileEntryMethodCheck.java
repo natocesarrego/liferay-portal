@@ -58,14 +58,15 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 
 				if (!hasClassOrVariableName(
 						"DLAppLocalService", javaMethodContent, content,
-					fileName, methodCall) &&
+						fileName, methodCall) &&
 					!variableName.contains("DLAppLocalServiceUtil")) {
 
 					continue;
 				}
 
 				String className = getVariableTypeName(
-					javaMethodContent, newContent, fileName, parameterList.get(8), true);
+					javaMethodContent, newContent, fileName,
+					parameterList.get(8), true);
 
 				if (!className.equals("byte[]")) {
 					continue;
@@ -88,9 +89,9 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 						"ServiceContext"
 					};
 
-					if (!hasValidParameters(javaMethodContent,
-							parameterTypes.length, content, fileName,
-							message, parameterList, parameterTypes)) {
+					if (!hasValidParameters(
+							javaMethodContent, parameterTypes.length, content,
+							fileName, message, parameterList, parameterTypes)) {
 
 						continue;
 					}
@@ -109,9 +110,9 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 						"String", "boolean", "byte[]", "ServiceContext"
 					};
 
-					if (!hasValidParameters(javaMethodContent,
-							parameterTypes.length, content, fileName,
-							message, parameterList, parameterTypes)) {
+					if (!hasValidParameters(
+							javaMethodContent, parameterTypes.length, content,
+							fileName, message, parameterList, parameterTypes)) {
 
 						continue;
 					}

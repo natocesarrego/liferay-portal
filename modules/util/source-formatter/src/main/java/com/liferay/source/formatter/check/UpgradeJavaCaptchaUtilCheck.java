@@ -35,8 +35,8 @@ public class UpgradeJavaCaptchaUtilCheck
 		String[] parameterTypes = {"ResourceRequest", "ResourceResponse"};
 
 		if (!hasParameterTypes(
-				content, content, content, ArrayUtil.toStringArray(parameterList),
-				parameterTypes)) {
+				content, content, content,
+				ArrayUtil.toStringArray(parameterList), parameterTypes)) {
 
 			return newContent;
 		}

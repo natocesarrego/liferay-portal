@@ -34,7 +34,8 @@ public class UpgradeSetResultsSetTotalMethodCheck extends BaseFileCheck {
 	}
 
 	private String _removeSetTotal(String content, String fileName)
-	throws Exception {
+		throws Exception {
+
 		String newContent = content;
 
 		Matcher setTotalMatcher = _setTotalPattern.matcher(content);
@@ -54,7 +55,8 @@ public class UpgradeSetResultsSetTotalMethodCheck extends BaseFileCheck {
 	}
 
 	private String _replaceSetResults(String content, String fileName)
-	throws Exception {
+		throws Exception {
+
 		String newContent = content;
 
 		Matcher setResultsMatcher = _setResultsPattern.matcher(content);
@@ -64,7 +66,8 @@ public class UpgradeSetResultsSetTotalMethodCheck extends BaseFileCheck {
 				content, setResultsMatcher.start());
 
 			if (hasClassOrVariableName(
-					"SearchContainer", content, content, fileName, methodCall)) {
+					"SearchContainer", content, content, fileName,
+					methodCall)) {
 
 				newContent = StringUtil.replace(
 					newContent, methodCall,

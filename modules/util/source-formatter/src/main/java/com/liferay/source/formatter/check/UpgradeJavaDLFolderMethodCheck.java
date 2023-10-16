@@ -67,8 +67,9 @@ public class UpgradeJavaDLFolderMethodCheck extends BaseUpgradeCheck {
 	}
 
 	private boolean _isDlFolderService(
-		String content, String fileName, String javaMethodContent,
-		String methodCall, List<String> parameterList) throws Exception {
+			String content, String fileName, String javaMethodContent,
+			String methodCall, List<String> parameterList)
+		throws Exception {
 
 		String variableName = getVariableName(methodCall);
 
@@ -82,28 +83,30 @@ public class UpgradeJavaDLFolderMethodCheck extends BaseUpgradeCheck {
 
 		if (variableName.contains("DLFolderLocalServiceUtil") ||
 			hasClassOrVariableName(
-				"DLFolderLocalService", javaMethodContent, content, fileName, methodCall)) {
+				"DLFolderLocalService", javaMethodContent, content, fileName,
+				methodCall)) {
 
 			String[] parameterTypes = {
 				"long", "long", "long", "boolean", "long", "String", "String",
 				"boolean", "ServiceContext"
 			};
 
-			valid = hasValidParameters(javaMethodContent,
-				9, content, fileName, message, parameterList,
+			valid = hasValidParameters(
+				javaMethodContent, 9, content, fileName, message, parameterList,
 				parameterTypes);
 		}
 		else if (variableName.contains("DLFolderServiceUtil") ||
 				 hasClassOrVariableName(
-					 "DLFolderService", javaMethodContent, content, fileName, methodCall)) {
+					 "DLFolderService", javaMethodContent, content, fileName,
+					 methodCall)) {
 
 			String[] parameterTypes = {
 				"long", "long", "boolean", "long", "String", "String",
 				"ServiceContext"
 			};
 
-			valid = hasValidParameters(javaMethodContent,
-				7, content, fileName, message, parameterList,
+			valid = hasValidParameters(
+				javaMethodContent, 7, content, fileName, message, parameterList,
 				parameterTypes);
 		}
 

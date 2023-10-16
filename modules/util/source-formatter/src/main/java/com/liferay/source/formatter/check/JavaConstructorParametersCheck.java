@@ -27,8 +27,9 @@ public class JavaConstructorParametersCheck extends BaseJavaTermCheck {
 
 	@Override
 	protected String doProcess(
-		String fileName, String absolutePath, JavaTerm javaTerm,
-		String fileContent) throws Exception {
+			String fileName, String absolutePath, JavaTerm javaTerm,
+			String fileContent)
+		throws Exception {
 
 		JavaSignature signature = javaTerm.getSignature();
 
@@ -303,8 +304,9 @@ public class JavaConstructorParametersCheck extends BaseJavaTermCheck {
 	}
 
 	private String _fixPassedInVariables(
-		String absolutePath, String content, String fileName, List<JavaParameter> parameters,
-		String fileContent) throws Exception {
+			String absolutePath, String content, String fileName,
+			List<JavaParameter> parameters, String fileContent)
+		throws Exception {
 
 		if (!isAttributeValue(_CHECK_PASSED_IN_VARIABLES_KEY, absolutePath)) {
 			return content;

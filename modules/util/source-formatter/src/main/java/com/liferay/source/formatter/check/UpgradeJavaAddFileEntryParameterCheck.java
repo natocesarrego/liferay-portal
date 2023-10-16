@@ -69,9 +69,9 @@ public class UpgradeJavaAddFileEntryParameterCheck extends BaseUpgradeCheck {
 					"String", "String", "byte[]", "ServiceContext"
 				};
 
-				if (!hasValidParameters(javaMethodContent,
-						10, content, fileName, message, parameterList,
-						parameterTypes)) {
+				if (!hasValidParameters(
+						javaMethodContent, 10, content, fileName, message,
+						parameterList, parameterTypes)) {
 
 					continue;
 				}
