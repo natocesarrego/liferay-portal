@@ -70,7 +70,7 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 				content, addUserMatcher.start());
 
 			if (!_checkMethodCall(
-					content, fileContent, addUserMatcher.group(2))) {
+					content, fileContent, fileName, addUserMatcher.group(2))) {
 
 				continue;
 			}
@@ -84,7 +84,7 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 				methodCall);
 
 			if (!hasValidParameters(
-					26, fileName, content, message, parameterList,
+					content, 26, fileContent, fileName, message, parameterList,
 					new String[] {
 						"long", "boolean", "String", "String", "boolean",
 						"String", "String", "long", "String", "Locale",
@@ -93,7 +93,7 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 						"long[]", "long[]", "boolean", "ServiceContext"
 					}) &&
 				!hasValidParameters(
-					27, fileName, content, message, parameterList,
+					content, 27, fileContent, fileName, message, parameterList,
 					new String[] {
 						"long", "long", "boolean", "String", "String",
 						"boolean", "String", "String", "long", "String",
@@ -103,7 +103,7 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 						"ServiceContext"
 					}) &&
 				!hasValidParameters(
-					31, fileName, content, message, parameterList,
+					content, 31, fileContent, fileName, message, parameterList,
 					new String[] {
 						"long", "boolean", "String", "String", "boolean",
 						"String", "String", "long", "String", "Locale",
@@ -129,16 +129,18 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 	}
 
 	private boolean _checkMethodCall(
-		String content, String fileContent, String methodCall) {
+		String content, String fileContent, String fileName,
+		String methodCall) {
 
 		String variableName = getVariableName(methodCall);
 
 		if (variableName.equals("UserLocalServiceUtil") ||
 			variableName.equals("UserServiceUtil") ||
 			hasClassOrVariableName(
-				"UserLocalService", content, fileContent, methodCall) ||
+				"UserLocalService", content, fileContent, fileName,
+				methodCall) ||
 			hasClassOrVariableName(
-				"UserService", content, fileContent, methodCall)) {
+				"UserService", content, fileContent, fileName, methodCall)) {
 
 			return true;
 		}
@@ -168,9 +170,10 @@ public class UpgradeJavaUserLocalServiceUtilCheck extends BaseUpgradeCheck {
 				methodCall);
 
 			if (!_checkMethodCall(
-					content, fileContent, updateStatusMatcher.group(2)) ||
+					content, fileContent, fileName,
+					updateStatusMatcher.group(2)) ||
 				!hasValidParameters(
-					2, fileName, content, message, parameterList,
+					content, 2, fileContent, fileName, message, parameterList,
 					new String[] {"long", "int"})) {
 
 				continue;

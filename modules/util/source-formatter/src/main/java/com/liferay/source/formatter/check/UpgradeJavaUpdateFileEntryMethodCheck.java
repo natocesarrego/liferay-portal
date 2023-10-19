@@ -57,16 +57,27 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 				String variableName = getVariableName(methodCall);
 
 				if (!hasClassOrVariableName(
-						"DLAppLocalService", content, content, methodCall) &&
+						"DLAppLocalService", javaMethodContent, content,
+						fileName, methodCall) &&
 					!variableName.contains("DLAppLocalServiceUtil")) {
 
 					continue;
 				}
 
-				String className = getVariableTypeName(
-					newContent, newContent, parameterList.get(8), true);
+				String variableTypeName = getVariableTypeName(
+					javaMethodContent, newContent, fileName,
+					parameterList.get(8), true);
 
-				if (!className.equals("byte[]")) {
+				if ((variableTypeName == null) ||
+					!variableTypeName.equals("byte[]")) {
+
+					continue;
+				}
+
+				variableTypeName = getVariableTypeName(
+					javaMethodContent, content, fileName, parameterList.get(7));
+
+				if (variableTypeName == null) {
 					continue;
 				}
 
@@ -77,10 +88,7 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 					"DLAppLocalService and DLAppLocalServiceUtil. Fill the ",
 					"new parameters manually, see LPS-194134.");
 
-				String parameterClass = getVariableTypeName(
-					content, content, parameterList.get(7));
-
-				if (parameterClass.equals("DLVersionNumberIncrease")) {
+				if (variableTypeName.equals("DLVersionNumberIncrease")) {
 					String[] parameterTypes = {
 						"long", "long", "String", "String", "String", "String",
 						"String", "DLVersionNumberIncrease", "byte[]",
@@ -88,8 +96,8 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 					};
 
 					if (!hasValidParameters(
-							parameterTypes.length, fileName, javaMethodContent,
-							message, parameterList, parameterTypes)) {
+							javaMethodContent, parameterTypes.length, content,
+							fileName, message, parameterList, parameterTypes)) {
 
 						continue;
 					}
@@ -109,8 +117,8 @@ public class UpgradeJavaUpdateFileEntryMethodCheck extends BaseUpgradeCheck {
 					};
 
 					if (!hasValidParameters(
-							parameterTypes.length, fileName, javaMethodContent,
-							message, parameterList, parameterTypes)) {
+							javaMethodContent, parameterTypes.length, content,
+							fileName, message, parameterList, parameterTypes)) {
 
 						continue;
 					}
