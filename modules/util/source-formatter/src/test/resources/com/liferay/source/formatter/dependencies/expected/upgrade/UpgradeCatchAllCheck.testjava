@@ -105,6 +105,10 @@ public class UpgradeCatchAllCheck {
 	}
 
 	public void method(long companyId, String externalReferenceCode) {
+		AssetVocabularyLocalServiceUtil.fetchAssetVocabularyByExternalReferenceCode(externalReferenceCode, 123);
+		AssetVocabularyLocalServiceUtil.fetchAssetVocabularyByExternalReferenceCode(companyId, externalReferenceCode);
+		_assetVocabularyLocalService.fetchAssetVocabularyByExternalReferenceCode(companyId, externalReferenceCode);
+
 		CommercePriceListLocalServiceUtil.fetchByExternalReferenceCode(externalReferenceCode, companyId);
 		_commercePriceListLocalService.fetchByExternalReferenceCode(123, "test123");
 		_commercePriceListLocalService.fetchByExternalReferenceCode(externalReferenceCode, companyId);
