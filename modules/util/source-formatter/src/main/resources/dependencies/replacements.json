@@ -379,6 +379,14 @@
 	},
 	{
 		"classNames": [
+			"AssetCategoryLocalService",
+			"AssetCategoryLocalServiceUtil"
+		],
+		"from": "fetchAssetCategoryByExternalReferenceCode(long, String)",
+		"issueKey": "LPS-196608"
+	},
+	{
+		"classNames": [
 			"CommercePriceListLocalService",
 			"CommercePriceListLocalServiceUtil"
 		],
