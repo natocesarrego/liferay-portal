@@ -312,6 +312,14 @@
 		"to": "fetchByExternalReferenceCode(param#1#, param#0#)"
 	},
 	{
+		"classNames": [
+			"AssetCategoryLocalService",
+			"AssetCategoryLocalServiceUtil"
+		],
+		"from": "fetchAssetCategoryByExternalReferenceCode(long, String)",
+		"issueKey": "LPS-196614"
+	},
+	{
 		"from": "AssetCategory::getLeftCategoryId",
 		"issueKey": "LPS-196624",
 		"to": "AssetCategory::getCategoryId"
