@@ -66,6 +66,12 @@ public class UpgradeCatchAllCheck {
 		assetCategory.getCategoryId;
 	}
 
+	public void method(CommerceAddress commerceAddress) {
+		_commerceAddressLocalService.updateCommerceAddress(commerceAddress.getCommerceAddressId(), commerceAddress.getName(), commerceAddress.getDescription(), commerceAddress.getStreet1(), commerceAddress.getStreet2(), commerceAddress.getStreet3(), commerceAddress.getCity(), commerceAddress.getZip(), commerceAddress.getRegionId(), commerceAddress.getCountryId(), commerceAddress.getPhoneNumber(), commerceAddress.getType(), ServiceContextThreadLocal.getServiceContext());
+		_commerceAddressLocalService.updateCommerceAddress(null);
+		_commerceAddressService.updateCommerceAddress(commerceAddress.getCommerceAddressId(), commerceAddress.getName(), commerceAddress.getDescription(), commerceAddress.getStreet1(), commerceAddress.getStreet2(), commerceAddress.getStreet3(), commerceAddress.getCity(), commerceAddress.getZip(), commerceAddress.getRegionId(), commerceAddress.getCountryId(), commerceAddress.getPhoneNumber(), commerceAddress.getType(), ServiceContextThreadLocal.getServiceContext());
+	}
+
 	public void method(
 		CommerceAddress commerceAddress, Country country, Region region) {
 
@@ -466,6 +472,12 @@ public class UpgradeCatchAllCheck {
 
 	@Reference
 	private CommerceAccountHelper _commerceAccountHelper;
+
+	@Reference
+	private CommerceAddressLocalService _commerceAddressLocalService;
+
+	@Reference
+	private CommerceAddressService _commerceAddressService;
 
 	@Reference
 	private CommerceOrderItemLocalService _commerceOrderItemLocalService;
