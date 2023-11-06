@@ -179,6 +179,22 @@
 		]
 	},
 	{
+		"from": "CookieUtil.get(HttpServletRequest, String)",
+		"issueKey": "LPS-192011",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.CookiesManagerUtil"
+		],
+		"to": "CookiesManagerUtil.getCookieValue(param#1#, param#0#)"
+	},
+	{
+		"from": "CookieUtil.get(HttpServletRequest, String, boolean)",
+		"issueKey": "LPS-192011",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.CookiesManagerUtil"
+		],
+		"to": "CookiesManagerUtil.getCookieValue(param#1#, param#0#, param#2#)"
+	},
+	{
 		"classNames": [
 			"AssetCategoryLocalService",
 			"AssetCategoryLocalServiceUtil"
