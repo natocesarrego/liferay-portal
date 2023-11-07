@@ -36,7 +36,6 @@ UpgradeJavaServiceReferenceAnnotationCheck | .bnd, .ftl, .gradle, .java, .json, 
 UpgradeJavaServiceTrackerListCheck | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replace the number of generic type arguments in ServiceTrackerList |
 UpgradeJavaStorageTypeAwareCheck | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Run code to delete StorageTypeAware interface |
 UpgradeJavaUpdateCommerceAddressCheck | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replace parameter in updateCommerceAddress method by other parameters list |
-UpgradePortletDisplayCheck | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replaces 'portletDisplay.getPortletInstanceConfiguration' with 'ConfigurationProviderUtil.getPortletInstanceConfiguration' |
 UpgradePortletFTLCheck | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Include the CSS classes 'cadmin' and include for impression of 'right cadmin' in 'portlet.ftl' file |
 UpgradeRejectedExecutionHandlerCheck | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replace Liferay's RejectedExecutionHandler with Java's RejectedExecutionHandler |
 UpgradeRemovedAPICheck | .java | Finds cases where calls are made to removed API after an upgrade. |
