@@ -410,6 +410,11 @@ public class UpgradeCatchAllCheck {
 		portletDisplay.getPortletInstanceConfiguration(null);
 	}
 
+	public void method(PortletDisplay portletDisplay, Class<T> clazz) {
+		ConfigurationProviderUtil.getPortletInstanceConfiguration(clazz, themeDisplay);
+		portletDisplay.getPortletInstanceConfiguration(null);
+	}
+
 	public void method(
 		ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
 

@@ -27,5 +27,5 @@ DLURLHelperUtil.getImagePreviewURL(null, null);
 
 themeDisplay.getScopeGroupId();
 
-ConfigurationProviderUtil.getPortletInstanceConfiguration(clazz, ServiceContextThreadLocal.getServiceContext().getThemeDisplay());
+ConfigurationProviderUtil.getPortletInstanceConfiguration(clazz, themeDisplay);
 %>
