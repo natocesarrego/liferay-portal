@@ -19,4 +19,6 @@ DLUtil.getGroupIds(themeDisplay);
 DLUtil.getImagePreviewURL(null, null);
 
 themeDisplay.getPortletGroupId();
+
+portletDisplay.getPortletInstanceConfiguration(clazz);
 %>
