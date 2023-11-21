@@ -402,7 +402,6 @@
 		"newImports": [
 			"com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil"
 		],
-		"skipParametersValidation": true,
 		"to": "ConfigurationProviderUtil.getPortletInstanceConfiguration(param#0#, themeDisplay)",
 		"validExtensions": [
 			"jsp"
