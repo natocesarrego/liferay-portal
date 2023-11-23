@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 	public static String[] getExpectedMessages() throws Exception {
+
 		List<String> expectedMessages = new ArrayList<>();
 
 		JSONArray jsonArray = _getReplacementsJSONArray("replacements.json");
@@ -42,10 +43,20 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 			String from = jsonObject.getString("from");
 
-			if (from.contains(StringPool.OPEN_PARENTHESIS) &&
-				!jsonObject.getBoolean("skipParametersValidation")) {
+			String[] validExtensions = JSONUtil.toStringArray(
+				jsonObject.getJSONArray("validExtensions"));
 
-				expectedMessages.add(_getMessage(jsonObject));
+			if (validExtensions.length==0) {
+				validExtensions = new String[] {"java"};
+			}
+
+			for (String validExtension : validExtensions) {
+				if ((validExtension.contains("java")) &&
+					(from.contains(StringPool.OPEN_PARENTHESIS) &&
+					 !jsonObject.getBoolean("skipParametersValidation"))) {
+
+					expectedMessages.add(_getMessage(jsonObject));
+				}
 			}
 		}
 
