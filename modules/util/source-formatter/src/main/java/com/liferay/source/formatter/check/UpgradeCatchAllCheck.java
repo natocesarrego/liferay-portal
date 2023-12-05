@@ -414,12 +414,16 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 		String methodCall = JavaSourceUtil.getMethodCall(
 			javaMethodContent, matcher.start());
 
-		List<String> parameterNames = JavaSourceUtil.getParameterList(
+		List<String> parameterNames = JavaSourceUtil.getParameterNames(
 			methodCall);
 
-		List<String> parameterTypes = JavaSourceUtil.getParameterList(from);
+		List<String> fromParameters = JavaSourceUtil.getParameterNames(from);
 
-		if (parameterNames.size() != parameterTypes.size()) {
+		if (!jsonObject.getBoolean("skipParametersValidation")) {
+			fromParameters = JavaSourceUtil.getParameterTypes(from);
+		}
+
+		if (parameterNames.size() != fromParameters.size()) {
 			return newContent;
 		}
 
@@ -430,7 +434,7 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 			 !hasParameterTypes(
 				 javaMethodContent, newContent, fileName,
 				 ArrayUtil.toStringArray(parameterNames),
-				 ArrayUtil.toStringArray(parameterTypes))) ||
+				 ArrayUtil.toStringArray(fromParameters))) ||
 			!keys.contains("to")) {
 
 			addMessage(fileName, _getMessage(jsonObject));
