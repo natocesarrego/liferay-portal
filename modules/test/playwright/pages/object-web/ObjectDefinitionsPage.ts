@@ -10,8 +10,11 @@ import {ApplicationsMenuPage} from '../product-navigation-applications-menu/Appl
 export class ObjectDefinitionsPage {
 	readonly addObjectFolderButton: Locator;
 	readonly applicationsMenuPage: ApplicationsMenuPage;
+	readonly buttonAddObjectDefinition: Locator;
+	readonly buttonSaveObjectDefinition: Locator;
 	readonly createObjectFolderButton: Locator;
 	readonly defaultObjectFolderLink: Locator;
+	readonly inputObjectFolderPluralLabel: Locator;
 	readonly objectFolderActionsLink: Locator;
 	readonly objectFolderDeleteFolderOption: Locator;
 	readonly objectFolderEditLabelAndERCOption: Locator;
@@ -22,12 +25,15 @@ export class ObjectDefinitionsPage {
 	constructor(page: Page) {
 		this.addObjectFolderButton = page.getByLabel('Add Object Folder');
 		this.applicationsMenuPage = new ApplicationsMenuPage(page);
+		this.buttonAddObjectDefinition = page.getByTitle('Create New Object');
+		this.buttonSaveObjectDefinition = page.getByText('Save');
 		this.createObjectFolderButton = page.getByRole('button', {
 			name: 'Create Folder',
 		});
 		this.defaultObjectFolderLink = page
 			.locator('li')
 			.filter({hasText: 'Default'});
+		this.inputObjectFolderPluralLabel = page.locator('input[name="pluralLabel"]');
 		this.objectFolderActionsLink = page
 			.locator('div.lfr__object-web-view-object-definitions-title-kebab')
 			.getByLabel('Object Folder Actions');
@@ -46,6 +52,24 @@ export class ObjectDefinitionsPage {
 
 	async clickDefaultObjectFolder() {
 		await this.defaultObjectFolderLink.click();
+	}
+
+	async createObjectDefinition(ObjectDefinitionLabel:string) {
+		await this.buttonAddObjectDefinition.click();
+		await this.objectFolderLabel.click();
+		await this.objectFolderLabel.fill(ObjectDefinitionLabel);
+		await this.inputObjectFolderPluralLabel.click();
+		await this.inputObjectFolderPluralLabel.fill(ObjectDefinitionLabel + 's')
+
+		const responsePromise = this.page.waitForResponse('**/object-definitions');
+
+		await this.buttonSaveObjectDefinition.click();
+
+		const response = await responsePromise;
+
+		console.log(response.json())
+
+		return response.json();
 	}
 
 	async createObjectFolder(objectFolderLabel: string) {
