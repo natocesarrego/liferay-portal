@@ -46,6 +46,17 @@ export class ObjectApiHelper {
 		);
 	}
 
+	async patchObjectEntryByEntryId(
+		applicationName: string,
+		data: DataObject,
+		entryObjectId: string
+	) {
+		return this.apiHelpers.patch(
+			`${this.apiHelpers.baseUrl}${applicationName}/${entryObjectId}`,
+			data
+		);
+	}
+
 	async postObjectDefinitionRandomObjectEntries(
 		fieldName: any,
 		fieldValue: String,
