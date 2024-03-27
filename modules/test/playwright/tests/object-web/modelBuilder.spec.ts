@@ -160,3 +160,37 @@ test('can delete object relationship from different folders', async ({
 
 	await apiHelpers.objectAdmin.deleteObjectFolder(objectFolder.id);
 });
+
+test('can edit erc from object entry', async ({
+	apiHelpers,
+	objectDefinitionsPage,
+}) => {
+	await objectDefinitionsPage.goto();
+
+	const customObject = await apiHelpers.objectAdmin.postRandomObjectDefinition('default');
+
+	await apiHelpers.object.postObjectDefinitionRandomObjectEntries(
+		'textField',
+		'entry value',
+		customObject.restContextPath
+	);
+
+	const restPath = "c/" + customObject.name.toLowerCase() + "s"
+
+	const objectEntry = (await apiHelpers.object.getObjectDefinitionObjectEntries(restPath));
+
+	const newERC = {
+		externalReferenceCode: 'nameERC'
+	}
+
+	expect(
+		(await apiHelpers.object.patchObjectEntryByEntryId(restPath, newERC, objectEntry.items[0].id))
+			.externalReferenceCode
+	).toEqual(
+		newERC.externalReferenceCode
+	)
+
+	// Clean up
+
+	await apiHelpers.objectAdmin.deleteObjectDefinition(customObject.id);
+})
