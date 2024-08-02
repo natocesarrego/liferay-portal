@@ -90,6 +90,10 @@ export class ApplicationsMenuPage {
 		this.commercePanelButton = page.getByRole('tab', {
 			name: 'Commerce',
 		});
+		this.commerceTaxCategoriesMenuItem = page.getByRole('menuitem', {
+			exact: true,
+			name: 'Tax Categories',
+		});
 		this.commerceSpecificationsMenuItem = page.getByRole('menuitem', {
 			exact: true,
 			name: 'Specifications',
@@ -330,6 +334,11 @@ export class ApplicationsMenuPage {
 	async goToCommerceSpecifications() {
 		await this.goToCommercePanel();
 		await this.commerceSpecificationsMenuItem.click();
+	}
+
+	async goToTaxCategories() {
+		await this.goToCommercePanel();
+		await this.commerceTaxCategoriesMenuItem.click();
 	}
 
 	async goToPayments() {
