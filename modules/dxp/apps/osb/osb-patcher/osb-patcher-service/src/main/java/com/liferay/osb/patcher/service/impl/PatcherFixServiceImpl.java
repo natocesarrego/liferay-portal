@@ -43,6 +43,8 @@ public class PatcherFixServiceImpl extends PatcherFixServiceBaseImpl {
 			String patcherProjectVersionName, String ticketList)
 		throws PortalException {
 
+		_validateCheckFixesByProjectVersion(patcherProjectVersionName, ticketList);
+
 		PatcherProjectVersion patcherProjectVersion =
 			_patcherProjectVersionLocalService.fetchPatcherProjectVersionByName(
 				patcherProjectVersionName);
@@ -68,6 +70,38 @@ public class PatcherFixServiceImpl extends PatcherFixServiceBaseImpl {
 		}
 
 		return jsonObject;
+	}
+
+	private void _validateCheckFixesByProjectVersion(
+			String patcherProjectVersionName, String ticketList)
+		throws PortalException {
+
+		if (Validator.isNull(patcherProjectVersionName)) {
+			throw new PortalException("the-project-version-name-is-required");
+		}
+
+		PatcherProjectVersion patcherProjectVersion =
+			_patcherProjectVersionLocalService.fetchPatcherProjectVersionByName(
+				patcherProjectVersionName);
+
+		if (patcherProjectVersion == null) {
+			throw new PortalException("the-project-version-does-not-exist");
+		}
+
+		if (Validator.isNull(ticketList)) {
+			throw new PortalException("the-ticket-list-is-required");
+		}
+
+		Pattern pattern = Pattern.compile(
+			PatcherConstants.TICKET_NAME_LPD_LPE_LPS_REGEX);
+
+		for (String ticket : ticketList.split(",")) {
+			String preparedTicket = PatcherUtil.preparePatcherName(ticket);
+
+			if (!pattern.matcher(preparedTicket).matches()) {
+				throw new PortalException("the-ticket-x-is-invalid");
+			}
+		}
 	}
 
 	@Reference
