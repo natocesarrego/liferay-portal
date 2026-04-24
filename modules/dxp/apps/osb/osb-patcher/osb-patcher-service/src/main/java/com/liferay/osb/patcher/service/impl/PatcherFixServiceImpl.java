@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -43,7 +43,8 @@ public class PatcherFixServiceImpl extends PatcherFixServiceBaseImpl {
 			String patcherProjectVersionName, String ticketList)
 		throws PortalException {
 
-		_validateCheckFixesByProjectVersion(patcherProjectVersionName, ticketList);
+		_validateCheckFixesByProjectVersion(
+			patcherProjectVersionName, ticketList);
 
 		PatcherProjectVersion patcherProjectVersion =
 			_patcherProjectVersionLocalService.fetchPatcherProjectVersionByName(
@@ -98,13 +99,17 @@ public class PatcherFixServiceImpl extends PatcherFixServiceBaseImpl {
 		for (String ticket : ticketList.split(",")) {
 			String preparedTicket = PatcherUtil.preparePatcherName(ticket);
 
-			if (!pattern.matcher(preparedTicket).matches()) {
+			if (!pattern.matcher(
+					preparedTicket
+				).matches()) {
+
 				throw new PortalException("the-ticket-x-is-invalid");
 			}
 		}
 	}
 
 	@Reference
-	private PatcherProjectVersionLocalService _patcherProjectVersionLocalService;
+	private PatcherProjectVersionLocalService
+		_patcherProjectVersionLocalService;
 
 }
