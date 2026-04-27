@@ -11,7 +11,7 @@ import com.liferay.osb.patcher.constants.WorkflowConstants;
 import com.liferay.osb.patcher.model.PatcherFix;
 import com.liferay.osb.patcher.model.PatcherProjectVersion;
 import com.liferay.osb.patcher.service.PatcherFixLocalServiceUtil;
-import com.liferay.osb.patcher.service.PatcherProjectVersionLocalService;
+import com.liferay.osb.patcher.service.PatcherProjectVersionLocalServiceUtil;
 import com.liferay.osb.patcher.service.base.PatcherFixLocalServiceBaseImpl;
 import com.liferay.osb.patcher.service.persistence.PatcherFixRelPersistence;
 import com.liferay.osb.patcher.util.EmailUtil;
@@ -96,7 +96,7 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 			patcherProjectVersionName, ticketList);
 
 		PatcherProjectVersion patcherProjectVersion =
-			_patcherProjectVersionLocalService.fetchPatcherProjectVersionByName(
+			PatcherProjectVersionLocalServiceUtil.fetchPatcherProjectVersionByName(
 				patcherProjectVersionName);
 
 		List<PatcherFix> patcherFixes = getPatcherFixes(
@@ -514,7 +514,7 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 		}
 
 		PatcherProjectVersion patcherProjectVersion =
-			_patcherProjectVersionLocalService.fetchPatcherProjectVersionByName(
+			PatcherProjectVersionLocalServiceUtil.fetchPatcherProjectVersionByName(
 				patcherProjectVersionName);
 
 		if (patcherProjectVersion == null) {
@@ -548,10 +548,6 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 
 	@Reference
 	private PatcherFixRelPersistence _patcherFixRelPersistence;
-
-	@Reference
-	private PatcherProjectVersionLocalService
-		_patcherProjectVersionLocalService;
 
 	@Reference
 	private UserLocalService _userLocalService;
