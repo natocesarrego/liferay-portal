@@ -130,8 +130,8 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 			String patcherProjectVersionName, String ticketNames)
 		throws PortalException {
 
-		_validateCheckPatcherFixesByPatcherProjectVersionName(
-			patcherProjectVersionName, ticketNames);
+		_validatePatcherProjectVersionName(patcherProjectVersionName);
+		_validateTicketNames(ticketNames);
 
 		PatcherProjectVersion patcherProjectVersion =
 			PatcherProjectVersionLocalServiceUtil.
@@ -545,8 +545,8 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 			_userLocalService.getUser(userId));
 	}
 
-	private void _validateCheckPatcherFixesByPatcherProjectVersionName(
-			String patcherProjectVersionName, String ticketNames)
+	private void _validatePatcherProjectVersionName(
+			String patcherProjectVersionName)
 		throws PortalException {
 
 		if (Validator.isNull(patcherProjectVersionName)) {
@@ -560,6 +560,10 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 		if (patcherProjectVersion == null) {
 			throw new PortalException("Patcher project version does not exist");
 		}
+	}
+
+	private void _validateTicketNames(String ticketNames)
+		throws PortalException {
 
 		if (Validator.isNull(ticketNames)) {
 			throw new PortalException("Ticket names is null");
