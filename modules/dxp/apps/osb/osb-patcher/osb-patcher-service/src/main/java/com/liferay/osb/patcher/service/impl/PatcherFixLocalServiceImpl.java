@@ -127,11 +127,11 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 
 	@Override
 	public JSONObject checkPatcherFixesByPatcherProjectVersionName(
-			String patcherProjectVersionName, String ticketList)
+			String patcherProjectVersionName, String ticketNames)
 		throws PortalException {
 
 		_validateCheckPatcherFixesByPatcherProjectVersionName(
-			patcherProjectVersionName, ticketList);
+			patcherProjectVersionName, ticketNames);
 
 		PatcherProjectVersion patcherProjectVersion =
 			PatcherProjectVersionLocalServiceUtil.
@@ -150,11 +150,10 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 
 		JSONObject jsonObject = _jsonFactory.createJSONObject();
 
-		for (String ticket : ticketList.split(",")) {
-			String preparedTicket = PatcherUtil.preparePatcherName(ticket);
+		for (String ticketName : ticketNames.split(",")) {
+			ticketName = PatcherUtil.preparePatcherName(ticketName);
 
-			jsonObject.put(
-				preparedTicket, patcherFixNames.contains(preparedTicket));
+			jsonObject.put(ticketName, patcherFixNames.contains(ticketName));
 		}
 
 		return jsonObject;
@@ -547,11 +546,11 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 	}
 
 	private void _validateCheckPatcherFixesByPatcherProjectVersionName(
-			String patcherProjectVersionName, String ticketList)
+			String patcherProjectVersionName, String ticketNames)
 		throws PortalException {
 
 		if (Validator.isNull(patcherProjectVersionName)) {
-			throw new PortalException("The project version name is invalid");
+			throw new PortalException("Patcher project version name is null");
 		}
 
 		PatcherProjectVersion patcherProjectVersion =
@@ -559,34 +558,34 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 				fetchPatcherProjectVersionByName(patcherProjectVersionName);
 
 		if (patcherProjectVersion == null) {
-			throw new PortalException("The project version is invalid");
+			throw new PortalException("Patcher project version does not exist");
 		}
 
-		if (Validator.isNull(ticketList)) {
-			throw new PortalException("The ticket list is invalid");
+		if (Validator.isNull(ticketNames)) {
+			throw new PortalException("Ticket names is null");
 		}
 
-		List<String> invalidTickets = new ArrayList<>();
+		List<String> invalidTicketNames = new ArrayList<>();
 		Pattern pattern = Pattern.compile(
 			PatcherConstants.TICKET_NAME_LPD_LPE_LPS_REGEX);
 
-		for (String ticket : ticketList.split(",")) {
-			String preparedTicket = PatcherUtil.preparePatcherName(ticket);
+		for (String ticket : ticketNames.split(",")) {
+			String ticketName = PatcherUtil.preparePatcherName(ticket);
 
 			if (!pattern.matcher(
-					preparedTicket
+					ticketName
 				).matches()) {
 
-				invalidTickets.add(ticket);
+				invalidTicketNames.add(ticket);
 			}
 		}
 
-		if (!invalidTickets.isEmpty()) {
-			String invalidTicketList = StringUtil.merge(
-				invalidTickets, StringPool.COMMA_AND_SPACE);
+		if (!invalidTicketNames.isEmpty()) {
+			String invalidTicketNamesString = StringUtil.merge(
+				invalidTicketNames, StringPool.COMMA_AND_SPACE);
 
 			throw new PortalException(
-				"The following tickets are invalid: " + invalidTicketList);
+				"Ticket names are invalid: " + invalidTicketNamesString);
 		}
 	}
 
