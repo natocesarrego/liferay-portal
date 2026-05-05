@@ -5,7 +5,6 @@
 
 package com.liferay.osb.patcher.service.impl;
 
-import com.liferay.osb.patcher.constants.PatcherConstants;
 import com.liferay.osb.patcher.constants.PatcherFixConstants;
 import com.liferay.osb.patcher.constants.WorkflowConstants;
 import com.liferay.osb.patcher.model.PatcherFix;
@@ -40,6 +39,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.osgi.service.component.annotations.Component;
@@ -566,16 +566,13 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 		}
 
 		List<String> invalidTicketNames = new ArrayList<>();
-		Pattern pattern = Pattern.compile(
-			PatcherConstants.TICKET_NAME_LPD_LPE_LPS_REGEX);
 
 		for (String ticket : ticketNames.split(",")) {
 			String ticketName = PatcherUtil.preparePatcherName(ticket);
 
-			if (!pattern.matcher(
-					ticketName
-				).matches()) {
+			Matcher matcher = _ticketNamePattern.matcher(ticketName);
 
+			if (!matcher.matches()) {
 				invalidTicketNames.add(ticket);
 			}
 		}
@@ -591,6 +588,9 @@ public class PatcherFixLocalServiceImpl extends PatcherFixLocalServiceBaseImpl {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PatcherFixLocalServiceImpl.class);
+
+	private static final Pattern _ticketNamePattern = Pattern.compile(
+		"^(LP[DES]-[0-9]+)$");
 
 	@Reference
 	private JSONFactory _jsonFactory;
