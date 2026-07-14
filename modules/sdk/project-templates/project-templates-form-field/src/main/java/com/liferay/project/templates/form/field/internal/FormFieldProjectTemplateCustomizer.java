@@ -45,6 +45,8 @@ public class FormFieldProjectTemplateCustomizer
 			ArchetypeGenerationResult archetypeGenerationResult)
 		throws Exception {
 
+		System.out.println("Executing onAfterGenerateProject ...");
+
 		String liferayVersion = projectTemplatesArgs.getLiferayVersion();
 
 		List<String> fileNames = new ArrayList<>();
