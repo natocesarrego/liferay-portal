@@ -229,12 +229,8 @@ public class ListTypeDefinitionServiceTest {
 
 		// A user can only list the list type definitions it may view
 
-		ListTypeDefinition restrictedListTypeDefinition =
-			_addListTypeDefinition(_adminUser);
 		ListTypeDefinition viewableListTypeDefinition = _addListTypeDefinition(
 			_adminUser);
-		ListTypeDefinition ownedListTypeDefinition = _addListTypeDefinition(
-			_user);
 
 		_setResourcePermissions(
 			ListTypeDefinition.class.getName(),
@@ -242,6 +238,31 @@ public class ListTypeDefinitionServiceTest {
 			String.valueOf(
 				viewableListTypeDefinition.getListTypeDefinitionId()),
 			RoleConstants.USER, new String[] {ActionKeys.VIEW});
+
+		// A user lists only the list type definitions it may view
+
+		ListTypeDefinition ownedListTypeDefinition = _addListTypeDefinition(
+			_user);
+		ListTypeDefinition restrictedListTypeDefinition =
+			_addListTypeDefinition(_adminUser);
+
+		try (ContextUserReplace contextUserReplace = new ContextUserReplace(
+				_user)) {
+
+			List<ListTypeDefinition> listTypeDefinitions =
+				_listTypeDefinitionService.getListTypeDefinitions(
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			Assert.assertTrue(
+				listTypeDefinitions.contains(ownedListTypeDefinition));
+			Assert.assertFalse(
+				listTypeDefinitions.contains(restrictedListTypeDefinition));
+			Assert.assertTrue(
+				listTypeDefinitions.contains(viewableListTypeDefinition));
+			Assert.assertEquals(
+				listTypeDefinitions.size(),
+				_listTypeDefinitionService.getListTypeDefinitionsCount());
+		}
 
 		// An administrator lists every list type definition
 
@@ -253,34 +274,9 @@ public class ListTypeDefinitionServiceTest {
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 			Assert.assertTrue(
-				listTypeDefinitions.toString(),
 				listTypeDefinitions.contains(restrictedListTypeDefinition));
 			Assert.assertTrue(
-				listTypeDefinitions.toString(),
 				listTypeDefinitions.contains(viewableListTypeDefinition));
-			Assert.assertEquals(
-				listTypeDefinitions.size(),
-				_listTypeDefinitionService.getListTypeDefinitionsCount());
-		}
-
-		// A user lists only the list type definitions it may view
-
-		try (ContextUserReplace contextUserReplace = new ContextUserReplace(
-				_user)) {
-
-			List<ListTypeDefinition> listTypeDefinitions =
-				_listTypeDefinitionService.getListTypeDefinitions(
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-			Assert.assertFalse(
-				listTypeDefinitions.toString(),
-				listTypeDefinitions.contains(restrictedListTypeDefinition));
-			Assert.assertTrue(
-				listTypeDefinitions.toString(),
-				listTypeDefinitions.contains(viewableListTypeDefinition));
-			Assert.assertTrue(
-				listTypeDefinitions.toString(),
-				listTypeDefinitions.contains(ownedListTypeDefinition));
 			Assert.assertEquals(
 				listTypeDefinitions.size(),
 				_listTypeDefinitionService.getListTypeDefinitionsCount());
