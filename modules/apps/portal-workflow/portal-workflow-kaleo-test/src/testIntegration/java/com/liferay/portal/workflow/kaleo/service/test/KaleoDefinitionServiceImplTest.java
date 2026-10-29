@@ -402,6 +402,16 @@ public class KaleoDefinitionServiceImplTest {
 			ServiceContextTestUtil.getServiceContext());
 	}
 
+	private AccountEntry _addAccountEntry(long userId) throws Exception {
+		return _accountEntryLocalService.addAccountEntry(
+			StringPool.BLANK, userId, 0L, RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(), null, null, null,
+			RandomTestUtil.randomString(),
+			AccountConstants.ACCOUNT_ENTRY_TYPE_BUSINESS,
+			WorkflowConstants.STATUS_APPROVED,
+			ServiceContextTestUtil.getServiceContext());
+	}
+
 	private KaleoDefinition _addKaleoDefinition() throws Exception {
 		return _addKaleoDefinition(
 			WorkflowDefinitionConstants.SCOPE_ALL, _serviceContext);
@@ -465,9 +475,30 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private void _testActivateKaleoDefinition() throws Exception {
-		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
+		_setUpPermissionThreadLocal(_companyAdminUser);
 
-		User user = _addUser();
+		ServiceContext companyServiceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		companyServiceContext.setCompanyId(_company.getCompanyId());
+		companyServiceContext.setUserId(_companyAdminUser.getUserId());
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", true
+			).build());
+
+		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
+			WorkflowDefinitionConstants.SCOPE_ALL, companyServiceContext);
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", false
+			).build());
+
+		User user = _addUser(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
@@ -477,7 +508,7 @@ public class KaleoDefinitionServiceImplTest {
 				WorkflowConstants.RESOURCE_NAME, StringPool.SPACE),
 			() -> _kaleoDefinitionService.activateKaleoDefinition(
 				kaleoDefinition.getName(), kaleoDefinition.getVersion(),
-				_serviceContext));
+				companyServiceContext));
 
 		_setUpPermissionThreadLocal(_companyAdminUser);
 
@@ -489,7 +520,7 @@ public class KaleoDefinitionServiceImplTest {
 				WorkflowConstants.RESOURCE_NAME, StringPool.SPACE),
 			() -> _kaleoDefinitionService.activateKaleoDefinition(
 				kaleoDefinition.getName(), kaleoDefinition.getVersion(),
-				_serviceContext));
+				companyServiceContext));
 
 		ConfigurationTestUtil.saveConfiguration(
 			_configuration,
@@ -500,7 +531,7 @@ public class KaleoDefinitionServiceImplTest {
 		KaleoDefinition activeKaleoDefinition =
 			_kaleoDefinitionService.activateKaleoDefinition(
 				kaleoDefinition.getName(), kaleoDefinition.getVersion(),
-				_serviceContext);
+				companyServiceContext);
 
 		Assert.assertTrue(activeKaleoDefinition.isActive());
 	}
@@ -556,7 +587,7 @@ public class KaleoDefinitionServiceImplTest {
 
 		// A user with the "checkPermission" attribute set to false
 
-		User user = _addUser();
+		User user = _addUser(_serviceContext.getCompanyId());
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext();
@@ -576,13 +607,19 @@ public class KaleoDefinitionServiceImplTest {
 
 		_setUpPermissionThreadLocal(_companyAdminUser);
 
+		ServiceContext companyServiceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		companyServiceContext.setCompanyId(_company.getCompanyId());
+
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
 			StringBundler.concat(
 				"User ", _companyAdminUser.getUserId(), " must have ",
 				ActionKeys.ADD_DEFINITION, " permission for ",
 				WorkflowConstants.RESOURCE_NAME, StringPool.SPACE),
-			this::_addKaleoDefinition);
+			() -> _addKaleoDefinition(
+				WorkflowDefinitionConstants.SCOPE_ALL, companyServiceContext));
 
 		// Administrator with "company.administrator.can.publish" enabled
 
@@ -592,7 +629,9 @@ public class KaleoDefinitionServiceImplTest {
 				"company.administrator.can.publish", true
 			).build());
 
-		Assert.assertNotNull(_addKaleoDefinition());
+		Assert.assertNotNull(
+			_addKaleoDefinition(
+				WorkflowDefinitionConstants.SCOPE_ALL, companyServiceContext));
 	}
 
 	private void _testAddKaleoDefinitionWithGroupId() throws Exception {
@@ -632,12 +671,33 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private void _testDeactivateKaleoDefinition() throws Exception {
-		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
+		_setUpPermissionThreadLocal(_companyAdminUser);
+
+		ServiceContext companyServiceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		companyServiceContext.setCompanyId(_company.getCompanyId());
+		companyServiceContext.setUserId(_companyAdminUser.getUserId());
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", true
+			).build());
+
+		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
+			WorkflowDefinitionConstants.SCOPE_ALL, companyServiceContext);
 
 		_kaleoDefinitionLocalService.activateKaleoDefinition(
-			kaleoDefinition.getKaleoDefinitionId(), _serviceContext);
+			kaleoDefinition.getKaleoDefinitionId(), companyServiceContext);
 
-		User user = _addUser();
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", false
+			).build());
+
+		User user = _addUser(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
@@ -647,7 +707,7 @@ public class KaleoDefinitionServiceImplTest {
 				WorkflowConstants.RESOURCE_NAME, StringPool.SPACE),
 			() -> _kaleoDefinitionService.deactivateKaleoDefinition(
 				kaleoDefinition.getName(), kaleoDefinition.getVersion(),
-				_serviceContext));
+				companyServiceContext));
 
 		_setUpPermissionThreadLocal(_companyAdminUser);
 
@@ -659,7 +719,7 @@ public class KaleoDefinitionServiceImplTest {
 				WorkflowConstants.RESOURCE_NAME, StringPool.SPACE),
 			() -> _kaleoDefinitionService.deactivateKaleoDefinition(
 				kaleoDefinition.getName(), kaleoDefinition.getVersion(),
-				_serviceContext));
+				companyServiceContext));
 
 		ConfigurationTestUtil.saveConfiguration(
 			_configuration,
@@ -670,7 +730,7 @@ public class KaleoDefinitionServiceImplTest {
 		KaleoDefinition inactiveKaleoDefinition =
 			_kaleoDefinitionService.deactivateKaleoDefinition(
 				kaleoDefinition.getName(), kaleoDefinition.getVersion(),
-				_serviceContext);
+				companyServiceContext);
 
 		Assert.assertFalse(inactiveKaleoDefinition.isActive());
 	}
@@ -726,9 +786,30 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private void _testDeleteKaleoDefinition() throws Exception {
-		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
+		_setUpPermissionThreadLocal(_companyAdminUser);
 
-		User user = _addUser();
+		ServiceContext companyServiceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		companyServiceContext.setCompanyId(_company.getCompanyId());
+		companyServiceContext.setUserId(_companyAdminUser.getUserId());
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", true
+			).build());
+
+		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
+			WorkflowDefinitionConstants.SCOPE_ALL, companyServiceContext);
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", false
+			).build());
+
+		User user = _addUser(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
@@ -737,7 +818,7 @@ public class KaleoDefinitionServiceImplTest {
 				" permission for ", WorkflowConstants.RESOURCE_NAME,
 				StringPool.SPACE),
 			() -> _kaleoDefinitionService.deleteKaleoDefinition(
-				kaleoDefinition.getName(), _serviceContext));
+				kaleoDefinition.getName(), companyServiceContext));
 
 		_setUpPermissionThreadLocal(_companyAdminUser);
 
@@ -748,7 +829,7 @@ public class KaleoDefinitionServiceImplTest {
 				ActionKeys.DELETE, " permission for ",
 				WorkflowConstants.RESOURCE_NAME, StringPool.SPACE),
 			() -> _kaleoDefinitionService.deleteKaleoDefinition(
-				kaleoDefinition.getName(), _serviceContext));
+				kaleoDefinition.getName(), companyServiceContext));
 
 		ConfigurationTestUtil.saveConfiguration(
 			_configuration,
@@ -757,11 +838,11 @@ public class KaleoDefinitionServiceImplTest {
 			).build());
 
 		_kaleoDefinitionService.deleteKaleoDefinition(
-			kaleoDefinition.getName(), _serviceContext);
+			kaleoDefinition.getName(), companyServiceContext);
 
 		Assert.assertNull(
 			_kaleoDefinitionLocalService.fetchKaleoDefinition(
-				kaleoDefinition.getName(), _serviceContext));
+				kaleoDefinition.getName(), companyServiceContext));
 	}
 
 	private void _testDeleteKaleoDefinitionWithGroupId() throws Exception {
@@ -831,6 +912,8 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private void _testGetKaleoDefinitionWithGroupId() throws Exception {
+		_setUpPermissionThreadLocal(TestPropsValues.getUser());
+
 		AccountEntry accountEntry = _addAccountEntry();
 
 		ConfigurationTestUtil.saveConfiguration(
@@ -867,15 +950,37 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private void _testUpdateKaleoDefinition() throws Exception {
-		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
+		_setUpPermissionThreadLocal(_companyAdminUser);
+
+		ServiceContext companyServiceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		companyServiceContext.setCompanyId(_company.getCompanyId());
+		companyServiceContext.setUserId(_companyAdminUser.getUserId());
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", true
+			).build());
+
+		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
+			WorkflowDefinitionConstants.SCOPE_ALL, companyServiceContext);
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", false
+			).build());
 
 		// A user with the "checkPermission" attribute set to false
 
-		User user = _addUser();
+		User user = _addUser(_company.getCompanyId());
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext();
 
+		serviceContext.setCompanyId(_company.getCompanyId());
 		serviceContext.setAttribute("checkPermission", Boolean.FALSE);
 
 		AssertUtils.assertFailure(
@@ -904,7 +1009,7 @@ public class KaleoDefinitionServiceImplTest {
 				kaleoDefinition.getExternalReferenceCode(),
 				kaleoDefinition.getKaleoDefinitionId(),
 				RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-				kaleoDefinition.getContent(), false, _serviceContext));
+				kaleoDefinition.getContent(), false, companyServiceContext));
 
 		// Administrator with "company.administrator.can.publish" enabled
 
@@ -919,7 +1024,7 @@ public class KaleoDefinitionServiceImplTest {
 				kaleoDefinition.getExternalReferenceCode(),
 				kaleoDefinition.getKaleoDefinitionId(),
 				RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-				kaleoDefinition.getContent(), false, _serviceContext));
+				kaleoDefinition.getContent(), false, companyServiceContext));
 	}
 
 	private void _testUpdateKaleoDefinitionWithDifferentGroupId()
@@ -933,19 +1038,31 @@ public class KaleoDefinitionServiceImplTest {
 				"company.administrator.can.publish", true
 			).build());
 
-		AccountEntry accountEntry1 = _addAccountEntry();
+		AccountEntry accountEntry1 = _addAccountEntry(
+			_companyAdminUser.getUserId());
 
-		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
+		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
 				accountEntry1.getAccountEntryGroupId(),
-				TestPropsValues.getUserId()));
+				_companyAdminUser.getUserId());
 
-		AccountEntry accountEntry2 = _addAccountEntry();
+		serviceContext.setCompanyId(_company.getCompanyId());
 
-		User user = _addUser(TestPropsValues.getCompanyId());
+		KaleoDefinition kaleoDefinition = _addKaleoDefinition(serviceContext);
+
+		AccountEntry accountEntry2 = _addAccountEntry(
+			_companyAdminUser.getUserId());
+
+		User user = _addUser(_company.getCompanyId());
 
 		_accountEntryUserRelLocalService.addAccountEntryUserRel(
 			accountEntry2.getAccountEntryId(), user.getUserId());
+
+		ServiceContext updateServiceContext =
+			ServiceContextTestUtil.getServiceContext(
+				accountEntry2.getAccountEntryGroupId(), user.getUserId());
+
+		updateServiceContext.setCompanyId(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
@@ -957,32 +1074,51 @@ public class KaleoDefinitionServiceImplTest {
 				kaleoDefinition.getExternalReferenceCode(),
 				kaleoDefinition.getKaleoDefinitionId(),
 				RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-				kaleoDefinition.getContent(), false,
-				ServiceContextTestUtil.getServiceContext(
-					accountEntry2.getAccountEntryGroupId(), user.getUserId())));
+				kaleoDefinition.getContent(), false, updateServiceContext));
 	}
 
 	private void _testUpdateKaleoDefinitionWithGroupId() throws Exception {
 		_setUpPermissionThreadLocal(_companyAdminUser);
 
-		AccountEntry accountEntry = _addAccountEntry();
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", true
+			).build());
 
-		KaleoDefinition kaleoDefinition1 = _addKaleoDefinition(
+		AccountEntry accountEntry = _addAccountEntry(
+			_companyAdminUser.getUserId());
+
+		ServiceContext companyServiceContext =
 			ServiceContextTestUtil.getServiceContext(
 				accountEntry.getAccountEntryGroupId(),
-				TestPropsValues.getUserId()));
+				_companyAdminUser.getUserId());
+
+		companyServiceContext.setCompanyId(_company.getCompanyId());
+
+		KaleoDefinition kaleoDefinition1 = _addKaleoDefinition(
+			companyServiceContext);
 
 		Assert.assertEquals(
 			accountEntry.getAccountEntryGroupId(),
 			kaleoDefinition1.getGroupId());
 
-		KaleoDefinition kaleoDefinition2 = _addKaleoDefinition();
+		ServiceContext globalServiceContext =
+			ServiceContextTestUtil.getServiceContext();
 
-		User user = _addUser(TestPropsValues.getCompanyId());
+		globalServiceContext.setCompanyId(_company.getCompanyId());
+		globalServiceContext.setUserId(_companyAdminUser.getUserId());
+
+		KaleoDefinition kaleoDefinition2 = _addKaleoDefinition(
+			WorkflowDefinitionConstants.SCOPE_ALL, globalServiceContext);
+
+		User user = _addUser(_company.getCompanyId());
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(
 				accountEntry.getAccountEntryGroupId(), user.getUserId());
+
+		serviceContext.setCompanyId(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
