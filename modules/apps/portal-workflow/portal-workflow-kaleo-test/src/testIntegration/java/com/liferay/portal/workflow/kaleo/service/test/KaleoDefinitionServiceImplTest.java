@@ -143,14 +143,16 @@ public class KaleoDefinitionServiceImplTest {
 			kaleoDefinition.getCompanyId(), _company2AdminUser.getCompanyId());
 
 		Assert.assertFalse(
-			PermissionThreadLocal.getPermissionChecker().isOmniadmin());
+			PermissionThreadLocal.getPermissionChecker(
+			).isOmniadmin());
 
 		Assert.assertEquals(
 			kaleoDefinition.getCompanyId(), _serviceContext.getCompanyId());
 
 		Assert.assertNotEquals(
 			kaleoDefinition.getCompanyId(),
-			PermissionThreadLocal.getPermissionChecker().getCompanyId());
+			PermissionThreadLocal.getPermissionChecker(
+			).getCompanyId());
 
 		PrincipalException principalException = Assert.assertThrows(
 			PrincipalException.class,
@@ -187,11 +189,13 @@ public class KaleoDefinitionServiceImplTest {
 			_serviceContext.getCompanyId(), _company2AdminUser.getCompanyId());
 
 		Assert.assertFalse(
-			PermissionThreadLocal.getPermissionChecker().isOmniadmin());
+			PermissionThreadLocal.getPermissionChecker(
+			).isOmniadmin());
 
 		Assert.assertNotEquals(
 			_serviceContext.getCompanyId(),
-			PermissionThreadLocal.getPermissionChecker().getCompanyId());
+			PermissionThreadLocal.getPermissionChecker(
+			).getCompanyId());
 
 		PrincipalException principalException = Assert.assertThrows(
 			PrincipalException.class, this::_addKaleoDefinition);
@@ -231,14 +235,16 @@ public class KaleoDefinitionServiceImplTest {
 			kaleoDefinition.getCompanyId(), _company2AdminUser.getCompanyId());
 
 		Assert.assertFalse(
-			PermissionThreadLocal.getPermissionChecker().isOmniadmin());
+			PermissionThreadLocal.getPermissionChecker(
+			).isOmniadmin());
 
 		Assert.assertEquals(
 			kaleoDefinition.getCompanyId(), _serviceContext.getCompanyId());
 
 		Assert.assertNotEquals(
 			kaleoDefinition.getCompanyId(),
-			PermissionThreadLocal.getPermissionChecker().getCompanyId());
+			PermissionThreadLocal.getPermissionChecker(
+			).getCompanyId());
 
 		PrincipalException principalException = Assert.assertThrows(
 			PrincipalException.class,
@@ -262,9 +268,7 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	@Test
-	public void testDeleteKaleoDefinitionFromAnotherCompany()
-		throws Exception {
-
+	public void testDeleteKaleoDefinitionFromAnotherCompany() throws Exception {
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
 
 		ConfigurationTestUtil.saveConfiguration(
@@ -279,14 +283,16 @@ public class KaleoDefinitionServiceImplTest {
 			kaleoDefinition.getCompanyId(), _company2AdminUser.getCompanyId());
 
 		Assert.assertFalse(
-			PermissionThreadLocal.getPermissionChecker().isOmniadmin());
+			PermissionThreadLocal.getPermissionChecker(
+			).isOmniadmin());
 
 		Assert.assertEquals(
 			kaleoDefinition.getCompanyId(), _serviceContext.getCompanyId());
 
 		Assert.assertNotEquals(
 			kaleoDefinition.getCompanyId(),
-			PermissionThreadLocal.getPermissionChecker().getCompanyId());
+			PermissionThreadLocal.getPermissionChecker(
+			).getCompanyId());
 
 		PrincipalException principalException = Assert.assertThrows(
 			PrincipalException.class,
@@ -354,9 +360,7 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	@Test
-	public void testUpdateKaleoDefinitionFromAnotherCompany()
-		throws Exception {
-
+	public void testUpdateKaleoDefinitionFromAnotherCompany() throws Exception {
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
 
 		ConfigurationTestUtil.saveConfiguration(
@@ -371,14 +375,16 @@ public class KaleoDefinitionServiceImplTest {
 			kaleoDefinition.getCompanyId(), _company2AdminUser.getCompanyId());
 
 		Assert.assertFalse(
-			PermissionThreadLocal.getPermissionChecker().isOmniadmin());
+			PermissionThreadLocal.getPermissionChecker(
+			).isOmniadmin());
 
 		Assert.assertEquals(
 			kaleoDefinition.getCompanyId(), _serviceContext.getCompanyId());
 
 		Assert.assertNotEquals(
 			kaleoDefinition.getCompanyId(),
-			PermissionThreadLocal.getPermissionChecker().getCompanyId());
+			PermissionThreadLocal.getPermissionChecker(
+			).getCompanyId());
 
 		PrincipalException principalException = Assert.assertThrows(
 			PrincipalException.class,
@@ -425,7 +431,7 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private KaleoDefinition _addKaleoDefinition(
-		String scope, ServiceContext serviceContext)
+			String scope, ServiceContext serviceContext)
 		throws Exception {
 
 		return _kaleoDefinitionService.addKaleoDefinition(
@@ -980,8 +986,8 @@ public class KaleoDefinitionServiceImplTest {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext();
 
-		serviceContext.setCompanyId(_company.getCompanyId());
 		serviceContext.setAttribute("checkPermission", Boolean.FALSE);
+		serviceContext.setCompanyId(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
