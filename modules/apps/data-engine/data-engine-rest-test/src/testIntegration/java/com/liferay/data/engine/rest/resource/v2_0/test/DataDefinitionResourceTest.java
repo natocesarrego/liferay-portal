@@ -23,6 +23,8 @@ import com.liferay.data.engine.rest.resource.v2_0.test.util.DataDefinitionTestUt
 import com.liferay.data.engine.rest.resource.v2_0.test.util.DataLayoutTestUtil;
 import com.liferay.data.engine.rest.resource.v2_0.test.util.content.type.TestDataDefinitionContentType;
 import com.liferay.data.engine.rest.resource.v2_0.test.util.content.type.test.util.ModelResourceActionTestUtil;
+import com.liferay.document.library.kernel.model.DLFileEntryType;
+import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceWrapper;
@@ -34,18 +36,26 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.ResourceConstants;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -253,6 +263,9 @@ public class DataDefinitionResourceTest
 			richTextDataDefinitionField.getCustomProperties();
 
 		Assert.assertTrue(customProperties.containsKey("editorConfig"));
+
+		_testGetSiteDataDefinitionByContentTypeContentTypePageWithoutViewPermission();
+		_testGetSiteDataDefinitionByContentTypeContentTypePageWithViewPermission();
 	}
 
 	@Override
@@ -1026,6 +1039,20 @@ public class DataDefinitionResourceTest
 		throw new AssertionError("No data definition field named " + name);
 	}
 
+	private DataDefinitionResource _getDataDefinitionResource(User user)
+		throws Exception {
+
+		return DataDefinitionResource.builder(
+		).authentication(
+			user.getEmailAddress(), user.getPasswordUnencrypted()
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
+	}
+
 	private List<String> _getDataLayoutColumnFieldNames(DataLayout dataLayout) {
 		List<String> dataLayoutColumnFieldNames = new ArrayList<>();
 
@@ -1108,6 +1135,114 @@ public class DataDefinitionResourceTest
 				dataDefinitionFields1[i].getNestedDataDefinitionFields(),
 				dataDefinitionFields2[i].getNestedDataDefinitionFields());
 		}
+	}
+
+	private void _testGetSiteDataDefinitionByContentTypeContentTypePageWithViewPermission()
+		throws Exception {
+
+		DataDefinition dataDefinition1 =
+			dataDefinitionResource.postSiteDataDefinitionByContentType(
+				testGroup.getGroupId(), "journal", randomDataDefinition());
+
+		dataDefinitionResource.postSiteDataDefinitionByContentType(
+			testGroup.getGroupId(), "journal", randomDataDefinition());
+
+		DDMStructure ddmStructure = _ddmStructureLocalService.getStructure(
+			dataDefinition1.getId());
+
+		Role role = _roleLocalService.getRole(
+			testCompany.getCompanyId(), RoleConstants.USER);
+
+		_resourcePermissionLocalService.setResourcePermissions(
+			testCompany.getCompanyId(),
+			ResourceActionsUtil.getCompositeModelName(
+				_portal.getClassName(ddmStructure.getClassNameId()),
+				DDMStructure.class.getName()),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(dataDefinition1.getId()), role.getRoleId(),
+			new String[] {ActionKeys.VIEW});
+
+		DataDefinition dataDefinition2 =
+			dataDefinitionResource.postSiteDataDefinitionByContentType(
+				testGroup.getGroupId(), "document-library",
+				randomDataDefinition());
+
+		DLFileEntryType dlFileEntryType =
+			_dlFileEntryTypeLocalService.addFileEntryType(
+				null, TestPropsValues.getUserId(), testGroup.getGroupId(),
+				dataDefinition2.getId(), null,
+				HashMapBuilder.put(
+					LocaleUtil.getDefault(), RandomTestUtil.randomString()
+				).build(),
+				Collections.emptyMap(),
+				ServiceContextTestUtil.getServiceContext(
+					testGroup.getGroupId()));
+
+		_resourcePermissionLocalService.setResourcePermissions(
+			testCompany.getCompanyId(), DLFileEntryType.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(dlFileEntryType.getFileEntryTypeId()),
+			role.getRoleId(), new String[] {ActionKeys.VIEW});
+
+		DataDefinitionResource dataDefinitionResource =
+			_getDataDefinitionResource(
+				UserTestUtil.addUser(
+					testCompany, RandomTestUtil.randomString()));
+
+		Page<DataDefinition> page =
+			dataDefinitionResource.
+				getSiteDataDefinitionByContentTypeContentTypePage(
+					testGroup.getGroupId(), "journal", null,
+					Pagination.of(1, 10), null);
+
+		assertEqualsIgnoringOrder(
+			Arrays.asList(dataDefinition1),
+			(List<DataDefinition>)page.getItems());
+
+		page =
+			dataDefinitionResource.
+				getSiteDataDefinitionByContentTypeContentTypePage(
+					testGroup.getGroupId(), "document-library",
+					MapUtil.getString(dataDefinition2.getName(), "en_US"),
+					Pagination.of(1, 10), null);
+
+		assertEqualsIgnoringOrder(
+			Arrays.asList(dataDefinition2),
+			(List<DataDefinition>)page.getItems());
+	}
+
+	private void _testGetSiteDataDefinitionByContentTypeContentTypePageWithoutViewPermission()
+		throws Exception {
+
+		dataDefinitionResource.postSiteDataDefinitionByContentType(
+			testGroup.getGroupId(), "journal", randomDataDefinition());
+
+		DataDefinition dataDefinition =
+			dataDefinitionResource.postSiteDataDefinitionByContentType(
+				testGroup.getGroupId(), "document-library",
+				randomDataDefinition());
+
+		DataDefinitionResource dataDefinitionResource =
+			_getDataDefinitionResource(
+				UserTestUtil.addUser(
+					testCompany, RandomTestUtil.randomString()));
+
+		Page<DataDefinition> page =
+			dataDefinitionResource.
+				getSiteDataDefinitionByContentTypeContentTypePage(
+					testGroup.getGroupId(), "journal", null,
+					Pagination.of(1, 10), null);
+
+		Assert.assertEquals(0, page.getTotalCount());
+
+		page =
+			dataDefinitionResource.
+				getSiteDataDefinitionByContentTypeContentTypePage(
+					testGroup.getGroupId(), "document-library",
+					MapUtil.getString(dataDefinition.getName(), "en_US"),
+					Pagination.of(1, 10), null);
+
+		Assert.assertEquals(0, page.getTotalCount());
 	}
 
 	private void _testGetSiteDataDefinitionsPage(
@@ -1398,8 +1533,17 @@ public class DataDefinitionResourceTest
 	@Inject
 	private DDMStructureLocalService _ddmStructureLocalService;
 
+	@Inject
+	private DLFileEntryTypeLocalService _dlFileEntryTypeLocalService;
+
 	@Inject(type = Portal.class)
 	private Portal _portal;
+
+	@Inject
+	private ResourcePermissionLocalService _resourcePermissionLocalService;
+
+	@Inject
+	private RoleLocalService _roleLocalService;
 
 	@Inject(
 		filter = "content.type=test", type = DataDefinitionContentType.class
