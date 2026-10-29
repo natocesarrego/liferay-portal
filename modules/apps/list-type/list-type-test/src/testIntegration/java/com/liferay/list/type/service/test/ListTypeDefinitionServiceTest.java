@@ -13,6 +13,7 @@ import com.liferay.list.type.service.ListTypeDefinitionLocalService;
 import com.liferay.list.type.service.ListTypeDefinitionService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
@@ -32,7 +33,9 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.Collections;
+import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -219,6 +222,69 @@ public class ListTypeDefinitionServiceTest {
 				StringPool.SPACE,
 				listTypeDefinition3.getListTypeDefinitionId()),
 			() -> _testGetListTypeDefinition(listTypeDefinition3, _user));
+	}
+
+	@Test
+	public void testGetListTypeDefinitions() throws Exception {
+
+		// A user can only list the list type definitions it may view
+
+		ListTypeDefinition restrictedListTypeDefinition =
+			_addListTypeDefinition(_adminUser);
+		ListTypeDefinition viewableListTypeDefinition = _addListTypeDefinition(
+			_adminUser);
+		ListTypeDefinition ownedListTypeDefinition = _addListTypeDefinition(
+			_user);
+
+		_setResourcePermissions(
+			ListTypeDefinition.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(
+				viewableListTypeDefinition.getListTypeDefinitionId()),
+			RoleConstants.USER, new String[] {ActionKeys.VIEW});
+
+		// An administrator lists every list type definition
+
+		try (ContextUserReplace contextUserReplace = new ContextUserReplace(
+				_adminUser)) {
+
+			List<ListTypeDefinition> listTypeDefinitions =
+				_listTypeDefinitionService.getListTypeDefinitions(
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			Assert.assertTrue(
+				listTypeDefinitions.toString(),
+				listTypeDefinitions.contains(restrictedListTypeDefinition));
+			Assert.assertTrue(
+				listTypeDefinitions.toString(),
+				listTypeDefinitions.contains(viewableListTypeDefinition));
+			Assert.assertEquals(
+				listTypeDefinitions.size(),
+				_listTypeDefinitionService.getListTypeDefinitionsCount());
+		}
+
+		// A user lists only the list type definitions it may view
+
+		try (ContextUserReplace contextUserReplace = new ContextUserReplace(
+				_user)) {
+
+			List<ListTypeDefinition> listTypeDefinitions =
+				_listTypeDefinitionService.getListTypeDefinitions(
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			Assert.assertFalse(
+				listTypeDefinitions.toString(),
+				listTypeDefinitions.contains(restrictedListTypeDefinition));
+			Assert.assertTrue(
+				listTypeDefinitions.toString(),
+				listTypeDefinitions.contains(viewableListTypeDefinition));
+			Assert.assertTrue(
+				listTypeDefinitions.toString(),
+				listTypeDefinitions.contains(ownedListTypeDefinition));
+			Assert.assertEquals(
+				listTypeDefinitions.size(),
+				_listTypeDefinitionService.getListTypeDefinitionsCount());
+		}
 	}
 
 	@Test
