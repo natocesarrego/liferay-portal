@@ -208,7 +208,7 @@ public class KaleoDefinitionServiceImpl extends KaleoDefinitionServiceBaseImpl {
 	}
 
 	private void _checkPermissions(
-		String actionId, long companyId, long groupId)
+			String actionId, long companyId, long groupId)
 		throws PrincipalException {
 
 		PermissionChecker permissionChecker =
