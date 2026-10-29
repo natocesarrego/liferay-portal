@@ -12,6 +12,7 @@ import com.liferay.list.type.model.ListTypeEntry;
 import com.liferay.list.type.service.base.ListTypeDefinitionServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -128,12 +129,14 @@ public class ListTypeDefinitionServiceImpl
 
 	@Override
 	public List<ListTypeDefinition> getListTypeDefinitions(int start, int end) {
-		return listTypeDefinitionPersistence.findAll(start, end);
+		return listTypeDefinitionPersistence.filterFindByCompanyId(
+			CompanyThreadLocal.getCompanyId(), start, end);
 	}
 
 	@Override
 	public int getListTypeDefinitionsCount() {
-		return listTypeDefinitionPersistence.countAll();
+		return listTypeDefinitionPersistence.filterCountByCompanyId(
+			CompanyThreadLocal.getCompanyId());
 	}
 
 	@Override
