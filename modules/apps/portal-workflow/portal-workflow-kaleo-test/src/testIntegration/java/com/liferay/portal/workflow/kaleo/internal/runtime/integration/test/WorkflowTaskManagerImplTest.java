@@ -1643,6 +1643,23 @@ public class WorkflowTaskManagerImplTest extends BaseWorkflowManagerTestCase {
 		_deactivateWorkflow(BlogsEntry.class.getName(), 0, 0);
 	}
 
+	@Test
+	public void testUpdateDueDateWithoutPermission() throws Exception {
+		_activateSingleApproverWorkflow(BlogsEntry.class.getName(), 0, 0);
+
+		_addBlogsEntry();
+
+		WorkflowTask workflowTask = _getWorkflowTask();
+
+		_assertMustHavePermission(
+			() -> _workflowTaskManager.updateDueDate(
+				_siteMemberUser.getCompanyId(), _siteMemberUser.getUserId(),
+				workflowTask.getWorkflowTaskId(), StringPool.BLANK,
+				new Date(System.currentTimeMillis() + Time.DAY)));
+
+		_deactivateWorkflow(BlogsEntry.class.getName(), 0, 0);
+	}
+
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 
