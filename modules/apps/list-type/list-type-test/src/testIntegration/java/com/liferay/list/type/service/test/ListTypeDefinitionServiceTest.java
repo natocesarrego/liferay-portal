@@ -260,6 +260,31 @@ public class ListTypeDefinitionServiceTest {
 	}
 
 	@Test
+	public void testGetListTypeDefinitionsCount() throws Exception {
+		_addListTypeDefinition(_adminUser);
+
+		ListTypeDefinition viewableListTypeDefinition = _addListTypeDefinition(
+			_adminUser);
+
+		_setResourcePermissions(
+			ListTypeDefinition.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(
+				viewableListTypeDefinition.getListTypeDefinitionId()),
+			RoleConstants.USER, new String[] {ActionKeys.VIEW});
+
+		List<ListTypeDefinition> listTypeDefinitions = _getListTypeDefinitions(
+			_user);
+		int listTypeDefinitionsCount = _getListTypeDefinitionsCount(_user);
+
+		Assert.assertEquals(
+			listTypeDefinitions.size(), listTypeDefinitionsCount);
+		Assert.assertTrue(
+			listTypeDefinitionsCount <
+				_getListTypeDefinitionsCount(_adminUser));
+	}
+
+	@Test
 	public void testUpdateListTypeDefinition() throws Exception {
 
 		// Can update list type definition with individual model permission
@@ -344,6 +369,14 @@ public class ListTypeDefinitionServiceTest {
 
 			return _listTypeDefinitionService.getListTypeDefinitions(
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		}
+	}
+
+	private int _getListTypeDefinitionsCount(User user) throws Exception {
+		try (ContextUserReplace contextUserReplace = new ContextUserReplace(
+				user)) {
+
+			return _listTypeDefinitionService.getListTypeDefinitionsCount();
 		}
 	}
 
