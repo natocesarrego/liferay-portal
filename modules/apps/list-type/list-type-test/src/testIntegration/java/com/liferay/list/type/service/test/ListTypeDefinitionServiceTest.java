@@ -280,8 +280,8 @@ public class ListTypeDefinitionServiceTest {
 		Assert.assertEquals(
 			listTypeDefinitions.size(), listTypeDefinitionsCount);
 		Assert.assertTrue(
-			listTypeDefinitionsCount <
-				_getListTypeDefinitionsCount(_adminUser));
+			listTypeDefinitionsCount < _getListTypeDefinitionsCount(
+				_adminUser));
 	}
 
 	@Test
