@@ -188,9 +188,7 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	@Test
-	public void testDeleteKaleoDefinitionFromAnotherCompany()
-		throws Exception {
-
+	public void testDeleteKaleoDefinitionFromAnotherCompany() throws Exception {
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
 
 		_setCompanyAdministratorCanPublish(true);
@@ -256,9 +254,7 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	@Test
-	public void testUpdateKaleoDefinitionFromAnotherCompany()
-		throws Exception {
-
+	public void testUpdateKaleoDefinitionFromAnotherCompany() throws Exception {
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition();
 
 		_setCompanyAdministratorCanPublish(true);
@@ -297,7 +293,7 @@ public class KaleoDefinitionServiceImplTest {
 	}
 
 	private KaleoDefinition _addKaleoDefinition(
-		String scope, ServiceContext serviceContext)
+			String scope, ServiceContext serviceContext)
 		throws Exception {
 
 		return _kaleoDefinitionService.addKaleoDefinition(
@@ -327,16 +323,6 @@ public class KaleoDefinitionServiceImplTest {
 		return user;
 	}
 
-	private void _setCompanyAdministratorCanPublish(boolean canPublish)
-		throws Exception {
-
-		ConfigurationTestUtil.saveConfiguration(
-			_configuration,
-			HashMapDictionaryBuilder.<String, Object>put(
-				"company.administrator.can.publish", canPublish
-			).build());
-	}
-
 	private String _read() throws Exception {
 		ClassLoader classLoader =
 			BaseKaleoLocalServiceTestCase.class.getClassLoader();
@@ -347,6 +333,16 @@ public class KaleoDefinitionServiceImplTest {
 
 			return StringUtil.read(inputStream);
 		}
+	}
+
+	private void _setCompanyAdministratorCanPublish(boolean canPublish)
+		throws Exception {
+
+		ConfigurationTestUtil.saveConfiguration(
+			_configuration,
+			HashMapDictionaryBuilder.<String, Object>put(
+				"company.administrator.can.publish", canPublish
+			).build());
 	}
 
 	private void _setUpPermissionThreadLocal(User user) {
@@ -810,8 +806,8 @@ public class KaleoDefinitionServiceImplTest {
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext();
 
-		serviceContext.setCompanyId(_company.getCompanyId());
 		serviceContext.setAttribute("checkPermission", Boolean.FALSE);
+		serviceContext.setCompanyId(_company.getCompanyId());
 
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
