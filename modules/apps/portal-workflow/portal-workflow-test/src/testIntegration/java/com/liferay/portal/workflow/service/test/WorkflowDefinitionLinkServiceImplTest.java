@@ -13,13 +13,17 @@ import com.liferay.portal.configuration.test.util.ConfigurationTestUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.WorkflowDefinitionLink;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkService;
 import com.liferay.portal.kernel.test.AssertUtils;
@@ -126,11 +130,55 @@ public class WorkflowDefinitionLinkServiceImplTest {
 				TestPropsValues.getGroupId(), BlogsEntry.class.getName(), 0, 0,
 				kaleoDefinition.getName(), 1));
 
+		AssertUtils.assertFailure(
+			PrincipalException.class,
+			StringBundler.concat(
+				"User ", _companyAdminUser.getUserId(),
+				" must be an omniadmin to act in company ",
+				TestPropsValues.getCompanyId()),
+			() -> _workflowDefinitionLinkService.addWorkflowDefinitionLink(
+				null, _companyAdminUser.getUserId(),
+				TestPropsValues.getCompanyId(), TestPropsValues.getGroupId(),
+				BlogsEntry.class.getName(), 0, 0, kaleoDefinition.getName(),
+				1));
+
+		AssertUtils.assertFailure(
+			PrincipalException.class,
+			StringBundler.concat(
+				"User ", _companyAdminUser.getUserId(),
+				" must be an omniadmin to act on behalf of user ",
+				TestPropsValues.getUserId()),
+			() -> _workflowDefinitionLinkService.addWorkflowDefinitionLink(
+				null, TestPropsValues.getUserId(), _company.getCompanyId(),
+				_group.getGroupId(), BlogsEntry.class.getName(), 0, 0,
+				kaleoDefinition.getName(), 1));
+
 		ConfigurationTestUtil.saveConfiguration(
 			_configuration,
 			HashMapDictionaryBuilder.<String, Object>put(
 				"company.administrator.can.publish", true
 			).build());
+
+		User cmsAdministratorUser = _addCMSAdministratorUser();
+
+		_setUpPermissionThreadLocal(cmsAdministratorUser);
+
+		PrincipalException.MustHavePermission mustHavePermission =
+			Assert.assertThrows(
+				PrincipalException.MustHavePermission.class,
+				() -> _workflowDefinitionLinkService.addWorkflowDefinitionLink(
+					null, cmsAdministratorUser.getUserId(),
+					_company.getCompanyId(), _group.getGroupId(),
+					BlogsEntry.class.getName(), 0, 0, kaleoDefinition.getName(),
+					1));
+
+		Assert.assertEquals(
+			Group.class.getName(), mustHavePermission.resourceName);
+		Assert.assertEquals(_group.getGroupId(), mustHavePermission.resourceId);
+		Assert.assertArrayEquals(
+			new String[] {ActionKeys.UPDATE}, mustHavePermission.actionId);
+
+		_setUpPermissionThreadLocal(_companyAdminUser);
 
 		String externalReferenceCode = RandomTestUtil.randomString();
 
@@ -220,6 +268,30 @@ public class WorkflowDefinitionLinkServiceImplTest {
 				kaleoDefinition.getName(),
 				workflowDefinitionLink1.getWorkflowDefinitionVersion()));
 
+		User cmsAdministratorUser = _addCMSAdministratorUser();
+
+		_setUpPermissionThreadLocal(cmsAdministratorUser);
+
+		PrincipalException.MustHavePermission mustHavePermission =
+			Assert.assertThrows(
+				PrincipalException.MustHavePermission.class,
+				() ->
+					_workflowDefinitionLinkService.updateWorkflowDefinitionLink(
+						workflowDefinitionLink1.getExternalReferenceCode(),
+						cmsAdministratorUser.getUserId(),
+						_company.getCompanyId(),
+						workflowDefinitionLink1.getGroupId(),
+						"com.liferay.account.model.AccountEntry", 0, 0,
+						kaleoDefinition.getName(),
+						workflowDefinitionLink1.
+							getWorkflowDefinitionVersion()));
+
+		Assert.assertEquals(
+			Group.class.getName(), mustHavePermission.resourceName);
+		Assert.assertEquals(_group.getGroupId(), mustHavePermission.resourceId);
+		Assert.assertArrayEquals(
+			new String[] {ActionKeys.UPDATE}, mustHavePermission.actionId);
+
 		_setUpPermissionThreadLocal(_companyAdminUser);
 
 		WorkflowDefinitionLink workflowDefinitionLink2 =
@@ -237,6 +309,24 @@ public class WorkflowDefinitionLinkServiceImplTest {
 		Assert.assertEquals(
 			kaleoDefinition.getName(),
 			workflowDefinitionLink2.getWorkflowDefinitionName());
+	}
+
+	private User _addCMSAdministratorUser() throws Exception {
+		Role role = _roleLocalService.fetchRole(
+			_company.getCompanyId(), RoleConstants.CMS_ADMINISTRATOR);
+
+		if (role == null) {
+			role = _roleLocalService.addRole(
+				null, _companyAdminUser.getUserId(), null, 0,
+				RoleConstants.CMS_ADMINISTRATOR, null, null,
+				RoleConstants.TYPE_REGULAR, null, null);
+		}
+
+		User user = _addUser();
+
+		_roleLocalService.addUserRole(user.getUserId(), role);
+
+		return user;
 	}
 
 	private KaleoDefinition _addKaleoDefinition() throws Exception {
@@ -288,6 +378,10 @@ public class WorkflowDefinitionLinkServiceImplTest {
 
 	private String _originalName;
 	private PermissionChecker _originalPermissionChecker;
+
+	@Inject
+	private RoleLocalService _roleLocalService;
+
 	private ServiceContext _serviceContext;
 
 	@Inject
