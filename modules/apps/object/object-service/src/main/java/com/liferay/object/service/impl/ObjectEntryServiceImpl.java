@@ -53,6 +53,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelper;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionRegistryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
@@ -375,17 +376,42 @@ public class ObjectEntryServiceImpl extends ObjectEntryServiceBaseImpl {
 	public int getObjectEntriesCount(
 		long groupId, long objectDefinitionId, int status) {
 
-		if (status == WorkflowConstants.STATUS_ANY) {
-			int count = objectEntryPersistence.countByG_ODI(
-				groupId, objectDefinitionId);
-			int trashCount = objectEntryPersistence.countByG_ODI_S(
-				groupId, objectDefinitionId, WorkflowConstants.STATUS_IN_TRASH);
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
 
-			return count - trashCount;
+		if (ObjectEntryThreadLocal.isSkipObjectEntryResourcePermission() ||
+			((permissionChecker != null) &&
+			 (permissionChecker.isCompanyAdmin() ||
+			  permissionChecker.isGroupAdmin(groupId)))) {
+
+			if (status == WorkflowConstants.STATUS_ANY) {
+				int count = objectEntryPersistence.countByG_ODI(
+					groupId, objectDefinitionId);
+				int trashCount = objectEntryPersistence.countByG_ODI_S(
+					groupId, objectDefinitionId,
+					WorkflowConstants.STATUS_IN_TRASH);
+
+				return count - trashCount;
+			}
+
+			return objectEntryPersistence.countByG_ODI_S(
+				groupId, objectDefinitionId, status);
 		}
 
-		return objectEntryPersistence.countByG_ODI_S(
-			groupId, objectDefinitionId, status);
+		try {
+			List<ObjectEntry> objectEntries = getObjectEntries(
+				groupId, objectDefinitionId, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS);
+
+			return objectEntries.size();
+		}
+		catch (PortalException portalException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to count object entries", portalException);
+			}
+
+			return 0;
+		}
 	}
 
 	@Override
