@@ -686,6 +686,48 @@ public class ObjectEntryServiceTest {
 	}
 
 	@Test
+	@TestInfo("LPD-112318")
+	public void testGetObjectEntriesCount() throws Exception {
+		ObjectEntry objectEntry = _addObjectEntry(_adminUser);
+
+		_addObjectEntry(_adminUser);
+
+		_assertObjectEntriesCount(2);
+
+		_setUser(_user);
+
+		_assertObjectEntriesCount(0);
+
+		_setResourcePermissions(
+			_objectDefinition.getClassName(),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(objectEntry.getObjectEntryId()), RoleConstants.USER,
+			new String[] {ActionKeys.VIEW});
+
+		_assertObjectEntriesCount(1);
+
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				"com.liferay.object.service.impl.ObjectEntryServiceImpl",
+				LoggerTestUtil.DEBUG)) {
+
+			Assert.assertEquals(
+				0,
+				_objectEntryService.getObjectEntriesCount(
+					_group.getGroupId(), RandomTestUtil.randomLong(),
+					WorkflowConstants.STATUS_ANY));
+
+			List<LogEntry> logEntries = logCapture.getLogEntries();
+
+			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
+
+			LogEntry logEntry = logEntries.get(0);
+
+			Assert.assertEquals(
+				"Unable to count object entries", logEntry.getMessage());
+		}
+	}
+
+	@Test
 	public void testGetObjectEntry() throws Exception {
 
 		// Can get object entry with individual model permission
@@ -1525,6 +1567,19 @@ public class ObjectEntryServiceTest {
 			ResourceConstants.SCOPE_COMPANY,
 			String.valueOf(TestPropsValues.getCompanyId()),
 			guestRole.getRoleId(), ObjectActionKeys.ADD_OBJECT_ENTRY);
+	}
+
+	private void _assertObjectEntriesCount(int count) {
+		Assert.assertEquals(
+			count,
+			_objectEntryService.getObjectEntriesCount(
+				_group.getGroupId(), _objectDefinition.getObjectDefinitionId(),
+				WorkflowConstants.STATUS_ANY));
+		Assert.assertEquals(
+			count,
+			_objectEntryService.getObjectEntriesCount(
+				_group.getGroupId(), _objectDefinition.getObjectDefinitionId(),
+				WorkflowConstants.STATUS_APPROVED));
 	}
 
 	private void _assertUserNotificationEventsCount() throws PortalException {
