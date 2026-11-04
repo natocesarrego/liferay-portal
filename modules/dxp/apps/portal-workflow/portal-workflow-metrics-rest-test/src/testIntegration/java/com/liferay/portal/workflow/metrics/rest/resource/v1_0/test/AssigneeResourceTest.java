@@ -8,10 +8,13 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.test.rule.DataGuard;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.search.test.rule.SearchTestRule;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Assignee;
@@ -19,6 +22,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.AssigneeBulkSele
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Instance;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.AssigneeResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -115,6 +119,8 @@ public class AssigneeResourceTest extends BaseAssigneeResourceTestCase {
 			});
 
 		Assert.assertEquals(0, page.getTotalCount());
+
+		_testPostProcessAssigneesPageWithoutPermission();
 	}
 
 	@Rule
@@ -136,6 +142,29 @@ public class AssigneeResourceTest extends BaseAssigneeResourceTestCase {
 				name = user.getFullName();
 			}
 		};
+	}
+
+	private void _testPostProcessAssigneesPageWithoutPermission()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		AssigneeResource assigneeResource = AssigneeResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
+
+		assertHttpResponseStatusCode(
+			403,
+			assigneeResource.postProcessAssigneesPageHttpResponse(
+				_process.getId(), new AssigneeBulkSelection()));
 	}
 
 	private Instance _instance;

@@ -19,7 +19,9 @@ import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.test.rule.SearchTestRule;
@@ -33,6 +35,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.NodeMetric;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.AssigneeMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -470,6 +473,8 @@ public class AssigneeMetricResourceTest
 					}
 				}),
 			(List<AssigneeMetric>)page.getItems());
+
+		_testPostProcessAssigneeMetricsPageWithoutPermission();
 	}
 
 	@Rule
@@ -565,6 +570,31 @@ public class AssigneeMetricResourceTest
 		_addRoleUser(role, assignee.getId());
 
 		return assigneeMetric;
+	}
+
+	private void _testPostProcessAssigneeMetricsPageWithoutPermission()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		AssigneeMetricResource assigneeMetricResource =
+			AssigneeMetricResource.builder(
+			).authentication(
+				user.getEmailAddress(), password
+			).endpoint(
+				testCompany.getVirtualHostname(),
+				PortalUtil.getPortalServerPort(false), "http"
+			).locale(
+				LocaleUtil.getDefault()
+			).build();
+
+		assertHttpResponseStatusCode(
+			403,
+			assigneeMetricResource.postProcessAssigneeMetricsPageHttpResponse(
+				_process.getId(), Pagination.of(1, 10), null,
+				new AssigneeMetricBulkSelection()));
 	}
 
 	@Inject
