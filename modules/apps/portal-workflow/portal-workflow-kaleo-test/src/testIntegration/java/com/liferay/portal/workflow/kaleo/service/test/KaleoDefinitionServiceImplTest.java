@@ -367,9 +367,9 @@ public class KaleoDefinitionServiceImplTest {
 	private void _testActivateKaleoDefinition() throws Exception {
 		_setUpPermissionThreadLocal(_company1AdminUser);
 
-		ServiceContext serviceContext = _getCompany1ServiceContext();
-
 		_setCompanyAdministratorCanPublish(true);
+
+		ServiceContext serviceContext = _getCompany1ServiceContext();
 
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
 			WorkflowDefinitionConstants.SCOPE_ALL, serviceContext);
@@ -543,9 +543,9 @@ public class KaleoDefinitionServiceImplTest {
 	private void _testDeactivateKaleoDefinition() throws Exception {
 		_setUpPermissionThreadLocal(_company1AdminUser);
 
-		ServiceContext serviceContext = _getCompany1ServiceContext();
-
 		_setCompanyAdministratorCanPublish(true);
+
+		ServiceContext serviceContext = _getCompany1ServiceContext();
 
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
 			WorkflowDefinitionConstants.SCOPE_ALL, serviceContext);
@@ -642,9 +642,9 @@ public class KaleoDefinitionServiceImplTest {
 	private void _testDeleteKaleoDefinition() throws Exception {
 		_setUpPermissionThreadLocal(_company1AdminUser);
 
-		ServiceContext serviceContext = _getCompany1ServiceContext();
-
 		_setCompanyAdministratorCanPublish(true);
+
+		ServiceContext serviceContext = _getCompany1ServiceContext();
 
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
 			WorkflowDefinitionConstants.SCOPE_ALL, serviceContext);
@@ -752,9 +752,9 @@ public class KaleoDefinitionServiceImplTest {
 	private void _testGetKaleoDefinitionWithGroupId() throws Exception {
 		_setUpPermissionThreadLocal(TestPropsValues.getUser());
 
-		AccountEntry accountEntry = _addAccountEntry();
-
 		_setCompanyAdministratorCanPublish(true);
+
+		AccountEntry accountEntry = _addAccountEntry();
 
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
 			ServiceContextTestUtil.getServiceContext(
@@ -786,9 +786,9 @@ public class KaleoDefinitionServiceImplTest {
 	private void _testUpdateKaleoDefinition() throws Exception {
 		_setUpPermissionThreadLocal(_company1AdminUser);
 
-		ServiceContext serviceContext1 = _getCompany1ServiceContext();
-
 		_setCompanyAdministratorCanPublish(true);
+
+		ServiceContext serviceContext1 = _getCompany1ServiceContext();
 
 		KaleoDefinition kaleoDefinition = _addKaleoDefinition(
 			WorkflowDefinitionConstants.SCOPE_ALL, serviceContext1);
