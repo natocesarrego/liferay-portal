@@ -1075,6 +1075,22 @@ public class ObjectEntryServiceTest {
 	}
 
 	@Test
+	@TestInfo("LPD-112318")
+	public void testGetOneToManyObjectEntriesCount() throws Exception {
+		_testGetObjectEntriesCount(
+			ObjectRelationshipConstants.TYPE_ONE_TO_MANY,
+			(objectRelationshipId, primaryKey) ->
+				_objectEntryService.getOneToManyObjectEntries(
+					_group.getGroupId(), objectRelationshipId, null, false,
+					primaryKey, true, null, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null),
+			(objectRelationshipId, primaryKey) ->
+				_objectEntryService.getOneToManyObjectEntriesCount(
+					_group.getGroupId(), objectRelationshipId, null, primaryKey,
+					true, null));
+	}
+
+	@Test
 	public void testGetOrAddEmptyObjectEntry() throws Exception {
 
 		// Lazy referencing disabled
