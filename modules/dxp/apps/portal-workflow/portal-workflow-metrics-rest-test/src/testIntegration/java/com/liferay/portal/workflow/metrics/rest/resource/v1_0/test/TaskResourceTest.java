@@ -6,8 +6,14 @@
 package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.search.test.rule.SearchTestRule;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Assignee;
@@ -17,6 +23,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Task;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.TaskBulkSelection;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.TaskResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -67,6 +74,50 @@ public class TaskResourceTest extends BaseTaskResourceTestCase {
 		}
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testDeleteProcessTaskWithoutPermission() throws Exception {
+		Task task = testDeleteProcessTask_addTask();
+
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userTaskResource.deleteProcessTaskHttpResponse(
+				task.getProcessId(), task.getId()));
+
+		assertHttpResponseStatusCode(
+			200,
+			taskResource.getProcessTaskHttpResponse(
+				task.getProcessId(), task.getId()));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessTaskWithoutPermission() throws Exception {
+		Task task = testGetProcessTask_addTask();
+
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userTaskResource.getProcessTaskHttpResponse(
+				task.getProcessId(), task.getId()));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessTasksPageWithoutPermission() throws Exception {
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userTaskResource.getProcessTasksPageHttpResponse(_process.getId()));
+	}
+
 	@Ignore
 	@Override
 	@Test
@@ -79,6 +130,55 @@ public class TaskResourceTest extends BaseTaskResourceTestCase {
 	@Test
 	public void testGraphQLPostProcessTask() throws Exception {
 		super.testGraphQLPostProcessTask();
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPatchProcessTaskCompleteWithoutPermission()
+		throws Exception {
+
+		Task task = testPatchProcessTaskComplete_addTask();
+
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userTaskResource.patchProcessTaskCompleteHttpResponse(
+				task.getProcessId(), task.getId(), task));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPatchProcessTaskWithoutPermission() throws Exception {
+		Task task = testPatchProcessTask_addTask();
+
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userTaskResource.patchProcessTaskHttpResponse(
+				task.getProcessId(), task.getId(), task));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPostProcessTaskWithoutPermission() throws Exception {
+		Task task = randomTask();
+
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userTaskResource.postProcessTaskHttpResponse(
+				_process.getId(), task));
+
+		assertHttpResponseStatusCode(
+			404,
+			taskResource.getProcessTaskHttpResponse(
+				_process.getId(), task.getId()));
 	}
 
 	@Override
@@ -291,6 +391,23 @@ public class TaskResourceTest extends BaseTaskResourceTestCase {
 			Arrays.asList(task2), (List<Task>)page.getItems());
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPostTasksPageWithoutPermission() throws Exception {
+		TaskResource userTaskResource =
+			_getUserWithoutPermissionsTaskResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userTaskResource.postTasksPageHttpResponse(
+				Pagination.of(1, 10),
+				new TaskBulkSelection() {
+					{
+						processId = _process.getId();
+					}
+				}));
+	}
+
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 
@@ -387,6 +504,24 @@ public class TaskResourceTest extends BaseTaskResourceTestCase {
 		throws Exception {
 
 		return task.getProcessId();
+	}
+
+	private TaskResource _getUserWithoutPermissionsTaskResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return TaskResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private Instance _instance;

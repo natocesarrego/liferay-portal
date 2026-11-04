@@ -9,6 +9,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
@@ -104,6 +105,28 @@ public class SLAResourceTest extends BaseSLAResourceTestCase {
 			null,
 			(sla1, sla2, page) -> assertEquals(
 				Arrays.asList(sla2, sla1), (List<SLA>)page.getItems()));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessSLAsPageWithoutPermission() throws Exception {
+		SLAResource userSLAResource = _getUserWithoutPermissionsSLAResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userSLAResource.getProcessSLAsPageHttpResponse(
+				_process.getId(), null, Pagination.of(1, 10)));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetSLAWithoutPermission() throws Exception {
+		SLA sla = testGetSLA_addSLA();
+
+		SLAResource userSLAResource = _getUserWithoutPermissionsSLAResource();
+
+		assertHttpResponseStatusCode(
+			404, userSLAResource.getSLAHttpResponse(sla.getId()));
 	}
 
 	@Ignore

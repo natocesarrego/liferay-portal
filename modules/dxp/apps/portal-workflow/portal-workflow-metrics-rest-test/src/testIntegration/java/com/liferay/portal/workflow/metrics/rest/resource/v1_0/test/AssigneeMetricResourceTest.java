@@ -13,13 +13,16 @@ import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.test.rule.SearchTestRule;
@@ -33,6 +36,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.NodeMetric;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.AssigneeMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -472,6 +476,22 @@ public class AssigneeMetricResourceTest
 			(List<AssigneeMetric>)page.getItems());
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPostProcessAssigneeMetricsPageWithoutPermission()
+		throws Exception {
+
+		AssigneeMetricResource userAssigneeMetricResource =
+			_getUserWithoutPermissionsAssigneeMetricResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userAssigneeMetricResource.
+				postProcessAssigneeMetricsPageHttpResponse(
+					_process.getId(), Pagination.of(1, 10), null,
+					new AssigneeMetricBulkSelection()));
+	}
+
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 
@@ -555,6 +575,25 @@ public class AssigneeMetricResourceTest
 	private void _deleteTasks() throws Exception {
 		_workflowMetricsRESTTestHelper.deleteTasks(
 			testGroup.getCompanyId(), _process.getId());
+	}
+
+	private AssigneeMetricResource
+			_getUserWithoutPermissionsAssigneeMetricResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return AssigneeMetricResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private AssigneeMetric _randomAssigneeMetric(Role role) throws Exception {

@@ -7,10 +7,13 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.odata.entity.EntityField;
@@ -22,6 +25,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.NodeMetric;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.NodeMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -479,6 +483,21 @@ public class NodeMetricResourceTest extends BaseNodeMetricResourceTestCase {
 			});
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessNodeMetricsPageWithoutPermission()
+		throws Exception {
+
+		NodeMetricResource userNodeMetricResource =
+			_getUserWithoutPermissionsNodeMetricResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userNodeMetricResource.getProcessNodeMetricsPageHttpResponse(
+				_process.getId(), null, null, null, null, null,
+				Pagination.of(1, 10), null));
+	}
+
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 
@@ -584,6 +603,24 @@ public class NodeMetricResourceTest extends BaseNodeMetricResourceTestCase {
 	private void _deleteTasks() throws Exception {
 		_workflowMetricsRESTTestHelper.deleteTasks(
 			testGroup.getCompanyId(), _process.getId());
+	}
+
+	private NodeMetricResource _getUserWithoutPermissionsNodeMetricResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return NodeMetricResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private Process _process;

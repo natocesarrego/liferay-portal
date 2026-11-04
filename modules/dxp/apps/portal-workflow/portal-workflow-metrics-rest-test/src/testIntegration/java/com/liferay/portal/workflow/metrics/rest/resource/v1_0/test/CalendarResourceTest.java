@@ -6,10 +6,21 @@
 package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.headless.batch.engine.client.dto.v1_0.ExportTask;
+import com.liferay.headless.batch.engine.client.resource.v1_0.ExportTaskResource;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.search.test.rule.SearchTestRule;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Calendar;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.CalendarResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 import com.liferay.portal.workflow.metrics.sla.calendar.WorkflowMetricsSLACalendar;
 
@@ -85,6 +96,59 @@ public class CalendarResourceTest extends BaseCalendarResourceTestCase {
 			calendars);
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetCalendarsPageWithoutPermission() throws Exception {
+		CalendarResource userCalendarResource =
+			_getUserWithoutPermissionsCalendarResource();
+
+		assertHttpResponseStatusCode(
+			404, userCalendarResource.getCalendarsPageHttpResponse());
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPostExportTaskWithoutPermission() throws Exception {
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		ExportTaskResource userExportTaskResource = ExportTaskResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).build();
+
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				"com.liferay.batch.engine.internal." +
+					"BatchEngineExportTaskExecutorImpl",
+				LoggerTestUtil.ERROR)) {
+
+			ExportTask exportTask = userExportTaskResource.postExportTask(
+				"com.liferay.portal.workflow.metrics.rest.dto.v1_0.Calendar",
+				"JSON", null, null, null, null, null);
+
+			while (true) {
+				exportTask = userExportTaskResource.getExportTask(
+					exportTask.getId());
+
+				ExportTask.ExecuteStatus executeStatus =
+					exportTask.getExecuteStatus();
+
+				if ((executeStatus == ExportTask.ExecuteStatus.COMPLETED) ||
+					(executeStatus == ExportTask.ExecuteStatus.FAILED)) {
+
+					Assert.assertEquals(
+						ExportTask.ExecuteStatus.FAILED, executeStatus);
+
+					break;
+				}
+			}
+		}
+	}
+
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 
@@ -111,6 +175,24 @@ public class CalendarResourceTest extends BaseCalendarResourceTestCase {
 				title = "24/7";
 			}
 		};
+	}
+
+	private CalendarResource _getUserWithoutPermissionsCalendarResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return CalendarResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private void _registerCustomCalendar() {

@@ -7,11 +7,15 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.function.UnsafeBiConsumer;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.search.document.Document;
 import com.liferay.portal.search.test.rule.SearchTestRule;
@@ -21,6 +25,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.ProcessMetric;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.ProcessMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.ArrayList;
@@ -83,6 +88,23 @@ public class ProcessMetricResourceTest
 			false,
 			(processMetric1, processMetric2) -> assertEquals(
 				processMetric1, processMetric2));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessMetricWithoutPermission() throws Exception {
+		ProcessMetric processMetric =
+			testGetProcessMetricsPage_addProcessMetric(randomProcessMetric());
+
+		Process process = processMetric.getProcess();
+
+		ProcessMetricResource userProcessMetricResource =
+			_getUserWithoutPermissionsProcessMetricResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userProcessMetricResource.getProcessMetricHttpResponse(
+				process.getId(), null, null, null));
 	}
 
 	@Override
@@ -160,6 +182,18 @@ public class ProcessMetricResourceTest
 			});
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessMetricsPageWithoutPermission() throws Exception {
+		ProcessMetricResource userProcessMetricResource =
+			_getUserWithoutPermissionsProcessMetricResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userProcessMetricResource.getProcessMetricsPageHttpResponse(
+				null, Pagination.of(1, 10), null));
+	}
+
 	@Ignore
 	@Override
 	@Test
@@ -229,6 +263,25 @@ public class ProcessMetricResourceTest
 			_workflowMetricsRESTTestHelper.deleteProcess(
 				testGroup.getCompanyId(), process);
 		}
+	}
+
+	private ProcessMetricResource
+			_getUserWithoutPermissionsProcessMetricResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return ProcessMetricResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private void _testGetProcessMetric(

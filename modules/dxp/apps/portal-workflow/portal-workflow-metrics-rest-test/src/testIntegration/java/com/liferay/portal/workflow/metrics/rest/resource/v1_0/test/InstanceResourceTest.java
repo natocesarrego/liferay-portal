@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.randomizerbumpers.NumericStringRandomizerBumper;
 import com.liferay.portal.kernel.test.randomizerbumpers.UniqueStringRandomizerBumper;
 import com.liferay.portal.kernel.test.rule.DataGuard;
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.odata.entity.EntityField;
@@ -38,6 +40,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.SLAResult;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.InstanceResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.ArrayList;
@@ -88,6 +91,25 @@ public class InstanceResourceTest extends BaseInstanceResourceTestCase {
 		_deleteInstances();
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testDeleteProcessInstanceWithoutPermission() throws Exception {
+		Instance instance = testDeleteProcessInstance_addInstance();
+
+		InstanceResource userInstanceResource =
+			_getUserWithoutPermissionsInstanceResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userInstanceResource.deleteProcessInstanceHttpResponse(
+				instance.getProcessId(), instance.getId()));
+
+		assertHttpResponseStatusCode(
+			200,
+			instanceResource.getProcessInstanceHttpResponse(
+				instance.getProcessId(), instance.getId()));
+	}
+
 	@Override
 	@Test
 	public void testGetProcessInstance() throws Exception {
@@ -118,6 +140,20 @@ public class InstanceResourceTest extends BaseInstanceResourceTestCase {
 
 		assertEquals(instance, getInstance);
 		assertValid(getInstance);
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessInstanceWithoutPermission() throws Exception {
+		Instance instance = testGetProcessInstance_addInstance();
+
+		InstanceResource userInstanceResource =
+			_getUserWithoutPermissionsInstanceResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userInstanceResource.getProcessInstanceHttpResponse(
+				instance.getProcessId(), instance.getId()));
 	}
 
 	@Override
@@ -372,6 +408,21 @@ public class InstanceResourceTest extends BaseInstanceResourceTestCase {
 			});
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessInstancesPageWithoutPermission()
+		throws Exception {
+
+		InstanceResource userInstanceResource =
+			_getUserWithoutPermissionsInstanceResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userInstanceResource.getProcessInstancesPageHttpResponse(
+				_process.getId(), null, null, null, null, null, null, null,
+				Pagination.of(1, 10), null));
+	}
+
 	@Ignore
 	@Override
 	@Test
@@ -391,6 +442,55 @@ public class InstanceResourceTest extends BaseInstanceResourceTestCase {
 	@Test
 	public void testGraphQLPostProcessInstance() throws Exception {
 		super.testGraphQLPostProcessInstance();
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPatchProcessInstanceCompleteWithoutPermission()
+		throws Exception {
+
+		Instance instance = testPatchProcessInstanceComplete_addInstance();
+
+		InstanceResource userInstanceResource =
+			_getUserWithoutPermissionsInstanceResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userInstanceResource.patchProcessInstanceCompleteHttpResponse(
+				instance.getProcessId(), instance.getId(), instance));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPatchProcessInstanceWithoutPermission() throws Exception {
+		Instance instance = testPatchProcessInstance_addInstance();
+
+		InstanceResource userInstanceResource =
+			_getUserWithoutPermissionsInstanceResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userInstanceResource.patchProcessInstanceHttpResponse(
+				instance.getProcessId(), instance.getId(), instance));
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testPostProcessInstanceWithoutPermission() throws Exception {
+		Instance instance = randomInstance();
+
+		InstanceResource userInstanceResource =
+			_getUserWithoutPermissionsInstanceResource();
+
+		assertHttpResponseStatusCode(
+			403,
+			userInstanceResource.postProcessInstanceHttpResponse(
+				_process.getId(), instance));
+
+		assertHttpResponseStatusCode(
+			404,
+			instanceResource.getProcessInstanceHttpResponse(
+				_process.getId(), instance.getId()));
 	}
 
 	@Rule
@@ -584,6 +684,24 @@ public class InstanceResourceTest extends BaseInstanceResourceTestCase {
 		}
 
 		_instances.clear();
+	}
+
+	private InstanceResource _getUserWithoutPermissionsInstanceResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return InstanceResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private void _testGetProcessInstancesPage(

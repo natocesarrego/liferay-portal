@@ -6,10 +6,17 @@
 package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.search.test.rule.SearchTestRule;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.TimeRange;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.TimeRangeResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +43,16 @@ public class TimeRangeResourceTest extends BaseTimeRangeResourceTestCase {
 		Assert.assertEquals(timeRanges.toString(), 7, timeRanges.size());
 
 		assertEquals(_getDefaultTimeRanges(), timeRanges);
+	}
+
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetTimeRangesPageWithoutPermission() throws Exception {
+		TimeRangeResource userTimeRangeResource =
+			_getUserWithoutPermissionsTimeRangeResource();
+
+		assertHttpResponseStatusCode(
+			404, userTimeRangeResource.getTimeRangesPageHttpResponse());
 	}
 
 	@Rule
@@ -100,6 +117,24 @@ public class TimeRangeResourceTest extends BaseTimeRangeResourceTestCase {
 					});
 			}
 		};
+	}
+
+	private TimeRangeResource _getUserWithoutPermissionsTimeRangeResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return TimeRangeResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 }

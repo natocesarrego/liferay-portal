@@ -7,15 +7,21 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Instance;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.SLAResult;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.SLAResultResource;
 import com.liferay.portal.workflow.metrics.rest.client.serdes.v1_0.SLAResultSerDes;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
@@ -104,6 +110,20 @@ public class SLAResultResourceTest extends BaseSLAResultResourceTestCase {
 		assertValid(getSLAResult);
 	}
 
+	@Test
+	@TestInfo("LPD-111726")
+	public void testGetProcessLastSLAResultWithoutPermission()
+		throws Exception {
+
+		SLAResultResource userSLAResultResource =
+			_getUserWithoutPermissionsSLAResultResource();
+
+		assertHttpResponseStatusCode(
+			404,
+			userSLAResultResource.getProcessLastSLAResultHttpResponse(
+				_process.getId()));
+	}
+
 	@Override
 	@Test
 	public void testGraphQLGetProcessLastSLAResult() throws Exception {
@@ -164,6 +184,24 @@ public class SLAResultResourceTest extends BaseSLAResultResourceTestCase {
 		throws Exception {
 
 		return testGetProcessLastSLAResult_addSLAResult();
+	}
+
+	private SLAResultResource _getUserWithoutPermissionsSLAResultResource()
+		throws Exception {
+
+		String password = RandomTestUtil.randomString();
+
+		User user = UserTestUtil.addUser(testCompany, password);
+
+		return SLAResultResource.builder(
+		).authentication(
+			user.getEmailAddress(), password
+		).endpoint(
+			testCompany.getVirtualHostname(),
+			PortalUtil.getPortalServerPort(false), "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private Instance _instance;
