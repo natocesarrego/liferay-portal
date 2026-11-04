@@ -687,6 +687,21 @@ public class ObjectEntryServiceTest {
 
 	@Test
 	@TestInfo("LPD-112318")
+	public void testGetManyToManyObjectEntriesCount() throws Exception {
+		_testGetObjectEntriesCount(
+			ObjectRelationshipConstants.TYPE_MANY_TO_MANY,
+			(objectRelationshipId, primaryKey) ->
+				_objectEntryService.getManyToManyObjectEntries(
+					_group.getGroupId(), objectRelationshipId, primaryKey, true,
+					false, null, QueryUtil.ALL_POS, QueryUtil.ALL_POS),
+			(objectRelationshipId, primaryKey) ->
+				_objectEntryService.getManyToManyObjectEntriesCount(
+					_group.getGroupId(), objectRelationshipId, primaryKey, true,
+					false, null));
+	}
+
+	@Test
+	@TestInfo("LPD-112318")
 	public void testGetObjectEntriesCount() throws Exception {
 		ObjectEntry objectEntry = _addObjectEntry(_adminUser);
 
@@ -1759,6 +1774,45 @@ public class ObjectEntryServiceTest {
 			_objectRelationshipLocalService.deleteObjectRelationship(
 				objectRelationship);
 		}
+	}
+
+	private void _testGetObjectEntriesCount(
+			String type,
+			UnsafeBiFunction<Long, Long, List<ObjectEntry>, PortalException>
+				objectEntriesUnsafeBiFunction,
+			UnsafeBiFunction<Long, Long, Integer, PortalException>
+				objectEntriesCountUnsafeBiFunction)
+		throws Exception {
+
+		UnsafeBiFunction<Long, Long, List<ObjectEntry>, PortalException>
+			unsafeBiFunction = (objectRelationshipId, primaryKey) -> {
+				List<ObjectEntry> objectEntries =
+					objectEntriesUnsafeBiFunction.apply(
+						objectRelationshipId, primaryKey);
+
+				Assert.assertEquals(
+					objectEntries.size(),
+					(int)objectEntriesCountUnsafeBiFunction.apply(
+						objectRelationshipId, primaryKey));
+
+				try (ContextUserReplace contextUserReplace =
+						new ContextUserReplace(
+							_adminUser,
+							PermissionCheckerFactoryUtil.create(_adminUser))) {
+
+					Assert.assertEquals(
+						2,
+						(int)objectEntriesCountUnsafeBiFunction.apply(
+							objectRelationshipId, primaryKey));
+				}
+
+				return objectEntries;
+			};
+
+		_testGetObjectEntries(false, false, type, unsafeBiFunction);
+		_testGetObjectEntries(false, true, type, unsafeBiFunction);
+		_testGetObjectEntries(true, false, type, unsafeBiFunction);
+		_testGetObjectEntries(true, true, type, unsafeBiFunction);
 	}
 
 	private void _testGetObjectEntry(ObjectEntry objectEntry, User user)
