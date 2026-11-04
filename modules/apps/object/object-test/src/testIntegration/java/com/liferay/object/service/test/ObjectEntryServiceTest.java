@@ -689,15 +689,15 @@ public class ObjectEntryServiceTest {
 	@TestInfo("LPD-112318")
 	public void testGetManyToManyObjectEntriesCount() throws Exception {
 		_testGetObjectEntriesCount(
-			ObjectRelationshipConstants.TYPE_MANY_TO_MANY,
+			(objectRelationshipId, primaryKey) ->
+				_objectEntryService.getManyToManyObjectEntriesCount(
+					_group.getGroupId(), objectRelationshipId, primaryKey, true,
+					false, null),
 			(objectRelationshipId, primaryKey) ->
 				_objectEntryService.getManyToManyObjectEntries(
 					_group.getGroupId(), objectRelationshipId, primaryKey, true,
 					false, null, QueryUtil.ALL_POS, QueryUtil.ALL_POS),
-			(objectRelationshipId, primaryKey) ->
-				_objectEntryService.getManyToManyObjectEntriesCount(
-					_group.getGroupId(), objectRelationshipId, primaryKey, true,
-					false, null));
+			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 	}
 
 	@Test
@@ -1078,16 +1078,16 @@ public class ObjectEntryServiceTest {
 	@TestInfo("LPD-112318")
 	public void testGetOneToManyObjectEntriesCount() throws Exception {
 		_testGetObjectEntriesCount(
-			ObjectRelationshipConstants.TYPE_ONE_TO_MANY,
+			(objectRelationshipId, primaryKey) ->
+				_objectEntryService.getOneToManyObjectEntriesCount(
+					_group.getGroupId(), objectRelationshipId, null, primaryKey,
+					true, null),
 			(objectRelationshipId, primaryKey) ->
 				_objectEntryService.getOneToManyObjectEntries(
 					_group.getGroupId(), objectRelationshipId, null, false,
 					primaryKey, true, null, QueryUtil.ALL_POS,
 					QueryUtil.ALL_POS, null),
-			(objectRelationshipId, primaryKey) ->
-				_objectEntryService.getOneToManyObjectEntriesCount(
-					_group.getGroupId(), objectRelationshipId, null, primaryKey,
-					true, null));
+			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 	}
 
 	@Test
@@ -1793,11 +1793,11 @@ public class ObjectEntryServiceTest {
 	}
 
 	private void _testGetObjectEntriesCount(
-			String type,
+			UnsafeBiFunction<Long, Long, Integer, PortalException>
+				objectEntriesCountUnsafeBiFunction,
 			UnsafeBiFunction<Long, Long, List<ObjectEntry>, PortalException>
 				objectEntriesUnsafeBiFunction,
-			UnsafeBiFunction<Long, Long, Integer, PortalException>
-				objectEntriesCountUnsafeBiFunction)
+			String type)
 		throws Exception {
 
 		UnsafeBiFunction<Long, Long, List<ObjectEntry>, PortalException>
@@ -1807,8 +1807,8 @@ public class ObjectEntryServiceTest {
 						objectRelationshipId, primaryKey);
 
 				Assert.assertEquals(
-					objectEntries.size(),
-					(int)objectEntriesCountUnsafeBiFunction.apply(
+					Integer.valueOf(objectEntries.size()),
+					objectEntriesCountUnsafeBiFunction.apply(
 						objectRelationshipId, primaryKey));
 
 				try (ContextUserReplace contextUserReplace =
@@ -1817,8 +1817,8 @@ public class ObjectEntryServiceTest {
 							PermissionCheckerFactoryUtil.create(_adminUser))) {
 
 					Assert.assertEquals(
-						2,
-						(int)objectEntriesCountUnsafeBiFunction.apply(
+						Integer.valueOf(2),
+						objectEntriesCountUnsafeBiFunction.apply(
 							objectRelationshipId, primaryKey));
 				}
 
