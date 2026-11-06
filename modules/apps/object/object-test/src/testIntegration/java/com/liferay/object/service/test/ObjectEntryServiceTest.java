@@ -111,6 +111,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -683,6 +684,13 @@ public class ObjectEntryServiceTest {
 		_testGetObjectEntries(
 			true, true, ObjectRelationshipConstants.TYPE_MANY_TO_MANY,
 			unsafeBiFunction);
+	}
+
+	@Test
+	@TestInfo("LPD-112318")
+	public void testGetManyToManyObjectEntriesCount() throws Exception {
+		_testGetObjectEntriesCount(
+			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 	}
 
 	@Test
@@ -1641,6 +1649,40 @@ public class ObjectEntryServiceTest {
 		}
 	}
 
+	private List<ObjectEntry> _getRelatedObjectEntries(
+			long objectRelationshipId, long primaryKey, String type)
+		throws PortalException {
+
+		if (Objects.equals(
+				type, ObjectRelationshipConstants.TYPE_MANY_TO_MANY)) {
+
+			return _objectEntryService.getManyToManyObjectEntries(
+				_group.getGroupId(), objectRelationshipId, primaryKey, true,
+				false, null, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		}
+
+		return _objectEntryService.getOneToManyObjectEntries(
+			_group.getGroupId(), objectRelationshipId, null, false, primaryKey,
+			true, null, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	private int _getRelatedObjectEntriesCount(
+			long objectRelationshipId, long primaryKey, String type)
+		throws PortalException {
+
+		if (Objects.equals(
+				type, ObjectRelationshipConstants.TYPE_MANY_TO_MANY)) {
+
+			return _objectEntryService.getManyToManyObjectEntriesCount(
+				_group.getGroupId(), objectRelationshipId, primaryKey, true,
+				false, null);
+		}
+
+		return _objectEntryService.getOneToManyObjectEntriesCount(
+			_group.getGroupId(), objectRelationshipId, null, primaryKey, true,
+			null);
+	}
+
 	private long _getRoleId(String roleName) throws Exception {
 		Role role = _roleLocalService.getRole(
 			TestPropsValues.getCompanyId(), roleName);
@@ -1778,6 +1820,37 @@ public class ObjectEntryServiceTest {
 			_objectRelationshipLocalService.deleteObjectRelationship(
 				objectRelationship);
 		}
+	}
+
+	private void _testGetObjectEntriesCount(String type) throws Exception {
+		UnsafeBiFunction<Long, Long, List<ObjectEntry>, PortalException>
+			unsafeBiFunction = (objectRelationshipId, primaryKey) -> {
+				List<ObjectEntry> objectEntries = _getRelatedObjectEntries(
+					objectRelationshipId, primaryKey, type);
+
+				Assert.assertEquals(
+					objectEntries.size(),
+					_getRelatedObjectEntriesCount(
+						objectRelationshipId, primaryKey, type));
+
+				try (ContextUserReplace contextUserReplace =
+						new ContextUserReplace(
+							_adminUser,
+							PermissionCheckerFactoryUtil.create(_adminUser))) {
+
+					Assert.assertEquals(
+						2,
+						_getRelatedObjectEntriesCount(
+							objectRelationshipId, primaryKey, type));
+				}
+
+				return objectEntries;
+			};
+
+		_testGetObjectEntries(false, false, type, unsafeBiFunction);
+		_testGetObjectEntries(false, true, type, unsafeBiFunction);
+		_testGetObjectEntries(true, false, type, unsafeBiFunction);
+		_testGetObjectEntries(true, true, type, unsafeBiFunction);
 	}
 
 	private void _testGetObjectEntry(ObjectEntry objectEntry, User user)
