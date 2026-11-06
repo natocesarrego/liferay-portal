@@ -375,6 +375,23 @@ public class ObjectEntryServiceImpl extends ObjectEntryServiceBaseImpl {
 	public int getObjectEntriesCount(
 		long groupId, long objectDefinitionId, int status) {
 
+		try {
+			if (_isFilterByViewPermission(groupId)) {
+				List<ObjectEntry> objectEntries = getObjectEntries(
+					groupId, objectDefinitionId, status, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS);
+
+				return objectEntries.size();
+			}
+		}
+		catch (PortalException portalException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to count object entries", portalException);
+			}
+
+			return 0;
+		}
+
 		if (status == WorkflowConstants.STATUS_ANY) {
 			int count = objectEntryPersistence.countByG_ODI(
 				groupId, objectDefinitionId);
@@ -868,6 +885,24 @@ public class ObjectEntryServiceImpl extends ObjectEntryServiceBaseImpl {
 			).atStartOfDay(
 				ZoneId.systemDefault()
 			).toInstant());
+	}
+
+	private boolean _isFilterByViewPermission(long groupId)
+		throws PortalException {
+
+		if (ObjectEntryThreadLocal.isSkipObjectEntryResourcePermission()) {
+			return false;
+		}
+
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		if (permissionChecker.isCompanyAdmin() ||
+			permissionChecker.isGroupAdmin(groupId)) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private void _sendUserNotificationEvents(
