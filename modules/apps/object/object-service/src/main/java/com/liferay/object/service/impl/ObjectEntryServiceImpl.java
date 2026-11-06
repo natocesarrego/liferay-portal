@@ -308,6 +308,14 @@ public class ObjectEntryServiceImpl extends ObjectEntryServiceBaseImpl {
 			boolean related, boolean reverse, String search)
 		throws PortalException {
 
+		if (_isFilterByViewPermission(groupId)) {
+			List<ObjectEntry> objectEntries = getManyToManyObjectEntries(
+				groupId, objectRelationshipId, primaryKey, related, reverse,
+				search, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			return objectEntries.size();
+		}
+
 		return objectEntryLocalService.getManyToManyObjectEntriesCount(
 			groupId, objectRelationshipId, primaryKey, related, reverse,
 			search);
