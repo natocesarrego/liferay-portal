@@ -1074,6 +1074,13 @@ public class ObjectEntryServiceTest {
 	}
 
 	@Test
+	@TestInfo("LPD-112318")
+	public void testGetOneToManyObjectEntriesCount() throws Exception {
+		_testGetObjectEntriesCount(
+			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
+	}
+
+	@Test
 	public void testGetOrAddEmptyObjectEntry() throws Exception {
 
 		// Lazy referencing disabled
