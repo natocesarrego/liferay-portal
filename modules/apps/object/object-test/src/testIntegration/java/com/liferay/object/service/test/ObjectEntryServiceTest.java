@@ -714,14 +714,14 @@ public class ObjectEntryServiceTest {
 
 		_assertObjectEntriesCount(1);
 
-		ObjectDefinition objectDefinition =
-			ObjectDefinitionTestUtil.addCustomObjectDefinition();
-
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
-
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
 				"com.liferay.object.service.impl.ObjectEntryServiceImpl",
 				LoggerTestUtil.DEBUG)) {
+
+			ObjectDefinition objectDefinition =
+				ObjectDefinitionTestUtil.addCustomObjectDefinition();
+
+			_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
 
 			Assert.assertEquals(
 				0,
