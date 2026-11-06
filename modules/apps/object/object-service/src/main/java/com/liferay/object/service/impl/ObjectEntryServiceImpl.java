@@ -375,6 +375,27 @@ public class ObjectEntryServiceImpl extends ObjectEntryServiceBaseImpl {
 	public int getObjectEntriesCount(
 		long groupId, long objectDefinitionId, int status) {
 
+		try {
+			PermissionChecker permissionChecker = getPermissionChecker();
+
+			if (!permissionChecker.isCompanyAdmin() &&
+				!permissionChecker.isGroupAdmin(groupId)) {
+
+				List<ObjectEntry> objectEntries = getObjectEntries(
+					groupId, objectDefinitionId, status, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS);
+
+				return objectEntries.size();
+			}
+		}
+		catch (PortalException portalException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to count object entries", portalException);
+			}
+
+			return 0;
+		}
+
 		if (status == WorkflowConstants.STATUS_ANY) {
 			int count = objectEntryPersistence.countByG_ODI(
 				groupId, objectDefinitionId);
