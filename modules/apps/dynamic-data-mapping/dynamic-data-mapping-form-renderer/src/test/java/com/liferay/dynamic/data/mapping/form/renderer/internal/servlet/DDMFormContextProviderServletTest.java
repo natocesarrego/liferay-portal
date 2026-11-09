@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -81,6 +82,21 @@ public class DDMFormContextProviderServletTest {
 		_groupPermissionUtilMockedStatic.close();
 
 		PermissionThreadLocal.setPermissionChecker(null);
+	}
+
+	@Test
+	public void testCheckGroupPermissionWhenUserCanViewGroup() {
+		Group group = _mockGroup();
+
+		_groupPermissionUtilMockedStatic.when(
+			() -> GroupPermissionUtil.contains(
+				Mockito.any(PermissionChecker.class), Mockito.eq(group),
+				Mockito.eq(ActionKeys.VIEW))
+		).thenReturn(
+			true
+		);
+
+		_invokeCheckGroupPermission();
 	}
 
 	@Test
