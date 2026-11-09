@@ -14,6 +14,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -90,7 +91,7 @@ public class DDMDataProviderInstanceServiceImpl
 			getPermissionChecker(),
 			dataProviderInstance.getDataProviderInstanceId(), ActionKeys.VIEW);
 
-		return dataProviderInstance;
+		return _filterDataProviderInstance(dataProviderInstance);
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public class DDMDataProviderInstanceServiceImpl
 			getPermissionChecker(),
 			dataProviderInstance.getDataProviderInstanceId(), ActionKeys.VIEW);
 
-		return dataProviderInstance;
+		return _filterDataProviderInstance(dataProviderInstance);
 	}
 
 	@Override
@@ -120,8 +121,9 @@ public class DDMDataProviderInstanceServiceImpl
 		_ddmDataProviderInstanceModelResourcePermission.check(
 			getPermissionChecker(), dataProviderInstanceId, ActionKeys.VIEW);
 
-		return ddmDataProviderInstancePersistence.findByPrimaryKey(
-			dataProviderInstanceId);
+		return _filterDataProviderInstance(
+			ddmDataProviderInstancePersistence.findByPrimaryKey(
+				dataProviderInstanceId));
 	}
 
 	@Override
@@ -137,15 +139,16 @@ public class DDMDataProviderInstanceServiceImpl
 			ddmDataProviderInstance.getDataProviderInstanceId(),
 			ActionKeys.VIEW);
 
-		return ddmDataProviderInstance;
+		return _filterDataProviderInstance(ddmDataProviderInstance);
 	}
 
 	@Override
 	public List<DDMDataProviderInstance> getDataProviderInstances(
 		long companyId, long[] groupIds, int start, int end) {
 
-		return ddmDataProviderInstanceFinder.filterByC_G(
-			companyId, groupIds, start, end);
+		return _filterDataProviderInstances(
+			ddmDataProviderInstanceFinder.filterByC_G(
+				companyId, groupIds, start, end));
 	}
 
 	@Override
@@ -171,7 +174,7 @@ public class DDMDataProviderInstanceServiceImpl
 									getDataProviderInstanceId(),
 								ActionKeys.VIEW)) {
 
-						return _removeAuthenticationData(
+						return _filterDataProviderInstance(
 							ddmDataProviderInstance);
 					}
 				}
@@ -189,9 +192,10 @@ public class DDMDataProviderInstanceServiceImpl
 		boolean andOperator, int start, int end,
 		OrderByComparator<DDMDataProviderInstance> orderByComparator) {
 
-		return ddmDataProviderInstanceFinder.filterFindByC_G_N_D(
-			companyId, groupIds, name, description, andOperator, start, end,
-			orderByComparator);
+		return _filterDataProviderInstances(
+			ddmDataProviderInstanceFinder.filterFindByC_G_N_D(
+				companyId, groupIds, name, description, andOperator, start, end,
+				orderByComparator));
 	}
 
 	@Override
@@ -222,6 +226,41 @@ public class DDMDataProviderInstanceServiceImpl
 		return ddmDataProviderInstanceLocalService.updateDataProviderInstance(
 			getUserId(), dataProviderInstanceId, nameMap, descriptionMap,
 			ddmFormValues, serviceContext);
+	}
+
+	private DDMDataProviderInstance _filterDataProviderInstance(
+			DDMDataProviderInstance ddmDataProviderInstance)
+		throws PortalException {
+
+		if (_ddmDataProviderInstanceModelResourcePermission.contains(
+				getPermissionChecker(), ddmDataProviderInstance,
+				ActionKeys.UPDATE)) {
+
+			return ddmDataProviderInstance;
+		}
+
+		return _removeAuthenticationData(
+			(DDMDataProviderInstance)ddmDataProviderInstance.clone());
+	}
+
+	private List<DDMDataProviderInstance> _filterDataProviderInstances(
+		List<DDMDataProviderInstance> ddmDataProviderInstances) {
+
+		return TransformUtil.transform(
+			ddmDataProviderInstances,
+			ddmDataProviderInstance -> {
+				try {
+					return _filterDataProviderInstance(
+						ddmDataProviderInstance);
+				}
+				catch (PortalException portalException) {
+					if (_log.isDebugEnabled()) {
+						_log.debug(portalException);
+					}
+
+					return null;
+				}
+			});
 	}
 
 	private JSONArray _filterFieldValues(JSONArray fieldValuesJSONArray) {
@@ -266,12 +305,13 @@ public class DDMDataProviderInstanceServiceImpl
 			ddmDataProviderInstance.setDefinition(
 				definitionJSONObject.toString());
 		}
-		catch (Exception exception) {
+		catch (JSONException jsonException) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
-					"Unable to remove authentication data from data " +
-						"providers search",
-					exception);
+					"Unable to remove authentication data from data provider " +
+						"instance " +
+							ddmDataProviderInstance.getDataProviderInstanceId(),
+					jsonException);
 			}
 		}
 
