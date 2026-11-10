@@ -90,7 +90,7 @@ public class DDMDataProviderInstanceServiceImpl
 			getPermissionChecker(),
 			dataProviderInstance.getDataProviderInstanceId(), ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(dataProviderInstance);
+		return _filterDDMDataProviderInstance(dataProviderInstance);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class DDMDataProviderInstanceServiceImpl
 			getPermissionChecker(),
 			dataProviderInstance.getDataProviderInstanceId(), ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(dataProviderInstance);
+		return _filterDDMDataProviderInstance(dataProviderInstance);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class DDMDataProviderInstanceServiceImpl
 		_ddmDataProviderInstanceModelResourcePermission.check(
 			getPermissionChecker(), dataProviderInstanceId, ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(
+		return _filterDDMDataProviderInstance(
 			ddmDataProviderInstancePersistence.findByPrimaryKey(
 				dataProviderInstanceId));
 	}
@@ -138,7 +138,7 @@ public class DDMDataProviderInstanceServiceImpl
 			ddmDataProviderInstance.getDataProviderInstanceId(),
 			ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(ddmDataProviderInstance);
+		return _filterDDMDataProviderInstance(ddmDataProviderInstance);
 	}
 
 	@Override
@@ -243,7 +243,7 @@ public class DDMDataProviderInstanceServiceImpl
 			ddmFormValues, serviceContext);
 	}
 
-	private DDMDataProviderInstance _filterDataProviderInstance(
+	private DDMDataProviderInstance _filterDDMDataProviderInstance(
 			DDMDataProviderInstance ddmDataProviderInstance)
 		throws PortalException {
 
