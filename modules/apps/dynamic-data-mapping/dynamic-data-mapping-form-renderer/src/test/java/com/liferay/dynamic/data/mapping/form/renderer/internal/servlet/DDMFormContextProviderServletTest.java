@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
 import com.liferay.portal.kernel.test.AssertUtils;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
@@ -173,6 +174,7 @@ public class DDMFormContextProviderServletTest {
 		).thenReturn(
 			ddmFormInstanceId
 		);
+
 		Mockito.when(
 			ddmFormTemplateContextProcessor.getGroupId()
 		).thenReturn(
@@ -204,6 +206,7 @@ public class DDMFormContextProviderServletTest {
 		).thenReturn(
 			_GROUP_ID
 		);
+
 		Mockito.when(
 			ddmFormInstance.getSettingsModel()
 		).thenReturn(
@@ -259,11 +262,12 @@ public class DDMFormContextProviderServletTest {
 		languageUtil.setLanguage(language);
 	}
 
-	private static final long _COMPANY_ID = 1L;
+	private static final long _COMPANY_ID = RandomTestUtil.randomLong();
 
-	private static final long _DDM_FORM_INSTANCE_ID = 3L;
+	private static final long _DDM_FORM_INSTANCE_ID =
+		RandomTestUtil.randomLong();
 
-	private static final long _GROUP_ID = 2L;
+	private static final long _GROUP_ID = RandomTestUtil.randomLong();
 
 	private DDMFormContextProviderServlet _ddmFormContextProviderServlet;
 	private final DDMFormInstanceLocalService _ddmFormInstanceLocalService =
