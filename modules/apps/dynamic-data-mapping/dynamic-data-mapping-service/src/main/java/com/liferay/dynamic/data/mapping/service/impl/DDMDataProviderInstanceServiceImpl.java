@@ -91,7 +91,7 @@ public class DDMDataProviderInstanceServiceImpl
 			getPermissionChecker(),
 			dataProviderInstance.getDataProviderInstanceId(), ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(dataProviderInstance);
+		return _filterDDMDataProviderInstance(dataProviderInstance);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class DDMDataProviderInstanceServiceImpl
 			getPermissionChecker(),
 			dataProviderInstance.getDataProviderInstanceId(), ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(dataProviderInstance);
+		return _filterDDMDataProviderInstance(dataProviderInstance);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class DDMDataProviderInstanceServiceImpl
 		_ddmDataProviderInstanceModelResourcePermission.check(
 			getPermissionChecker(), dataProviderInstanceId, ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(
+		return _filterDDMDataProviderInstance(
 			ddmDataProviderInstancePersistence.findByPrimaryKey(
 				dataProviderInstanceId));
 	}
@@ -139,14 +139,14 @@ public class DDMDataProviderInstanceServiceImpl
 			ddmDataProviderInstance.getDataProviderInstanceId(),
 			ActionKeys.VIEW);
 
-		return _filterDataProviderInstance(ddmDataProviderInstance);
+		return _filterDDMDataProviderInstance(ddmDataProviderInstance);
 	}
 
 	@Override
 	public List<DDMDataProviderInstance> getDataProviderInstances(
 		long companyId, long[] groupIds, int start, int end) {
 
-		return _filterDataProviderInstances(
+		return _filterDDMDataProviderInstances(
 			ddmDataProviderInstanceFinder.filterByC_G(
 				companyId, groupIds, start, end));
 	}
@@ -174,7 +174,7 @@ public class DDMDataProviderInstanceServiceImpl
 									getDataProviderInstanceId(),
 								ActionKeys.VIEW)) {
 
-						return _filterDataProviderInstance(
+						return _filterDDMDataProviderInstance(
 							ddmDataProviderInstance);
 					}
 				}
@@ -192,7 +192,7 @@ public class DDMDataProviderInstanceServiceImpl
 		boolean andOperator, int start, int end,
 		OrderByComparator<DDMDataProviderInstance> orderByComparator) {
 
-		return _filterDataProviderInstances(
+		return _filterDDMDataProviderInstances(
 			ddmDataProviderInstanceFinder.filterFindByC_G_N_D(
 				companyId, groupIds, name, description, andOperator, start, end,
 				orderByComparator));
@@ -228,7 +228,7 @@ public class DDMDataProviderInstanceServiceImpl
 			ddmFormValues, serviceContext);
 	}
 
-	private DDMDataProviderInstance _filterDataProviderInstance(
+	private DDMDataProviderInstance _filterDDMDataProviderInstance(
 			DDMDataProviderInstance ddmDataProviderInstance)
 		throws PortalException {
 
@@ -243,14 +243,14 @@ public class DDMDataProviderInstanceServiceImpl
 			(DDMDataProviderInstance)ddmDataProviderInstance.clone());
 	}
 
-	private List<DDMDataProviderInstance> _filterDataProviderInstances(
+	private List<DDMDataProviderInstance> _filterDDMDataProviderInstances(
 		List<DDMDataProviderInstance> ddmDataProviderInstances) {
 
 		return TransformUtil.transform(
 			ddmDataProviderInstances,
 			ddmDataProviderInstance -> {
 				try {
-					return _filterDataProviderInstance(
+					return _filterDDMDataProviderInstance(
 						ddmDataProviderInstance);
 				}
 				catch (PortalException portalException) {
