@@ -27,6 +27,7 @@ import com.liferay.dynamic.data.mapping.service.DDMTemplateVersionLocalService;
 import com.liferay.dynamic.data.mapping.service.base.DDMTemplateLocalServiceBaseImpl;
 import com.liferay.dynamic.data.mapping.service.persistence.DDMTemplateLinkPersistence;
 import com.liferay.dynamic.data.mapping.service.persistence.DDMTemplateVersionPersistence;
+import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -53,6 +54,8 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.permission.ModelPermissions;
 import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
+import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -231,9 +234,9 @@ public class DDMTemplateLocalServiceImpl
 		}
 
 		_validate(
-			groupId, classNameId, templateKey, LocaleUtil.getSiteDefault(),
-			nameMap, script, smallImage, smallImageURL, smallImageFile,
-			smallImageBytes);
+			groupId, classNameId, templateKey, language,
+			LocaleUtil.getSiteDefault(), nameMap, script, smallImage,
+			smallImageURL, smallImageFile, smallImageBytes);
 
 		DDMTemplate template = _addTemplate(
 			externalReferenceCode, user, groupId, classNameId, classPK,
@@ -986,7 +989,7 @@ public class DDMTemplateLocalServiceImpl
 		}
 
 		_validate(
-			template.getGroupId(),
+			template.getGroupId(), language,
 			LocaleUtil.fromLanguageId(template.getDefaultLanguageId()), nameMap,
 			script, smallImage, smallImageURL, smallImageFile, smallImageBytes);
 
@@ -1214,9 +1217,10 @@ public class DDMTemplateLocalServiceImpl
 
 		_validate(
 			sourceTemplate.getGroupId(), sourceTemplate.getClassNameId(),
-			templateKey, LocaleUtil.getSiteDefault(), nameMap,
-			sourceTemplate.getScript(), smallImage,
-			sourceTemplate.getSmallImageURL(), smallImageFile, smallImageBytes);
+			templateKey, sourceTemplate.getLanguage(),
+			LocaleUtil.getSiteDefault(), nameMap, sourceTemplate.getScript(),
+			smallImage, sourceTemplate.getSmallImageURL(), smallImageFile,
+			smallImageBytes);
 
 		DDMTemplate targetTemplate = _addTemplate(
 			null, user, sourceTemplate.getGroupId(),
@@ -1341,23 +1345,34 @@ public class DDMTemplateLocalServiceImpl
 	}
 
 	private void _validate(
-			Locale locale, Map<Locale, String> nameMap, String script)
+			long groupId, long classNameId, String templateKey, String language,
+			Locale locale, Map<Locale, String> nameMap, String script,
+			boolean smallImage, String smallImageURL, File smallImageFile,
+			byte[] smallImageBytes)
 		throws PortalException {
 
-		_validateName(locale, nameMap);
+		templateKey = StringUtil.toUpperCase(StringUtil.trim(templateKey));
 
-		if (Validator.isNull(script)) {
-			throw new TemplateScriptException("Script is null");
+		DDMTemplate template = ddmTemplatePersistence.fetchByG_C_T(
+			groupId, classNameId, templateKey);
+
+		if (template != null) {
+			throw new TemplateDuplicateTemplateKeyException(
+				"Template already exists with template key " + templateKey);
 		}
+
+		_validate(
+			groupId, language, locale, nameMap, script, smallImage,
+			smallImageURL, smallImageFile, smallImageBytes);
 	}
 
 	private void _validate(
-			long groupId, Locale locale, Map<Locale, String> nameMap,
-			String script, boolean smallImage, String smallImageURL,
-			File smallImageFile, byte[] smallImageBytes)
+			long groupId, String language, Locale locale,
+			Map<Locale, String> nameMap, String script, boolean smallImage,
+			String smallImageURL, File smallImageFile, byte[] smallImageBytes)
 		throws PortalException {
 
-		_validate(locale, nameMap, script);
+		_validate(language, locale, nameMap, script);
 
 		if (!smallImage || Validator.isNotNull(smallImageURL) ||
 			(smallImageFile == null) || (smallImageBytes == null)) {
@@ -1403,24 +1418,26 @@ public class DDMTemplateLocalServiceImpl
 	}
 
 	private void _validate(
-			long groupId, long classNameId, String templateKey, Locale locale,
-			Map<Locale, String> nameMap, String script, boolean smallImage,
-			String smallImageURL, File smallImageFile, byte[] smallImageBytes)
+			String language, Locale locale, Map<Locale, String> nameMap,
+			String script)
 		throws PortalException {
 
-		templateKey = StringUtil.toUpperCase(StringUtil.trim(templateKey));
+		_validateName(locale, nameMap);
 
-		DDMTemplate template = ddmTemplatePersistence.fetchByG_C_T(
-			groupId, classNameId, templateKey);
-
-		if (template != null) {
-			throw new TemplateDuplicateTemplateKeyException(
-				"Template already exists with template key " + templateKey);
+		if (Validator.isNull(script)) {
+			throw new TemplateScriptException("Script is null");
 		}
 
-		_validate(
-			groupId, locale, nameMap, script, smallImage, smallImageURL,
-			smallImageFile, smallImageBytes);
+		if (ExportImportThreadLocal.isImportInProcess() ||
+			ExportImportThreadLocal.isStagingInProcess()) {
+
+			return;
+		}
+
+		if (TemplateConstants.LANG_TYPE_VM.equals(language)) {
+			throw new TemplateException(
+				"Velocity templates are no longer supported");
+		}
 	}
 
 	private void _validateName(Locale locale, Map<Locale, String> nameMap)
