@@ -39,6 +39,18 @@ The ticket key follows the pattern `LPD-12345`, `LCD-12345`, `LRCI-1234`, and si
 
 Collect every distinct ticket key from the subjects of the branch's commits relative to `${BASE_BRANCH}`. Each subject is prefixed with its ticket (`LPD-12345 <subject>`); extract every distinct key, in commit order (oldest first). When no commit carries a ticket, prompt the user for one.
 
+Fetch the summary, description, security level, labels, and links of each ticket in the set once the set is resolved, for **Security Mode** and for the wording check under **Pull Request**. Never change a ticket here. When a fetch fails, name the ticket that went unchecked, and treat the branch as a security fix.
+
+### Security Mode
+
+A security fix must not stand out on the public pull request. Its title, body, and commit messages read like any other change to the same code, and the details of the vulnerability stay in the private ticket. Decide on every run, without asking the user, whether the branch is a security fix, and treat it as one when any of these holds:
+
+- A commit message on the branch names a vulnerability, or a developer report from `pr-check` flagged or noted it.
+- A ticket in the set has a security level, a label or a link that marks it as a security finding, or a summary or description that describes a vulnerability.
+- The diff adds or changes a permission or access check, input validation, escaping or sanitization, path handling, deserialization, or token or CSRF handling.
+
+When in doubt, treat the branch as a security fix. A false positive costs only a plainer description, while a miss can publish the details. Tell the user that security mode is on and which of these set it, and never say so in the PR.
+
 ### Target Repository
 
 The target repository defaults to `<fork-owner>/<repository>`. When `${ARGUMENTS}` names a different `org/repo`, use that; when it matches an alias below, expand the alias; otherwise, ask the user to choose `<fork-owner>` from the teams below, leaving out any team that has no fork of `<repository>`:
@@ -70,7 +82,7 @@ The PR head is `<github-username>:<branch-name>` (the GitHub username is read fr
 
 ### Pushed Branch
 
-Push the current branch to the user's remote when it has not been pushed yet or when new local commits exist.
+Push the current branch to the user's remote when it has not been pushed yet or when new local commits exist. Push only after the user approves the title and body, since a reword under **Pull Request** changes the commits.
 
 ### Pull Request
 
@@ -88,7 +100,7 @@ https://liferay.atlassian.net/browse/TICKET-ID-2
 
 ## What Is Being Fixed
 
-Explain the problem or bug that motivated the change — what was going wrong or what was missing.
+Explain the problem or bug that motivated the change — what was going wrong or what was missing. In security mode, describe what the code now does instead, as described below.
 
 ## How It Is Being Fixed
 
@@ -105,7 +117,7 @@ This optional section is only included when the commits do not add any tests. It
 <!-- pr-check {"result": "<state>", "sha": "<tested-SHA>"} -->
 ```
 
-The **PR Check** section is the Results Summary block emitted by the `pr-check` skill that ran as the precondition — the overall state line, the tested SHA, the table of validations, and every note appended below it, since any row can carry a note, a `PASS` included — pasted verbatim, followed by a hidden marker. The marker is an HTML comment, invisible in rendered Markdown, whose payload is a JSON object of the form `<!-- pr-check {"result": "<state>", "sha": "<tested-SHA>"} -->`, where `<state>` is `success` when the overall state is `PASS` and `failure` when it is `FAIL`, so a run carrying `NOT VERIFIED` rows records `success`, and `<tested-SHA>` is the full 40-character SHA from the Results Summary. The webhook reads the `result` and `sha` fields to apply the `pr-check` commit status to that SHA and the `pr-check - <state>` label to the PR, so this skill records no status or label itself.
+The **PR Check** section is the Results Summary block emitted by the `pr-check` skill that ran as the precondition — the overall state line, the tested SHA, the table of validations, and every note appended below it, since any row can carry a note, a `PASS` included — pasted verbatim, followed by a hidden marker. The marker is an HTML comment, invisible in rendered Markdown, whose payload is a JSON object of the form `<!-- pr-check {"result": "<state>", "sha": "<tested-SHA>"} -->`, where `<state>` is `success` when the overall state is `PASS` and `failure` when it is `FAIL`, so a run carrying `NOT VERIFIED` rows records `success`, and `<tested-SHA>` is the full 40-character SHA from the Results Summary. The webhook reads the `result` and `sha` fields to apply the `pr-check` commit status to that SHA and the `pr-check - <state>` label to the PR, so this skill records no status or label itself. A developer report that `pr-check` shows after the block is not part of it, so never copy any of it into the PR.
 
 When `build/test-plan/result.json` exists and its `head` is the tested SHA, add a `Test plan: <count> run, <passed> passed.` line between the Results Summary block and the marker. Leave it out otherwise. Put a blank line before and after it. `<count>` is the number of entries in `tests`. `<passed>` is the number of those entries whose `result` is `passed`.
 
@@ -118,6 +130,12 @@ When pr-check was skipped via `--skip-pr-check`, still write the section, but as
 ```
 
 The webhook applies the status and label when it processes the `pull_request` event for the newly opened PR, so no publish step is needed at creation. Use the `pr-check-publish` skill only to record a later pr-check run on an existing PR.
+
+In security mode, write the title and both sections from the diff and the commit messages alone, never from a ticket or from the session, which is where the details of a vulnerability live. Describe the change the way the same diff would read as routine maintenance: the classes and methods it touches, how it changes them, and what the tests cover, rather than the protection it adds or who may now do what. Take each verb from the change itself rather than a stock phrase, so that no word recurs across security fixes, and keep every statement true, so that a change in behavior is never called a refactor. Leave out how the defect could be exploited, what could reach it, what it allowed, any word that labels the change as a vulnerability fix, and any placeholder such as a pointer to the ticket. In every mode, never copy a ticket summary into the title or the body.
+
+Before presenting them, check the title, the body, and the summary of each ticket in the set for the details that **Security Changes** in [commit.md](../../rules/commit.md) says to leave out, and suggest a wording for each one that follows that section. In security mode, also flag any sentence that says what was wrong before the change, names a protection the change adds, or says who may now do what. When pr-check was skipped, check the message of every commit on the branch as well. Present the findings with the proposed title and body, together with any developer report pr-check showed for the commit messages, and say that nothing here blocks the PR and that the user decides. Never change a ticket, since the user changes it in Jira when they agree, and never copy a finding into the PR.
+
+In security mode, also propose a new message for each commit that has not been pushed yet and whose message carries a body, was flagged or noted in a developer report from `pr-check`, or would be flagged by the check above, written the same way, as a title with no body. Reword a commit only once the user approves its new message, keep its tree unchanged, and run pr-check again before creating the PR, since its Results Summary names the SHA it tested. Leave pushed commits as they are.
 
 Use a direct, to-the-point style. Avoid being verbose. Present the proposed title and body to the user before submitting, and proceed once they approve.
 

@@ -21,7 +21,7 @@ Newly created PRs do not need this skill: the `pr` skill writes the same Results
 
 ### Results Summary
 
-Use the **Results Summary** block emitted by the `pr-check` run in the current session — the overall state line, the tested SHA, the table of validations, and every note appended below it. Any row can carry a note, a `PASS` included, so carry them all verbatim. When no Results Summary is available (pr-check has not run this session), abort and ask the user to run `pr-check` first; this skill records a run, it does not perform one.
+Use the **Results Summary** block emitted by the `pr-check` run in the current session — the overall state line, the tested SHA, the table of validations, and every note appended below it. Any row can carry a note, a `PASS` included, so carry them all verbatim. A developer report that `pr-check` shows after the block is not part of it, so never post any of it. When no Results Summary is available (pr-check has not run this session), abort and ask the user to run `pr-check` first; this skill records a run, it does not perform one.
 
 The tested SHA must be the current head of the pull request:
 
