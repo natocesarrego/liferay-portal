@@ -14,6 +14,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.HistogramMetric;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Instance;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.ProcessMetric;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.HistogramMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.time.DayOfWeek;
@@ -103,6 +104,8 @@ public class HistogramMetricResourceTest
 		_testGetProcessMetric(
 			LocalDateTime.of(nowlocalDate.minusDays(1), LocalTime.MAX),
 			LocalDateTime.of(nowlocalDate.minusDays(1), LocalTime.MIDNIGHT));
+
+		_testGetProcessHistogramMetricWithoutPermission();
 	}
 
 	@Ignore
@@ -210,6 +213,20 @@ public class HistogramMetricResourceTest
 		}
 
 		return 1D / timeAmount;
+	}
+
+	private void _testGetProcessHistogramMetricWithoutPermission()
+		throws Exception {
+
+		HistogramMetricResource histogramMetricResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				HistogramMetricResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			histogramMetricResource.getProcessHistogramMetricHttpResponse(
+				_process.getId(), null, null,
+				HistogramMetric.Unit.DAYS.getValue()));
 	}
 
 	private void _testGetProcessMetric(

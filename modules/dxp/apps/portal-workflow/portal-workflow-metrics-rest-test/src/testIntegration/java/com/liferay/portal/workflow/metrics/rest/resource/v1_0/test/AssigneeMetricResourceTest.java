@@ -33,6 +33,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.NodeMetric;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.AssigneeMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -470,6 +471,8 @@ public class AssigneeMetricResourceTest
 					}
 				}),
 			(List<AssigneeMetric>)page.getItems());
+
+		_testPostProcessAssigneeMetricsPageWithoutPermission();
 	}
 
 	@Rule
@@ -565,6 +568,20 @@ public class AssigneeMetricResourceTest
 		_addRoleUser(role, assignee.getId());
 
 		return assigneeMetric;
+	}
+
+	private void _testPostProcessAssigneeMetricsPageWithoutPermission()
+		throws Exception {
+
+		AssigneeMetricResource assigneeMetricResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				AssigneeMetricResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			403,
+			assigneeMetricResource.postProcessAssigneeMetricsPageHttpResponse(
+				_process.getId(), Pagination.of(1, 10), null,
+				new AssigneeMetricBulkSelection()));
 	}
 
 	@Inject

@@ -19,6 +19,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.AssigneeBulkSele
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Instance;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.AssigneeResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -115,6 +116,8 @@ public class AssigneeResourceTest extends BaseAssigneeResourceTestCase {
 			});
 
 		Assert.assertEquals(0, page.getTotalCount());
+
+		_testPostProcessAssigneePageWithoutPermission();
 	}
 
 	@Rule
@@ -136,6 +139,19 @@ public class AssigneeResourceTest extends BaseAssigneeResourceTestCase {
 				name = user.getFullName();
 			}
 		};
+	}
+
+	private void _testPostProcessAssigneePageWithoutPermission()
+		throws Exception {
+
+		AssigneeResource assigneeResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				AssigneeResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			403,
+			assigneeResource.postProcessAssigneesPageHttpResponse(
+				_process.getId(), new AssigneeBulkSelection()));
 	}
 
 	private Instance _instance;

@@ -22,6 +22,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.NodeMetric;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.NodeMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.Arrays;
@@ -459,6 +460,8 @@ public class NodeMetricResourceTest extends BaseNodeMetricResourceTestCase {
 			Pagination.of(1, 2), null);
 
 		Assert.assertEquals(0, page.getTotalCount());
+
+		_testGetProcessNodeMetricsPageWithoutPermission();
 	}
 
 	@Override
@@ -584,6 +587,20 @@ public class NodeMetricResourceTest extends BaseNodeMetricResourceTestCase {
 	private void _deleteTasks() throws Exception {
 		_workflowMetricsRESTTestHelper.deleteTasks(
 			testGroup.getCompanyId(), _process.getId());
+	}
+
+	private void _testGetProcessNodeMetricsPageWithoutPermission()
+		throws Exception {
+
+		NodeMetricResource nodeMetricResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				NodeMetricResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			nodeMetricResource.getProcessNodeMetricsPageHttpResponse(
+				_process.getId(), null, null, null, null, null,
+				Pagination.of(1, 10), null));
 	}
 
 	private Process _process;

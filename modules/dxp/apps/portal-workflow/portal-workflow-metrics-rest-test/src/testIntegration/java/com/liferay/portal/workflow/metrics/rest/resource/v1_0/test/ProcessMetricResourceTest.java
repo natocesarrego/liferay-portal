@@ -21,6 +21,7 @@ import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.ProcessMetric;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Pagination;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.ProcessMetricResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.ArrayList;
@@ -83,6 +84,8 @@ public class ProcessMetricResourceTest
 			false,
 			(processMetric1, processMetric2) -> assertEquals(
 				processMetric1, processMetric2));
+
+		_testGetProcessMetricWithoutPermission();
 	}
 
 	@Override
@@ -106,6 +109,8 @@ public class ProcessMetricResourceTest
 		assertEquals(
 			Collections.singletonList(processMetric),
 			(List<ProcessMetric>)page.getItems());
+
+		_testGetProcessMetricsPageWithoutPermission();
 	}
 
 	@Override
@@ -267,6 +272,35 @@ public class ProcessMetricResourceTest
 			postProcess.getId(), completed, null, null);
 
 		unsafeBiConsumer.accept(postProcessMetric, getProcessMetric);
+	}
+
+	private void _testGetProcessMetricWithoutPermission() throws Exception {
+		ProcessMetric processMetric =
+			testGetProcessMetricsPage_addProcessMetric(randomProcessMetric());
+
+		Process process = processMetric.getProcess();
+
+		ProcessMetricResource userProcessMetricResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				ProcessMetricResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			userProcessMetricResource.getProcessMetricHttpResponse(
+				process.getId(), null, null, null));
+	}
+
+	private void _testGetProcessMetricsPageWithoutPermission()
+		throws Exception {
+
+		ProcessMetricResource userProcessMetricResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				ProcessMetricResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			userProcessMetricResource.getProcessMetricsPageHttpResponse(
+				null, Pagination.of(1, 10), null));
 	}
 
 	private static Document[] _documents;

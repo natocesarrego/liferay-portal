@@ -8,8 +8,11 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.search.test.rule.SearchTestRule;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.ReindexStatus;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.ReindexStatusResource;
+import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.List;
 
@@ -37,9 +40,25 @@ public class ReindexStatusResourceTest
 
 		Assert.assertEquals(
 			reindexStatuses.toString(), 0, reindexStatuses.size());
+
+		_testGetReindexStatusesPageWithoutPermission();
 	}
 
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
+
+	private void _testGetReindexStatusesPageWithoutPermission()
+		throws Exception {
+
+		ReindexStatusResource reindexStatusResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				ReindexStatusResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404, reindexStatusResource.getReindexStatusesPageHttpResponse());
+	}
+
+	@Inject
+	private WorkflowMetricsRESTTestHelper _workflowMetricsRESTTestHelper;
 
 }

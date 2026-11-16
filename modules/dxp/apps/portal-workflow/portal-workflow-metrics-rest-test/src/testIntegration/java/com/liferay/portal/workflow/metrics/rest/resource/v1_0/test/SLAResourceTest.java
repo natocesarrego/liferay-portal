@@ -8,12 +8,7 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.test.rule.DataGuard;
-import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.kernel.test.util.UserTestUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.test.rule.SearchTestRule;
 import com.liferay.portal.test.rule.Inject;
@@ -104,6 +99,16 @@ public class SLAResourceTest extends BaseSLAResourceTestCase {
 			null,
 			(sla1, sla2, page) -> assertEquals(
 				Arrays.asList(sla2, sla1), (List<SLA>)page.getItems()));
+
+		_testGetProcessSLAsPageWithoutPermission();
+	}
+
+	@Override
+	@Test
+	public void testGetSLA() throws Exception {
+		super.testGetSLA();
+
+		_testGetSLAWithoutPermission();
 	}
 
 	@Ignore
@@ -246,28 +251,12 @@ public class SLAResourceTest extends BaseSLAResourceTestCase {
 		}
 	}
 
-	private SLAResource _getUserWithoutPermissionsSLAResource()
-		throws Exception {
-
-		String password = RandomTestUtil.randomString();
-
-		User user = UserTestUtil.addUser(testCompany, password);
-
-		return SLAResource.builder(
-		).authentication(
-			user.getEmailAddress(), password
-		).endpoint(
-			testCompany.getVirtualHostname(),
-			PortalUtil.getPortalServerPort(false), "http"
-		).locale(
-			LocaleUtil.getDefault()
-		).build();
-	}
-
 	private void _testDeleteSLAWithoutPermission() throws Exception {
 		SLA sla = testGetSLA_addSLA();
 
-		SLAResource userSLAResource = _getUserWithoutPermissionsSLAResource();
+		SLAResource userSLAResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				SLAResource.class, testCompany);
 
 		assertHttpResponseStatusCode(
 			403, userSLAResource.deleteSLAHttpResponse(sla.getId()));
@@ -297,13 +286,37 @@ public class SLAResourceTest extends BaseSLAResourceTestCase {
 		unsafeTriConsumer.accept(sla1, sla2, page);
 	}
 
+	private void _testGetProcessSLAsPageWithoutPermission() throws Exception {
+		SLAResource userSLAResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				SLAResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			userSLAResource.getProcessSLAsPageHttpResponse(
+				_process.getId(), null, Pagination.of(1, 10)));
+	}
+
+	private void _testGetSLAWithoutPermission() throws Exception {
+		SLA sla = testGetSLA_addSLA();
+
+		SLAResource userSLAResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				SLAResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404, userSLAResource.getSLAHttpResponse(sla.getId()));
+	}
+
 	private void _testPostProcessSLAWithoutPermission() throws Exception {
 		Page<SLA> page = slaResource.getProcessSLAsPage(
 			_process.getId(), null, Pagination.of(1, 1));
 
 		long totalCount = page.getTotalCount();
 
-		SLAResource userSLAResource = _getUserWithoutPermissionsSLAResource();
+		SLAResource userSLAResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				SLAResource.class, testCompany);
 
 		assertHttpResponseStatusCode(
 			403,
@@ -319,7 +332,9 @@ public class SLAResourceTest extends BaseSLAResourceTestCase {
 	private void _testPutSLAWithoutPermission() throws Exception {
 		SLA sla = testPutSLA_addSLA();
 
-		SLAResource userSLAResource = _getUserWithoutPermissionsSLAResource();
+		SLAResource userSLAResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				SLAResource.class, testCompany);
 
 		assertHttpResponseStatusCode(
 			403, userSLAResource.putSLAHttpResponse(sla.getId(), randomSLA()));

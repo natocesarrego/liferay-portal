@@ -8,8 +8,11 @@ package com.liferay.portal.workflow.metrics.rest.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.search.test.rule.SearchTestRule;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.TimeRange;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.TimeRangeResource;
+import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ public class TimeRangeResourceTest extends BaseTimeRangeResourceTestCase {
 		Assert.assertEquals(timeRanges.toString(), 7, timeRanges.size());
 
 		assertEquals(_getDefaultTimeRanges(), timeRanges);
+
+		_testGetTimeRangesPageWithoutPermission();
 	}
 
 	@Rule
@@ -101,5 +106,17 @@ public class TimeRangeResourceTest extends BaseTimeRangeResourceTestCase {
 			}
 		};
 	}
+
+	private void _testGetTimeRangesPageWithoutPermission() throws Exception {
+		TimeRangeResource timeRangeResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				TimeRangeResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404, timeRangeResource.getTimeRangesPageHttpResponse());
+	}
+
+	@Inject
+	private WorkflowMetricsRESTTestHelper _workflowMetricsRESTTestHelper;
 
 }

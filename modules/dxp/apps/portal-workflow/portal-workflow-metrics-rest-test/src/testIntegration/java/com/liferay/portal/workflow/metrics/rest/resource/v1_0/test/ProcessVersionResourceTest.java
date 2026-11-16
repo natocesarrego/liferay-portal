@@ -15,6 +15,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.ProcessVersion;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.ProcessVersionResource;
 import com.liferay.portal.workflow.metrics.rest.client.serdes.v1_0.ProcessVersionSerDes;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
@@ -95,6 +96,8 @@ public class ProcessVersionResourceTest
 
 				return null;
 			});
+
+		_testGetProcessProcessVersionsPageWithoutPermission();
 	}
 
 	@Test
@@ -127,6 +130,19 @@ public class ProcessVersionResourceTest
 	@Override
 	protected String[] getAdditionalAssertFieldNames() {
 		return new String[] {"name"};
+	}
+
+	private void _testGetProcessProcessVersionsPageWithoutPermission()
+		throws Exception {
+
+		ProcessVersionResource processVersionResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				ProcessVersionResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			processVersionResource.getProcessProcessVersionsPageHttpResponse(
+				_process.getId()));
 	}
 
 	private Process _process;

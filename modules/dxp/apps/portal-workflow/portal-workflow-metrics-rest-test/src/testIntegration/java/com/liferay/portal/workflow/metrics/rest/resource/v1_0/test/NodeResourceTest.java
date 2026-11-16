@@ -12,6 +12,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Node;
 import com.liferay.portal.workflow.metrics.rest.client.dto.v1_0.Process;
 import com.liferay.portal.workflow.metrics.rest.client.pagination.Page;
+import com.liferay.portal.workflow.metrics.rest.client.resource.v1_0.NodeResource;
 import com.liferay.portal.workflow.metrics.rest.resource.v1_0.test.helper.WorkflowMetricsRESTTestHelper;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -54,6 +56,14 @@ public class NodeResourceTest extends BaseNodeResourceTestCase {
 		}
 
 		_deleteNodes();
+	}
+
+	@Override
+	@Test
+	public void testDeleteProcessNode() throws Exception {
+		super.testDeleteProcessNode();
+
+		_testDeleteProcessNodeWithoutPermission();
 	}
 
 	@Override
@@ -92,6 +102,8 @@ public class NodeResourceTest extends BaseNodeResourceTestCase {
 
 		assertEqualsIgnoringOrder(
 			Arrays.asList(node1, node2), (List<Node>)page.getItems());
+
+		_testGetProcessNodesPageWithoutPermission();
 	}
 
 	@Ignore
@@ -113,6 +125,14 @@ public class NodeResourceTest extends BaseNodeResourceTestCase {
 	@Test
 	public void testGraphQLPostProcessNode() throws Exception {
 		super.testGraphQLPostProcessNode();
+	}
+
+	@Override
+	@Test
+	public void testPostProcessNode() throws Exception {
+		super.testPostProcessNode();
+
+		_testPostProcessNodeWithoutPermission();
 	}
 
 	@Rule
@@ -169,6 +189,52 @@ public class NodeResourceTest extends BaseNodeResourceTestCase {
 			_workflowMetricsRESTTestHelper.deleteNode(
 				testGroup.getCompanyId(), node, _process.getId());
 		}
+	}
+
+	private void _testDeleteProcessNodeWithoutPermission() throws Exception {
+		Node node = testDeleteProcessNode_addNode();
+
+		NodeResource userNodeResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				NodeResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			403,
+			userNodeResource.deleteProcessNodeHttpResponse(
+				_process.getId(), node.getId()));
+
+		Page<Node> page = nodeResource.getProcessNodesPage(_process.getId());
+
+		assertContains(node, (List<Node>)page.getItems());
+	}
+
+	private void _testGetProcessNodesPageWithoutPermission() throws Exception {
+		NodeResource userNodeResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				NodeResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			404,
+			userNodeResource.getProcessNodesPageHttpResponse(_process.getId()));
+	}
+
+	private void _testPostProcessNodeWithoutPermission() throws Exception {
+		Page<Node> page = nodeResource.getProcessNodesPage(_process.getId());
+
+		long totalCount = page.getTotalCount();
+
+		NodeResource userNodeResource =
+			_workflowMetricsRESTTestHelper.getUserWithoutResourcePermissions(
+				NodeResource.class, testCompany);
+
+		assertHttpResponseStatusCode(
+			403,
+			userNodeResource.postProcessNodeHttpResponse(
+				_process.getId(), randomNode()));
+
+		page = nodeResource.getProcessNodesPage(_process.getId());
+
+		Assert.assertEquals(totalCount, page.getTotalCount());
 	}
 
 	private final List<Node> _nodes = new ArrayList<>();
