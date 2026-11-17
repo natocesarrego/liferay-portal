@@ -216,6 +216,8 @@ The procedure runs in two passes over the validations, in the order below. The o
 
 1. [Unused DS Lifecycle Parameter](validations/branch/unused-ds-lifecycle-parameter.md)
 
+1. [Commit Message Wording](validations/branch/commit-message-wording.md)
+
 1. [Full Portal Build](validations/portal/full-portal-build.md)
 
 1. [Per-Module Compile](validations/portal/per-module-compile.md)
@@ -315,7 +317,7 @@ When a precondition fails, stop the run. Dispatch no validation, publish no Resu
 
 The rules below divide in two. Dispatch, ordering, handoffs, the ledger, and the overall state belong to this runner. Reading a log, judging a result, and reporting a note belong to the subagent, which never sees this document and is told only what it needs.
 
-Start every fired validation in the ledger at `NOT RUN`, then spawn one subagent for each, of type `pr-check-validation`, defined in [pr-check-validation.md](../../agents/pr-check-validation.md), which runs on Sonnet. A subagent spawned without that type inherits your model instead. **Give it only the `## Command` and `## Autocommit` sections of its validation.** Pass each section whole, from its heading to the next `## ` heading, and never through a line cap such as `head`, `tail`, or a fixed line range: a truncated section reads as complete, the subagent cannot know what it lost, and nothing downstream recovers it. A validation with no `## Autocommit` section makes no commit, so say so rather than leaving the subagent to infer it from an absence. That says nothing about the working tree, since a validation without one can still build and leave output behind. Record one of the results below, and capture any note the command directs it to return. Tell the subagent to run every command in the foreground and to return only once it has a verdict. A subagent that starts a build in the background and returns while it runs hands back no verdict, and nothing reports the build's result afterward. Do not halt on a failure, so the developer sees the full picture.
+Start every fired validation in the ledger at `NOT RUN`, then spawn one subagent for each, of type `pr-check-validation`, defined in [pr-check-validation.md](../../agents/pr-check-validation.md), which runs on Sonnet. A subagent spawned without that type inherits your model instead. **Give it only the `## Command` and `## Autocommit` sections of its validation.** Pass each section whole, from its heading to the next `## ` heading, and never through a line cap such as `head`, `tail`, or a fixed line range: a truncated section reads as complete, the subagent cannot know what it lost, and nothing downstream recovers it. A validation with no `## Autocommit` section makes no commit, so say so rather than leaving the subagent to infer it from an absence. That says nothing about the working tree, since a validation without one can still build and leave output behind. Record one of the results below, and capture any note and any developer report the command directs it to return. Tell the subagent to run every command in the foreground and to return only once it has a verdict. A subagent that starts a build in the background and returns while it runs hands back no verdict, and nothing reports the build's result afterward. Do not halt on a failure, so the developer sees the full picture.
 
 A validation returns one of five results:
 
@@ -434,3 +436,5 @@ After the Results Summary block, tell the developer to run the `test-plan` skill
 
 - **Java Unit Tests** names a changed class that has no unit test.
 - The diff changes a `*.batch-engine-data.json` file, a `resource-actions/*.xml` file, or a file under `src/main/resources/site-initializer`.
+
+After the Results Summary block, also show the developer every developer report a validation returned, as [Commit Message Wording](validations/branch/commit-message-wording.md) does when it flags or notes a message. A developer report is not part of the block. It can quote text that must stay off the pull request, so never copy any of it into the block, the PR description, or a comment.

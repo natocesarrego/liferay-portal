@@ -52,3 +52,7 @@ When a body is warranted:
 - Write plain prose rather than bullet points, matching the repository convention.
 
 When the user provides a hint or description, incorporate it into the message.
+
+### Security Changes
+
+When the change fixes a vulnerability, or touches security in another way, such as adding a check or tightening access, describe the code that changed the way any other change to it would read, and omit the body. This overrides the title and body rules above where they differ. A commit message stays in Git history for good and is public once the branch is pushed, so leave out how a defect could be exploited, what could reach it, what it allowed, and any word that labels the change as a security fix, and keep those details in the private ticket. Name the classes and methods the change touches rather than the protection it adds or who may now do what.
