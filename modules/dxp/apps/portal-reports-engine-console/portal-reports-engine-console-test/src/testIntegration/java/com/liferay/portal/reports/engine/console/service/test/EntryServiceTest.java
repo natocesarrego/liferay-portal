@@ -6,6 +6,7 @@
 package com.liferay.portal.reports.engine.console.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.document.library.kernel.exception.NoSuchFileException;
 import com.liferay.petra.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -29,6 +30,7 @@ import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -38,12 +40,15 @@ import com.liferay.portal.reports.engine.console.model.Entry;
 import com.liferay.portal.reports.engine.console.service.DefinitionLocalServiceUtil;
 import com.liferay.portal.reports.engine.console.service.EntryLocalServiceUtil;
 import com.liferay.portal.reports.engine.console.service.EntryServiceUtil;
+import com.liferay.portal.test.mail.MailServiceTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.test.rule.SynchronousMailTestRule;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -70,7 +75,8 @@ public class EntryServiceTest {
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
 			new LiferayIntegrationTestRule(),
-			SynchronousDestinationTestRule.INSTANCE);
+			SynchronousDestinationTestRule.INSTANCE,
+			SynchronousMailTestRule.INSTANCE);
 
 	@BeforeClass
 	public static void setUpClass() throws IOException {
@@ -102,6 +108,47 @@ public class EntryServiceTest {
 	@After
 	public void tearDown() throws PortalException {
 		PermissionThreadLocal.setPermissionChecker(_originalPermissionChecker);
+	}
+
+	@Test
+	public void testDeleteAttachmentWithEntryFileName() throws Exception {
+		PermissionThreadLocal.setPermissionChecker(_adminPermissionChecker);
+
+		Entry entry = addEntryWithAttachment();
+
+		String[] attachmentsFileNames = entry.getAttachmentsFileNames();
+
+		Assert.assertEquals(
+			Arrays.toString(attachmentsFileNames), 1,
+			attachmentsFileNames.length);
+
+		EntryServiceUtil.deleteAttachment(
+			entry.getCompanyId(), entry.getEntryId(), attachmentsFileNames[0]);
+
+		Assert.assertEquals(0, entry.getAttachmentsFileNames().length);
+	}
+
+	@Test
+	public void testDeleteAttachmentWithFileNameOfAnotherEntry()
+		throws Exception {
+
+		PermissionThreadLocal.setPermissionChecker(_adminPermissionChecker);
+
+		Entry entry1 = addEntryWithAttachment();
+
+		String[] attachmentsFileNames = entry1.getAttachmentsFileNames();
+
+		Entry entry2 = addEntryWithAttachment();
+
+		Assert.assertThrows(
+			NoSuchFileException.class,
+			() -> EntryServiceUtil.deleteAttachment(
+				entry2.getCompanyId(), entry2.getEntryId(),
+				attachmentsFileNames[0]));
+
+		Assert.assertTrue(
+			ArrayUtil.contains(
+				entry1.getAttachmentsFileNames(), attachmentsFileNames[0]));
 	}
 
 	@Test
@@ -142,6 +189,62 @@ public class EntryServiceTest {
 		List<Entry> entries = getEntries(_guestPermissionChecker, 0, 5);
 
 		Assert.assertEquals(entries.toString(), 5, entries.size());
+	}
+
+	@Test
+	public void testSendEmailsWithEntryFileName() throws Exception {
+		PermissionThreadLocal.setPermissionChecker(_adminPermissionChecker);
+
+		Entry entry = addEntryWithAttachment();
+
+		String[] attachmentsFileNames = entry.getAttachmentsFileNames();
+
+		MailServiceTestUtil.clearMessages();
+
+		EntryServiceUtil.sendEmails(
+			entry.getEntryId(), attachmentsFileNames[0],
+			new String[] {RandomTestUtil.randomString() + "@liferay.com"},
+			false);
+
+		Assert.assertEquals(1, MailServiceTestUtil.getInboxSize());
+	}
+
+	@Test
+	public void testSendEmailsWithFileNameOfAnotherEntry() throws Exception {
+		PermissionThreadLocal.setPermissionChecker(_adminPermissionChecker);
+
+		Entry entry1 = addEntryWithAttachment();
+
+		String[] attachmentsFileNames = entry1.getAttachmentsFileNames();
+
+		Entry entry2 = addEntryWithAttachment();
+
+		MailServiceTestUtil.clearMessages();
+
+		Assert.assertThrows(
+			NoSuchFileException.class,
+			() -> EntryServiceUtil.sendEmails(
+				entry2.getEntryId(), attachmentsFileNames[0],
+				new String[] {RandomTestUtil.randomString() + "@liferay.com"},
+				false));
+
+		Assert.assertEquals(0, MailServiceTestUtil.getInboxSize());
+	}
+
+	protected Entry addEntryWithAttachment() throws Exception {
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		serviceContext.setModelPermissions(
+			ModelPermissionsFactory.create(
+				_ENTRY_GROUP_PERMISSIONS, null, Entry.class.getName()));
+
+		return EntryLocalServiceUtil.addEntry(
+			TestPropsValues.getUserId(), _group.getGroupId(),
+			_definition.getDefinitionId(), "txt", false, null, null, false,
+			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, StringPool.BLANK, RandomTestUtil.randomString(),
+			StringPool.BLANK, serviceContext);
 	}
 
 	protected List<Entry> getEntries(
