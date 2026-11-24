@@ -5,22 +5,28 @@
 
 package com.liferay.portal.reports.engine.console.web.internal.admin.portlet;
 
+import com.liferay.document.library.kernel.exception.NoSuchFileException;
 import com.liferay.document.library.kernel.store.Store;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.reports.engine.console.constants.ReportsEngineConsolePortletKeys;
 import com.liferay.portal.reports.engine.console.model.Definition;
+import com.liferay.portal.reports.engine.console.model.Entry;
 import com.liferay.portal.reports.engine.console.model.Source;
 import com.liferay.portal.reports.engine.console.service.DefinitionLocalService;
+import com.liferay.portal.reports.engine.console.service.EntryLocalService;
 import com.liferay.portal.reports.engine.console.service.SourceLocalService;
 import com.liferay.portal.reports.engine.console.web.internal.admin.constants.ReportsEngineWebKeys;
 
@@ -123,6 +129,14 @@ public class AdminPortlet extends MVCPortlet {
 	protected DefinitionLocalService definitionLocalService;
 
 	@Reference
+	protected EntryLocalService entryLocalService;
+
+	@Reference(
+		target = "(model.class.name=com.liferay.portal.reports.engine.console.model.Entry)"
+	)
+	protected ModelResourcePermission<Entry> entryModelResourcePermission;
+
+	@Reference
 	protected SourceLocalService sourceLocalService;
 
 	@Reference(target = "(default=true)")
@@ -135,12 +149,23 @@ public class AdminPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		long entryId = ParamUtil.getLong(resourceRequest, "entryId");
+
+		Entry entry = entryLocalService.getEntry(entryId);
+
+		entryModelResourcePermission.check(
+			themeDisplay.getPermissionChecker(), entry, ActionKeys.VIEW);
+
 		String fileName = ParamUtil.getString(resourceRequest, "fileName");
+
+		if (!ArrayUtil.contains(entry.getAttachmentsFileNames(), fileName)) {
+			throw new NoSuchFileException(fileName);
+		}
 
 		String shortFileName = StringUtil.extractLast(
 			fileName, StringPool.SLASH);
 		InputStream inputStream = store.getFileAsStream(
-			themeDisplay.getCompanyId(), CompanyConstants.SYSTEM, fileName,
+			entry.getCompanyId(), CompanyConstants.SYSTEM, fileName,
 			StringPool.BLANK);
 
 		PortletResponseUtil.sendFile(
