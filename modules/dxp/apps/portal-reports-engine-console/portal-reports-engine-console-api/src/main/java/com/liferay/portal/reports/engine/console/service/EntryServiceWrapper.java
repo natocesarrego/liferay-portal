@@ -41,11 +41,23 @@ public class EntryServiceWrapper
 			pageURL, reportName, reportParameters, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #deleteAttachment(long, String)}
+	 */
+	@Deprecated
 	@Override
 	public void deleteAttachment(long companyId, long entryId, String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		_entryService.deleteAttachment(companyId, entryId, fileName);
+	}
+
+	@Override
+	public void deleteAttachment(long entryId, String fileName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_entryService.deleteAttachment(entryId, fileName);
 	}
 
 	@Override
@@ -124,4 +136,4 @@ public class EntryServiceWrapper
 	private EntryService _entryService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1963736929
+// LIFERAY-SERVICE-BUILDER-HASH:-1906634436

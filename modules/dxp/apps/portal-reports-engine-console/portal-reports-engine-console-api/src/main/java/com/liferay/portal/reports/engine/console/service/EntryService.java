@@ -54,7 +54,15 @@ public interface EntryService extends BaseService {
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #deleteAttachment(long, String)}
+	 */
+	@Deprecated
 	public void deleteAttachment(long companyId, long entryId, String fileName)
+		throws PortalException;
+
+	public void deleteAttachment(long entryId, String fileName)
 		throws PortalException;
 
 	public Entry deleteEntry(long entryId) throws PortalException;
@@ -87,4 +95,4 @@ public interface EntryService extends BaseService {
 	public void unscheduleEntry(long entryId) throws PortalException;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:172732566
+// LIFERAY-SERVICE-BUILDER-HASH:-2036320863

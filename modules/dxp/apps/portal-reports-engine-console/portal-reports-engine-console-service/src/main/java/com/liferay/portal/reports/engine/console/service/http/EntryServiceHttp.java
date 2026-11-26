@@ -128,6 +128,42 @@ public class EntryServiceHttp {
 		}
 	}
 
+	public static void deleteAttachment(
+			HttpPrincipal httpPrincipal, long entryId, String fileName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				EntryServiceUtil.class, "deleteAttachment",
+				_deleteAttachmentParameterTypes2);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, entryId, fileName);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static com.liferay.portal.reports.engine.console.model.Entry
 			deleteEntry(HttpPrincipal httpPrincipal, long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -135,7 +171,7 @@ public class EntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				EntryServiceUtil.class, "deleteEntry",
-				_deleteEntryParameterTypes2);
+				_deleteEntryParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, entryId);
 
@@ -182,7 +218,7 @@ public class EntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				EntryServiceUtil.class, "getEntries",
-				_getEntriesParameterTypes3);
+				_getEntriesParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, definitionName, userName, createDateGT,
@@ -227,7 +263,7 @@ public class EntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				EntryServiceUtil.class, "getEntriesCount",
-				_getEntriesCountParameterTypes4);
+				_getEntriesCountParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, definitionName, userName, createDateGT,
@@ -269,7 +305,7 @@ public class EntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				EntryServiceUtil.class, "sendEmails",
-				_sendEmailsParameterTypes5);
+				_sendEmailsParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, entryId, fileName, emailAddresses, notification);
@@ -305,7 +341,7 @@ public class EntryServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				EntryServiceUtil.class, "unscheduleEntry",
-				_unscheduleEntryParameterTypes6);
+				_unscheduleEntryParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, entryId);
 
@@ -343,24 +379,26 @@ public class EntryServiceHttp {
 	};
 	private static final Class<?>[] _deleteAttachmentParameterTypes1 =
 		new Class[] {long.class, long.class, String.class};
-	private static final Class<?>[] _deleteEntryParameterTypes2 = new Class[] {
+	private static final Class<?>[] _deleteAttachmentParameterTypes2 =
+		new Class[] {long.class, String.class};
+	private static final Class<?>[] _deleteEntryParameterTypes3 = new Class[] {
 		long.class
 	};
-	private static final Class<?>[] _getEntriesParameterTypes3 = new Class[] {
+	private static final Class<?>[] _getEntriesParameterTypes4 = new Class[] {
 		long.class, String.class, String.class, java.util.Date.class,
 		java.util.Date.class, boolean.class, int.class, int.class,
 		com.liferay.portal.kernel.util.OrderByComparator.class
 	};
-	private static final Class<?>[] _getEntriesCountParameterTypes4 =
+	private static final Class<?>[] _getEntriesCountParameterTypes5 =
 		new Class[] {
 			long.class, String.class, String.class, java.util.Date.class,
 			java.util.Date.class, boolean.class
 		};
-	private static final Class<?>[] _sendEmailsParameterTypes5 = new Class[] {
+	private static final Class<?>[] _sendEmailsParameterTypes6 = new Class[] {
 		long.class, String.class, String[].class, boolean.class
 	};
-	private static final Class<?>[] _unscheduleEntryParameterTypes6 =
+	private static final Class<?>[] _unscheduleEntryParameterTypes7 =
 		new Class[] {long.class};
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1052311952
+// LIFERAY-SERVICE-BUILDER-HASH:-1737396720
