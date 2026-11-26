@@ -46,11 +46,22 @@ public class EntryServiceUtil {
 			pageURL, reportName, reportParameters, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #deleteAttachment(long, String)}
+	 */
+	@Deprecated
 	public static void deleteAttachment(
 			long companyId, long entryId, String fileName)
 		throws PortalException {
 
 		getService().deleteAttachment(companyId, entryId, fileName);
+	}
+
+	public static void deleteAttachment(long entryId, String fileName)
+		throws PortalException {
+
+		getService().deleteAttachment(entryId, fileName);
 	}
 
 	public static Entry deleteEntry(long entryId) throws PortalException {
@@ -110,4 +121,4 @@ public class EntryServiceUtil {
 		new Snapshot<>(EntryServiceUtil.class, EntryService.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1009405847
+// LIFERAY-SERVICE-BUILDER-HASH:942232845
