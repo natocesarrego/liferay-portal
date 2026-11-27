@@ -7,9 +7,7 @@ package com.liferay.portal.reports.engine.console.web.internal.admin.portlet.act
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.reports.engine.console.constants.ReportsEngineConsolePortletKeys;
 import com.liferay.portal.reports.engine.console.service.EntryService;
 
@@ -36,15 +34,11 @@ public class DeleteReportMVCActionCommand extends BaseMVCActionCommand {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
 
 		String fileName = ParamUtil.getString(actionRequest, "fileName");
 
-		_entryService.deleteAttachment(
-			themeDisplay.getCompanyId(), entryId, fileName);
+		_entryService.deleteAttachment(entryId, fileName);
 	}
 
 	@Reference

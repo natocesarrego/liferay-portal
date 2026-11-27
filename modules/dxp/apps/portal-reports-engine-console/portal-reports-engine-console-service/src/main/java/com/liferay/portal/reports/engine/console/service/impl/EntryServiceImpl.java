@@ -5,11 +5,14 @@
 
 package com.liferay.portal.reports.engine.console.service.impl;
 
+import com.liferay.document.library.kernel.exception.NoSuchFileException;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.reports.engine.console.model.Definition;
 import com.liferay.portal.reports.engine.console.model.Entry;
@@ -54,14 +57,30 @@ public class EntryServiceImpl extends EntryServiceBaseImpl {
 			serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #deleteAttachment(long, String)}
+	 */
+	@Deprecated
 	@Override
 	public void deleteAttachment(long companyId, long entryId, String fileName)
 		throws PortalException {
 
-		_entryModelResourcePermission.check(
-			getPermissionChecker(), entryId, ActionKeys.DELETE);
+		deleteAttachment(entryId, fileName);
+	}
 
-		entryLocalService.deleteAttachment(companyId, fileName);
+	@Override
+	public void deleteAttachment(long entryId, String fileName)
+		throws PortalException {
+
+		Entry entry = entryPersistence.findByPrimaryKey(entryId);
+
+		_entryModelResourcePermission.check(
+			getPermissionChecker(), entry, ActionKeys.DELETE);
+
+		_validateAttachment(entry, fileName);
+
+		entryLocalService.deleteAttachment(entry.getCompanyId(), fileName);
 	}
 
 	@Override
@@ -101,8 +120,12 @@ public class EntryServiceImpl extends EntryServiceBaseImpl {
 			boolean notification)
 		throws PortalException {
 
+		Entry entry = entryPersistence.findByPrimaryKey(entryId);
+
 		_entryModelResourcePermission.check(
-			getPermissionChecker(), entryId, ActionKeys.VIEW);
+			getPermissionChecker(), entry, ActionKeys.VIEW);
+
+		_validateAttachment(entry, fileName);
 
 		entryLocalService.sendEmails(
 			entryId, fileName, emailAddresses, notification);
@@ -114,6 +137,17 @@ public class EntryServiceImpl extends EntryServiceBaseImpl {
 			getPermissionChecker(), entryId, ActionKeys.DELETE);
 
 		entryLocalService.unscheduleEntry(entryId);
+	}
+
+	private void _validateAttachment(Entry entry, String fileName)
+		throws PortalException {
+
+		if (!ArrayUtil.contains(entry.getAttachmentsFileNames(), fileName)) {
+			throw new NoSuchFileException(
+				StringBundler.concat(
+					"Entry ", entry.getEntryId(),
+					" does not have the attachment ", fileName));
+		}
 	}
 
 	@Reference(
